@@ -21,17 +21,19 @@ public class ManaTile : MonoBehaviour
 
 
     /// <summary>
-    /// Sets the color of this mana.
+    /// Sets the color of this mana. (both visual and game logic).
     /// </summary>
-    /// <param name="manaCosmetics">Cosmetics object of the sprites and colors to use</param>
     /// <param name="color">an integer representing the color.</param>
-    public void SetColor(ManaCosmetics manaCosmetics, int color) {
+    /// <param name="manaCosmetics">Cosmetics object of the sprites and colors to use. If null, visuals are not changed.</param>
+    public void SetColor(int color, ManaCosmetics manaCosmetics = null) {
         this.color = color;
 
-        var manaVisual = manaCosmetics.manaVisuals[color];
-        var spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = manaVisual.sprite;
-        spriteRenderer.color = manaVisual.tint;
+        if (manaCosmetics) {
+            var manaVisual = manaCosmetics.manaVisuals[color];
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.sprite = manaVisual.sprite;
+            spriteRenderer.color = manaVisual.tint;
+        }
     }
 
     // Animate towards the new position

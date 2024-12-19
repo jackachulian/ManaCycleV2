@@ -30,29 +30,21 @@ public class Board : MonoBehaviour
 
 
     // ================ Non-Serialized Fields ================
-    // -------- General --------
-    /// <summary>
-    /// Dimensions of the board's tile grid. 
-    /// This is slightly taller than the visual size, due to the fact that pieces can be moved above the top edge of the board.
-    /// </summary>
-    private const int WIDTH = 7, HEIGHT = 20;
-
-    /// <summary>
-    /// The visual height of the board. Does not include the extra rows above the visible board where tiles can still exist.
-    /// </summary>
-    private const int VISUAL_HEIGHT = 15;
-
     /// <summary>
     /// The battleManager that is managing this board. Also contains dependencies needed for SpawnPiece, etc
     /// Is set upon battle initialization.
     /// </summary>
-    private BattleManager battleManager;
+    public BattleManager battleManager {get; private set;}
 
     /// <summary>
-    /// All ManaTiles that have been placed on the board
-    /// (This does not include any currently falling pieces on this board!)
+    /// Stores all placed mana tiles. Cached on initialization.
     /// </summary>
-    private ManaTile[,] manaTileGrid;
+    public ManaTileGrid manaTileGrid {get; private set;}
+
+    /// <summary>
+    /// Manages spellcasts for this board. Cached on initialization.
+    /// </summary>
+    public SpellcastManager spellcastManager {get; private set;}
 
     /// <summary>
     /// RNG instance used to determine the colors.
@@ -87,7 +79,12 @@ public class Board : MonoBehaviour
     /// <param name="seed">the seed to use for RNG</param>
     public void InitializeBattle(BattleManager battleManager, int seed) {
         this.battleManager = battleManager;
-        manaTileGrid = new ManaTile[WIDTH, HEIGHT];
+        
+        manaTileGrid = GetComponent<ManaTileGrid>();
+        manaTileGrid.InitializeBattle();
+
+        spellcastManager = GetComponent<SpellcastManager>();
+        spellcastManager.InitializeBattle(this);
 
         rng = new System.Random(seed);
 
@@ -102,7 +99,7 @@ public class Board : MonoBehaviour
         float currentFallFrequency = GetCurrentFallFrequency();
 
         // If there is a current piece, have it fall after delay.
-        if (currentPiece) {
+        if (currentPiece != null) {
             movementTimer += Time.deltaTime * currentFallFrequency;
 
             int iters = 0;
@@ -130,13 +127,13 @@ public class Board : MonoBehaviour
         currentPiece.transform.SetParent(manaTileTransform);
 
         // spawn position will be the top row, middle column
-        Vector2Int spawnPos = new Vector2Int(WIDTH / 2, VISUAL_HEIGHT-1); 
+        Vector2Int spawnPos = new Vector2Int(manaTileGrid.width / 2, manaTileGrid.visual_height-1); 
         currentPiece.position = spawnPos;
         currentPiece.UpdateVisualPositions();
 
         for (int i = 0; i < currentPiece.tiles.Length; i++) {
             int color = rng.Next(5);
-            currentPiece.tiles[i].SetColor(battleManager.cosmetics, color);
+            currentPiece.tiles[i].SetColor(color, battleManager.cosmetics);
         }
     }
 
@@ -225,13 +222,13 @@ public class Board : MonoBehaviour
             Vector2Int piecePosition = piece.position + piece.GetTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
-            if (piecePosition.x < 0 || piecePosition.x >= WIDTH || piecePosition.y < 0 || piecePosition.y >= HEIGHT) {
+            if (piecePosition.x < 0 || piecePosition.x >= manaTileGrid.width || piecePosition.y < 0 || piecePosition.y >= manaTileGrid.height) {
                 return false;
             }
 
             // If any tile in the piece intersects another tile, return false
             // (If value is not null, there is a tile there)
-            if (manaTileGrid[piecePosition.x, piecePosition.y]) {
+            if (manaTileGrid.HasTile(piecePosition)) {
                 return false;
             }
         }
@@ -253,7 +250,7 @@ public class Board : MonoBehaviour
             Vector2Int boardPosition = piece.position + piece.GetTilePosition(i);
             tile.position = boardPosition;
             placePositions[i] = boardPosition;
-            manaTileGrid[boardPosition.x, boardPosition.y] = tile;
+            manaTileGrid.PlaceTile(tile, boardPosition);
             tile.transform.SetParent(manaTileTransform, true);
         }
 
@@ -263,36 +260,7 @@ public class Board : MonoBehaviour
         // Perform gravity on all tiles - lower Y position tiles should fall first so tiles above correctly fall on top of them
         Array.Sort(placePositions, (pos1, pos2) => pos1.y - pos2.y);
         foreach (Vector2Int pos in placePositions) {
-            Debug.Log("doing gravity on "+pos);
-            TileGravity(pos);
+            manaTileGrid.TileGravity(pos);
         }
-    }
-
-    /// <summary>
-    /// Perform gravity on the tile at the given position.
-    /// </summary>
-    /// <param name="position">the position of the tile on the grid to fall</param>
-    void TileGravity(Vector2Int position) {
-        // if null, no tile here
-        ManaTile tile = manaTileGrid[position.x, position.y];
-        if (tile == null) return;
-
-        // While the tile is above the bottom of the board, keep falling
-        while (position.y > 0) {
-            // If the tile below is not empty, tile cannot fall here
-            if (manaTileGrid[position.x, position.y - 1] != null) {
-                break;
-            }
-
-            // Fall by one tile
-            manaTileGrid[position.x, position.y] = null;
-            position.y -= 1;
-            manaTileGrid[position.x, position.y] = tile;
-        }
-
-        // if tile fell at all, animate its fall position to the new position
-        if (position.y != tile.position.y) {
-            tile.AnimatePosition(position);
-        }
-    }
+    }    
 }
