@@ -5,7 +5,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
-    [SerializeField] private ManaCycle manaCycle;
+    [SerializeField] public ManaCycle manaCycle;
 
     /// <summary>
     /// All players in the game. 2-4 players per game

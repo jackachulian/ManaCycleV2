@@ -1,7 +1,5 @@
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Video;
-
 
 public class ManaCycle : MonoBehaviour
 {  
@@ -23,8 +21,8 @@ public class ManaCycle : MonoBehaviour
     
 
     // (These will later depend on the level in solo mode, but static for now)
-    private const int cycleLength = 7;
-    private const int cycleUniqueColors = 5;
+    public readonly int cycleLength = 7;
+    public readonly int cycleUniqueColors = 5;
 
     /// <summary>
     /// All visual Tiles that are displayed on the display the cycle
@@ -34,7 +32,7 @@ public class ManaCycle : MonoBehaviour
     /// <summary>
     /// The cycle randonly generated upon battle initialization.
     /// </summary>
-    private int[] cycle;
+    private int[] colorSequence;
 
     /// <summary>
     /// Is called by the BattleManager, after the BattleManager initializes and before the Boards initialize.
@@ -45,48 +43,55 @@ public class ManaCycle : MonoBehaviour
         }
 
         tiles = new ManaTile[cycleLength];
-        cycle = new int[cycleLength];
+        colorSequence = new int[cycleLength];
 
         // Add one of each color to the list
         for (int i=0; i<cycleUniqueColors; i++)
         {
-            cycle[i] = i;
+            colorSequence[i] = i;
         }
 
         // Add random colors until length is met
         for (int i=cycleUniqueColors; i<cycleLength; i++)
         {
-            cycle[i] = Random.Range(0, cycleUniqueColors);
+            colorSequence[i] = Random.Range(0, cycleUniqueColors);
         }
 
         // Shuffle the list
-        cycle = cycle.OrderBy(x => Random.value).ToArray();
+        colorSequence = colorSequence.OrderBy(x => Random.value).ToArray();
 
         // For each color, check that the color below is not the same color
         for (int i=0; i<cycleLength-1; i++)
         {
             // If it is, swap the color to a random color that is not either of the colors next to it
             // If at the top, tile above is the tile at the bottom, which is the one before it
-            int colorAbove = (i == 0) ? cycle[cycle.Length-1] : cycle[i-1];
-            int colorBelow = cycle[i+1];
+            int colorAbove = (i == 0) ? colorSequence[colorSequence.Length-1] : colorSequence[i-1];
+            int colorBelow = colorSequence[i+1];
 
             // Keep picking a new color until it is different than the one above & below
             // don't run if cycle length and unique color amount make this impossible (need at least 3 colors for guaranteed no adjacent touching)
-            while ((cycle[i] == colorAbove || cycle[i] == colorBelow) && (cycleUniqueColors > 2))
+            while ((colorSequence[i] == colorAbove || colorSequence[i] == colorBelow) && (cycleUniqueColors > 2))
             {
-                cycle[i] = Random.Range(0,cycleUniqueColors);
+                colorSequence[i] = Random.Range(0,cycleUniqueColors);
             }
         }
+
+        Debug.Log(string.Join(", ", colorSequence));
 
         // Create cycle color objects for each cycle color
         for (int i=0; i<cycleLength; i++)
         {
             ManaTile tile = battleManager.SpawnTile();
             tiles[i] = tile;
-            tile.SetColor(cycle[i], battleManager.cosmetics);
+            tile.SetColor(colorSequence[i], battleManager.cosmetics);
             tile.transform.SetParent(manaTileTransform);
             tile.transform.localPosition = new Vector2(0, (i - (cycleLength-1)/2.0f) * -manaSeparation);
             tile.transform.localScale = new Vector2(manaScale, manaScale);
         }
+    }
+
+    // Returns the color of the sequence at the given index.
+    public int GetSequenceColor(int index) {
+        return colorSequence[index];
     }
 }

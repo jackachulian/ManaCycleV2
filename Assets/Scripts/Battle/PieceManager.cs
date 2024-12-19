@@ -180,7 +180,7 @@ public class PieceManager : MonoBehaviour {
             Vector2Int piecePosition = piece.position + piece.GetTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
-            if (piecePosition.x < 0 || piecePosition.x >= board.manaTileGrid.width || piecePosition.y < 0 || piecePosition.y >= board.manaTileGrid.height) {
+            if (!board.manaTileGrid.IsInBounds(piecePosition)) {
                 return false;
             }
 
@@ -213,12 +213,15 @@ public class PieceManager : MonoBehaviour {
         }
 
         // Destroy piece container that is no longer needed
-        Destroy(piece);
+        Destroy(piece.gameObject);
 
         // Perform gravity on all placed tiles - lower Y position tiles should fall first so tiles above correctly fall on top of them
         Array.Sort(placePositions, (pos1, pos2) => pos1.y - pos2.y);
         foreach (Vector2Int pos in placePositions) {
             board.manaTileGrid.TileGravity(pos);
         }
+
+        // Let spellcastmanager know the board state has changed and to rebuild all blobs
+        board.spellcastManager.RefreshBlobs();
     }    
 }

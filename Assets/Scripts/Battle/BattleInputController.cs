@@ -107,4 +107,8 @@ public class PlayerInputController : MonoBehaviour
             board.pieceManager.SetQuickfall(false);
         }
     }
+
+    public void OnSpellcast() {
+        board.spellcastManager.TrySpellcast();
+    }
 }

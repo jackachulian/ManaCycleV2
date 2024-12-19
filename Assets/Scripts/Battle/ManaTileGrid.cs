@@ -34,6 +34,10 @@ public class ManaTileGrid : MonoBehaviour {
         grid = new ManaTile[width, height];
     }
 
+    public bool IsInBounds(Vector2Int position) {
+        return position.x >= 0 && position.x < width && position.y >= 0 && position.y < height;
+    }
+
     /// <summary>
     /// Returns true if there is a tile at the given x and y coordinate.
     /// </summary>
@@ -44,12 +48,32 @@ public class ManaTileGrid : MonoBehaviour {
     }
 
     /// <summary>
+    /// Get the tile at the given position, or null if there is no tile there.
+    /// </summary>
+    /// <param name="position">x and y position of the tile on the grid</param>
+    /// <returns>the ManaTile at the position, or null if there is no tile there</returns>
+    public ManaTile GetTile(Vector2Int position) {
+        return grid[position.x, position.y];
+    }
+
+    /// <summary>
     /// Place the tile at the given position.
     /// </summary>
     /// <param name="tile">the tile to place</param>
     /// <param name="position">the grid coords to place the tile at</param>
     public void PlaceTile(ManaTile tile, Vector2Int position) {
         grid[position.x, position.y] = tile;
+    }
+
+    /// <summary>
+    /// Clear the tile at the given position, if there is one there.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name=""></param>
+    public void ClearTile(Vector2Int position) {
+        ManaTile tile = grid[position.x, position.y];
+        grid[position.x, position.y] = null;
+        Destroy(tile.gameObject);
     }
 
     /// <summary>
@@ -77,6 +101,21 @@ public class ManaTileGrid : MonoBehaviour {
         // if tile fell at all, animate its fall position to the new position
         if (position.y != tile.position.y) {
             tile.AnimatePosition(position);
+        }
+    }
+
+    /// <summary>
+    /// Perform gravity on all tiles.
+    /// Should be called after many tiles on the board are updated at once, i.e. spellcasts.
+    /// </summary>
+    public void AllTileGravity() {
+        // I'ts important to loop from lowest to highset y value here, so that tiles can correctly fall onto the tiles below them
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                TileGravity(new Vector2Int(x, y));
+            }
         }
     }
 }
