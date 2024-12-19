@@ -6,8 +6,8 @@ using UnityEngine;
 public class ManaTile : MonoBehaviour
 {
     /// <summary>
-    /// Position of this tile.
-    /// If contained within a piece, this is the offset from the center tile of the piece.
+    /// Position of this tile
+    /// If contained within a piece, this is the offset from the center tile of the piece (BEFORE piece rotation).
     /// If contained within a board's tile grid, this is the offset from the bottom-left tile.
     /// </summary>
     public Vector2Int position;
@@ -27,5 +27,12 @@ public class ManaTile : MonoBehaviour
         this.color = color;
 
         // TODO: update visuals using some sort of cosmetics object
+        
+    }
+
+    // Animate towards the new position
+    public void AnimatePosition(Vector2 targetPosition) {
+        // TODO: interpolate between current and target position over time
+        transform.localPosition = targetPosition;
     }
 }
