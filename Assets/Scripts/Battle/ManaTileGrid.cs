@@ -6,6 +6,12 @@ using UnityEngine;
 /// </summary>
 public class ManaTileGrid : MonoBehaviour {
     /// <summary>
+    /// Transform that mana tiles should be parented under
+    /// </summary>
+    [SerializeField] private Transform _manaTileTransform;
+    public Transform manaTileTransform => _manaTileTransform;
+    
+    /// <summary>
     /// Dimensions of the board's tile grid. 
     /// This is slightly taller than the visual size, due to the fact that pieces can be moved above the top edge of the board.
     /// </summary>

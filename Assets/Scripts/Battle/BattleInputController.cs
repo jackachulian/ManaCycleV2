@@ -68,12 +68,12 @@ public class PlayerInputController : MonoBehaviour
 
         // right: move piece right
         else if (analogDirectionPressed == AnalogMoveDirection.RIGHT) {
-            board.TryMovePiece(Vector2Int.right);
+            board.pieceManager.TryMovePiece(Vector2Int.right);
         }
 
         // left: move piece left
         else if (analogDirectionPressed == AnalogMoveDirection.LEFT) {
-            board.TryMovePiece(Vector2Int.left);
+            board.pieceManager.TryMovePiece(Vector2Int.left);
         }
 
         // down: quickfall
@@ -83,28 +83,28 @@ public class PlayerInputController : MonoBehaviour
     }
 
     public void OnMoveLeft() {
-        board.TryMovePiece(Vector2Int.left);
+        board.pieceManager.TryMovePiece(Vector2Int.left);
     }
 
     public void OnMoveRight() {
-        board.TryMovePiece(Vector2Int.right);
+        board.pieceManager.TryMovePiece(Vector2Int.right);
     }
 
     public void OnRotateCCW() {
-        board.TryRotatePiece(-1);
+        board.pieceManager.TryRotatePiece(-1);
     }
 
     public void OnRotateCW() {
-        board.TryRotatePiece(1);
+        board.pieceManager.TryRotatePiece(1);
     }
 
     public void OnQuickfall(InputValue value) {
         float pressed = value.Get<float>();
         
         if (pressed >= 0.5) {
-            board.SetQuickfall(true);
+            board.pieceManager.SetQuickfall(true);
         } else {
-            board.SetQuickfall(false);
+            board.pieceManager.SetQuickfall(false);
         }
     }
 }

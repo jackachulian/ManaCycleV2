@@ -22,7 +22,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Should be set to true whenever the board's grid is modified.
     /// Lets this script know if it needs to re-check for blob connections
     /// </summary>
-    public bool needsUpdate;
+    private bool needsUpdate;
 
 
 
