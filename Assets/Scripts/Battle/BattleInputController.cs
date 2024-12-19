@@ -90,6 +90,14 @@ public class PlayerInputController : MonoBehaviour
         board.TryMovePiece(Vector2Int.right);
     }
 
+    public void OnRotateCCW() {
+        board.TryRotatePiece(-1);
+    }
+
+    public void OnRotateCW() {
+        board.TryRotatePiece(1);
+    }
+
     public void OnQuickfall(InputValue value) {
         float pressed = value.Get<float>();
         

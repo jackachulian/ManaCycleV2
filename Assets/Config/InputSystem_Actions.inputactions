@@ -16,12 +16,12 @@
                 },
                 {
                     "name": "DigitalNormalizedMove",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "ecd3523a-d443-498e-a21a-fceb9b99ce11",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "MoveLeft",
@@ -96,19 +96,19 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Previous",
+                    "name": "RotateCCW",
                     "type": "Button",
                     "id": "2776c80d-3c14-4091-8c56-d04ced07a2b0",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Next",
+                    "name": "RotateCW",
                     "type": "Button",
                     "id": "b7230bb6-fc9b-4f52-8b25-f5e19cb2c2ba",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -117,7 +117,7 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -259,11 +259,11 @@
                 {
                     "name": "",
                     "id": "cbac6039-9c09-46a1-b5f2-4e5124ccb5ed",
-                    "path": "<Keyboard>/2",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Next",
+                    "action": "RotateCW",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -274,7 +274,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Next",
+                    "action": "RotateCW",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -347,11 +347,11 @@
                 {
                     "name": "",
                     "id": "1534dc16-a6aa-499d-9c3a-22b47347b52a",
-                    "path": "<Keyboard>/1",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Previous",
+                    "action": "RotateCCW",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -362,7 +362,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Previous",
+                    "action": "RotateCCW",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -522,6 +522,17 @@
                 },
                 {
                     "name": "",
+                    "id": "03c52212-cb19-40ba-a85d-22ded9258e44",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "46b186ac-bb0f-44c7-ab08-cbd2d876aee3",
                     "path": "<Keyboard>/d",
                     "interactions": "",
@@ -533,8 +544,30 @@
                 },
                 {
                     "name": "",
+                    "id": "10c6647b-2469-4e89-9d8c-e5d548b25c04",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "663fe0e9-1559-4167-983d-50526a4cf288",
                     "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Quickfall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c40d996e-4692-4c66-9f84-8f89b6261d8e",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

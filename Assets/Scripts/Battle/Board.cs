@@ -261,8 +261,9 @@ public class Board : MonoBehaviour
         Destroy(piece);
 
         // Perform gravity on all tiles - lower Y position tiles should fall first so tiles above correctly fall on top of them
-        placePositions.OrderBy(pos => pos.y);
+        Array.Sort(placePositions, (pos1, pos2) => pos1.y - pos2.y);
         foreach (Vector2Int pos in placePositions) {
+            Debug.Log("doing gravity on "+pos);
             TileGravity(pos);
         }
     }
