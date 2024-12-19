@@ -25,6 +25,16 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     [SerializeField] private float maxChainDelay = 2.00f;
 
+    /// <summary>
+    /// CyclePointer to position on the current color being cleared
+    /// </summary>
+    [SerializeField] private Transform cyclePointer;
+
+    /// <summary>
+    /// Amount of units of offset to position the cycle pointer.
+    /// </summary>
+    [SerializeField] private float cyclePointerOffset = 1.5f;
+
     // ================ Non-serialized fields ================
     // ======== General ========
     /// <summary>
@@ -84,13 +94,15 @@ public class SpellcastManager : MonoBehaviour {
     
     // ================ Methods ================
     /// <summary>
-    /// Called when the battle initializes, after the Board for this spellcastmanager is fully initialized.
+    /// Called when the battle initializes, after the ManaCycle and the Board for this spellcastmanager is initialized.
     /// </summary>
     /// <param name="board"></param>
     public void InitializeBattle(Board board) {
         this.board = board;
         blobGrid = new List<Vector2Int>[board.manaTileGrid.width, board.manaTileGrid.height];
         clearableManaCounts = new int[board.battleManager.manaCycle.cycleUniqueColors];
+
+        RepositionCyclePointer();
     }
 
     void Update() {
@@ -180,7 +192,15 @@ public class SpellcastManager : MonoBehaviour {
             // TODO: cycle multiplier
         }
 
-        // TODO: visuals
+        RepositionCyclePointer();
+    }
+
+    private void RepositionCyclePointer() {
+        var cycleManaTile = board.battleManager.manaCycle.GetCycleTile(cycleIndex);
+        
+        // TODO: in 2-player mode, player 2's pointer is offset to the right instead of left. 
+        // in 3 and 4-player mode, half and half on each side and handle overlaps by spreading out the sprites slightly
+        cyclePointer.position = cycleManaTile.transform.position + Vector3.left * cyclePointerOffset;
     }
 
     /// <summary>

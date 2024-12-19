@@ -94,4 +94,12 @@ public class ManaCycle : MonoBehaviour
     public int GetSequenceColor(int index) {
         return colorSequence[index];
     }
+
+    /// <summary>
+    /// Get a visual tile that is part of the cycle list of colors.
+    /// </summary>
+    /// <returns>the tile GameObject for the given cycle index</returns>
+    public ManaTile GetCycleTile(int index) {
+        return tiles[index];
+    }
 }
