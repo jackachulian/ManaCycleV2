@@ -12,6 +12,6 @@ public class ManaCosmetics : ScriptableObject
 
 [System.Serializable]
 public class ManaVisual {
-    public Sprite image;
+    public Sprite sprite;
     public Color tint;
 }

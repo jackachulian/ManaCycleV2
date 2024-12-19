@@ -8,6 +8,11 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Board[] boards;
 
     /// <summary>
+    /// Cosmetics to use for all boards and the mana cycle
+    /// </summary>
+    [SerializeField] public ManaCosmetics cosmetics;
+
+    /// <summary>
     /// The L-shaped Triomino ManaPiece that will be duplicated, spawned, and color-changed on all boards
     /// </summary>
     [SerializeField] private ManaPiece manaPiece;

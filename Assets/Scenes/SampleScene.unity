@@ -148,7 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2d8ba011896584a8899095a01f6588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementFrequency: 0.8
+  fallFrequency: 1.25
+  quickFallFrequency: 10
   manaTileTransform: {fileID: 476388995}
 --- !u!4 &20370672
 Transform:
@@ -257,7 +258,7 @@ SpriteRenderer:
   m_SortingLayerID: -721117897
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -411,7 +412,7 @@ SpriteRenderer:
   m_SortingLayerID: -721117897
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -621,6 +622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boards:
   - {fileID: 20370671}
+  cosmetics: {fileID: 11400000, guid: 6d37034fe6289064184c49808436ed7f, type: 2}
   manaPiece: {fileID: 428040071}
 --- !u!4 &590613156
 Transform:
@@ -728,7 +730,7 @@ SpriteRenderer:
   m_SortingLayerID: -721117897
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -845,7 +847,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2d8ba011896584a8899095a01f6588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementFrequency: 0.8
+  fallFrequency: 0.8
+  quickFallFrequency: 0.1
   manaTileTransform: {fileID: 0}
 --- !u!212 &2108981050
 SpriteRenderer:

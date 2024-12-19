@@ -37,22 +37,15 @@ public class PlayerInputController : MonoBehaviour
         } else {
             float angle = Vector2.SignedAngle(Vector2.up, inputVector);
 
-            // Up
             if (angle > -45 && angle <= 45) {
                 newDirection = AnalogMoveDirection.UP;
             }
-                
-            // Right
             else if (angle > 45 && angle <= 135) {
-                newDirection = AnalogMoveDirection.RIGHT;
-            }
-
-            // Left
-            else if (angle > -135 && angle <= -45) {
                 newDirection = AnalogMoveDirection.LEFT;
             }
-
-            // Down
+            else if (angle > -135 && angle <= -45) {
+                newDirection = AnalogMoveDirection.RIGHT;
+            }
             else {
                 newDirection = AnalogMoveDirection.DOWN;
             }
@@ -97,7 +90,13 @@ public class PlayerInputController : MonoBehaviour
         board.TryMovePiece(Vector2Int.right);
     }
 
-    public void OnQuickfall() {
-        // TODO: set quickfall to true when pressed, false when unpressed
+    public void OnQuickfall(InputValue value) {
+        float pressed = value.Get<float>();
+        
+        if (pressed >= 0.5) {
+            board.SetQuickfall(true);
+        } else {
+            board.SetQuickfall(false);
+        }
     }
 }

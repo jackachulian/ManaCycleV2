@@ -9,21 +9,38 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class Board : MonoBehaviour
 {
+    // ================ Serialized Fields ================
+    [Header("Piece Movement")]
     /// <summary>
-    /// All ManaTiles that have been placed on the board
-    /// (This does not include any currently falling pieces on this board!)
+    /// The amount of rows the piece should fall per second while not quickfalling.
     /// </summary>
-    [SerializeField] private ManaTile[,] manaTileGrid;
+    [SerializeField] private float fallFrequency = 1.25f;
 
     /// <summary>
-    /// How often the current piece should fall down one tile
+    /// The amount of rows the piece should fall per second while quickfalling.
     /// </summary>
-    [SerializeField] private float movementFrequency = 0.8f;
+    [SerializeField] private float quickFallFrequency = 10f;
 
+
+    [Header("Transforms")]
     /// <summary>
     /// Transform that mana tiles should be parented under
     /// </summary>
     [SerializeField] private Transform manaTileTransform;
+
+
+    // ================ Non-Serialized Fields ================
+    // -------- General --------
+    /// <summary>
+    /// Dimensions of the board's tile grid. 
+    /// This is slightly taller than the visual size, due to the fact that pieces can be moved above the top edge of the board.
+    /// </summary>
+    private const int WIDTH = 7, HEIGHT = 20;
+
+    /// <summary>
+    /// The visual height of the board. Does not include the extra rows above the visible board where tiles can still exist.
+    /// </summary>
+    private const int VISUAL_HEIGHT = 15;
 
     /// <summary>
     /// The battleManager that is managing this board. Also contains dependencies needed for SpawnPiece, etc
@@ -32,10 +49,10 @@ public class Board : MonoBehaviour
     private BattleManager battleManager;
 
     /// <summary>
-    /// Incrementing timer. When greater than movementFrequency (after fall speed modifiers), 
-    /// set to 0 and move the current piece down one tile.
+    /// All ManaTiles that have been placed on the board
+    /// (This does not include any currently falling pieces on this board!)
     /// </summary>
-    private float movementTimer;
+    private ManaTile[,] manaTileGrid;
 
     /// <summary>
     /// RNG instance used to determine the colors.
@@ -48,16 +65,19 @@ public class Board : MonoBehaviour
     /// </summary>
     private ManaPiece currentPiece;
 
+
+    // -------- Piece Movement --------
     /// <summary>
-    /// Dimensions of the board's tile grid. 
-    /// This is slightly taller than the visual size, due to the fact that pieces can be moved above the top edge of the board.
+    /// Incrementing value that tracks the percentage of time before a fall should happen.
+    /// When greater than 1, subtract 1 and move the current piece down one tile.
+    /// The rate this value is incremented is calculated in GetCurrentFallFrequency().
     /// </summary>
-    private const int width = 7, height = 20;
+    private float movementTimer;
 
     /// <summary>
-    /// The visual height of the board.
+    /// Set to true while quickfalling and false when not.
     /// </summary>
-    private const int visualHeight = 15;
+    private bool quickfall = false;
 
     /// <summary>
     /// Called by BattleManager when battle is initialized
@@ -67,7 +87,7 @@ public class Board : MonoBehaviour
     /// <param name="seed">the seed to use for RNG</param>
     public void InitializeBattle(BattleManager battleManager, int seed) {
         this.battleManager = battleManager;
-        manaTileGrid = new ManaTile[width, height];
+        manaTileGrid = new ManaTile[WIDTH, HEIGHT];
 
         rng = new System.Random(seed);
 
@@ -78,17 +98,28 @@ public class Board : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // If there is a current piece, have it fall after delay
+        // use quickfall speed if quick falling, or normal fall frequency otherwise
+        float currentFallFrequency = GetCurrentFallFrequency();
+
+        // If there is a current piece, have it fall after delay.
         if (currentPiece) {
-            movementTimer += Time.deltaTime;
-            if (movementTimer > movementFrequency) {
-                movementTimer -= movementFrequency;
+            movementTimer += Time.deltaTime * currentFallFrequency;
+
+            int iters = 0;
+            while (movementTimer > 0) {
+                movementTimer -= 1;
 
                 // TODO: add a little bit of buffer time before placing the piece to allow sliding
                 bool moved = TryMovePiece(Vector2Int.down);
                 if (!moved) {
                     PlacePiece(currentPiece);
                     SpawnNewPiece();
+                }
+
+                iters++;
+                if (iters > 100) {
+                    Debug.LogWarning("Tried to fall current piece over 100 times in one frame... consider lowering fall speed!");
+                    break;
                 }
             }
         }
@@ -99,13 +130,25 @@ public class Board : MonoBehaviour
         currentPiece.transform.SetParent(manaTileTransform);
 
         // spawn position will be the top row, middle column
-        Vector2Int spawnPos = new Vector2Int(width / 2, height-1); 
+        Vector2Int spawnPos = new Vector2Int(WIDTH / 2, VISUAL_HEIGHT-1); 
         currentPiece.position = spawnPos;
         currentPiece.UpdateVisualPositions();
 
         for (int i = 0; i < currentPiece.tiles.Length; i++) {
             int color = rng.Next(5);
-            currentPiece.tiles[i].SetColor(color);
+            currentPiece.tiles[i].SetColor(battleManager.cosmetics, color);
+        }
+    }
+
+    /// <summary>
+    /// Get the current fall delay, after accounting for quickfall and anything else that affects fall delay.
+    /// </summary>
+    /// <returns>current amount of delay in seconds between piece falls</returns>
+    float GetCurrentFallFrequency() {
+        if (quickfall) {
+            return quickFallFrequency;
+        } else {
+            return fallFrequency;
         }
     }
 
@@ -135,7 +178,7 @@ public class Board : MonoBehaviour
     /// </summary>
     /// <param name="rotation">amount of clockwise rotations. negative is counter-clockwise rotations</param>
     /// <returns>true if the piece was successfully rotated</returns>
-    bool TryRotatePiece(int rotations) {
+    public bool TryRotatePiece(int rotations) {
         if (rotations == 0) {
             Debug.LogWarning("Piece was rotated zero times");
             return true;
@@ -167,6 +210,14 @@ public class Board : MonoBehaviour
     }
 
     /// <summary>
+    /// Set quickfalling to either true or false.
+    /// </summary>
+    /// <param name="newQuickFall">the new quickfall value, true = quickfalling, false = not quickfalling</param>
+    public void SetQuickfall(bool newQuickFall) {
+        quickfall = newQuickFall;
+    }
+
+    /// <summary>
     /// Returns true if all tiles in the piece are within bounds and not obstructed by any tiles already placed.
     /// </summary>
     bool IsValidPlacement(ManaPiece piece) {
@@ -174,7 +225,7 @@ public class Board : MonoBehaviour
             Vector2Int piecePosition = piece.position + piece.GetTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
-            if (piecePosition.x < 0 || piecePosition.x >= width || piecePosition.y < 0 || piecePosition.y >= height) {
+            if (piecePosition.x < 0 || piecePosition.x >= WIDTH || piecePosition.y < 0 || piecePosition.y >= HEIGHT) {
                 return false;
             }
 

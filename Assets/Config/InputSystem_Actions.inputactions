@@ -43,12 +43,12 @@
                 },
                 {
                     "name": "Quickfall",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "b3e3a7eb-3a28-4b12-9e32-dde4888cf598",
-                    "expectedControlType": "",
+                    "expectedControlType": "Digital",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Look",
