@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6451131013418738776}
   - component: {fileID: 3461201935571253515}
+  - component: {fileID: 8814767011064023852}
   - component: {fileID: 1752761823836298849}
   m_Layer: 0
   m_Name: PlayerInput
@@ -46,6 +47,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 0}
+--- !u!114 &8814767011064023852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8276651579362871504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db92d57bd4475f4b96274e25bef80c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPanel: {fileID: 0}
 --- !u!114 &1752761823836298849
 MonoBehaviour:
   m_ObjectHideFlags: 0
