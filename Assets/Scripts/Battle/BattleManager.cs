@@ -3,6 +3,11 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     /// <summary>
+    /// The BattleManager for the scene. Only one should exist at a time, a warning will be raised if there is more than one.
+    /// </summary>
+    public static BattleManager instance {get; set;}
+
+    /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
     [SerializeField] public ManaCycle manaCycle;
@@ -26,6 +31,14 @@ public class BattleManager : MonoBehaviour
     /// Single seperated mana piece prefab, used for the cycle, abilities, etc
     /// </summary>
     [SerializeField] private ManaTile manaTilePrefab;
+
+    private void Awake() {
+        if (instance != null) {
+            Debug.LogWarning("A new BattleManager has replaced the old one! Make sure there is only one BattleManager.");
+        }
+
+        instance = this;
+    }
 
     public void Start() {
         // TODO: synchronize RNG between clients
@@ -60,5 +73,13 @@ public class BattleManager : MonoBehaviour
     public ManaTile SpawnTile() {
         ManaTile tile = Instantiate(manaTilePrefab);
         return tile;
+    }
+
+    /// <summary>
+    /// Get a board by index. Used for assigning boards to player inputs, particularly over the network in online mode.
+    /// </summary>
+    /// <returns>the board at the given index in teh baords array</returns>
+    public Board GetBoardByIndex(int index) {
+        return boards[index];
     }
 }

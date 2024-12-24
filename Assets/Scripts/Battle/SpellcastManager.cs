@@ -35,6 +35,15 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     [SerializeField] private float cyclePointerOffset = 1.5f;
 
+    private enum BoardSide {
+        LEFT,
+        RIGHT
+    }
+    /// <summary>
+    /// The side of the screen the board is on. Used for cycle pointer positioning.
+    /// </summary>
+    [SerializeField] private BoardSide boardSide = BoardSide.LEFT;
+
     // ================ Non-serialized fields ================
     // ======== General ========
     /// <summary>
@@ -200,7 +209,8 @@ public class SpellcastManager : MonoBehaviour {
         
         // TODO: in 2-player mode, player 2's pointer is offset to the right instead of left. 
         // in 3 and 4-player mode, half and half on each side and handle overlaps by spreading out the sprites slightly
-        cyclePointer.position = cycleManaTile.transform.position + Vector3.left * cyclePointerOffset;
+        Vector3 offsetDirection = boardSide == BoardSide.LEFT ? Vector3.left : Vector3.right;
+        cyclePointer.position = cycleManaTile.transform.position + offsetDirection * cyclePointerOffset;
     }
 
     /// <summary>
