@@ -11,11 +11,11 @@ public class NetworkPlayer : NetworkBehaviour {
     /// <summary>
     /// Custom script that responds to the inputs sent from the Player Input component and sends them to the board
     /// </summary>
-    private PlayerInputController playerInputController;
+    private BattleInputController playerInputController;
 
     private void Awake() {
         playerInput = GetComponent<PlayerInput>();
-        playerInputController = GetComponent<PlayerInputController>();
+        playerInputController = GetComponent<BattleInputController>();
     }
 
     public override void OnNetworkSpawn()
@@ -25,7 +25,20 @@ public class NetworkPlayer : NetworkBehaviour {
         // enable input if the client owns this network player
         playerInput.enabled = IsOwner;
 
+        // If already in battle mode, connect the board
+        if (BattleManager.instance) BattleConnectBoard();
+    }
+
+    /// <summary>
+    /// Connect the player input to the appropriate board based on network id.
+    /// </summary>
+    public void BattleConnectBoard() {
         int boardIndex = IsHost ? 0 : 1;
         playerInputController.board = BattleManager.instance.GetBoardByIndex(boardIndex);
+    }
+
+    [Rpc(SendTo.NotOwner)]
+    private void TestRpc() {
+
     }
 }

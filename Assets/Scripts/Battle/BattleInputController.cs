@@ -5,14 +5,9 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Handles a PlayerInput's messages for the battle scene, controlling the board that is assigned.
 /// </summary>
-public class PlayerInputController : MonoBehaviour
+public class BattleInputController : MonoBehaviour
 {
     public Board board;
-
-    /// <summary>
-    /// Used to compare with the last input update to compare magnitudes and input when crossing a threshold.
-    /// </summary>
-    private float prevAnalogMoveMagnitude;
 
     enum AnalogMoveDirection {
         NONE,
