@@ -24,6 +24,9 @@ public class BattlePlayer : MonoBehaviour {
     private void Awake() {
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
+
+        // battle inputs will be enabled by the battlemanager once the battle starts
+        DisableBattleInputs();
     }
 
     /// <summary>

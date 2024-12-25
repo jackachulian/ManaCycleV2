@@ -48,16 +48,22 @@ public class BattleSetupManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Display the connection menu for connecting to online game sessions.
+    /// </summary>
     public void ShowConnectionMenu() {
         state = BattleSetupState.CONNECT_MENU;
         connectMenu.gameObject.SetActive(true);
         characterSelectMenu.gameObject.SetActive(false);
     }
 
-    public void ShowCharSelectMenu() {
+    /// <summary>
+    /// Initialize and show the char select menu.
+    /// </summary>
+    public void InitializeCharSelect() {
         state = BattleSetupState.CHARACTER_SELECT;
         connectMenu.gameObject.SetActive(false);
-        characterSelectMenu.gameObject.SetActive(true);
+        characterSelectMenu.InitializeBattleSetup();
     }
 
     public void SetSession(ISession session) {

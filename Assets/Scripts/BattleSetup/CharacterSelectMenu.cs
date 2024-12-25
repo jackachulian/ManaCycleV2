@@ -34,10 +34,20 @@ public class CharacterSelectMenu : MonoBehaviour
         }
     }
 
-    private void Start() {
-        // Start the LocalPlayerManagement scene that will handle spawning local players
-        if (!PlayerInputManager.instance) {
-            SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
+    /// <summary>
+    /// Initializes the char select. Should only be called from the battle setup manager
+    /// </summary>
+    public void InitializeBattleSetup() {
+        // show the menu
+        gameObject.SetActive(true);
+
+        // load the local player inputs needed for local play.
+        // TODO: don't do this in online mode
+        if (!BattleNetworkManager.instance) {
+            if (!PlayerInputManager.instance) {
+                SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
+                Debug.Log("loaded local player management scene");
+            }
         }
     }
 

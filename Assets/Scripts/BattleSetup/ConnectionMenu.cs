@@ -15,6 +15,9 @@ public class ConnectionMenu : MonoBehaviour
 
     private void Awake() {
         canvasGroup = GetComponent<CanvasGroup>();
+
+        // make sure there is a networkmanager before a session can be started
+        StartNetworkManagerScene();
     }
 
     /// <summary>
@@ -24,7 +27,7 @@ public class ConnectionMenu : MonoBehaviour
         Debug.Log("Session has ben joined: "+session.Code);
 
         BattleSetupManager.instance.SetSession(session);
-        BattleSetupManager.instance.ShowCharSelectMenu();
+        BattleSetupManager.instance.InitializeCharSelect();
     }
 
     /// <summary>
@@ -64,8 +67,11 @@ public class ConnectionMenu : MonoBehaviour
     /// Ensures that the network manager scene is loaded additively.
     /// </summary>
     public void StartNetworkManagerScene() {
-        if (!NetworkManager.Singleton) {
-            SceneManager.LoadScene("NetworkManager", LoadSceneMode.Additive);
+        if (BattleNetworkManager.instance == null) {
+            Debug.Log("Starting network management scene");
+            SceneManager.LoadScene("NetworkManagement", LoadSceneMode.Additive);
+        } else {
+            Debug.Log("Skipping network management scene load, battle network manager already present");
         }
     }
 
@@ -73,6 +79,6 @@ public class ConnectionMenu : MonoBehaviour
     /// TODO: probably should move this to the home menu
     /// </summary>
     public void OnSinglePlayerPressed() {
-        BattleSetupManager.instance.ShowCharSelectMenu();
+        BattleSetupManager.instance.InitializeCharSelect();
     }
 }
