@@ -11,21 +11,4 @@ public class BattleNetworkManager : NetworkManager {
 
         instance = this;
     }
-
-    public void ConnectPlayersToBoards() {
-        var players = FindObjectsByType<NetworkPlayer>(FindObjectsSortMode.None);
-        Debug.Log("Players: "+players+" - count: "+players.Length);
-
-        foreach (NetworkPlayer player in players) {
-            player.BattleConnectBoard();
-        }
-    }
-
-    public void ConnectPlayersToBattleSetup() {
-        var players = FindObjectsByType<NetworkPlayer>(FindObjectsSortMode.None);
-
-        foreach (NetworkPlayer player in players) {
-            player.BattleSetupConnectPanel();
-        }
-    }
 }

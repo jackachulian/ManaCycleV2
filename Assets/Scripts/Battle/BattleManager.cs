@@ -55,10 +55,14 @@ public class BattleManager : MonoBehaviour
             board.InitializeBattle(this, seed);
         }
 
-        if (BattleNetworkManager.instance) {
-            BattleNetworkManager.instance.ConnectPlayersToBoards();
-        } else {
-            Debug.LogWarning("No network manager instance set!");
+        // Connects all players found to their respective boards.
+        // This works for both online and local, as both use BattlePlayers.
+        var players = FindObjectsByType<BattlePlayer>(FindObjectsSortMode.None);
+        Debug.Log("Players: "+players+" - count: "+players.Length);
+
+        foreach (BattlePlayer player in players) {
+            player.BattleConnectBoard();
+            player.EnableBattleInputs();
         }
     }
 

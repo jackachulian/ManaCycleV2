@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6451131013418738776}
+  - component: {fileID: 2565938552819923598}
   - component: {fileID: 3461201935571253515}
   - component: {fileID: 8814767011064023852}
   - component: {fileID: 1752761823836298849}
   m_Layer: 0
-  m_Name: PlayerInput
+  m_Name: BattlePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,6 +35,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2565938552819923598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8276651579362871504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a045e5ebb809304485e2ec65a7685d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3461201935571253515
 MonoBehaviour:
   m_ObjectHideFlags: 0

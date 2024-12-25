@@ -68,4 +68,11 @@ public class ConnectionMenu : MonoBehaviour
             SceneManager.LoadScene("NetworkManager", LoadSceneMode.Additive);
         }
     }
+
+    /// <summary>
+    /// TODO: probably should move this to the home menu
+    /// </summary>
+    public void OnSinglePlayerPressed() {
+        BattleSetupManager.instance.ShowCharSelectMenu();
+    }
 }

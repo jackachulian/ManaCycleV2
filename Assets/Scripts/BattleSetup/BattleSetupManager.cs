@@ -39,8 +39,12 @@ public class BattleSetupManager : MonoBehaviour
         // TODO: skip the connection screen if in singleplayer.
         ShowConnectionMenu();
 
-        if (BattleNetworkManager.instance) {
-            BattleNetworkManager.instance.ConnectPlayersToBattleSetup();
+        // Connect all players to their battle setup
+        var players = FindObjectsByType<BattlePlayer>(FindObjectsSortMode.None);
+
+        foreach (BattlePlayer player in players) {
+            player.BattleSetupConnectPanel();
+            player.DisableBattleInputs();
         }
     }
 

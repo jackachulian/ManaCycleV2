@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Multiplayer.Widgets;
 using Unity.Services.Multiplayer;
+using UnityEngine.InputSystem;
 
 public class CharacterSelectMenu : MonoBehaviour
 {
@@ -30,6 +31,13 @@ public class CharacterSelectMenu : MonoBehaviour
     private void OnDisable() {
         foreach (BattleSetupPlayerPanel playerPanel in playerPanels) {
             playerPanel.onReadyChanged.RemoveListener(CheckIfAllPlayersReady);
+        }
+    }
+
+    private void Start() {
+        // Start the LocalPlayerManagement scene that will handle spawning local players
+        if (!PlayerInputManager.instance) {
+            SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
         }
     }
 

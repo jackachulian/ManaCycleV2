@@ -4,19 +4,13 @@ using UnityEngine.InputSystem;
 
 public class NetworkPlayer : NetworkBehaviour {
     /// <summary>
-    /// the Unity engine's Input System player input manager
+    /// Contains the player ID and used to connect to the correct board
     /// </summary>
-    private PlayerInput playerInput;
-
-    /// <summary>
-    /// Custom script that responds to the inputs sent from the Player Input component and sends them to the board
-    /// </summary>
-    private BattleInputController playerInputController;
+    private BattlePlayer battlePlayer;
 
     private void Awake() {
-        playerInput = GetComponent<PlayerInput>();
-        playerInput.enabled = false; // start false just so it doesn't steal any input devices when it shouldn't
-        playerInputController = GetComponent<BattleInputController>();
+        battlePlayer = GetComponent<BattlePlayer>();
+        battlePlayer.DisableUserInput(); // start false just so it doesn't steal any input devices when it shouldn't
 
         // ensures this won't be destroyed when moving bewteen the battlesetup and battle scene
         DontDestroyOnLoad(this);
@@ -27,30 +21,23 @@ public class NetworkPlayer : NetworkBehaviour {
         base.OnNetworkSpawn();
 
         // enable input if the client owns this network player
-        playerInput.enabled = IsOwner;
+        if (IsOwner) {
+            battlePlayer.EnableUserInput();
+        } else {
+            battlePlayer.DisableUserInput();
+        }
+
+        // TODO: make this work with 4 players
+        battlePlayer.id = IsHost ? 0 : 1;
 
         // If already in battle setup mode, connect the board
-        if (BattleSetupManager.instance) BattleSetupConnectPanel();
+        if (BattleSetupManager.instance) battlePlayer.BattleSetupConnectPanel();
 
         // If already in battle mode, connect the board
-        if (BattleManager.instance) BattleConnectBoard();
+        if (BattleManager.instance) battlePlayer.BattleConnectBoard();
     }
 
-    /// <summary>
-    /// Connect the player to their battle setup player panel based on their network id.
-    /// </summary>
-    public void BattleSetupConnectPanel() {
-        // TODO: implement after battle setup scene is implemented
-    }
-
-    /// <summary>
-    /// Connect the player input to the appropriate board based on network id.
-    /// </summary>
-    public void BattleConnectBoard() {
-        int boardIndex = IsHost ? 0 : 1;
-        playerInputController.board = BattleManager.instance.GetBoardByIndex(boardIndex);
-        Debug.Log(this+" connected to "+playerInputController.board);
-    }
+    
 
     [Rpc(SendTo.NotOwner)]
     private void TestRpc() {
