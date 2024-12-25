@@ -1,5 +1,7 @@
+using Unity.Netcode;
 using Unity.Services.Multiplayer;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ConnectionMenu : MonoBehaviour
@@ -55,6 +57,15 @@ public class ConnectionMenu : MonoBehaviour
         BattleSetupManager.instance.ShowConnectionMenu();
         foreach (Selectable s in disableWhileJoining) {
             s.interactable = true;
+        }
+    }
+
+    /// <summary>
+    /// Ensures that the network manager scene is loaded additively.
+    /// </summary>
+    public void StartNetworkManagerScene() {
+        if (!NetworkManager.Singleton) {
+            SceneManager.LoadScene("NetworkManager", LoadSceneMode.Additive);
         }
     }
 }

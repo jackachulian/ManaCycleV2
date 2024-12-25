@@ -38,6 +38,10 @@ public class BattleSetupManager : MonoBehaviour
     private void Start() {
         // TODO: skip the connection screen if in singleplayer.
         ShowConnectionMenu();
+
+        if (BattleNetworkManager.instance) {
+            BattleNetworkManager.instance.ConnectPlayersToBattleSetup();
+        }
     }
 
     public void ShowConnectionMenu() {

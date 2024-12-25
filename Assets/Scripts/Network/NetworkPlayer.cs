@@ -17,6 +17,9 @@ public class NetworkPlayer : NetworkBehaviour {
         playerInput = GetComponent<PlayerInput>();
         playerInput.enabled = false; // start false just so it doesn't steal any input devices when it shouldn't
         playerInputController = GetComponent<BattleInputController>();
+
+        // ensures this won't be destroyed when moving bewteen the battlesetup and battle scene
+        DontDestroyOnLoad(this);
     }
 
     public override void OnNetworkSpawn()
@@ -46,6 +49,7 @@ public class NetworkPlayer : NetworkBehaviour {
     public void BattleConnectBoard() {
         int boardIndex = IsHost ? 0 : 1;
         playerInputController.board = BattleManager.instance.GetBoardByIndex(boardIndex);
+        Debug.Log(this+" connected to "+playerInputController.board);
     }
 
     [Rpc(SendTo.NotOwner)]

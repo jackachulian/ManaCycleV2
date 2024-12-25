@@ -54,6 +54,12 @@ public class BattleManager : MonoBehaviour
         foreach (Board board in boards) {
             board.InitializeBattle(this, seed);
         }
+
+        if (BattleNetworkManager.instance) {
+            BattleNetworkManager.instance.ConnectPlayersToBoards();
+        } else {
+            Debug.LogWarning("No network manager instance set!");
+        }
     }
 
     /// <summary>
