@@ -22,14 +22,12 @@ public class BattlePlayer : NetworkBehaviour {
     /// </summary>
     private BattleInputController playerInputController;
 
-    private void OnEnable() {
-        playerInput = GetComponent<PlayerInput>();
-        playerInputController = GetComponent<BattleInputController>();
-    }
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+
+        playerInput = GetComponent<PlayerInput>();
+        playerInputController = GetComponent<BattleInputController>();
 
         // enable input if the client owns this player (always true in singleplayer, caries in multiplayer)
         if (IsOwner) {

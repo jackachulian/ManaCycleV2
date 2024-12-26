@@ -8,6 +8,11 @@ public class BattleManager : MonoBehaviour
     public static BattleManager instance {get; set;}
 
     /// <summary>
+    /// The current settings being used for the battle, such as RNG seed, etc
+    /// </summary>
+    public static BattleSettings battleSettings {get; private set;}
+
+    /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
     [SerializeField] public ManaCycle manaCycle;
@@ -32,6 +37,14 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     [SerializeField] private ManaTile manaTilePrefab;
 
+    /// <summary>
+    /// Use this to set all the settings to use for the battle.
+    /// </summary>
+    /// <param name="settings">the BattleSettings object to use</param>
+    public static void Configure(BattleSettings settings) {
+        battleSettings = settings;
+    }
+
     private void Awake() {
         if (instance != null) {
             Debug.LogWarning("A new BattleManager has replaced the old one! Make sure there is only one BattleManager.");
@@ -49,10 +62,9 @@ public class BattleManager : MonoBehaviour
 
         // Used for mana color RNG during the match.
         // All boards share the same seed, and will have the same piece colors if the same RNG mode is selected.
-        int seed = Random.Range(0, int.MaxValue);
 
         foreach (Board board in boards) {
-            board.InitializeBattle(this, seed);
+            board.InitializeBattle(this, battleSettings.seed);
         }
 
         // Connects all players found to their respective boards.
