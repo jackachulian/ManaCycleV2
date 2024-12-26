@@ -559,9 +559,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8189162748236628404}
   - component: {fileID: 8080181362692088909}
+  - component: {fileID: 1456735445565561387}
   - component: {fileID: 6666762156440927966}
   m_Layer: 5
-  m_Name: P1PlayerPanel
+  m_Name: PlayerPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -599,6 +600,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6453708271299997485}
   m_CullTransparentMesh: 1
+--- !u!114 &1456735445565561387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6453708271299997485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1181847804
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &6666762156440927966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -611,9 +637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f80924bf4c01e6446adb0571f71dd6f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onReadyChanged:
-    m_PersistentCalls:
-      m_Calls: []
+  ShowTopMostFoldoutHeaderGroup: 1
+  toggle: {fileID: 7710081761713250204}
 --- !u!1 &6898293985073094567
 GameObject:
   m_ObjectHideFlags: 0

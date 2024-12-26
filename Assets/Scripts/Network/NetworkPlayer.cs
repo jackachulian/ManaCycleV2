@@ -36,11 +36,4 @@ public class NetworkPlayer : NetworkBehaviour {
         // If already in battle mode, connect the board
         if (BattleManager.instance) battlePlayer.BattleConnectBoard();
     }
-
-    
-
-    [Rpc(SendTo.NotOwner)]
-    private void TestRpc() {
-        
-    }
 }

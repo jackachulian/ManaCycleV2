@@ -10,12 +10,8 @@ public class ConnectionMenu : MonoBehaviour
     /// Selectables in this array will be temporarily un-interactable while attempting to join a session.
     /// </summary>
     [SerializeField] private Selectable[] disableWhileJoining;
-
-    private CanvasGroup canvasGroup;
-
-    private void Awake() {
-        canvasGroup = GetComponent<CanvasGroup>();
-
+    
+    private void Start() {
         // make sure there is a networkmanager before a session can be started
         StartNetworkManagerScene();
     }
