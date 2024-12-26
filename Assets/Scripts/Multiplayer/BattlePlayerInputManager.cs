@@ -1,11 +1,19 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BattlePlayerInputManager : PlayerInputManager {
-    public new static BattlePlayerInputManager instance {get; set;}
+/// <summary>
+/// Manages the connecting of seperate input devices as separate players in local multiplayer.
+/// </summary>
+public class BattlePlayerInputManager : MonoBehaviour {
+    public InputActionAsset actions;
 
-    public List<BattlePlayer> players;
+    public static BattlePlayerInputManager instance {get; set;}
+
+    private PlayerInputManager playerInputManager;
+
+    private List<BattlePlayer> players;
 
     private void Awake() {
         if (instance != null) {
@@ -13,15 +21,36 @@ public class BattlePlayerInputManager : PlayerInputManager {
         }
 
         instance = this;
+
+        players = new List<BattlePlayer>();
+
+        playerInputManager = GetComponent<PlayerInputManager>();
+
+        // enable all actions - the action asses tend to remain disabled when they shouldnt be
+        actions.Enable();
+        foreach (var map in actions.actionMaps) {
+            map.Enable();
+        }
     }
 
     private void Start() {
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnPlayerJoined(PlayerInput playerInput) {
-        players.Add(playerInput.GetComponent<BattlePlayer>());
+        BattlePlayer battlePlayer = playerInput.gameObject.GetComponent<BattlePlayer>();
+        if (!battlePlayer) {
+            Debug.Log("No battle player on spawned player");
+            return;
+        }
+
+        players.Add(battlePlayer);
         DontDestroyOnLoad(playerInput.gameObject);
+
+        // needed for NetworkVariables to work without raising warnings, but theoretically not needed for singleplayer
+        battlePlayer.GetComponent<NetworkObject>().Spawn();
+
+        Debug.Log(battlePlayer.gameObject+" joined");
     }
 
     private void OnPlayerLeft(PlayerInput playerInput) {

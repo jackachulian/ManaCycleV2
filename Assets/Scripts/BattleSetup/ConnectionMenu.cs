@@ -10,10 +10,13 @@ public class ConnectionMenu : MonoBehaviour
     /// Selectables in this array will be temporarily un-interactable while attempting to join a session.
     /// </summary>
     [SerializeField] private Selectable[] disableWhileJoining;
-    
+
     private void Start() {
         // make sure there is a networkmanager before a session can be started
         StartNetworkManagerScene();
+
+        // online by default when connection menu is open and join buttons may be pressed, will change to offline if singleplayer is pressed
+        BattleSetupManager.online = true; 
     }
 
     /// <summary>
@@ -76,6 +79,11 @@ public class ConnectionMenu : MonoBehaviour
     /// </summary>
     public void OnSinglePlayerPressed() {
         BattleSetupManager.online = false;
+
+        // all singleplayer will be a local host but deny all incoming connections
+        BattleNetworkManager.instance.StartHost();
+
+
         BattleSetupManager.instance.InitializeCharSelect();
     }
 }

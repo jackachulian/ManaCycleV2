@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,7 +6,7 @@ using UnityEngine.InputSystem;
 /// Contains the player ID, username, and other info.
 /// ID is a number 0-3. Tells the battle manager which board it should connect the player's inputs to.
 /// </summary>
-public class BattlePlayer : MonoBehaviour {
+public class BattlePlayer : NetworkBehaviour {
     /// <summary>
     /// A number 0-3. Determines which board this is connected to.
     /// </summary>
@@ -24,9 +25,27 @@ public class BattlePlayer : MonoBehaviour {
     private void Awake() {
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
+    }
 
-        // battle inputs will be enabled by the battlemanager once the battle starts
-        DisableBattleInputs();
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        // enable input if the client owns this player (always true in singleplayer, caries in multiplayer)
+        if (IsOwner) {
+            EnableUserInput();
+        } else {
+            DisableUserInput();
+        }
+
+        // TODO: make this work with 4 players
+        id = IsHost ? 0 : 1;
+
+        // If already in battle setup mode, connect the board
+        if (BattleSetupManager.instance) BattleSetupConnectPanel();
+
+        // If already in battle mode, connect the board
+        if (BattleManager.instance) BattleConnectBoard();
     }
 
     /// <summary>
@@ -47,18 +66,18 @@ public class BattlePlayer : MonoBehaviour {
     }
 
     public void EnableUserInput() {
-        playerInput.enabled = true;
+        if (playerInput) playerInput.enabled = true;
     }
 
     public void DisableUserInput() {
-        playerInput.enabled = false;
+        if (playerInput) playerInput.enabled = false;
     }
 
     public void EnableBattleInputs() {
-        playerInput.actions.FindActionMap("Battle").Enable();
+        if (playerInput) playerInput.actions.FindActionMap("Battle").Enable();
     }
 
     public void DisableBattleInputs() {
-        playerInput.actions.FindActionMap("Battle").Disable();
+        if (playerInput) playerInput.actions.FindActionMap("Battle").Disable();
     }
 }

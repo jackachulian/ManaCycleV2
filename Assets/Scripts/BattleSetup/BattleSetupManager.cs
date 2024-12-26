@@ -11,6 +11,7 @@ public class BattleSetupManager : MonoBehaviour
 
     /// <summary>
     /// True if the current battle setup is for an online match. False if it is for a local only match.
+    /// Note: both online and offline will use Netcode, but offline will only have one player being the host.
     /// </summary>
     public static bool online {get; set;} = true;
 

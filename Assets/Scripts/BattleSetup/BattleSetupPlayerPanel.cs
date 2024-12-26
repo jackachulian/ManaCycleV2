@@ -58,7 +58,6 @@ public class BattleSetupPlayerPanel : NetworkBehaviour
     /// For when the ready networkvariable is changed
     /// </summary>
     public void OnReadyChanged(bool previous, bool current) {
-        Debug.Log(this+" ready state changed from "+previous+" to "+current);
         toggle.isOn = current;
     }
 }

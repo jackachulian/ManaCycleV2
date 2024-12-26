@@ -20,7 +20,7 @@ public class ManaCycle : MonoBehaviour
     
     
 
-    // (These will later depend on the level in solo mode, but static for now)
+    // (These will later depend on the level in solo mode, but constant for now)
     public readonly int cycleLength = 7;
     public readonly int cycleUniqueColors = 5;
 
