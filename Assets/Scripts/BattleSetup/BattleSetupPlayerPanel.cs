@@ -20,31 +20,18 @@ public class BattleSetupPlayerPanel : NetworkBehaviour
     /// </summary>
     [SerializeField] private Toggle toggle;
 
-    private void OnEnable() {
-        toggle.onValueChanged.AddListener(OnReadyToggleChanged);
-    }
-
-    private void OnDisable() {
-        toggle.onValueChanged.RemoveListener(OnReadyToggleChanged);
-    }
-
     public void InitializeBattleSetup(CharacterSelectMenu characterSelectMenu) {
-        if (BattleNetworkManager.instance.IsHost) {
-            Debug.Log("Spawning "+this+" on network");
-            // "Spawn" on the network so that values such as Ready are synced to clients
-            GetComponent<NetworkObject>().Spawn();
-        } else {
-            Debug.Log("We are not the host, don't spawn the player panels");
-        }
+
     }
 
     public override void OnNetworkSpawn() {
-        Debug.Log(this+" spawned");
         ready.OnValueChanged += OnReadyChanged;
+        toggle.onValueChanged.AddListener(OnReadyToggleChanged);
     }
 
     public override void OnNetworkDespawn() {
         ready.OnValueChanged -= OnReadyChanged;
+        toggle.onValueChanged.RemoveListener(OnReadyToggleChanged);
     }
 
     /// <summary>
