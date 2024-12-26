@@ -57,6 +57,20 @@ public class BattlePlayerInputManager : MonoBehaviour {
         players.Remove(playerInput.GetComponent<BattlePlayer>());
     }
 
+    public void EnableJoining() {
+        playerInputManager.EnableJoining();
+    }
+
+    public void DisableJoining() {
+        playerInputManager.DisableJoining();
+    }
+
+    public void DisconnectAllPlayers() {
+        foreach (var player in players) {
+            Destroy(player.gameObject);
+        }
+    }
+
     public void EnableBattleInputs() {
         foreach (BattlePlayer player in players) {
             player.EnableBattleInputs();

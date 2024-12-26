@@ -61,6 +61,8 @@ public class BattleSetupManager : MonoBehaviour
         state = BattleSetupState.CONNECT_MENU;
         connectMenu.gameObject.SetActive(true);
         characterSelectMenu.gameObject.SetActive(false);
+        BattlePlayerInputManager.instance.DisableJoining();
+        BattlePlayerInputManager.instance.DisconnectAllPlayers();
     }
 
     /// <summary>
@@ -70,6 +72,7 @@ public class BattleSetupManager : MonoBehaviour
         state = BattleSetupState.CHARACTER_SELECT;
         connectMenu.gameObject.SetActive(false);
         characterSelectMenu.InitializeBattleSetup();
+        BattlePlayerInputManager.instance.EnableJoining();
     }
 
     public void SetSession(ISession session) {

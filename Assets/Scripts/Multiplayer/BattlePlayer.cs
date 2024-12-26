@@ -22,7 +22,7 @@ public class BattlePlayer : NetworkBehaviour {
     /// </summary>
     private BattleInputController playerInputController;
 
-    private void Awake() {
+    private void OnEnable() {
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
     }
@@ -42,10 +42,16 @@ public class BattlePlayer : NetworkBehaviour {
         id = IsHost ? 0 : 1;
 
         // If already in battle setup mode, connect the board
-        if (BattleSetupManager.instance) BattleSetupConnectPanel();
+        if (BattleSetupManager.instance) {
+            BattleSetupConnectPanel();
+        }
 
         // If already in battle mode, connect the board
-        if (BattleManager.instance) BattleConnectBoard();
+        if (BattleManager.instance) {
+            BattleConnectBoard();
+        } else {
+            DisableBattleInputs();
+        }
     }
 
     /// <summary>
@@ -66,18 +72,18 @@ public class BattlePlayer : NetworkBehaviour {
     }
 
     public void EnableUserInput() {
-        if (playerInput) playerInput.enabled = true;
+        playerInput.enabled = true;
     }
 
     public void DisableUserInput() {
-        if (playerInput) playerInput.enabled = false;
+        playerInput.enabled = false;
     }
 
     public void EnableBattleInputs() {
-        if (playerInput) playerInput.actions.FindActionMap("Battle").Enable();
+        playerInput.actions.FindActionMap("Battle").Enable();
     }
 
     public void DisableBattleInputs() {
-        if (playerInput) playerInput.actions.FindActionMap("Battle").Disable();
+        playerInput.actions.FindActionMap("Battle").Disable();
     }
 }
