@@ -10,6 +10,11 @@ public class BattleSetupManager : MonoBehaviour
     public static BattleSetupManager instance {get; set;}
 
     /// <summary>
+    /// True if the current battle setup is for an online match. False if it is for a local only match.
+    /// </summary>
+    public static bool online {get; set;} = true;
+
+    /// <summary>
     /// Current session this client is connected to.
     /// </summary>
     public ISession current_session {get; set;}

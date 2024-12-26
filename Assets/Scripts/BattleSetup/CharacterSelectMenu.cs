@@ -43,10 +43,12 @@ public class CharacterSelectMenu : MonoBehaviour
 
         // load the local player inputs needed for local play.
         // TODO: don't do this in online mode
-        if (!BattleNetworkManager.instance) {
+        if (!BattleSetupManager.online) {
             if (!PlayerInputManager.instance) {
                 SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
                 Debug.Log("loaded local player management scene");
+            } else {
+                Debug.Log("Not loading player input manager because an instance already exists");
             }
         }
     }

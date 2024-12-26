@@ -79,6 +79,7 @@ public class ConnectionMenu : MonoBehaviour
     /// TODO: probably should move this to the home menu
     /// </summary>
     public void OnSinglePlayerPressed() {
+        BattleSetupManager.online = false;
         BattleSetupManager.instance.InitializeCharSelect();
     }
 }
