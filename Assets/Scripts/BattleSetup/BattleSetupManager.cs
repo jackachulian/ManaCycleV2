@@ -31,6 +31,11 @@ public class BattleSetupManager : MonoBehaviour
         battleLobbyManager.battleSetupManager = this;
         battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
         battleLobbyManager.StartNetworkManagerScene();
+
+        
+        // start off with joins disabled. Enable it once the char select panel is shown in local multiplayer
+        battleLobbyManager.StartPlayerInputManager();
+        battleLobbyManager.battlePlayerInputManager.DisableJoining();
     }
 
     private void Start() {
@@ -53,8 +58,8 @@ public class BattleSetupManager : MonoBehaviour
         state = BattleSetupState.CONNECT_MENU;
         connectMenu.gameObject.SetActive(true);
         characterSelectMenu.gameObject.SetActive(false);
-        BattlePlayerInputManager.instance.DisableJoining();
-        BattlePlayerInputManager.instance.DisconnectAllPlayers();
+        battleLobbyManager.battlePlayerInputManager.DisableJoining();
+        battleLobbyManager.battlePlayerInputManager.DisconnectAllPlayers();
     }
 
     /// <summary>
@@ -64,10 +69,6 @@ public class BattleSetupManager : MonoBehaviour
         state = BattleSetupState.CHARACTER_SELECT;
         connectMenu.gameObject.SetActive(false);
         characterSelectMenu.InitializeBattleSetup();
-        BattlePlayerInputManager.instance.EnableJoining();
-    }
-
-    public void SetSession(ISession session) {
-        battleLobbyManager.current_session = session;
+        battleLobbyManager.battlePlayerInputManager.EnableJoining();
     }
 }

@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8f9ffae8e420db4b9ffc3cc994ffe8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleLobbyManager: {fileID: 11400000, guid: 4d6c448006e9f5c45a0d15d5d54afa7b, type: 2}
   playerPanels:
   - {fileID: 5674465028878187140}
   - {fileID: 1253505874}
@@ -1558,6 +1559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30e92861b3fa96b4ab83a4a2523c00c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleLobbyManager: {fileID: 11400000, guid: 4d6c448006e9f5c45a0d15d5d54afa7b, type: 2}
   connectMenu: {fileID: 1730108174}
   characterSelectMenu: {fileID: 30386044}
   state: 0
@@ -4628,6 +4630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c67c9aa94efbcd40a54b6aea161aa2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleLobbyManager: {fileID: 11400000, guid: 4d6c448006e9f5c45a0d15d5d54afa7b, type: 2}
   disableWhileJoining:
   - {fileID: 1174397080}
   - {fileID: 443741015}

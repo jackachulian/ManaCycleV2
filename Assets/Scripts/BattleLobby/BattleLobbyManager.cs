@@ -19,6 +19,16 @@ public class BattleLobbyManager : ScriptableObject {
     public BattleNetworkManager battleNetworkManager {get; set;}
 
     /// <summary>
+    /// Battle player input manager prefab to spawn in battle or battlesetup scenes (singleplayer / local multiplayer only)
+    /// </summary>
+    public BattlePlayerInputManager battlePlayerInputManagerPrefab;
+
+    /// <summary>
+    /// Instance of the BattlePlayerInputManager in the scene (only used in singleplayer/local multiplayer)
+    /// </summary>
+    public BattlePlayerInputManager battlePlayerInputManager {get; set;}
+
+    /// <summary>
     /// The battle setup manager in the battle setup scene. Value set by battlesetupmanager on awake. Null while in battle
     /// </summary>
     public BattleSetupManager battleSetupManager {get; set;}
@@ -82,5 +92,15 @@ public class BattleLobbyManager : ScriptableObject {
         } else {
             Debug.Log("Host already started");
         }
+    }
+
+    public void StartPlayerInputManager() {
+        if (battlePlayerInputManager != null) {
+            Debug.Log("Player input manager already instantiated");
+            return;
+        }
+
+        Debug.Log("Instantiating player input manager");
+        battlePlayerInputManager = Instantiate(battlePlayerInputManagerPrefab);
     }
 }

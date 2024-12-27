@@ -31,7 +31,7 @@ public class CharacterSelectMenu : MonoBehaviour
 
         // show the session code (Online mode only)
         if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
-            if (battleLobbyManager.current_session != null) {
+            if (battleLobbyManager.current_session == null) {
                 Debug.LogError("No session found while in online mode in character select!");
             } else {
                 showJoinCode.Session = battleLobbyManager.current_session;
@@ -44,7 +44,7 @@ public class CharacterSelectMenu : MonoBehaviour
             playerPanel.InitializeBattleSetup(this);
             playerPanel.ready.OnValueChanged += CheckIfAllPlayersReady;
             // spawn the player panels on the network if this is the server
-            if (battleLobbyManager.battleNetworkManager.IsServer) playerPanel.GetComponent<NetworkObject>().Spawn();
+            // if (battleLobbyManager.battleNetworkManager.IsServer) playerPanel.GetComponent<NetworkObject>().Spawn();
         }
 
         

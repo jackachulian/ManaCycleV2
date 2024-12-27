@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: BattleLobbyConfig
   m_EditorClassIdentifier: 
   battleNetworkManagerPrefab: {fileID: 6795268350944010003, guid: 3512e8bdb1722b24d945fbf98eb0c893, type: 3}
+  battlePlayerInputManagerPrefab: {fileID: 3813082260796398835, guid: 0bd4325197f5ead4482af532cff5e357, type: 3}

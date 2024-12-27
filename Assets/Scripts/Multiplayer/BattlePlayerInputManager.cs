@@ -7,30 +7,14 @@ using UnityEngine.InputSystem;
 /// Manages the connecting of seperate input devices as separate players in local multiplayer.
 /// </summary>
 public class BattlePlayerInputManager : MonoBehaviour {
-    public InputActionAsset actions;
-
-    public static BattlePlayerInputManager instance {get; set;}
-
     private PlayerInputManager playerInputManager;
 
     private List<BattlePlayer> players;
 
     private void Awake() {
-        if (instance != null) {
-            Debug.LogWarning("More than one BattlePlayerInputManager was loaded!");
-        }
-
-        instance = this;
-
         players = new List<BattlePlayer>();
 
         playerInputManager = GetComponent<PlayerInputManager>();
-
-        // enable all actions - the action asses tend to remain disabled when they shouldnt be
-        actions.Enable();
-        foreach (var map in actions.actionMaps) {
-            map.Enable();
-        }
     }
 
     private void Start() {
@@ -48,7 +32,7 @@ public class BattlePlayerInputManager : MonoBehaviour {
         DontDestroyOnLoad(playerInput.gameObject);
 
         // needed for NetworkVariables to work without raising warnings, but theoretically not needed for singleplayer
-        battlePlayer.GetComponent<NetworkObject>().Spawn();
+        // battlePlayer.GetComponent<NetworkObject>().Spawn();
 
         Debug.Log(battlePlayer.gameObject+" joined");
     }
