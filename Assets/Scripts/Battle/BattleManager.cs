@@ -3,11 +3,6 @@ using UnityEngine;
 public class BattleManager : MonoBehaviour
 {
     /// <summary>
-    /// The BattleManager for the scene. Only one should exist at a time, a warning will be raised if there is more than one.
-    /// </summary>
-    public static BattleManager instance {get; set;}
-
-    /// <summary>
     /// The current settings being used for the battle, such as RNG seed, etc
     /// </summary>
     public static BattleSettings battleSettings {get; private set;}
@@ -46,15 +41,18 @@ public class BattleManager : MonoBehaviour
     }
 
     private void Awake() {
-        if (instance != null) {
-            Debug.LogWarning("A new BattleManager has replaced the old one! Make sure there is only one BattleManager.");
+        if (BattleLobbyManager.battleManager != null) {
+            Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
+            Destroy(BattleLobbyManager.battleManager.gameObject);
         }
-
-        instance = this;
+        
+        BattleLobbyManager.battleManager = this;
+        BattleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
     }
 
     public void Start() {
-        // TODO: synchronize RNG between clients
+        BattleLobbyManager.StartNetworkManagerScene();
+        BattleLobbyManager.StartNetworkManagerHost();
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.

@@ -40,12 +40,12 @@ public class BattlePlayer : NetworkBehaviour {
         id = IsHost ? 0 : 1;
 
         // If already in battle setup mode, connect the board
-        if (BattleSetupManager.instance) {
+        if (BattleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
             BattleSetupConnectPanel();
         }
 
         // If already in battle mode, connect the board
-        if (BattleManager.instance) {
+        if (BattleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
             BattleConnectBoard();
         } else {
             DisableBattleInputs();
@@ -65,7 +65,7 @@ public class BattlePlayer : NetworkBehaviour {
     public void BattleConnectBoard() {
         // TODO: ideally, make this work when there is up to 4 players. or online could just be 1v1s
         int boardIndex = id;
-        playerInputController.board = BattleManager.instance.GetBoardByIndex(boardIndex);
+        playerInputController.board = BattleLobbyManager.battleManager.GetBoardByIndex(boardIndex);
         Debug.Log(this+" connected to "+playerInputController.board);
     }
 

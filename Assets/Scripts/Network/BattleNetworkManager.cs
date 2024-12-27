@@ -10,5 +10,11 @@ public class BattleNetworkManager : NetworkManager {
         }
 
         instance = this;
+
+        // If battle scene is already active, make sure host is started 
+        // (only really used for testing straight into battle scene and skipping battle setup)
+        if (BattleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
+            BattleLobbyManager.StartNetworkManagerHost();
+        }
     }
 }

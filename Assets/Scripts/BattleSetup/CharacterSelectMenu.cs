@@ -25,11 +25,11 @@ public class CharacterSelectMenu : MonoBehaviour
         gameObject.SetActive(true);
 
         // show the session code (Online mode only)
-        if (BattleSetupManager.online) {
-            if (BattleSetupManager.instance.current_session != null) {
+        if (BattleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
+            if (BattleLobbyManager.current_session != null) {
                 Debug.LogError("No session found while in online mode in character select!");
             } else {
-                showJoinCode.Session = BattleSetupManager.instance.current_session;
+                showJoinCode.Session = BattleLobbyManager.current_session;
                 showJoinCode.OnSessionJoined(); 
             }
         }
@@ -46,7 +46,7 @@ public class CharacterSelectMenu : MonoBehaviour
 
         // load the local player inputs needed for local play.
         // don't do this in online mode
-        if (!BattleSetupManager.online) {
+        if (BattleLobbyManager.battleType != BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
             if (!PlayerInputManager.instance) {
                 SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
                 Debug.Log("loaded local player management scene");

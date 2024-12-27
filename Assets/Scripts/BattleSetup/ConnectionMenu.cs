@@ -12,11 +12,9 @@ public class ConnectionMenu : MonoBehaviour
     [SerializeField] private Selectable[] disableWhileJoining;
 
     private void Start() {
-        // make sure there is a networkmanager before a session can be started
-        StartNetworkManagerScene();
-
-        // online by default when connection menu is open and join buttons may be pressed, will change to offline if singleplayer is pressed
-        BattleSetupManager.online = true; 
+        // ONLNE_MULTIPLAYER by default when connection menu is open and join buttons may be pressed, 
+        // will change to LOCAL_MULTIPLAYER if offline button is pressed
+        BattleLobbyManager.battleType = BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER;
     }
 
     /// <summary>
@@ -25,8 +23,8 @@ public class ConnectionMenu : MonoBehaviour
     public void OnSessionJoined(ISession session) {
         Debug.Log("Session has ben joined: "+session.Code);
 
-        BattleSetupManager.instance.SetSession(session);
-        BattleSetupManager.instance.InitializeCharSelect();
+        BattleLobbyManager.current_session = session;
+        BattleLobbyManager.battleSetupManager.InitializeCharSelect();
     }
 
     /// <summary>
@@ -56,34 +54,24 @@ public class ConnectionMenu : MonoBehaviour
     /// Re-show the connection menu when a session is terminated.
     /// </summary>
     public void OnSessionLeft() {
-        BattleSetupManager.instance.ShowConnectionMenu();
+        BattleLobbyManager.battleSetupManager.ShowConnectionMenu();
         foreach (Selectable s in disableWhileJoining) {
             s.interactable = true;
         }
     }
 
-    /// <summary>
-    /// Ensures that the network manager scene is loaded additively.
-    /// </summary>
-    public void StartNetworkManagerScene() {
-        if (BattleNetworkManager.instance == null) {
-            Debug.Log("Starting network management scene");
-            SceneManager.LoadScene("NetworkManagement", LoadSceneMode.Additive);
-        } else {
-            Debug.Log("Skipping network management scene load, battle network manager already present");
-        }
-    }
+    
 
     /// <summary>
     /// TODO: probably should move this to the home menu
     /// </summary>
     public void OnSinglePlayerPressed() {
-        BattleSetupManager.online = false;
+        BattleLobbyManager.battleType = BattleLobbyManager.BattleType.LOCAL_MULTIPLAYER;
 
         // all singleplayer will be a local host but deny all incoming connections
         BattleNetworkManager.instance.StartHost();
 
 
-        BattleSetupManager.instance.InitializeCharSelect();
+        BattleLobbyManager.battleSetupManager.InitializeCharSelect();
     }
 }

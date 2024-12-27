@@ -4,25 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class BattleSetupManager : MonoBehaviour
 {
-    /// <summary>
-    /// The BattleSetupManager for the current battle setup scene. Only one should exist at a time, a warning will be raised if there is more than one.
-    /// </summary>
-    public static BattleSetupManager instance {get; set;}
-
-    /// <summary>
-    /// True if the current battle setup is for an online match. False if it is for a local only match.
-    /// Note: both online and offline will use Netcode, but offline will only have one player being the host.
-    /// </summary>
-    public static bool online {get; set;} = true;
-
-    /// <summary>
-    /// Current session this client is connected to.
-    /// </summary>
-    public ISession current_session {get; set;}
-
     [SerializeField] private ConnectionMenu connectMenu;
 
-    [SerializeField] private CharacterSelectMenu characterSelectMenu;
+    [SerializeField] public CharacterSelectMenu characterSelectMenu;
 
     public enum BattleSetupState {
         CONNECT_MENU,
@@ -34,11 +18,14 @@ public class BattleSetupManager : MonoBehaviour
     public BattleSetupState state;
 
     private void Awake() {
-        if (instance != null) {
-            Debug.LogWarning("A new BattleSetupManager has replaced the old one! Make sure there is only one BattleSetupManager in the scene.");
+        if (BattleLobbyManager.battleSetupManager != null) {
+            Debug.LogWarning("Duplicate BattleSetupManager! Destroying the old one.");
+            Destroy(BattleLobbyManager.battleSetupManager.gameObject);
         }
 
-        instance = this;
+        BattleLobbyManager.battleSetupManager = this;
+        BattleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
+        BattleLobbyManager.StartNetworkManagerScene();
     }
 
     private void Start() {
@@ -76,6 +63,6 @@ public class BattleSetupManager : MonoBehaviour
     }
 
     public void SetSession(ISession session) {
-        current_session = session;
+        BattleLobbyManager.current_session = session;
     }
 }
