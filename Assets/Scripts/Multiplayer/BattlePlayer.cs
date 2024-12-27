@@ -8,6 +8,11 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class BattlePlayer : NetworkBehaviour {
     /// <summary>
+    /// Stores shared battle lobby dependencies
+    /// </summary>
+    [SerializeField] public BattleLobbyManager battleLobbyManager;
+
+    /// <summary>
     /// A number 0-3. Determines which board this is connected to.
     /// </summary>
     public int id {get; set;}
@@ -40,12 +45,12 @@ public class BattlePlayer : NetworkBehaviour {
         id = IsHost ? 0 : 1;
 
         // If already in battle setup mode, connect the board
-        if (BattleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
+        if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
             BattleSetupConnectPanel();
         }
 
         // If already in battle mode, connect the board
-        if (BattleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
+        if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
             BattleConnectBoard();
         } else {
             DisableBattleInputs();
@@ -65,7 +70,7 @@ public class BattlePlayer : NetworkBehaviour {
     public void BattleConnectBoard() {
         // TODO: ideally, make this work when there is up to 4 players. or online could just be 1v1s
         int boardIndex = id;
-        playerInputController.board = BattleLobbyManager.battleManager.GetBoardByIndex(boardIndex);
+        playerInputController.board = battleLobbyManager.battleManager.GetBoardByIndex(boardIndex);
         Debug.Log(this+" connected to "+playerInputController.board);
     }
 

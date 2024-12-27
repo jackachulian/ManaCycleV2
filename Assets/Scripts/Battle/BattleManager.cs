@@ -8,6 +8,11 @@ public class BattleManager : MonoBehaviour
     public static BattleSettings battleSettings {get; private set;}
 
     /// <summary>
+    /// Stores shared battle lobby dependencies
+    /// </summary>
+    [SerializeField] public BattleLobbyManager battleLobbyManager;
+
+    /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
     [SerializeField] public ManaCycle manaCycle;
@@ -41,18 +46,18 @@ public class BattleManager : MonoBehaviour
     }
 
     private void Awake() {
-        if (BattleLobbyManager.battleManager != null) {
+        if (battleLobbyManager.battleManager != null) {
             Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
-            Destroy(BattleLobbyManager.battleManager.gameObject);
+            Destroy(battleLobbyManager.battleManager.gameObject);
         }
         
-        BattleLobbyManager.battleManager = this;
-        BattleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
+        battleLobbyManager.battleManager = this;
+        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
     }
 
     public void Start() {
-        BattleLobbyManager.StartNetworkManagerScene();
-        BattleLobbyManager.StartNetworkManagerHost();
+        battleLobbyManager.StartNetworkManagerScene();
+        battleLobbyManager.StartNetworkManagerHost();
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.

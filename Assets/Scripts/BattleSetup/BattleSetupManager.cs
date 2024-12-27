@@ -4,6 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class BattleSetupManager : MonoBehaviour
 {
+    /// <summary>
+    /// Stores shared battle lobby dependencies
+    /// </summary>
+    [SerializeField] public BattleLobbyManager battleLobbyManager;
+
     [SerializeField] private ConnectionMenu connectMenu;
 
     [SerializeField] public CharacterSelectMenu characterSelectMenu;
@@ -18,14 +23,14 @@ public class BattleSetupManager : MonoBehaviour
     public BattleSetupState state;
 
     private void Awake() {
-        if (BattleLobbyManager.battleSetupManager != null) {
+        if (battleLobbyManager.battleSetupManager != null) {
             Debug.LogWarning("Duplicate BattleSetupManager! Destroying the old one.");
-            Destroy(BattleLobbyManager.battleSetupManager.gameObject);
+            Destroy(battleLobbyManager.battleSetupManager.gameObject);
         }
 
-        BattleLobbyManager.battleSetupManager = this;
-        BattleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
-        BattleLobbyManager.StartNetworkManagerScene();
+        battleLobbyManager.battleSetupManager = this;
+        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
+        battleLobbyManager.StartNetworkManagerScene();
     }
 
     private void Start() {
@@ -63,6 +68,6 @@ public class BattleSetupManager : MonoBehaviour
     }
 
     public void SetSession(ISession session) {
-        BattleLobbyManager.current_session = session;
+        battleLobbyManager.current_session = session;
     }
 }

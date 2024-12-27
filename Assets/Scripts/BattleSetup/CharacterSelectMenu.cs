@@ -8,6 +8,11 @@ using Unity.Netcode;
 public class CharacterSelectMenu : MonoBehaviour
 {
     /// <summary>
+    /// Stores shared battle lobby dependencies
+    /// </summary>
+    [SerializeField] public BattleLobbyManager battleLobbyManager;
+
+    /// <summary>
     /// All four battle setup player panels in the character select menu.
     /// </summary>
     [SerializeField] private BattleSetupPlayerPanel[] playerPanels;
@@ -25,11 +30,11 @@ public class CharacterSelectMenu : MonoBehaviour
         gameObject.SetActive(true);
 
         // show the session code (Online mode only)
-        if (BattleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
-            if (BattleLobbyManager.current_session != null) {
+        if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
+            if (battleLobbyManager.current_session != null) {
                 Debug.LogError("No session found while in online mode in character select!");
             } else {
-                showJoinCode.Session = BattleLobbyManager.current_session;
+                showJoinCode.Session = battleLobbyManager.current_session;
                 showJoinCode.OnSessionJoined(); 
             }
         }
@@ -39,14 +44,14 @@ public class CharacterSelectMenu : MonoBehaviour
             playerPanel.InitializeBattleSetup(this);
             playerPanel.ready.OnValueChanged += CheckIfAllPlayersReady;
             // spawn the player panels on the network if this is the server
-            if (BattleNetworkManager.instance.IsServer) playerPanel.GetComponent<NetworkObject>().Spawn();
+            if (battleLobbyManager.battleNetworkManager.IsServer) playerPanel.GetComponent<NetworkObject>().Spawn();
         }
 
         
 
         // load the local player inputs needed for local play.
         // don't do this in online mode
-        if (BattleLobbyManager.battleType != BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
+        if (battleLobbyManager.battleType != BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
             if (!PlayerInputManager.instance) {
                 SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
                 Debug.Log("loaded local player management scene");
@@ -61,7 +66,7 @@ public class CharacterSelectMenu : MonoBehaviour
 
     public void CheckIfAllPlayersReady(bool previous, bool current) {
         // Only the server/host can start the game
-        if (!BattleNetworkManager.instance.IsServer) return;
+        if (!battleLobbyManager.battleNetworkManager.IsServer) return;
 
         // Make sure all players are ready
         foreach (BattleSetupPlayerPanel playerPanel in playerPanels) {
