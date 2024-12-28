@@ -5,12 +5,16 @@ using Unity.Services.Multiplayer;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 
+/// <summary>
+/// The character select menu and all of its UI-related components and functionalities.
+/// For network-related CharacterSelect RPCs and server functions go to the CharacterSelectNetworkBehaviour.
+/// </summary>
 public class CharacterSelectMenu : MonoBehaviour
 {
     /// <summary>
     /// Stores shared battle lobby dependencies
     /// </summary>
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
+    [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     /// <summary>
     /// All four battle setup player panels in the character select menu.
@@ -23,6 +27,16 @@ public class CharacterSelectMenu : MonoBehaviour
     [SerializeField] private ShowJoinCode showJoinCode;
 
     /// <summary>
+    /// Controls network-related RPCs, seperate from the UI.
+    /// </summary>
+    [SerializeField] private CharacterSelectNetworkBehaviour _characterSelectNetworkBehaviour;
+
+    /// <summary>
+    /// Controls network-related RPCs, separate from the UI. (Public accessor)
+    /// </summary>
+    public CharacterSelectNetworkBehaviour characterSelectNetworkBehaviour => _characterSelectNetworkBehaviour;
+    
+    /// <summary>
     /// Initializes the char select. Should only be called from the battle setup manager
     /// </summary>
     public void InitializeBattleSetup() {
@@ -31,61 +45,41 @@ public class CharacterSelectMenu : MonoBehaviour
 
         // show the session code (Online mode only)
         if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
+            showJoinCode.gameObject.SetActive(true);
             if (battleLobbyManager.current_session == null) {
                 Debug.LogError("No session found while in online mode in character select!");
             } else {
                 showJoinCode.Session = battleLobbyManager.current_session;
                 showJoinCode.OnSessionJoined(); 
             }
+        } else {
+            showJoinCode.gameObject.SetActive(false);
         }
 
         // initialize battle panels
         foreach (BattleSetupPlayerPanel playerPanel in playerPanels) {
             playerPanel.InitializeBattleSetup(this);
-            playerPanel.ready.OnValueChanged += CheckIfAllPlayersReady;
-            // spawn the player panels on the network if this is the server
-            // if (battleLobbyManager.battleNetworkManager.IsServer) playerPanel.GetComponent<NetworkObject>().Spawn();
-        }
-
-        
-
-        // load the local player inputs needed for local play.
-        // don't do this in online mode
-        if (battleLobbyManager.battleType != BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
-            if (!PlayerInputManager.instance) {
-                SceneManager.LoadScene("LocalPlayerManagement", LoadSceneMode.Additive);
-                Debug.Log("loaded local player management scene");
-            } else {
-                Debug.Log("Not loading player input manager because an instance already exists");
-            }
-        }
-
-        
-        
+        }        
     }
 
-    public void CheckIfAllPlayersReady(bool previous, bool current) {
-        // Only the server/host can start the game
-        if (!battleLobbyManager.battleNetworkManager.IsServer) return;
-
-        // Make sure all players are ready
-        foreach (BattleSetupPlayerPanel playerPanel in playerPanels) {
-            if (!playerPanel.ready.Value) {
-                return;
-            }
-        }
-
-        // The server/host chooses the seed that will be used for piece RNG.
-        BattleSettings settings = new BattleSettings();
-        settings.seed = Random.Range(0, int.MaxValue);
-
-        //TODO: transition / battle start sound/animation
-        StartGameRpc(settings);
+    public void HideUI() {
+        gameObject.SetActive(false);
     }
 
-    [Rpc(SendTo.Everyone)]
-    public void StartGameRpc(BattleSettings settings) {
-        BattleManager.Configure(settings);
-        SceneManager.LoadScene("Battle");
+    /// <summary>
+    /// Spawn the network behaviour that will control this UI.
+    /// Only works if this client is the host.
+    /// </summary>
+    public void SpawnNetworkObject() {
+        Debug.Log("Spawning character select network behaviour....");
+        characterSelectNetworkBehaviour.GetComponent<NetworkObject>().Spawn();
+    }
+
+    /// <summary>
+    /// Get the setuppanel with the given index.
+    /// The controlled panel will have the same index as the board the player will control in battle.
+    /// </summary>
+    public BattleSetupPlayerPanel GetPanel(int index) {
+        return playerPanels[index];
     }
 }

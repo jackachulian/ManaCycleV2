@@ -72,6 +72,7 @@ public class BattleLobbyManager : ScriptableObject {
         if (battleNetworkManager == null) {
             Debug.Log("Instantiating network manager");
             battleNetworkManager = Instantiate(battleNetworkManagerPrefab);
+            battleNetworkManager.Initialize(this);
         } else {
             Debug.Log("Skipping network management scene load, battle network manager already present");
         }
