@@ -1,4 +1,6 @@
+using Unity.Collections;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +13,11 @@ public class BattlePlayer : NetworkBehaviour {
     /// Stores shared battle lobby dependencies
     /// </summary>
     [SerializeField] public BattleLobbyManager battleLobbyManager;
+
+    /// <summary>
+    /// The client's username. Set by the client when joining.
+    /// </summary>
+    public NetworkVariable<FixedString128Bytes> username = new NetworkVariable<FixedString128Bytes>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     /// <summary>
     /// A number 0-3. Determines which board this is connected to.
@@ -47,13 +54,20 @@ public class BattlePlayer : NetworkBehaviour {
 
         battleLobbyManager.battleNetworkManager.AddPlayer(OwnerClientId, this);
 
+        // Set username asynchrously, if this is the local player
+        if (IsLocalPlayer) {
+            SetUsernameAsync();
+        }
+
         boardIndex.OnValueChanged += OnBoardIndexChanged;
+
+        username.OnValueChanged += OnUsernameChanged;
 
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
 
-        // enable input if the client owns this player (always true in singleplayer, varies in multiplayer)
-        if (IsOwner) {
+        // only enable input if this is the local player (always true in singleplayer, varies in multiplayer)
+        if (IsLocalPlayer) {
             EnableUserInput();
         } else {
             DisableUserInput();
@@ -76,6 +90,14 @@ public class BattlePlayer : NetworkBehaviour {
         }
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    public async void SetUsernameAsync() {
+        username.Value = await AuthenticationService.Instance.GetPlayerNameAsync();
+    }
+
+    public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
+        playerPanel.SetUsername(current.ToString());
     }
 
     public override void OnNetworkDespawn()

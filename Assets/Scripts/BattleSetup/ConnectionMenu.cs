@@ -1,4 +1,7 @@
+using TMPro;
 using Unity.Netcode;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using Unity.Services.Multiplayer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +15,11 @@ public class ConnectionMenu : MonoBehaviour
     [SerializeField] public BattleLobbyManager battleLobbyManager;
 
     /// <summary>
+    /// Shows the username. Probably temporary
+    /// </summary>
+    [SerializeField] private TMP_Text guestUsernameText;
+
+    /// <summary>
     /// Selectables in this array will be temporarily un-interactable while attempting to join a session.
     /// </summary>
     [SerializeField] private Selectable[] disableWhileJoining;
@@ -20,6 +28,12 @@ public class ConnectionMenu : MonoBehaviour
         // ONLNE_MULTIPLAYER by default when connection menu is open and join buttons may be pressed, 
         // will change to LOCAL_MULTIPLAYER if offline button is pressed
         battleLobbyManager.battleType = BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER;
+
+        AuthenticationService.Instance.SignedIn += OnSignedIn;
+    }
+
+    public async void OnSignedIn() {
+        guestUsernameText.text = "Guest username: "+await AuthenticationService.Instance.GetPlayerNameAsync();
     }
 
     /// <summary>

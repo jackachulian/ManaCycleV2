@@ -1,4 +1,6 @@
 using System;
+using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,18 +12,41 @@ using UnityEngine.UI;
 public class BattleSetupPlayerPanel : MonoBehaviour
 {
     /// <summary>
+    /// Displays the username in online mode.
+    /// </summary>
+    [SerializeField] private TMP_Text usernameText;
+
+    /// <summary>
     /// checkbox for when the player is ready
     /// (PROBABLY TEMPORARY, will be replaced with selecting a character, RNG and drop speed.)
     /// </summary>
-    [SerializeField] private Toggle toggle;
+    [SerializeField] private Toggle readyToggle;
+
+    /// <summary>
+    /// Cached canvasgroup component.
+    /// </summary>
+    private CanvasGroup canvasGroup;
 
     /// <summary>
     /// The BattlePlayer currently assigned to this board, according to the RPCs sent by CharacterSelectNetworkBehaviour.
     /// </summary>
     private BattlePlayer battlePlayer;
 
+    public void Awake() {
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        // start off as mostly transparent when no player connected (may change this later)
+        canvasGroup.alpha = 0.4f;
+
+        // hide whatever placeholder username there is until a player connects to this panel
+        SetUsername("");
+
+        // toggle starts as uninteractable, will become interactable when the local client controls this panel
+        readyToggle.interactable = false;
+    }
+
     public void InitializeBattleSetup(CharacterSelectMenu characterSelectMenu) {
-        
+        // there was code here but not anymore, most code will be in OnNetworkSpawn
     }
 
     /// <summary>
@@ -38,11 +63,16 @@ public class BattleSetupPlayerPanel : MonoBehaviour
         if (battlePlayer) {
             Debug.Log("Unassigning client id "+battlePlayer.OwnerClientId+" from setup panel object "+this);
 
-            toggle.interactable = false;
+            readyToggle.interactable = false;
             battlePlayer.ready.OnValueChanged -= OnReadyChanged;
 
+            SetUsername("");
+
+            // semi-transparent when no player connected
+            canvasGroup.alpha = 0.4f;
+
             // only stop listening for UI callbacks if the player actually controls the toggle
-            if (battlePlayer.IsOwner) toggle.onValueChanged.RemoveListener(OnReadyToggleChanged);
+            if (battlePlayer.IsOwner) readyToggle.onValueChanged.RemoveListener(OnReadyToggleChanged);
         }
 
         battlePlayer = player;
@@ -51,14 +81,24 @@ public class BattleSetupPlayerPanel : MonoBehaviour
         if (battlePlayer) {
             Debug.Log("Assigning player object of client id "+battlePlayer.OwnerClientId+" to setup panel object "+this);
 
-            toggle.interactable = battlePlayer.IsOwner;
+            readyToggle.interactable = battlePlayer.IsOwner;
             battlePlayer.ready.OnValueChanged += OnReadyChanged;
 
-            // only listen for ui callbacks if the player actually controls the toggle
-            if (battlePlayer.IsOwner) toggle.onValueChanged.AddListener(OnReadyToggleChanged);
-        }
+            SetUsername(battlePlayer.username.Value.ToString());
 
-        
+            // fully opaque when a player is connected
+            canvasGroup.alpha = 1f;
+
+            // only listen for ui callbacks if the player actually controls the toggle
+            if (battlePlayer.IsOwner) readyToggle.onValueChanged.AddListener(OnReadyToggleChanged);
+        }
+    }
+
+    /// <summary>
+    /// For when a player connects and after their username is set asynchronously from their client.
+    /// </summary>
+    public void SetUsername(string username) {
+        usernameText.text = username;
     }
 
     // public override void OnNetworkSpawn() {
@@ -91,6 +131,6 @@ public class BattleSetupPlayerPanel : MonoBehaviour
     public void OnReadyChanged(bool previous, bool current) {
         // Debug.Log(this+" ready was changed from "+previous+" to "+current);
         // change value without notify (notify would call OnReadyToggleChanged which would try to re-update the network variable!)
-        toggle.SetIsOnWithoutNotify(current);
+        readyToggle.SetIsOnWithoutNotify(current);
     }
 }
