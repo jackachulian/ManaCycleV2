@@ -34,10 +34,9 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
     }
 
     public void OnPlayerLeft(ulong clientId) {
-        UnassignClientFromPanel(clientId);
-
-        // disconnect player from panel - may not be needed because the player destroys itself when leaving for now. so check if null
         if (IsServer) {
+            UnassignClientFromPanel(clientId);
+
             BattlePlayer player = battleLobbyManager.battleNetworkManager.GetPlayerByClientId(clientId);
             if (player) player.ready.OnValueChanged -= OnAnyPlayerReadyChanged;
         }

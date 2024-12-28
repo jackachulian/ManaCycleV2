@@ -88,7 +88,7 @@ public class BattleLobbyManager : ScriptableObject {
             return;
         }
 
-        if (!battleNetworkManager.IsHost) {
+        if (!battleNetworkManager.IsHost && !battleNetworkManager.IsClient) {
             battleNetworkManager.StartHost();
         } else {
             Debug.Log("Host already started");
