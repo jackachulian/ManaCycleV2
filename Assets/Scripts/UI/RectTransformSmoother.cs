@@ -6,7 +6,11 @@ namespace MainMenu
 {
     public class RectTransformSmoother : MonoBehaviour
     {
-        private RectTransform rt;
+        private RectTransform _rt;
+        private RectTransform rt {
+            get => (_rt == null) ? GetComponent<RectTransform>() : _rt;
+        }
+
         private Vector3 targetAnchoredPosition;
         private Vector3 targetEulerAngles;
         private Vector3 targetScale;
@@ -21,7 +25,7 @@ namespace MainMenu
         // Start is called before the first frame update
         void Start()
         {
-            rt = GetComponent<RectTransform>();
+            _rt = GetComponent<RectTransform>();
 
             targetAnchoredPosition = rt.anchoredPosition;
             targetEulerAngles = rt.eulerAngles;
@@ -39,6 +43,7 @@ namespace MainMenu
         // set target pos and rotation to smoothly transition to
         public void SetTargets(Vector3 pos, Vector3? ea = null, Vector3? s = null, float st = 0.1f)
         {
+            if (st == 0f) SetImmediate(pos, ea, s);
             targetAnchoredPosition = pos;
             if (ea.HasValue) targetEulerAngles = ea.Value;
             if (s != null) targetScale = s.Value;

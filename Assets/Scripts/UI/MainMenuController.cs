@@ -9,25 +9,22 @@ namespace MainMenu
     {
         // should correspond to the color of each button
         [SerializeField] private Color[] menuColors;
-        [SerializeField] private HalfRadialButtons radialMenu;
+        [SerializeField] private HalfRadialButtons rootMenu;
+        [SerializeField] private HalfRadialButtons settingsMenu;
         [SerializeField] private SelectionSceneSwapper sceneSwapper;
         [SerializeField] private Image backgroundImage;
 
         // Start is called before the first frame update
         void Start()
         {
-            radialMenu.ButtonSelected += OnButtonSelected;
-            radialMenu.ButtonSelected += sceneSwapper.OnButtonSelected;
+            rootMenu.ButtonSelected += OnButtonSelected;
+            rootMenu.ButtonSelected += sceneSwapper.OnButtonSelected;
+
+            settingsMenu.gameObject.SetActive(false);
             
             // TODO cleanup radial button menu init
             OnButtonSelected(0);
             sceneSwapper.OnButtonSelected(0, true);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            
         }
 
         // called when a new button in the radial menu is selected. Update visuals accordingly
@@ -35,6 +32,7 @@ namespace MainMenu
         {
             backgroundImage.materialForRendering.SetColor("_Color", Color.Lerp(menuColors[index], Color.black, 0.65f));
         }
+
     }
 }
 
