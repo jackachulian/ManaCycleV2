@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class BattleManager : NetworkBehaviour
 {
+    private NetworkVariable<BattleData> battleData = new NetworkVariable<BattleData>();
+
     /// <summary>
     /// Stores shared battle lobby dependencies
     /// </summary>
@@ -37,6 +39,11 @@ public class BattleManager : NetworkBehaviour
     /// </summary>
     [SerializeField] private ManaTile manaTilePrefab;
 
+    /// <summary>
+    /// only true once initialized. will initialize the first time the networkvariable BattleData is changed/set on this client
+    /// </summary>
+    private bool initialized = false;
+
     private void Awake() {
         if (this == null) {
             Debug.LogWarning("Self battlemanager is null, destroying self");
@@ -66,6 +73,26 @@ public class BattleManager : NetworkBehaviour
 
     public override void OnNetworkSpawn() {
         Debug.Log("BattleManager spawned");
+        if (battleLobbyManager.networkManager.IsServer) {
+            battleData.Value = battleLobbyManager.battleData;
+        }
+
+        InitializeBattle();
+    }
+
+    /// <summary>
+    /// Initialize the battle with the given data. Will decide RNG, cycle sequence, etc
+    /// </summary>
+    public void InitializeBattle() {
+        if (initialized) {
+            Debug.LogWarning("BattleManager already initialized");
+            return;
+        }
+        initialized = true;
+
+        Debug.Log("BattleManager initialized via RPC");
+        battleLobbyManager.SetBattleData(battleData.Value);
+
         battleLobbyManager.battleManager = this;
         battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
 

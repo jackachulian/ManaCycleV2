@@ -1,3 +1,5 @@
+using System.Linq;
+using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using Unity.Services.Multiplayer;
 using Unity.VisualScripting;
@@ -77,23 +79,28 @@ public class BattleLobbyManager : ScriptableObject {
     /// Start the host on the networkmanager if not already started.
     // Mainly used for testing when directly loading into battle scene without starting host in battle setup scene
     /// </summary>
-    public void StartNetworkManagerHost() {
+    public void StartNetworkManager() {
         if (!networkManager) {
             Debug.LogError("Battle network scene is not loaded, can't start host!");
             return;
         }
 
         if (!networkManager.IsHost && !networkManager.IsClient) {
-            networkManager.StartHost();
+            if (CurrentPlayer.ReadOnlyTags().Contains("DefaultToClient")) {
+                networkManager.StartClient();
+            } else {
+                // If the host is started while in battle phase, battle setup was skipped, 
+                // so load some default battle settings
+                if (battlePhase == BattlePhase.BATTLE) {
+                    Debug.Log("Using default battle data, because battle scene was loaded directly!");
+                    BattleData battleData = new BattleData();
+                    battleData.cycleLength = 7;
+                    battleData.cycleUniqueColors = 5;
+                    battleData.Randomize();
+                    SetBattleData(battleData);
+                }
 
-            // If the host is started while in battle phase, battle setup was skipped, so load some default battle settings
-            if (battlePhase == BattlePhase.BATTLE) {
-                Debug.Log("Using default battle data, because battle scene was loaded directly!");
-                BattleData battleData = new BattleData();
-                battleData.cycleLength = 7;
-                battleData.cycleUniqueColors = 5;
-                battleData.Randomize();
-                SetBattleData(battleData);
+                networkManager.StartHost();
             }
         } else {
             Debug.Log("Host already started");

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Multiplayer.Playmode;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -58,8 +60,8 @@ public class PlayerManager : MonoBehaviour {
         // If battle scene is already active, make sure host is started
         // (only really used for testing straight into battle scene and skipping battle setup)
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
-            Debug.Log("Starting host directly from network manager because we are in the battle scene");
-            battleLobbyManager.StartNetworkManagerHost();
+            Debug.Log("Starting host/client directly from network manager because we are in the battle scene");
+            battleLobbyManager.StartNetworkManager();
         }
     }
 
