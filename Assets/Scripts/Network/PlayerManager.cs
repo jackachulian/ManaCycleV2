@@ -135,6 +135,24 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    public void ConnectAllPlayersToBoards() {
+        foreach (var player in GetPlayers()) {
+            player.ConnectToBoard(player.boardIndex.Value);
+        }
+    }
+
+    public void EnableBattleInputs() {
+        foreach (var player in GetPlayers()) {
+            player.EnableBattleInputs();
+        }
+    }
+
+    public void DisableBattleInputs() {
+        foreach (var player in GetPlayers()) {
+            player.DisableBattleInputs();
+        }
+    }
+
     /// <summary>
     /// (Server/Host Only) Assigns a newly joining player to the next available panel.
     /// </summary>

@@ -99,6 +99,9 @@ public class BattleManager : MonoBehaviour
         } else {
             Debug.Log("This is not the server");
         }
+
+        battleLobbyManager.playerManager.ConnectAllPlayersToBoards();
+        battleLobbyManager.playerManager.EnableBattleInputs();
     }
 
     /// <summary>
