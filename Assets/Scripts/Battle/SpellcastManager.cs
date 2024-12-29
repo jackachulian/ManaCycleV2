@@ -210,7 +210,7 @@ public class SpellcastManager : NetworkBehaviour {
         for (int i = 0; i < 2; i++) {
             Board otherBoard = board.battleManager.GetBoardByIndex(i);
             // Only send the damage if this client owns the board the damage is being sent to
-            if (otherBoard != board && otherBoard.healthManager.IsOwner) {
+            if (otherBoard && otherBoard.IsInitialized() && otherBoard != board && otherBoard.healthManager.IsOwner) {
                 otherBoard.healthManager.EnqueueDamageRpc(damage);
             }
         }

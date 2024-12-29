@@ -34,7 +34,7 @@ public class HealthManager : NetworkBehaviour {
     }
 
     public void UpdateHpBarVisual() {
-        hpBarUI.UpdateHpVisual(health, maxHealth);
+        hpBarUI.UpdateHpVisual(health, maxHealth, incomingDamage);
     }
 
     /// <summary>
@@ -49,6 +49,21 @@ public class HealthManager : NetworkBehaviour {
     public void EnqueueDamageRpc(int damage) {
         // TODO: implement the incoming damage bar
         health -= damage;
+
+        UpdateHpBarVisual();
+    }
+
+    public void AdvanceDamageQueue() {
+        if (incomingDamage[5] > 0) {
+            // TODO: damage animation
+            health -= incomingDamage[5];
+        }
+
+        for (int i = 5; i >= 0; i--) {
+            incomingDamage[i] = incomingDamage[i - 1];
+        }
+
+        incomingDamage[0] = 0;
 
         UpdateHpBarVisual();
     }

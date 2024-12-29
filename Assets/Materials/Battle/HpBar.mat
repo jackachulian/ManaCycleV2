@@ -47,6 +47,9 @@ Material:
     m_Colors:
     - _BackColor: {r: 0.091183186, g: 0.090334624, b: 0.09433961, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DamageEndColor: {r: 0.9716981, g: 0.337374, b: 0.2062567, a: 1}
+    - _DamageFinalColor: {r: 0.9339623, g: 0.083704144, b: 0.16872987, a: 1}
+    - _DamageStartColor: {r: 0.9528302, g: 0.57005894, b: 0.18427375, a: 1}
     - _HpColor: {r: 0.17150229, g: 0.8867924, b: 0.55887425, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

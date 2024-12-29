@@ -38,12 +38,21 @@ public class Board : MonoBehaviour
     public HealthManager healthManager {get; private set;}
 
     /// <summary>
+    /// Set to true when initialized by the battlemanager.
+    /// </summary>
+    private bool initialized = false;
+
+    /// <summary>
     /// Called by BattleManager when battle is initialized
     /// Any initialization should go here (no Start() method)
     /// </summary>
     /// <param name="battleManager">the battle manager for the battle this board is being initialized within</param>
     /// <param name="seed">the seed to use for RNG</param>
     public void InitializeBattle(BattleManager battleManager, int seed) {
+        if (initialized) {
+            Debug.LogWarning("Already initialized; going to reinitialize but make sure this was intended!");
+        }
+
         this.battleManager = battleManager;
         
         manaTileGrid = GetComponent<ManaTileGrid>();
@@ -57,5 +66,9 @@ public class Board : MonoBehaviour
 
         healthManager = GetComponent<HealthManager>();
         healthManager.InitializeBattle(this);
+    }
+
+    public bool IsInitialized() {
+        return initialized;
     }
 }
