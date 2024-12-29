@@ -102,11 +102,11 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     /// <param name="id">client ID / device ID of the disconnected player</param>
     public void RemovePlayer(ulong id) {
-        players.Remove(id);
-
         if (battleLobbyManager.networkManager.IsServer) {
             UnassignClientFromPanel(id);
         }
+
+        players.Remove(id);
     }
 
     /// <summary>

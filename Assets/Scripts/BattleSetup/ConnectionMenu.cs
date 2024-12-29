@@ -50,6 +50,7 @@ public class ConnectionMenu : MonoBehaviour
     /// Disables the UI while joining a session.
     /// </summary>
     public void OnJoiningSession() {
+        battleLobbyManager.battleType = BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER;
         foreach (Selectable s in disableWhileJoining) {
             s.interactable = false;
         }

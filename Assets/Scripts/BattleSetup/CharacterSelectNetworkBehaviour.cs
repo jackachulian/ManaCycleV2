@@ -87,6 +87,7 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
         battleLobbyManager.SetBattleData(battleData);
         
         if (battleLobbyManager.networkManager.IsServer) {
+            battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
             battleLobbyManager.networkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
         }
     }

@@ -60,15 +60,17 @@ public class BattlePlayer : NetworkBehaviour {
 
     public override void OnNetworkSpawn()
     {
+        boardIndex.OnValueChanged += OnBoardIndexChanged;
+        username.OnValueChanged += OnUsernameChanged;
+
         if (IsServer) {
             boardIndex.Value = -1;
         }
-
-        boardIndex.OnValueChanged += OnBoardIndexChanged;
-        username.OnValueChanged += OnUsernameChanged;
         
         // Register this player with the player manager
         battleLobbyManager.playerManager.AddPlayer(GetId(), this);
+
+        ConnectToBoard(boardIndex.Value);
 
         // Set username asynchrously, if this is the local player
         if (IsLocalPlayer) {
@@ -149,11 +151,14 @@ public class BattlePlayer : NetworkBehaviour {
     /// </summary>
     public void OnBoardIndexChanged(int previous, int current) {
         Debug.Log("player "+OwnerClientId+" board index changed from "+previous+" to "+current+" in battle phase "+battleLobbyManager.battlePhase);
+        ConnectToBoard(current);
+    }
 
+    public void ConnectToBoard(int index) {
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
-            BattleSetupConnectPanel(current);
+            BattleSetupConnectPanel(index);
         } else if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
-            BattleConnectBoard(current);
+            BattleConnectBoard(index);
         }
     }
 

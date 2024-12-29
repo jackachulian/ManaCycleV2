@@ -18,10 +18,15 @@ public class BattlePlayerInputManager : MonoBehaviour {
 
         playerInputManager = GetComponent<PlayerInputManager>();
 
+        if (battleLobbyManager.battlePlayerInputManager != null) {
+            Debug.LogWarning("Duplicate BattlePlayerInputManager! Destroying the old one.");
+            Destroy(battleLobbyManager.battlePlayerInputManager.gameObject);
+        }
+
         battleLobbyManager.battlePlayerInputManager = this;
 
         playerInputManager.onPlayerJoined += OnPlayerJoined;
-        playerInputManager.onPlayerLeft += OnPlayerJoined;
+        playerInputManager.onPlayerLeft -= OnPlayerJoined;
 
         DisableJoining();
     }
