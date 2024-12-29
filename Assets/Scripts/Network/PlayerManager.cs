@@ -112,6 +112,7 @@ public class PlayerManager : MonoBehaviour {
         if (players.ContainsKey(id)) {
             return players[id];
         } else {
+            Debug.Log("Player with id "+id+" does not exist or has despawned / disconnected");
             return null;
         }
     }

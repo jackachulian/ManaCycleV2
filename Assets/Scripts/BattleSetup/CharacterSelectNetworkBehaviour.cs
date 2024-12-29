@@ -97,7 +97,11 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
             for (int i = 0; i < assignedIds.Count; i++) {
                 ulong assignedId = assignedIds[i];
                 BattlePlayer player = battleLobbyManager.playerManager.GetPlayerById(assignedId);
-                player.boardIndex.Value = i;
+                if (player) {
+                    player.boardIndex.Value = i;
+                } else {
+                    Debug.Log("Tried to unassign player "+assignedId+" but player object was null (probably despawned)");
+                }
             }
         }
     }

@@ -56,13 +56,13 @@ public class BattlePlayer : NetworkBehaviour {
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
 
+        // Register this player with the player manager
+        battleLobbyManager.playerManager.AddPlayer(GetId(), this);
+
         // start off as board -1 (no board)
         if (IsServer) {
             boardIndex.Value = -1;
-        }
-
-        // Add to players list
-        battleLobbyManager.playerManager.AddPlayer(GetId(), this);
+        }        
 
         // Let CharSelect know this player now exists
         // Will assign this player a panel and listen for when it is ready to start the game
