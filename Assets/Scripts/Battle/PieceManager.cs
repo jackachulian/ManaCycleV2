@@ -1,11 +1,12 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
 /// Manages the piece falling on this board.
 /// Responsibilities include piece movement, spawning new randomized pieces, falling, etc.
 /// </summary>
-public class PieceManager : MonoBehaviour {
+public class PieceManager : NetworkBehaviour {
     /// <summary>
     /// The amount of rows the piece should fall per second while not quickfalling.
     /// </summary>
@@ -53,6 +54,9 @@ public class PieceManager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        // Only perform fall logic if this board is owned
+        if (!IsOwner) return;
+
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
 
@@ -67,8 +71,7 @@ public class PieceManager : MonoBehaviour {
                 // TODO: add a little bit of buffer time before placing the piece to allow sliding
                 bool moved = TryMovePiece(Vector2Int.down);
                 if (!moved) {
-                    PlacePiece(currentPiece);
-                    SpawnNewPiece();
+                    PlaceCurrentPieceRpc();
                 }
 
                 iters++;
@@ -80,31 +83,32 @@ public class PieceManager : MonoBehaviour {
         }
     }
 
-    public void SpawnNewPiece() {
-        currentPiece = board.battleManager.SpawnPiece();
-        currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
-
-        // spawn position will be the top row, middle column
-        Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
-        currentPiece.position = spawnPos;
-        currentPiece.UpdateVisualPositions();
-
-        for (int i = 0; i < currentPiece.tiles.Length; i++) {
-            int color = rng.Next(5);
-            currentPiece.tiles[i].SetColor(color, board.battleManager.cosmetics);
-        }
-    }
-
     /// <summary>
     /// Get the current fall delay, after accounting for quickfall and anything else that affects fall delay.
+    /// (Should only be used on the owner board)
     /// </summary>
     /// <returns>current amount of delay in seconds between piece falls</returns>
     float GetCurrentFallFrequency() {
+        if (!IsOwner) {
+            Debug.Log("Trying to get fall speed on a non-owner client! Ony the owner should handle piece falling");
+            return 0;
+        }
+
         if (quickfall) {
             return quickFallFrequency;
         } else {
             return fallFrequency;
         }
+    }
+
+    /// <summary>
+    /// RPC to send to other clients when the position of the piece successfully changes.
+    /// </summary>
+    [Rpc(SendTo.NotOwner)]
+    public void UpdateCurrentPieceRpc(Vector2Int position, int rotation) {
+        currentPiece.position = position;
+        currentPiece.rotation = rotation;
+        currentPiece.UpdateVisualPositions();
     }
 
     /// <summary>
@@ -122,6 +126,7 @@ public class PieceManager : MonoBehaviour {
             return false;
         }
 
+        UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
         return true;
     }
@@ -160,6 +165,7 @@ public class PieceManager : MonoBehaviour {
             }
         }
 
+        UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
         return true;
     }
@@ -169,6 +175,14 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     /// <param name="newQuickFall">the new quickfall value, true = quickfalling, false = not quickfalling</param>
     public void SetQuickfall(bool newQuickFall) {
+        // Only the client's board should manage its own quickfall.
+        // In fact, other clients don't even need to know if the current piece is quickfalling, because *all* movements are currently sent,
+        // including the moving down that happens when the client manages its own piece falling
+        if (!IsOwner) {
+            Debug.Log("Only the owner of a board should manage its own quickfall.");
+            return;
+        }
+
         quickfall = newQuickFall;
     }
 
@@ -195,9 +209,20 @@ public class PieceManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Move all tiles of the piece onto this board's grid of tiles and destroy the piece container afterwards.
+    /// RPC to place the current piece and spawn the next one.
+    /// </summary>
+    [Rpc(SendTo.Everyone)]
+    void PlaceCurrentPieceRpc() {
+        PlacePiece(currentPiece);
+        SpawnNewPiece();
+    }
+
+    /// <summary>
+    /// /// Move all tiles of the piece onto this board's grid of tiles and destroy the piece container afterwards.
     /// Uses the piece's <c>GetTilePosition()</c> to get the positions to place each tile.
     /// </summary>
+    /// <param name="piece">the piece to place</param>
+    /// <param name="spawnNewPieceAfter">whether or not a new piece should be spawned immediately after the current one is placed</param>
     void PlacePiece(ManaPiece piece) {
         Vector2Int[] placePositions = new Vector2Int[piece.tiles.Length];
 
@@ -223,5 +248,23 @@ public class PieceManager : MonoBehaviour {
 
         // Let spellcastmanager know the board state has changed and to rebuild all blobs
         board.spellcastManager.RefreshBlobs();
-    }    
+    }
+
+    /// <summary>
+    /// Is called after the current piece is placed.
+    /// </summary>
+    public void SpawnNewPiece() {
+        currentPiece = board.battleManager.SpawnPiece();
+        currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
+
+        // spawn position will be the top row, middle column
+        Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
+        currentPiece.position = spawnPos;
+        currentPiece.UpdateVisualPositions();
+
+        for (int i = 0; i < currentPiece.tiles.Length; i++) {
+            int color = rng.Next(5);
+            currentPiece.tiles[i].SetColor(color, board.battleManager.cosmetics);
+        }
+    }
 }

@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using Unity.Services.Multiplayer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,14 +10,14 @@ using UnityEngine.SceneManagement;
 [CreateAssetMenu(fileName = "BattleLobbyConfig", menuName = "ManaCycle/BattleLobbyManager", order = 1)]
 public class BattleLobbyManager : ScriptableObject {
     /// <summary>
-    /// Battle network manager prefab to spawn in battle or battlesetup scenes
+    /// Instance of the PlayerManager in the scenes
     /// </summary>
-    public BattleNetworkManager battleNetworkManagerPrefab;
+    public PlayerManager playerManager;
 
     /// <summary>
-    /// Instance of the BattleNetworkManager in the scene
+    /// Instance of the NetworkManager in the scenes
     /// </summary>
-    public BattleNetworkManager battleNetworkManager {get; set;}
+    public NetworkManager networkManager;
 
     /// <summary>
     /// Battle player input manager prefab to spawn in battle or battlesetup scenes (singleplayer / local multiplayer only)
@@ -26,17 +27,17 @@ public class BattleLobbyManager : ScriptableObject {
     /// <summary>
     /// Instance of the BattlePlayerInputManager in the scene (only used in singleplayer/local multiplayer)
     /// </summary>
-    public BattlePlayerInputManager battlePlayerInputManager {get; set;}
+    public BattlePlayerInputManager battlePlayerInputManager;
 
     /// <summary>
     /// The battle setup manager in the battle setup scene. Value set by battlesetupmanager on awake. Null while in battle
     /// </summary>
-    public BattleSetupManager battleSetupManager {get; set;}
+    public BattleSetupManager battleSetupManager;
 
     /// <summary>
     /// The battle manager in the battle scene. Value set by battlemanager on awake. Null while in battle setup
     /// </summary>
-    public BattleManager battleManager {get; set;}
+    public BattleManager battleManager;
 
     public enum BattleType {
         NONE, // default value, make sure to change to a vlaue other than this
@@ -49,12 +50,12 @@ public class BattleLobbyManager : ScriptableObject {
     /// <summary>
     /// The type of battle currently being setup/played.
     /// </summary>
-    public BattleType battleType {get; set;} = BattleType.NONE;
+    public BattleType battleType = BattleType.NONE;
 
     /// <summary>
     /// Current session this client is connected to if in online mode.
     /// </summary>
-    public ISession current_session {get; set;}
+    public ISession current_session;
 
     public enum BattlePhase {
         BATTLE_SETUP,
@@ -63,45 +64,22 @@ public class BattleLobbyManager : ScriptableObject {
     /// <summary>
     /// The current phase of the battle, CHARACTER_SELECT or BATTLE, depending on the last scene that was loaded.
     /// </summary>
-    public BattlePhase battlePhase {get; set;}
-
-    /// <summary>
-    /// Ensures that the network manager scene is loaded additively. Won't load it if it's already loaded.
-    /// </summary>
-    public void StartNetworkManagerScene() {
-        if (battleNetworkManager == null) {
-            Debug.Log("Instantiating network manager");
-            battleNetworkManager = Instantiate(battleNetworkManagerPrefab);
-            battleNetworkManager.Initialize(this);
-        } else {
-            Debug.Log("Skipping network management scene load, battle network manager already present");
-        }
-    }
+    public BattlePhase battlePhase;
 
     /// <summary>
     /// Start the host on the networkmanager if not already started.
     // Mainly used for testing when directly loading into battle scene without starting host in battle setup scene
     /// </summary>
     public void StartNetworkManagerHost() {
-        if (!battleNetworkManager) {
+        if (!networkManager) {
             Debug.LogError("Battle network scene is not loaded, can't start host!");
             return;
         }
 
-        if (!battleNetworkManager.IsHost && !battleNetworkManager.IsClient) {
-            battleNetworkManager.StartHost();
+        if (!networkManager.IsHost && !networkManager.IsClient) {
+            networkManager.StartHost();
         } else {
             Debug.Log("Host already started");
         }
-    }
-
-    public void StartPlayerInputManager() {
-        if (battlePlayerInputManager != null) {
-            Debug.Log("Player input manager already instantiated");
-            return;
-        }
-
-        Debug.Log("Instantiating player input manager");
-        battlePlayerInputManager = Instantiate(battlePlayerInputManagerPrefab);
     }
 }

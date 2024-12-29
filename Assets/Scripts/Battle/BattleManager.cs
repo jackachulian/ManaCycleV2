@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -56,7 +57,6 @@ public class BattleManager : MonoBehaviour
     }
 
     public void Start() {
-        battleLobbyManager.StartNetworkManagerScene();
         battleLobbyManager.StartNetworkManagerHost();
 
         // Initialize the cycle and generate a random sequence of colors.
@@ -70,6 +70,33 @@ public class BattleManager : MonoBehaviour
             board.InitializeBattle(this, battleSettings.seed);
         }
 
+        // Server spawns board and assigns ownership based on player's boardIndex
+        if (battleLobbyManager.networkManager.IsServer) {
+            Debug.Log("This is the server, spawning boards");
+            foreach (BattlePlayer player in battleLobbyManager.playerManager.GetPlayers()) {
+                if (!player) {
+                    Debug.LogError("Null player detected");
+                    continue;
+                }
+
+                if (player.boardIndex.Value < 0 || player.boardIndex.Value >= boards.Length) {
+                    Debug.LogError("Player with ID "+player.GetId()+" has out-of-range board index: "+player.boardIndex.Value);
+                    continue;
+                };
+
+                Board board = boards[player.boardIndex.Value];
+                if (!board) {
+                    Debug.LogError("Null board detected at index "+player.boardIndex.Value);
+                    continue;
+                }
+
+                Debug.Log("Spawning board "+board+" with owner of clientID "+player.OwnerClientId);
+                board.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);
+            }
+        } else {
+            Debug.Log("This is not the server");
+        }
+
         // Connects all players found to their respective boards.
         // This works for both online and local, as both use BattlePlayers.
         var players = FindObjectsByType<BattlePlayer>(FindObjectsSortMode.None);
@@ -79,6 +106,9 @@ public class BattleManager : MonoBehaviour
             player.BattleConnectBoard();
             player.EnableBattleInputs();
         }
+
+        
+
     }
 
     /// <summary>

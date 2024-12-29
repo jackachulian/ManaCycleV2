@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae146cb04e266074a9ba2d1a798081a9, type: 3}
   m_Name: BattleLobbyConfig
   m_EditorClassIdentifier: 
-  battleNetworkManagerPrefab: {fileID: 6795268350944010003, guid: 3512e8bdb1722b24d945fbf98eb0c893, type: 3}
+  playerManager: {fileID: 0}
+  networkManager: {fileID: 0}
   battlePlayerInputManagerPrefab: {fileID: 3813082260796398835, guid: 0bd4325197f5ead4482af532cff5e357, type: 3}
+  battlePlayerInputManager: {fileID: 0}
+  battleSetupManager: {fileID: 0}
+  battleManager: {fileID: 0}
+  battleType: 0
+  battlePhase: 1

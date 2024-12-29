@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 0
   m_MaxPlayerCount: 4
-  m_AllowJoining: 1
+  m_AllowJoining: 0
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
     m_PersistentCalls:
@@ -67,7 +67,7 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 8276651579362871504, guid: 077e0724faafddc4d9422c14b8e0053e, type: 3}
+  m_PlayerPrefab: {fileID: 8602643770284877901, guid: 077e0724faafddc4d9422c14b8e0053e, type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: -1
@@ -89,3 +89,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d99351138fad34db149506d7b9b793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleLobbyManager: {fileID: 11400000, guid: 4d6c448006e9f5c45a0d15d5d54afa7b, type: 2}

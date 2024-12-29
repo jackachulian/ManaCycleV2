@@ -88,7 +88,7 @@ public class ConnectionMenu : MonoBehaviour
         battleLobbyManager.battleType = BattleLobbyManager.BattleType.LOCAL_MULTIPLAYER;
 
         // all singleplayer will be a local host but deny all incoming connections
-        battleLobbyManager.battleNetworkManager.StartHost();
+        battleLobbyManager.networkManager.StartHost();
 
 
         battleLobbyManager.battleSetupManager.InitializeCharSelect();

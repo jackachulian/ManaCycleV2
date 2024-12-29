@@ -10,34 +10,43 @@ using UnityEngine.SceneManagement;
 public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
     [SerializeField] private BattleLobbyManager battleLobbyManager;
 
-    [SerializeField] private CharacterSelectMenu characterSelectMenu;
-
     /// <summary>
-    /// Used in online multiplayer mode. Matches a client ID with the index of the player panel they are currently assigned to.
+    /// Matches a client/device ID with the index of the player panel they are currently assigned to.
+    /// Client ID used in online multiplayer, and device ID used for other modes.
     /// </summary>
-    private List<ulong> assignedClientIds = new List<ulong>();
+    private List<ulong> assignedIds = new List<ulong>();
 
     public override void OnNetworkSpawn() {
-        battleLobbyManager.battleNetworkManager.OnClientConnectedCallback += OnPlayerJoined;
-        battleLobbyManager.battleNetworkManager.OnClientDisconnectCallback += OnPlayerLeft;
+        // In online multiplayer, listen for connected clients
+        // if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
+        //     battleLobbyManager.networkManager.OnClientConnectedCallback += OnPlayerJoined;
+        //     battleLobbyManager.networkManager.OnClientDisconnectCallback += OnPlayerLeft;
+        // } 
+        // otherwise, player input manager will send OnPlayerJoined to this script
 
         Debug.Log("character select network behaviour spawned!");
     }
 
-    public void OnPlayerJoined(ulong clientId) {
-        
-        if (IsServer) {
-            BattlePlayer player = battleLobbyManager.battleNetworkManager.GetPlayerByClientId(clientId);
-            // If this is the server, listen for when their readiness changes to know when to check if all players are ready and start the game if so
+    public void OnPlayerJoined(ulong id) {
+        Debug.Log("Player with id "+id+" joined");
+        if (battleLobbyManager.networkManager.IsServer) {
+            BattlePlayer player = battleLobbyManager.playerManager.GetPlayerById(id);
+
+            // Assign the new player to a panel
+            AssignClientToNextAvailablePanel(id);
+
+            // listen for when their readiness changes to know when to check if all players are ready and start the game if so
             player.ready.OnValueChanged += OnAnyPlayerReadyChanged;
+        } else {
+            Debug.Log("Not assigning player "+id+" to a panel because this is not the server");
         }
     }
 
-    public void OnPlayerLeft(ulong clientId) {
+    public void OnPlayerLeft(ulong id) {
         if (IsServer) {
-            UnassignClientFromPanel(clientId);
+            UnassignClientFromPanel(id);
 
-            BattlePlayer player = battleLobbyManager.battleNetworkManager.GetPlayerByClientId(clientId);
+            BattlePlayer player = battleLobbyManager.playerManager.GetPlayerById(id);
             if (player) player.ready.OnValueChanged -= OnAnyPlayerReadyChanged;
         }
     }
@@ -49,46 +58,45 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
     /// <summary>
     /// (Server/Host Only) Assigns a newly joining player to the next available panel.
     /// </summary>
-    /// <param name="clientId"></param>
-    public void AssignClientToNextAvailablePanel(ulong clientId) {
+    public void AssignClientToNextAvailablePanel(ulong id) {
         // Show error when attempted from a non-server client.
         // Even if this error did no show up, clients would not be able to perform this because the server owns the CharacterSelectMenu network object.
-        if (!battleLobbyManager.battleNetworkManager.IsServer) {
+        if (!battleLobbyManager.networkManager.IsServer) {
             Debug.LogError("Only the server can assign a client to a panel!");
             return;
         }
 
-        if (assignedClientIds.Count >= 4) {
+        if (assignedIds.Count >= 4) {
             Debug.LogError("There are no available panels to assign. Are there more than 4 players in the lobby?");
             return;
         }
 
-        // Add the client ID to the list, and assign the client ID to the tail of the list of panels (the next available one).
-        assignedClientIds.Add(clientId);
-        int boardIndex = assignedClientIds.Count - 1;
-        Debug.Log("Assigning panel "+boardIndex+" to client "+clientId);
+        // Add the client/device ID to the list, and assign the ID to the tail of the list of panels (the next available one).
+        assignedIds.Add(id);
+        int boardIndex = assignedIds.Count - 1;
+        Debug.Log("Assigning panel "+boardIndex+" to player with ID "+id);
 
-        BattlePlayer player = battleLobbyManager.battleNetworkManager.GetPlayerByClientId(clientId);
+        BattlePlayer player = battleLobbyManager.playerManager.GetPlayerById(id);
         player.boardIndex.Value = boardIndex;
     }
 
     /// <summary>
-    /// (Server/Host Only) Unassign the client ID from whatever panel they are assigned to.
-    /// Afterwards, reassign all panels based on the assignedClientIds list.
+    /// (Server/Host Only) Unassign the client/device ID from whatever panel they are assigned to.
+    /// Afterwards, reassign all panels based on the assignedIds list.
     /// Therefore, if the client who disconnected has panels after them, those clients will shift backward and be reassigned to previous panels.
     /// </summary>
-    public void UnassignClientFromPanel(ulong clientId) {
-        if (!battleLobbyManager.battleNetworkManager.IsServer) {
+    public void UnassignClientFromPanel(ulong id) {
+        if (!battleLobbyManager.networkManager.IsServer) {
             Debug.LogError("Only the server/host can unassign a client from a panel!");
             return;
         }
 
-        bool clientWasRemoved = assignedClientIds.Remove(clientId);
+        bool clientWasRemoved = assignedIds.Remove(id);
 
         if (clientWasRemoved) {
-            for (int i = 0; i < assignedClientIds.Count; i++) {
-                ulong assignedClientId = assignedClientIds[i];
-                BattlePlayer player = battleLobbyManager.battleNetworkManager.GetPlayerByClientId(assignedClientId);
+            for (int i = 0; i < assignedIds.Count; i++) {
+                ulong assignedId = assignedIds[i];
+                BattlePlayer player = battleLobbyManager.playerManager.GetPlayerById(assignedId);
                 player.boardIndex.Value = i;
             }
         }
@@ -98,16 +106,16 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
     /// (Server/Host Only) Check if all connected players are ready, and start the game if so.
     /// </summary>
     public void StartIfAllPlayersReady() {
-        if (!battleLobbyManager.battleNetworkManager.IsServer) {
+        if (!battleLobbyManager.networkManager.IsServer) {
             Debug.LogError("Only the server/host can start the game!");
             return;
         }
 
         // Make sure there are at least 2 players before the match can start
-        if (battleLobbyManager.battleNetworkManager.ConnectedClients.Count < 2) return;
+        if (battleLobbyManager.networkManager.ConnectedClients.Count < 2) return;
 
         // Make sure all connected players are ready
-        foreach (var player in battleLobbyManager.battleNetworkManager.GetPlayers()) {
+        foreach (var player in battleLobbyManager.playerManager.GetPlayers()) {
             if (!player.ready.Value) {
                 return;
             }

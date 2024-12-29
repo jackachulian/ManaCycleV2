@@ -1,6 +1,7 @@
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,11 @@ public class BattlePlayer : NetworkBehaviour {
     /// Stores shared battle lobby dependencies
     /// </summary>
     [SerializeField] public BattleLobbyManager battleLobbyManager;
+
+    /// <summary>
+    /// Used only in non-online mode. the ID of this player, assigned by the player input manager.
+    /// </summary>
+    public ulong localPlayerId {get; set;}
 
     /// <summary>
     /// The client's username. Set by the client when joining.
@@ -47,12 +53,21 @@ public class BattlePlayer : NetworkBehaviour {
 
     public override void OnNetworkSpawn()
     {
+        playerInput = GetComponent<PlayerInput>();
+        playerInputController = GetComponent<BattleInputController>();
+
         // start off as board -1 (no board)
         if (IsServer) {
             boardIndex.Value = -1;
         }
 
-        battleLobbyManager.battleNetworkManager.AddPlayer(OwnerClientId, this);
+        // Add to players list
+        battleLobbyManager.playerManager.AddPlayer(GetId(), this);
+
+        // Let CharSelect know this player now exists
+        // Will assign this player a panel and listen for when it is ready to start the game
+        var charSelect = battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour;
+        charSelect.OnPlayerJoined(GetId());
 
         // Set username asynchrously, if this is the local player
         if (IsLocalPlayer) {
@@ -63,9 +78,6 @@ public class BattlePlayer : NetworkBehaviour {
 
         username.OnValueChanged += OnUsernameChanged;
 
-        playerInput = GetComponent<PlayerInput>();
-        playerInputController = GetComponent<BattleInputController>();
-
         // only enable input if this is the local player (always true in singleplayer, varies in multiplayer)
         if (IsLocalPlayer) {
             EnableUserInput();
@@ -74,7 +86,7 @@ public class BattlePlayer : NetworkBehaviour {
         }
 
         // if in battle setup, disable battle inputs
-        // (BoardIndex's OnValueChanged will connect the board to the appropriate panel)
+
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
             DisableBattleInputs();
             BattleSetupConnectPanel();
@@ -84,27 +96,52 @@ public class BattlePlayer : NetworkBehaviour {
             BattleConnectBoard();
         }
 
-        // If this is the server, assign to the next available slot
-        if (battleLobbyManager.battleNetworkManager.IsServer) {
-            battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour.AssignClientToNextAvailablePanel(OwnerClientId);
-        }
-
         DontDestroyOnLoad(gameObject);
     }
 
-    public async void SetUsernameAsync() {
-        username.Value = await AuthenticationService.Instance.GetPlayerNameAsync();
-    }
-
-    public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
-        playerPanel.SetUsername(current.ToString());
-    }
-
+    
     public override void OnNetworkDespawn()
     {
         boardIndex.OnValueChanged -= OnBoardIndexChanged;
 
-        battleLobbyManager.battleNetworkManager.RemovePlayer(OwnerClientId);
+        battleLobbyManager.playerManager.RemovePlayer(GetId());
+    }
+
+    /// <summary>
+    /// In online multiplayer this returns the client ID
+    /// in local multiplayer/singleplayer this returns the playerinput's device ID
+    /// </summary>
+    public ulong GetId() {
+        if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
+            return OwnerClientId;
+        } else {
+            // if (!playerInput) {
+            //     Debug.LogError("No player input");
+            //     return OwnerClientId;
+            // }
+
+            // if (playerInput.devices.Count == 0) {
+            //     Debug.LogError("No devices connected to player input on "+this+"!");
+            //     return OwnerClientId;
+            // }
+
+            // return (ulong)playerInput.devices[0].deviceId;
+
+            return localPlayerId;
+        }
+    }
+
+    public async void SetUsernameAsync() {
+        if (UnityServices.State == ServicesInitializationState.Initialized) {
+            username.Value = await AuthenticationService.Instance.GetPlayerNameAsync();
+        } else {
+            // TODO: may want to just wait until initialized and then set username when initialized callback. idk
+            Debug.Log("Skipping username set, unity services is not initialized");
+        }
+    }
+
+    public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
+        if (playerPanel) playerPanel.SetUsername(current.ToString());
     }
 
     /// <summary>
@@ -145,6 +182,8 @@ public class BattlePlayer : NetworkBehaviour {
     /// Connect the player input to the appropriate board based on network id.
     /// </summary>
     public void BattleConnectBoard() {
+        if (boardIndex.Value < 0) return;
+
         // TODO: ideally, make this work when there is up to 4 players. or online could just be 1v1s
         playerInputController.board = battleLobbyManager.battleManager.GetBoardByIndex(boardIndex.Value);
         Debug.Log(this+" connected to "+playerInputController.board);

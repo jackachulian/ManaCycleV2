@@ -61,7 +61,8 @@ public class BattleSetupPlayerPanel : MonoBehaviour
 
         // Unregister callbacks if there is already a battleplayer
         if (battlePlayer) {
-            Debug.Log("Unassigning client id "+battlePlayer.OwnerClientId+" from setup panel object "+this);
+            Debug.LogWarning("Assigning a player to an already occupied panel. Previous player will now have no panel. Make sure you aren't stealing a panel from a player that needs it!");
+            Debug.Log("Unassigning player with id "+battlePlayer.GetId()+" from setup panel object "+this);
 
             readyToggle.interactable = false;
             battlePlayer.ready.OnValueChanged -= OnReadyChanged;
@@ -79,7 +80,7 @@ public class BattleSetupPlayerPanel : MonoBehaviour
 
         // Register callbacks if new player is not null
         if (battlePlayer) {
-            Debug.Log("Assigning player object of client id "+battlePlayer.OwnerClientId+" to setup panel object "+this);
+            Debug.Log("Assigning player object of id "+battlePlayer.GetId()+" to setup panel object "+this);
 
             readyToggle.interactable = battlePlayer.IsOwner;
             battlePlayer.ready.OnValueChanged += OnReadyChanged;
