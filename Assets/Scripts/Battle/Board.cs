@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -32,6 +33,11 @@ public class Board : MonoBehaviour
     public SpellcastManager spellcastManager {get; private set;}
 
     /// <summary>
+    /// Handles sending and receiving damage.
+    /// </summary>
+    public HealthManager healthManager {get; private set;}
+
+    /// <summary>
     /// Called by BattleManager when battle is initialized
     /// Any initialization should go here (no Start() method)
     /// </summary>
@@ -49,7 +55,7 @@ public class Board : MonoBehaviour
         spellcastManager = GetComponent<SpellcastManager>();
         spellcastManager.InitializeBattle(this);
 
-        // TODO: move this to after a timer
-        pieceManager.SpawnNewPiece();
+        healthManager = GetComponent<HealthManager>();
+        healthManager.InitializeBattle(this);
     }
 }

@@ -195,7 +195,7 @@ public class BattlePlayer : NetworkBehaviour {
     /// </summary>
     public void BattleConnectBoard(int index) {
         if (index < 0) {
-            Debug.LogError("Trying to connect battleplayer to board but board index is invalid: "+index);
+            Debug.LogWarning("Trying to connect battleplayer to board but board index is invalid: "+index);
             return;
         };
 

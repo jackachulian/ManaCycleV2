@@ -49,6 +49,8 @@ public class PieceManager : NetworkBehaviour {
         this.board = board;
 
         rng = new System.Random(seed);
+
+        SpawnNewPiece();
     }
 
     // Update is called once per frame
@@ -104,7 +106,7 @@ public class PieceManager : NetworkBehaviour {
     /// <summary>
     /// RPC to send to other clients when the position of the piece successfully changes.
     /// </summary>
-    [Rpc(SendTo.NotOwner)]
+    [Rpc(SendTo.NotOwner, RequireOwnership = true)]
     public void UpdateCurrentPieceRpc(Vector2Int position, int rotation) {
         currentPiece.position = position;
         currentPiece.rotation = rotation;
@@ -211,7 +213,7 @@ public class PieceManager : NetworkBehaviour {
     /// <summary>
     /// RPC to place the current piece and spawn the next one.
     /// </summary>
-    [Rpc(SendTo.Everyone)]
+    [Rpc(SendTo.Everyone, RequireOwnership = true)]
     void PlaceCurrentPieceRpc() {
         PlacePiece(currentPiece);
         SpawnNewPiece();

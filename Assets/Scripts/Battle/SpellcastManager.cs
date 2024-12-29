@@ -148,7 +148,7 @@ public class SpellcastManager : NetworkBehaviour {
         // end the cascade and move to the next color in the chain.
         // note: this will only be reached if a cascade is set to happen right after a clear, but an ability tile breaks the cascade before cascadeDelay passes
         else if (currentCascade > 0 && timeSinceLastClear >= chainDelay) {
-            AdvanceCycleRpc();
+            EndCascadeRpc();
         }
 
         // Check to see if there is a valid chain
@@ -167,7 +167,7 @@ public class SpellcastManager : NetworkBehaviour {
         }
     }
 
-    [Rpc(SendTo.Everyone)]
+    [Rpc(SendTo.Everyone, RequireOwnership = true)]
     private void EndChainRpc() {
         spellcasting = false;
         currentChain = 0;
@@ -178,7 +178,7 @@ public class SpellcastManager : NetworkBehaviour {
     /// <summary>
     /// Called when a chain or cascade is triggered. Clear the current color, add to chain/cascade, and score appropriate amount of points
     /// </summary>
-    [Rpc(SendTo.Everyone)]
+    [Rpc(SendTo.Everyone, RequireOwnership = true)]
     private void SpellcastClearRpc() {
         // if a cascade is happening, add to cascade, otherwise add to chain
         if (currentCascade > 0) {
@@ -190,7 +190,31 @@ public class SpellcastManager : NetworkBehaviour {
         }
 
         // Clear the current cycle color and recalculate connected tiles
-        ClearColor(GetCurrentCycleColor());
+        double totalMana = ClearColor(GetCurrentCycleColor());
+        double damagePerMana = 5f;
+        double chainMultiplier = currentChain;
+
+        // if no cascade is happening (cascade == 0), no cascade bonus
+        // if a cascade IS happening but has not activated yet: 1 -> 1.0, 2 -> 2.0, 3 -> 4.0, 4 -> 8.0, etc
+        double cascadeMultiplier = currentCascade > 0 ? Math.Pow(currentCascade - 1, 2.0) : 1.0;
+
+        // deal damage to other boards, split damage equally
+        int damage = (int)(totalMana * damagePerMana * chainMultiplier * cascadeMultiplier);
+
+        // TODO: factor in how many boards are actually currently controlled, and split damage equally among them
+        // for now just deal damage to all other boards. RPC will only be sent if this client actually owns the board
+        // (client decides how much damage it takes)
+
+        // another possible security improvement: 
+        // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
+        for (int i = 0; i < 2; i++) {
+            Board otherBoard = board.battleManager.GetBoardByIndex(i);
+            // Only send the damage if this client owns the board the damage is being sent to
+            if (otherBoard != board && otherBoard.healthManager.IsOwner) {
+                otherBoard.healthManager.EnqueueDamageRpc(damage);
+            }
+        }
+
         board.manaTileGrid.AllTileGravity();
         RefreshBlobs();
 
@@ -198,19 +222,27 @@ public class SpellcastManager : NetworkBehaviour {
         if (IsCurrentColorClearable()) {
             if (currentCascade == 0) currentCascade = 1;
         }
-        // otherwise, advance to the next color in the cycle
+        // otherwise, advance to the next color in the cycle (only send if owner)
         else {
-            AdvanceCycleRpc();
+            AdvanceCycle();
         }
+    }
+
+    /// <summary>
+    /// RPC that will end the current cascade and advance to the next color in the sequence.
+    /// </summary>
+    [Rpc(SendTo.Everyone, RequireOwnership = true)]
+    public void EndCascadeRpc() {
+        currentCascade = 0;
+        AdvanceCycle();
     }
 
     /// <summary>
     /// Move this board's pointer to the next sequential color in the cycle.
     /// Also, end any cascade that may be ongoing.
     /// </summary>
-    [Rpc(SendTo.Everyone)]
-    private void AdvanceCycleRpc() {
-        currentCascade = 0;
+    private void AdvanceCycle() {
+        
         cycleIndex += 1;
         if (cycleIndex >= board.battleManager.battleLobbyManager.battleData.cycleLength) {
             cycleIndex = 0;
@@ -242,7 +274,7 @@ public class SpellcastManager : NetworkBehaviour {
         SpellcastStartedRpc();
     }
 
-    [Rpc(SendTo.Everyone)]
+    [Rpc(SendTo.Everyone, RequireOwnership = true)]
     private void SpellcastStartedRpc() {
         // TODO: play spellcast startup sound
         spellcasting = true;
@@ -344,8 +376,11 @@ public class SpellcastManager : NetworkBehaviour {
     /// Blob size must be at least <c>minBlobSize</c>.
     /// </summary>
     /// <param name="color">the color to clear</param>
-    private void ClearColor(int color) {
+    /// <returns>the total amount of mana cleared 
+    /// (as a float, as some pieces have increased mana multipliers and count as more than 1 mana)</returns>
+    private float ClearColor(int color) {
         // Loop through all tiles, if the tile is part of a blob of adequate size and matching color, clear that tile
+        float manaTotal = 0f;
         for (int y = 0; y < board.manaTileGrid.height; y++) {
             for (int x = 0; x < board.manaTileGrid.width; x++) {
                 List<Vector2Int> blob = blobGrid[x, y];
@@ -354,9 +389,11 @@ public class SpellcastManager : NetworkBehaviour {
                     ManaTile tile = board.manaTileGrid.GetTile(position);
                     if (tile.color == color) {
                         board.manaTileGrid.ClearTile(position);
+                        manaTotal += 1;
                     }
                 }
             }
         }
+        return manaTotal;
     }
 }

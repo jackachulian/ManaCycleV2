@@ -4,9 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// Manages the current battle.
-/// Also a NetworkBehaviour that controls spawning of boards, when the game pauses/stalls from bad connection, etc
 /// </summary>
-public class BattleManager : MonoBehaviour
+public class BattleManager : NetworkBehaviour
 {
     /// <summary>
     /// Stores shared battle lobby dependencies
@@ -40,14 +39,19 @@ public class BattleManager : MonoBehaviour
 
     private void Awake() {
         if (this == null) {
-            Debug.Log("Self battlemanager is null, destroying self");
+            Debug.LogWarning("Self battlemanager is null, destroying self");
             Destroy(gameObject);
             return;
         }
 
         if (!gameObject.activeSelf) {
-            Debug.Log("battlemanager is not activeSelf, destroying self");
+            Debug.LogWarning("battlemanager is not activeSelf, destroying self");
             Destroy(gameObject);
+            return;
+        }
+
+        if (battleLobbyManager.battleManager == this) {
+            Debug.LogWarning("BattleManager instance awoke twice?");
             return;
         }
 
@@ -55,14 +59,15 @@ public class BattleManager : MonoBehaviour
             Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
             Destroy(battleLobbyManager.battleManager.gameObject);
         }
-        
+
         battleLobbyManager.battleManager = this;
         battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
     }
 
-    public void Start() {
-        // Start host if not already started (needed when loading straight into battle scene)
-        battleLobbyManager.StartNetworkManagerHost();
+    public override void OnNetworkSpawn() {
+        Debug.Log("BattleManager spawned");
+        battleLobbyManager.battleManager = this;
+        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.

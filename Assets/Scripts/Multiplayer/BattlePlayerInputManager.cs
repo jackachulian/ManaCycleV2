@@ -19,8 +19,9 @@ public class BattlePlayerInputManager : MonoBehaviour {
         playerInputManager = GetComponent<PlayerInputManager>();
 
         if (battleLobbyManager.battlePlayerInputManager != null) {
-            Debug.LogWarning("Duplicate BattlePlayerInputManager! Destroying the old one.");
-            Destroy(battleLobbyManager.battlePlayerInputManager.gameObject);
+            Debug.LogWarning("Duplicate BattlePlayerInputManager! Destroying the new one.");
+            Destroy(gameObject);
+            return;
         }
 
         battleLobbyManager.battlePlayerInputManager = this;
