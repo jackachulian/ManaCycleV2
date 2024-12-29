@@ -85,6 +85,16 @@ public class BattleLobbyManager : ScriptableObject {
 
         if (!networkManager.IsHost && !networkManager.IsClient) {
             networkManager.StartHost();
+
+            // If the host is started while in battle phase, battle setup was skipped, so load some default battle settings
+            if (battlePhase == BattlePhase.BATTLE) {
+                Debug.Log("Using default battle data, because battle scene was loaded directly!");
+                BattleData battleData = new BattleData();
+                battleData.cycleLength = 7;
+                battleData.cycleUniqueColors = 5;
+                battleData.Randomize();
+                SetBattleData(battleData);
+            }
         } else {
             Debug.Log("Host already started");
         }

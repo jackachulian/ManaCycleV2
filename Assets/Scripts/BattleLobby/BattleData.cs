@@ -16,7 +16,7 @@ public struct BattleData : INetworkSerializeByMemcpy {
     public int cycleLength;
     public int cycleUniqueColors;
 
-    public BattleData(int cycleLength, int cycleUniqueColors) {
+    public BattleData(int cycleLength = 7, int cycleUniqueColors = 5) {
         this.seed = -1;
         this.cycleLength = cycleLength;
         this.cycleUniqueColors = cycleUniqueColors;

@@ -51,32 +51,29 @@ public class BattlePlayer : NetworkBehaviour {
     /// </summary>
     private BattleSetupPlayerPanel playerPanel;
 
-    public override void OnNetworkSpawn()
-    {
+    private void Awake() {
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
 
-        // Register this player with the player manager
-        battleLobbyManager.playerManager.AddPlayer(GetId(), this);
+        DisableUserInput();
+    }
 
-        // start off as board -1 (no board)
+    public override void OnNetworkSpawn()
+    {
         if (IsServer) {
             boardIndex.Value = -1;
-        }        
+        }
 
-        // Let CharSelect know this player now exists
-        // Will assign this player a panel and listen for when it is ready to start the game
-        var charSelect = battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour;
-        charSelect.OnPlayerJoined(GetId());
+        boardIndex.OnValueChanged += OnBoardIndexChanged;
+        username.OnValueChanged += OnUsernameChanged;
+        
+        // Register this player with the player manager
+        battleLobbyManager.playerManager.AddPlayer(GetId(), this);
 
         // Set username asynchrously, if this is the local player
         if (IsLocalPlayer) {
             SetUsernameAsync();
         }
-
-        boardIndex.OnValueChanged += OnBoardIndexChanged;
-
-        username.OnValueChanged += OnUsernameChanged;
 
         // only enable input if this is the local player (always true in singleplayer, varies in multiplayer)
         if (IsLocalPlayer) {
@@ -88,13 +85,18 @@ public class BattlePlayer : NetworkBehaviour {
         // if in battle setup, disable battle inputs
 
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
+            // Let CharSelect know this player now exists
+            // Will assign this player a panel and listen for when it is ready to start the game
+            var charSelect = battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour;
+            charSelect.OnPlayerJoined(GetId());
+
             DisableBattleInputs();
-            BattleSetupConnectPanel();
+            // BattleSetupConnectPanel();
         }
-        // If already in battle mode, connect the board
-        else if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
-            BattleConnectBoard();
-        }
+        // // If already in battle mode, connect the board
+        // else if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
+        //     BattleConnectBoard();
+        // }
 
         DontDestroyOnLoad(gameObject);
     }
@@ -102,8 +104,6 @@ public class BattlePlayer : NetworkBehaviour {
     
     public override void OnNetworkDespawn()
     {
-        boardIndex.OnValueChanged -= OnBoardIndexChanged;
-
         battleLobbyManager.playerManager.RemovePlayer(GetId());
     }
 
@@ -148,19 +148,26 @@ public class BattlePlayer : NetworkBehaviour {
     /// When board index is loaded or changes, make this player control the appropriate setup panel or board
     /// </summary>
     public void OnBoardIndexChanged(int previous, int current) {
+        Debug.Log("player "+OwnerClientId+" board index changed from "+previous+" to "+current+" in battle phase "+battleLobbyManager.battlePhase);
+
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
-            BattleSetupConnectPanel();
+            BattleSetupConnectPanel(current);
+        } else if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
+            BattleConnectBoard(current);
         }
     }
 
     /// <summary>
-    /// Connect the player to their battle setup player panel based on their network id.
+    /// Connect the player to their battle setup player panel based on the passed index.
     /// </summary>
-    public void BattleSetupConnectPanel() {
+    public void BattleSetupConnectPanel(int index) {
         // don't connect if value is the default -1
-        if (boardIndex.Value < 0) return;
+        if (index < 0) {
+            Debug.LogError("Trying to connect battleplayer to setup panel but index is invalid: "+index);
+            return;
+        };
 
-        BattleSetupPlayerPanel panel = battleLobbyManager.battleSetupManager.characterSelectMenu.GetPanel(boardIndex.Value);
+        BattleSetupPlayerPanel panel = battleLobbyManager.battleSetupManager.characterSelectMenu.GetPanel(index);
 
         // If panel does not change or is still null, return
         if (playerPanel == panel) return;
@@ -179,13 +186,16 @@ public class BattlePlayer : NetworkBehaviour {
     }
 
     /// <summary>
-    /// Connect the player input to the appropriate board based on network id.
+    /// Connect the player input to the appropriate board based on the passed index.
     /// </summary>
-    public void BattleConnectBoard() {
-        if (boardIndex.Value < 0) return;
+    public void BattleConnectBoard(int index) {
+        if (index < 0) {
+            Debug.LogError("Trying to connect battleplayer to board but board index is invalid: "+index);
+            return;
+        };
 
         // TODO: ideally, make this work when there is up to 4 players. or online could just be 1v1s
-        playerInputController.board = battleLobbyManager.battleManager.GetBoardByIndex(boardIndex.Value);
+        playerInputController.board = battleLobbyManager.battleManager.GetBoardByIndex(index);
         Debug.Log(this+" connected to "+playerInputController.board);
     }
 

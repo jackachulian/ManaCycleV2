@@ -2,6 +2,10 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Manages the current battle.
+/// Also a NetworkBehaviour that controls spawning of boards, when the game pauses/stalls from bad connection, etc
+/// </summary>
 public class BattleManager : MonoBehaviour
 {
     /// <summary>
@@ -35,6 +39,18 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private ManaTile manaTilePrefab;
 
     private void Awake() {
+        if (this == null) {
+            Debug.Log("Self battlemanager is null, destroying self");
+            Destroy(gameObject);
+            return;
+        }
+
+        if (!gameObject.activeSelf) {
+            Debug.Log("battlemanager is not activeSelf, destroying self");
+            Destroy(gameObject);
+            return;
+        }
+
         if (battleLobbyManager.battleManager != null) {
             Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
             Destroy(battleLobbyManager.battleManager.gameObject);
@@ -45,15 +61,14 @@ public class BattleManager : MonoBehaviour
     }
 
     public void Start() {
+        // Start host if not already started (needed when loading straight into battle scene)
         battleLobbyManager.StartNetworkManagerHost();
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
         manaCycle.InitializeBattle(this);
 
-        // Used for mana color RNG during the match.
-        // All boards share the same seed, and will have the same piece colors if the same RNG mode is selected.
-
+        
         foreach (Board board in boards) {
             board.InitializeBattle(this, battleLobbyManager.battleData.seed);
         }
@@ -79,24 +94,11 @@ public class BattleManager : MonoBehaviour
                 }
 
                 Debug.Log("Spawning board "+board+" with owner of clientID "+player.OwnerClientId);
-                board.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);
+                board.GetComponent<NetworkObject>().ChangeOwnership(player.OwnerClientId);
             }
         } else {
             Debug.Log("This is not the server");
         }
-
-        // Connects all players found to their respective boards.
-        // This works for both online and local, as both use BattlePlayers.
-        var players = FindObjectsByType<BattlePlayer>(FindObjectsSortMode.None);
-        Debug.Log("Players: "+players+" - count: "+players.Length);
-
-        foreach (BattlePlayer player in players) {
-            player.BattleConnectBoard();
-            player.EnableBattleInputs();
-        }
-
-        
-
     }
 
     /// <summary>
