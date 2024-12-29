@@ -1,13 +1,9 @@
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
-    /// <summary>
-    /// The current settings being used for the battle, such as RNG seed, etc
-    /// </summary>
-    public static BattleSettings battleSettings {get; private set;}
-
     /// <summary>
     /// Stores shared battle lobby dependencies
     /// </summary>
@@ -38,14 +34,6 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     [SerializeField] private ManaTile manaTilePrefab;
 
-    /// <summary>
-    /// Use this to set all the settings to use for the battle.
-    /// </summary>
-    /// <param name="settings">the BattleSettings object to use</param>
-    public static void Configure(BattleSettings settings) {
-        battleSettings = settings;
-    }
-
     private void Awake() {
         if (battleLobbyManager.battleManager != null) {
             Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
@@ -67,7 +55,7 @@ public class BattleManager : MonoBehaviour
         // All boards share the same seed, and will have the same piece colors if the same RNG mode is selected.
 
         foreach (Board board in boards) {
-            board.InitializeBattle(this, battleSettings.seed);
+            board.InitializeBattle(this, battleLobbyManager.battleData.seed);
         }
 
         // Server spawns board and assigns ownership based on player's boardIndex

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
 /// A component to be used on the same gameobject as the Board.
 /// Handles spellcasting and the timing associated with it.
 /// </summary>
-public class SpellcastManager : MonoBehaviour {
+public class SpellcastManager : NetworkBehaviour {
     // ================ Serialized fields ================
     /// <summary>
     /// Minimum possible time between clears before a cascade can be triggered. 
@@ -66,18 +67,18 @@ public class SpellcastManager : MonoBehaviour {
     /// The total amount of clearable mana on the board for each color, as discovered from the last blob refresh.
     /// Used to determine if a spellcast can currently be initiated. If current color clearable mana is 0, a buzzer sound will play and no spellcast will occur.
     /// </summary>
-    public int[] clearableManaCounts;
+    private int[] clearableManaCounts;
 
     /// <summary>
     /// Minimum blob size required to clear
     /// </summary>
-    public readonly int minBlobSize = 3;
+    private readonly int minBlobSize = 3;
 
     // ======== Spellcasting ========
     /// <summary>
     /// Whether or not a spellcast is currently in progress.
     /// </summary>
-    public bool spellcasting {get; private set;}
+    private bool spellcasting {get; set;}
 
     // TODO: Make these private!! only public for debugging purposes
     /// <summary>
@@ -87,18 +88,20 @@ public class SpellcastManager : MonoBehaviour {
     /// If still clearable after cascadeDelay, trigger a cascade clear and increment by 1.
     /// Once cascade ends set back to 0.
     /// </summary>
-    public int currentCascade;
+    private int currentCascade;
 
     /// <summary>
     /// Current chain during a spellcast
     /// </summary>
-    public int currentChain;
+    private int currentChain;
 
     /// <summary>
     /// Is set to 0 when a clear happens during a spellcast and counts upward.
     /// Used for spellcast cascade/chain timing.
+    /// This value is only managed on the client controlling this board, 
+    /// so don't use this value within RPCs that are sent to all clients!
     /// </summary>
-    public float timeSinceLastClear;
+    private float timeSinceLastClear;
 
     
     // ================ Methods ================
@@ -109,7 +112,7 @@ public class SpellcastManager : MonoBehaviour {
     public void InitializeBattle(Board board) {
         this.board = board;
         blobGrid = new List<Vector2Int>[board.manaTileGrid.width, board.manaTileGrid.height];
-        clearableManaCounts = new int[board.battleManager.manaCycle.cycleUniqueColors];
+        clearableManaCounts = new int[board.battleManager.battleLobbyManager.battleData.cycleUniqueColors];
 
         RepositionCyclePointer();
     }
@@ -123,7 +126,11 @@ public class SpellcastManager : MonoBehaviour {
     /// Runs each frame.
     /// </summary>
     void SpellcastUpdate() {
+        // only manage spellcast timing while a spellcast is active
         if (!spellcasting) return;
+
+        // Only perform spellcast timing logic if this board is owned
+        if (!IsOwner) return;
 
         timeSinceLastClear += Time.deltaTime;
 
@@ -134,14 +141,14 @@ public class SpellcastManager : MonoBehaviour {
             && timeSinceLastClear < chainDelay      // must happen before chain delay
             && IsCurrentColorClearable()            // current color in cycle must be clearable
         ) {
-            SpellcastClear();
+            SpellcastClearRpc();
+            timeSinceLastClear = 0;
         } 
         // If a cascade is ongoing, but there is not a valid cascade and cascade period has passed (chain delay reached), 
         // end the cascade and move to the next color in the chain.
         // note: this will only be reached if a cascade is set to happen right after a clear, but an ability tile breaks the cascade before cascadeDelay passes
         else if (currentCascade > 0 && timeSinceLastClear >= chainDelay) {
-            currentCascade = 0;
-            AdvanceCycle();
+            AdvanceCycleRpc();
         }
 
         // Check to see if there is a valid chain
@@ -150,21 +157,29 @@ public class SpellcastManager : MonoBehaviour {
             && timeSinceLastClear < maxChainDelay   // must happen before max chain delay
             && IsCurrentColorClearable()            // current color in cycle must be clearable
         ) {
-            SpellcastClear();
+            SpellcastClearRpc();
+            timeSinceLastClear = 0;
         } 
+
         // otherwise, if past max chain delay, end the chain here
         else if (timeSinceLastClear >= maxChainDelay) {
-            spellcasting = false;
-            currentChain = 0;
-            currentCascade = 0;
-            Debug.Log("Chain ended");
+            EndChainRpc();
         }
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void EndChainRpc() {
+        spellcasting = false;
+        currentChain = 0;
+        currentCascade = 0;
+        Debug.Log("Chain ended");
     }
 
     /// <summary>
     /// Called when a chain or cascade is triggered. Clear the current color, add to chain/cascade, and score appropriate amount of points
     /// </summary>
-    private void SpellcastClear() {
+    [Rpc(SendTo.Everyone)]
+    private void SpellcastClearRpc() {
         // if a cascade is happening, add to cascade, otherwise add to chain
         if (currentCascade > 0) {
             Debug.Log("Cascade clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
@@ -185,18 +200,19 @@ public class SpellcastManager : MonoBehaviour {
         }
         // otherwise, advance to the next color in the cycle
         else {
-            AdvanceCycle();
+            AdvanceCycleRpc();
         }
-        
-        timeSinceLastClear = 0;
     }
 
     /// <summary>
     /// Move this board's pointer to the next sequential color in the cycle.
+    /// Also, end any cascade that may be ongoing.
     /// </summary>
-    private void AdvanceCycle() {
+    [Rpc(SendTo.Everyone)]
+    private void AdvanceCycleRpc() {
+        currentCascade = 0;
         cycleIndex += 1;
-        if (cycleIndex >= board.battleManager.manaCycle.cycleLength) {
+        if (cycleIndex >= board.battleManager.battleLobbyManager.battleData.cycleLength) {
             cycleIndex = 0;
             // TODO: cycle multiplier
         }
@@ -223,6 +239,11 @@ public class SpellcastManager : MonoBehaviour {
             return;
         }
 
+        SpellcastStartedRpc();
+    }
+
+    [Rpc(SendTo.Everyone)]
+    private void SpellcastStartedRpc() {
         // TODO: play spellcast startup sound
         spellcasting = true;
         timeSinceLastClear = 0;
@@ -235,7 +256,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Returns the color that this board is currently on and has to clear in order to advance the cycle.
     /// </summary>
     /// <returns>the int representing the current color</returns>
-    public int GetCurrentCycleColor() {
+    private int GetCurrentCycleColor() {
         return board.battleManager.manaCycle.GetSequenceColor(cycleIndex);
     }
 
@@ -243,7 +264,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Returns true if, according to the last blob update, the current cycle color can be cleared.
     /// </summary>
     /// <returns>true if current cycle color is currently clearable</returns>
-    public bool IsCurrentColorClearable() {
+    private bool IsCurrentColorClearable() {
         return clearableManaCounts[GetCurrentCycleColor()] > 0;
     }
 
@@ -292,7 +313,7 @@ public class SpellcastManager : MonoBehaviour {
     /// <param name="blob">the blob (list of vecor2ints) to add to</param>
     /// <param name="position">position of the possible tile to try to add to the blob</param>
     /// <param name="color">the color to check for </param>
-    void ExpandBlob(List<Vector2Int> blob, Vector2Int position, int color)
+    private void ExpandBlob(List<Vector2Int> blob, Vector2Int position, int color)
     {
         // Don't add to blob if the tile is in an invalid position
         if (!board.manaTileGrid.IsInBounds(position)) return;
@@ -323,7 +344,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Blob size must be at least <c>minBlobSize</c>.
     /// </summary>
     /// <param name="color">the color to clear</param>
-    void ClearColor(int color) {
+    private void ClearColor(int color) {
         // Loop through all tiles, if the tile is part of a blob of adequate size and matching color, clear that tile
         for (int y = 0; y < board.manaTileGrid.height; y++) {
             for (int x = 0; x < board.manaTileGrid.width; x++) {

@@ -115,8 +115,10 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
             return;
         }
 
-        // Make sure there are at least 2 players before the match can start
-        if (battleLobbyManager.networkManager.ConnectedClients.Count < 2) return;
+        // in Online, Make sure there are at least 2 players before the match can start
+        // in local, there only needs to be at least 1 player
+        int minPlayers = battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER ? 2 : 1;
+        if (battleLobbyManager.networkManager.ConnectedClients.Count < minPlayers) return;
 
         // Make sure all connected players are ready
         foreach (var player in battleLobbyManager.playerManager.GetPlayers()) {
@@ -128,16 +130,25 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
         // The server/host chooses the seed that will be used for piece RNG.
         // TODO: may want to initialize these settings at the start of the scene, use them in the UI, 
         // and then send it to startgamerpc from here when the game starts
-        BattleSettings settings = new BattleSettings();
-        settings.seed = Random.Range(0, int.MaxValue);
+        BattleData battleData = new BattleData();
 
-        // send the RPC that will start the game on all clients
-        StartGameRpc(settings);
+        // TODO: maybe customizable in a battle settings UI?
+        battleData.cycleLength = 7;
+        battleData.cycleUniqueColors = 5;
+
+        // will randomize the piece RNG seed and the cycle
+        battleData.Randomize();
+
+        // send the RPC that will start the game on all clients with synchronized battle data
+        StartGameRpc(battleData);
     }
 
     [Rpc(SendTo.Everyone)]
-    public void StartGameRpc(BattleSettings settings) {
-        BattleManager.Configure(settings);
-        SceneManager.LoadScene("Battle");
+    public void StartGameRpc(BattleData battleData) {
+        battleLobbyManager.SetBattleData(battleData);
+        
+        if (battleLobbyManager.networkManager.IsServer) {
+            battleLobbyManager.networkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
+        }
     }
 }

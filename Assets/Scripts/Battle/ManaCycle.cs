@@ -17,12 +17,6 @@ public class ManaCycle : MonoBehaviour
     /// Transform that the mana tiles in the cycle are parented to
     /// </summary>
     [SerializeField] private Transform manaTileTransform;
-    
-    
-
-    // (These will later depend on the level in solo mode, but constant for now)
-    public readonly int cycleLength = 7;
-    public readonly int cycleUniqueColors = 5;
 
     /// <summary>
     /// All visual Tiles that are displayed on the display the cycle
@@ -42,8 +36,48 @@ public class ManaCycle : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        tiles = new ManaTile[cycleLength];
-        colorSequence = new int[cycleLength];
+        var battleData = battleManager.battleLobbyManager.battleData;
+
+        // Seed is used to determine the cycle
+        Random.InitState(battleData.seed);
+        colorSequence = GenerateCycleColorSequence(battleData.cycleLength, battleData.cycleUniqueColors);
+
+        tiles = new ManaTile[battleData.cycleLength];
+
+        Debug.Log(string.Join(", ", colorSequence));
+
+        // Create cycle color objects for each cycle color
+        for (int i=0; i<battleData.cycleLength; i++)
+        {
+            ManaTile tile = battleManager.SpawnTile();
+            tiles[i] = tile;
+            tile.SetColor(colorSequence[i], battleManager.cosmetics);
+            tile.transform.SetParent(manaTileTransform);
+            tile.transform.localPosition = new Vector2(0, (i - (battleData.cycleLength-1)/2.0f) * -manaSeparation);
+            tile.transform.localScale = new Vector2(manaScale, manaScale);
+        }
+    }
+
+    // Returns the color of the sequence at the given index.
+    public int GetSequenceColor(int index) {
+        return colorSequence[index];
+    }
+
+    /// <summary>
+    /// Get a visual tile that is part of the cycle list of colors.
+    /// </summary>
+    /// <returns>the tile GameObject for the given cycle index</returns>
+    public ManaTile GetCycleTile(int index) {
+        return tiles[index];
+    }
+
+    /// <summary>
+    /// (Static) Generate a cycle color sequence, expressed as an array of integers, with the given length and amount of unique colors.
+    /// </summary>
+    /// <param name="cycleLength">total length of the color sequence</param>
+    /// <param name="cycleUniqueColors">total amount of unique colors</param>
+    public static int[] GenerateCycleColorSequence(int cycleLength, int cycleUniqueColors) {
+        int[] colorSequence = new int[cycleLength];
 
         // Add one of each color to the list
         for (int i=0; i<cycleUniqueColors; i++)
@@ -76,30 +110,6 @@ public class ManaCycle : MonoBehaviour
             }
         }
 
-        Debug.Log(string.Join(", ", colorSequence));
-
-        // Create cycle color objects for each cycle color
-        for (int i=0; i<cycleLength; i++)
-        {
-            ManaTile tile = battleManager.SpawnTile();
-            tiles[i] = tile;
-            tile.SetColor(colorSequence[i], battleManager.cosmetics);
-            tile.transform.SetParent(manaTileTransform);
-            tile.transform.localPosition = new Vector2(0, (i - (cycleLength-1)/2.0f) * -manaSeparation);
-            tile.transform.localScale = new Vector2(manaScale, manaScale);
-        }
-    }
-
-    // Returns the color of the sequence at the given index.
-    public int GetSequenceColor(int index) {
-        return colorSequence[index];
-    }
-
-    /// <summary>
-    /// Get a visual tile that is part of the cycle list of colors.
-    /// </summary>
-    /// <returns>the tile GameObject for the given cycle index</returns>
-    public ManaTile GetCycleTile(int index) {
-        return tiles[index];
+        return colorSequence;
     }
 }
