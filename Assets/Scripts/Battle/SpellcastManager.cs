@@ -123,7 +123,7 @@ public class SpellcastManager : NetworkBehaviour {
 
     /// <summary>
     /// Updates the state of the spellcast based on several timing variables and the changing state of the board.
-    /// Runs each frame.
+    /// Runs each frame. (Only on the owner of this board!)
     /// </summary>
     void SpellcastUpdate() {
         // only manage spellcast timing while a spellcast is active
@@ -228,7 +228,7 @@ public class SpellcastManager : NetworkBehaviour {
         if (IsCurrentColorClearable()) {
             if (currentCascade == 0) currentCascade = 1;
         }
-        // otherwise, advance to the next color in the cycle (only send if owner)
+        // otherwise, advance to the next color in the cycle
         else {
             AdvanceCycle();
         }
@@ -245,7 +245,6 @@ public class SpellcastManager : NetworkBehaviour {
 
     /// <summary>
     /// Move this board's pointer to the next sequential color in the cycle.
-    /// Also, end any cascade that may be ongoing.
     /// </summary>
     private void AdvanceCycle() {
         

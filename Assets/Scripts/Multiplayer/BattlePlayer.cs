@@ -13,7 +13,7 @@ public class BattlePlayer : NetworkBehaviour {
     /// <summary>
     /// Stores shared battle lobby dependencies
     /// </summary>
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
+    [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     /// <summary>
     /// Used only in non-online mode. the ID of this player, assigned by the player input manager.

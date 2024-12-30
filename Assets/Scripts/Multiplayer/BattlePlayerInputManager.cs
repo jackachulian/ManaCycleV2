@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 /// Manages the connecting of seperate input devices as separate players in local multiplayer.
 /// </summary>
 public class BattlePlayerInputManager : MonoBehaviour {
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
+    [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     private PlayerInputManager playerInputManager;
 

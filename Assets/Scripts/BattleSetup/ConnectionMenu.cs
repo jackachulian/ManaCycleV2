@@ -12,7 +12,7 @@ public class ConnectionMenu : MonoBehaviour
     /// <summary>
     /// Stores shared battle lobby dependencies
     /// </summary>
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
+    [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     /// <summary>
     /// Shows the username. Probably temporary

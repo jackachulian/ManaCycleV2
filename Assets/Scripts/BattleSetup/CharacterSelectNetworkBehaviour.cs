@@ -10,8 +10,6 @@ using UnityEngine.SceneManagement;
 public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
     [SerializeField] private BattleLobbyManager battleLobbyManager;
 
-    
-
     public override void OnNetworkSpawn() {
         // In online multiplayer, listen for connected clients
         // if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {

@@ -7,11 +7,12 @@ public class BattleSetupManager : MonoBehaviour
     /// <summary>
     /// Stores shared battle lobby dependencies
     /// </summary>
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
+    [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     [SerializeField] private ConnectionMenu connectMenu;
 
-    [SerializeField] public CharacterSelectMenu characterSelectMenu;
+    [SerializeField] private CharacterSelectMenu _characterSelectMenu;
+    public CharacterSelectMenu characterSelectMenu => _characterSelectMenu;
 
     public enum BattleSetupState {
         CONNECT_MENU,

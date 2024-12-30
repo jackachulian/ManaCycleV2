@@ -11,7 +11,7 @@ public class PlayerManager : MonoBehaviour {
     /// <summary>
     /// Contains shared values used between battle scenes
     /// </summary>
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
+    [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     /// <summary>
     /// Cached networkmanager component on same gameobject

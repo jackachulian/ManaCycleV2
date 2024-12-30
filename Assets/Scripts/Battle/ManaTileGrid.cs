@@ -41,8 +41,6 @@ public class ManaTileGrid : MonoBehaviour {
     /// <summary>
     /// Returns true if there is a tile at the given x and y coordinate.
     /// </summary>
-    /// <param name="coords"></param>
-    /// <returns>true if there is a tile here.</returns>
     public bool HasTile(Vector2Int position) {
         return grid[position.x, position.y] != null;
     }
