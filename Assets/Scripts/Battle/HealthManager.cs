@@ -30,6 +30,7 @@ public class HealthManager : NetworkBehaviour {
     /// </summary>
     /// <param name="board"></param>
     public void InitializeBattle(Board board) {
+        incomingDamage = new int[6];
         UpdateHpBarVisual();
     }
 
@@ -38,17 +39,13 @@ public class HealthManager : NetworkBehaviour {
     }
 
     /// <summary>
-    /// Receive damage from another board. 
-    /// When another client's board's spellcast is evaluated on other this client,
-    /// this client will evaulate this RPC on this client's own board, which will be propogated to other clients.
-    /// This ensures that the other client dealing the damage cannot send whatever damage value they want to this client
-    /// which obviously would not be good if hackers abused it
+    /// Receive damage from another board.
     /// </summary>
-    /// <param name="damage">the amount of damage enqueued by the other player's spellcast</param>
-    [Rpc(SendTo.Everyone, RequireOwnership = true)]
+    /// <param name="damage">the amount of damage dealt by the other player</param>
+    [Rpc(SendTo.Everyone)]
     public void EnqueueDamageRpc(int damage) {
         // TODO: implement the incoming damage bar
-        health -= damage;
+        incomingDamage[0] += damage;
 
         UpdateHpBarVisual();
     }
@@ -59,7 +56,7 @@ public class HealthManager : NetworkBehaviour {
             health -= incomingDamage[5];
         }
 
-        for (int i = 5; i >= 0; i--) {
+        for (int i = 5; i >= 1; i--) {
             incomingDamage[i] = incomingDamage[i - 1];
         }
 

@@ -216,6 +216,7 @@ public class PieceManager : NetworkBehaviour {
     [Rpc(SendTo.Everyone, RequireOwnership = true)]
     void PlaceCurrentPieceRpc() {
         PlacePiece(currentPiece);
+        board.healthManager.AdvanceDamageQueue();
         SpawnNewPiece();
     }
 

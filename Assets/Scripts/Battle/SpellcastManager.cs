@@ -202,18 +202,24 @@ public class SpellcastManager : NetworkBehaviour {
         int damage = (int)(totalMana * damagePerMana * chainMultiplier * cascadeMultiplier);
 
         // TODO: factor in how many boards are actually currently controlled, and split damage equally among them
-        // for now just deal damage to all other boards. RPC will only be sent if this client actually owns the board
+        // for now just deal damage to all other boards.
         // (client decides how much damage it takes)
 
         // another possible security improvement: 
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
-        for (int i = 0; i < 2; i++) {
-            Board otherBoard = board.battleManager.GetBoardByIndex(i);
-            // Only send the damage if this client owns the board the damage is being sent to
-            if (otherBoard && otherBoard.IsInitialized() && otherBoard != board && otherBoard.healthManager.IsOwner) {
-                otherBoard.healthManager.EnqueueDamageRpc(damage);
+        if (IsOwner) {
+            for (int i = 0; i < 2; i++) {
+                Board otherBoard = board.battleManager.GetBoardByIndex(i);
+                // Only send the damage if this client owns this board
+                if (otherBoard != board) {
+                    otherBoard.healthManager.EnqueueDamageRpc(damage);
+                }
             }
+        } else {
+            // check actual (received) value if present, wait for it if not
+            // and then compare it against expected damage (the local damage variable)
         }
+        
 
         board.manaTileGrid.AllTileGravity();
         RefreshBlobs();
