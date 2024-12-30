@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-namespace MainMenu
+namespace Menus
 {
     public class HalfRadialButtons : MonoBehaviour
     {
@@ -46,6 +47,23 @@ namespace MainMenu
             {
                 itemTransforms[i] = items[i].GetComponent<RectTransformSmoother>();
                 items[i].gameObject.SetActive(false);
+
+                // set up navigation
+                Navigation itemNav = items[i].navigation;
+                itemNav.mode = Navigation.Mode.Explicit;
+                itemNav.selectOnDown = items[Mod(i + 1, items.Length)];
+                itemNav.selectOnUp = items[Mod(i - 1, items.Length)];
+                items[i].navigation = itemNav;
+
+                // set up select events
+                EventTrigger.Entry entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.Move;
+                entry.callback.AddListener( (eventData) => 
+                { 
+                    int y = (int) (eventData as AxisEventData).moveVector.y;
+                    if (y != 0) SelectNext(-y); 
+                } );
+                items[i].gameObject.GetComponent<EventTrigger>().triggers.Add(entry);
             }
 
             ShowVisibleButtons();
@@ -101,7 +119,7 @@ namespace MainMenu
             }
         }
 
-        private void SelectNext(int selectionDelta = 1)
+        public void SelectNext(int selectionDelta = 1)
         {
             // difference between current index and bottommost visible item index
             int endDelta = (shownAmount / 2 + 1) * (int) Mathf.Sign(selectionDelta);
@@ -110,14 +128,8 @@ namespace MainMenu
 
             // change selected button index and raise event that change happend for other visuals to update
             currentSelectionIndex = Mod(currentSelectionIndex + selectionDelta, items.Length);
-            SelectItem(selectionDelta);
-
-        }
-
-        private void SelectItem(int selectionDelta = 1)
-        {
             ButtonSelected?.Invoke(currentSelectionIndex, selectionDelta < 0);
-            EventSystem.current.SetSelectedGameObject(items[currentSelectionIndex].gameObject);
+
         }
 
         private float ToTheta(int i)
@@ -129,26 +141,6 @@ namespace MainMenu
         private int Mod(int n, int m)
         {
             return (n % m + m) % m; 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            // TEMP replace with new input system
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                SelectNext(-1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                SelectNext(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                ButtonSubmitted?.Invoke(currentSelectionIndex);
-            }
         }
 
         public void TransitionRadius(float r, float st = 0.1f)
@@ -176,8 +168,7 @@ namespace MainMenu
             gameObject.SetActive(true);
             TransitionRadius(openRadius);
             yield return new WaitForSeconds(0.1f);
-
-            SelectItem();
+            EventSystem.current.SetSelectedGameObject(items[currentSelectionIndex].gameObject);
         }
 
         // used in event triggers

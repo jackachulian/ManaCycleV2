@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Menus;
 
 namespace MainMenu
 {
@@ -21,9 +22,10 @@ namespace MainMenu
             rootMenu.ButtonSelected += sceneSwapper.OnButtonSelected;
 
             settingsMenu.gameObject.SetActive(false);
+            rootMenu.CoroutineOpen();
             
             // TODO cleanup radial button menu init
-            OnButtonSelected(0);
+            // OnButtonSelected(0);
             sceneSwapper.OnButtonSelected(0, true);
         }
 
