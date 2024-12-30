@@ -33,8 +33,8 @@ namespace Menus
         // called when the selected button is changed.
         public event ButtonSelectedHandler ButtonSelected;
 
-        public delegate void ButtonSubmittedHandler(int index);
-        public event ButtonSubmittedHandler ButtonSubmitted;
+        public delegate void MenuOpenedHandler();
+        public event MenuOpenedHandler MenuOpened;
 
         // Start is called before the first frame update
         void Start()
@@ -168,7 +168,10 @@ namespace Menus
             gameObject.SetActive(true);
             TransitionRadius(openRadius);
             yield return new WaitForSeconds(0.1f);
+
+            MenuOpened?.Invoke();
             EventSystem.current.SetSelectedGameObject(items[currentSelectionIndex].gameObject);
+            ButtonSelected?.Invoke(currentSelectionIndex, true);
         }
 
         // used in event triggers
