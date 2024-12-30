@@ -26,11 +26,15 @@ public class HealthManager : NetworkBehaviour {
     [SerializeField] private HpBarUI hpBarUI;
     [SerializeField] private IncomingDamageUI incomingDamageUI;
 
+
+    private Board board;
+
     /// <summary>
     /// Called when the battle initializes, after the ManaCycle and the Board for this healthmanager is initialized.
     /// </summary>
     /// <param name="board"></param>
     public void InitializeBattle(Board board) {
+        this.board = board;
         incomingDamage = new int[6];
         UpdateHealthUI();
     }
@@ -63,6 +67,10 @@ public class HealthManager : NetworkBehaviour {
         }
 
         incomingDamage[0] = 0;
+
+        if (health <= 0) {
+            board.Defeat();
+        }
 
         UpdateHealthUI();
     }

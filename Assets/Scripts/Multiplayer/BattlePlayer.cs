@@ -200,7 +200,9 @@ public class BattlePlayer : NetworkBehaviour {
         };
 
         // TODO: ideally, make this work when there is up to 4 players. or online could just be 1v1s
-        playerInputController.board = battleLobbyManager.battleManager.GetBoardByIndex(index);
+        Board board = battleLobbyManager.battleManager.GetBoardByIndex(index);
+        playerInputController.board = board;
+        board.onPlayerConnected.Invoke(this);
         Debug.Log(this+" connected to "+playerInputController.board);
     }
 

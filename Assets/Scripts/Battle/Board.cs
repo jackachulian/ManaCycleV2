@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 /// <summary>
@@ -43,6 +44,30 @@ public class Board : MonoBehaviour
     private bool initialized = false;
 
     /// <summary>
+    /// Invoked when player is defeated.
+    /// BattleManager will listen for this to know when to check when only one player is alive.
+    /// </summary>
+    public UnityEvent onDefeat {get; set;}
+
+    /// <summary>
+    /// Piece spawning will only happen while boardActive is true.
+    /// Set to true when initialized, set to false when winning/losing.
+    /// </summary>
+    public bool boardActive {get; private set;}
+
+    /// <summary>
+    /// Set to true when this board either tops out or runs out of health.
+    /// </summary>
+    public bool defeated {get; private set;}
+
+    /// <summary>
+    /// Called when any player connects to this board.
+    /// Expects a BattlePlayer as the parameter passed.
+    /// </summary>
+    public UnityEvent<BattlePlayer> onPlayerConnected {get; private set;} = new UnityEvent<BattlePlayer>();
+    public UnityEvent<BattlePlayer> onPlayerDisconnected {get; private set;} = new UnityEvent<BattlePlayer>();
+
+    /// <summary>
     /// Called by BattleManager when battle is initialized
     /// Any initialization should go here (no Start() method)
     /// </summary>
@@ -50,10 +75,15 @@ public class Board : MonoBehaviour
     /// <param name="seed">the seed to use for RNG</param>
     public void InitializeBattle(BattleManager battleManager, int seed) {
         if (initialized) {
-            Debug.LogWarning("Already initialized; going to reinitialize but make sure this was intended!");
+            Debug.LogWarning(this+" already initialized; going to reinitialize but make sure this was intended!");
+        } else {
+            Debug.Log("Initializing battle board "+this);
         }
 
         this.battleManager = battleManager;
+
+        defeated = false;
+        boardActive = true;
         
         manaTileGrid = GetComponent<ManaTileGrid>();
         manaTileGrid.InitializeBattle();
@@ -70,5 +100,23 @@ public class Board : MonoBehaviour
 
     public bool IsInitialized() {
         return initialized;
+    }
+
+    /// <summary>
+    /// To be called when this player runs out of HP or tops out.
+    /// Destroy the current piece, stop piece spawning, etc
+    /// </summary>
+    public void Defeat() {
+        boardActive = false;
+        defeated = true;
+        onDefeat.Invoke();
+    }
+
+    /// <summary>
+    /// In singleplayer, called when player earns enough score / completes all objectives.
+    /// In multiplayer, called when all other boards are defeated.
+    /// </summary>
+    public void Win() {
+        boardActive = false;
     }
 }

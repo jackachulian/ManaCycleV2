@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 590613156}
   - component: {fileID: 590613158}
   - component: {fileID: 590613157}
+  - component: {fileID: 590613159}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -413,9 +414,11 @@ MonoBehaviour:
   boards:
   - {fileID: 262004901}
   - {fileID: 1495945859}
+  postGameMenuUI: {fileID: 0}
   cosmetics: {fileID: 11400000, guid: 6d37034fe6289064184c49808436ed7f, type: 2}
   manaPiecePrefab: {fileID: 4739590568304164122, guid: bf6b3eb5ac3a1ed47b928acdde94e7e4, type: 3}
   manaTilePrefab: {fileID: 3662205671954021063, guid: e42c7f7f7aab59d42a4a3f025032c5d6, type: 3}
+  battleStart: {fileID: 590613159}
 --- !u!114 &590613158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +444,21 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &590613159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 590613154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12f65956a379cde46a961a9b70263578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  battleLobbyManager: {fileID: 11400000, guid: 4d6c448006e9f5c45a0d15d5d54afa7b, type: 2}
+  canStartBattle: 0
 --- !u!1001 &1012525813
 PrefabInstance:
   m_ObjectHideFlags: 0

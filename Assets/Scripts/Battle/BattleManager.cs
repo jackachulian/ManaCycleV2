@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -25,6 +26,12 @@ public class BattleManager : NetworkBehaviour
     [SerializeField] private Board[] boards;
 
     /// <summary>
+    /// UI for the postgame. Start the UI when the game completes.
+    /// The postgame UI will send requests to this BattleManager if a rematch / character select is requested
+    /// </summary>
+    [SerializeField] private PostGameMenuUI postGameMenuUI;
+
+    /// <summary>
     /// Cosmetics to use for all boards and the mana cycle
     /// </summary>
     [SerializeField] public ManaCosmetics cosmetics;
@@ -43,6 +50,16 @@ public class BattleManager : NetworkBehaviour
     /// only true once initialized. will initialize the first time the networkvariable BattleData is changed/set on this client
     /// </summary>
     private bool initialized = false;
+
+    /// <summary>
+    /// Is set to true when a winner is chosen.
+    /// </summary>
+    public bool gameCompleted {get; private set;}
+
+    /// <summary>
+    /// Used to start rematches
+    /// </summary>
+    [SerializeField] private BattleStartNetworkBehaviour battleStart;
 
     private void Awake() {
         if (this == null) {
@@ -161,5 +178,50 @@ public class BattleManager : NetworkBehaviour
     /// <returns>the board at the given index in teh baords array</returns>
     public Board GetBoardByIndex(int index) {
         return boards[index];
+    }
+
+    /// <summary>
+    /// To be called when a player connects to one of this battle manager's boards
+    /// </summary>
+    public void OnPlayerConnectedToBoard(BattlePlayer battlePlayer) {        
+        if (battleLobbyManager.networkManager.IsServer) {
+            // listen for when their readiness changes to know when to check if all players are ready for a rematch
+            battlePlayer.ready.OnValueChanged += battleStart.OnAnyPlayerReadyChanged;
+        }
+    }
+
+    /// <summary>
+    /// Check if only one board remains active and is not defeated (still has health).
+    /// </summary>
+    public void CheckForWinner() {
+        int livingBoards = 0;
+        // tentative winner; will only actually be the winner if no other non-defeated boards are found
+        Board winner = null;
+        foreach (Board board in boards) {
+            if (!board.defeated) {
+                if (livingBoards == 0) {
+                    winner = board;
+                } else {
+                    return;
+                }
+            } else {
+                livingBoards += 1;
+            }
+        }
+
+        if (winner) {
+            winner.Win();
+            gameCompleted = true;
+        }
+    }
+
+    // Waits a bit and then show the postgame menu
+    public async void PostGame() {
+        // TODO: wait until current spellcast completes on winning board
+        await Task.Delay(1000);
+
+        battleStart.canStartBattle = true;
+
+        postGameMenuUI.ShowPostGameMenuUI();
     }
 }

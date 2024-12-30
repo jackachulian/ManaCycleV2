@@ -257,6 +257,12 @@ public class PieceManager : NetworkBehaviour {
     /// Is called after the current piece is placed.
     /// </summary>
     public void SpawnNewPiece() {
+        // If board is inactive, can't spawn new pieces
+        if (!board.boardActive) {
+            Debug.LogWarning("Board is inactive, can't spawn a new piece");
+            return;
+        }
+
         currentPiece = board.battleManager.SpawnPiece();
         currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
 
