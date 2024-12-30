@@ -49,6 +49,19 @@ namespace MainMenu
             logoImage.SetTargets(new Vector2(750, 10));
         }
 
+        public void Quit()
+        {
+            Debug.Log("Quiting");
+            Application.Quit();
+        }
+
+        public void OpenQuitMenu()
+        {
+            backgroundFader.SetAlphaTarget(0.85f);
+            logoImage.SetTargets(new Vector2(750, 10));
+            rootMenu.CoroutineClose();
+        }
+
     }
 }
 
