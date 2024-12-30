@@ -11,7 +11,7 @@ public class HpBarUI : MonoBehaviour {
         material = GetComponent<SpriteRenderer>().material;
     }
 
-    public void UpdateHpVisual(float hp, float maxHp, int[] incomingDamage) {
+    public void UpdateUI(float hp, float maxHp, int[] incomingDamage) {
         float hpPercentage = hp / maxHp;
 
         material.SetFloat("_HpPercentage", hpPercentage);

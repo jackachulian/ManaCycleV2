@@ -24,6 +24,7 @@ public class HealthManager : NetworkBehaviour {
     public int[] incomingDamage {get; private set;}
 
     [SerializeField] private HpBarUI hpBarUI;
+    [SerializeField] private IncomingDamageUI incomingDamageUI;
 
     /// <summary>
     /// Called when the battle initializes, after the ManaCycle and the Board for this healthmanager is initialized.
@@ -31,11 +32,12 @@ public class HealthManager : NetworkBehaviour {
     /// <param name="board"></param>
     public void InitializeBattle(Board board) {
         incomingDamage = new int[6];
-        UpdateHpBarVisual();
+        UpdateHealthUI();
     }
 
-    public void UpdateHpBarVisual() {
-        hpBarUI.UpdateHpVisual(health, maxHealth, incomingDamage);
+    public void UpdateHealthUI() {
+        hpBarUI.UpdateUI(health, maxHealth, incomingDamage);
+        incomingDamageUI.UpdateUI(incomingDamage);
     }
 
     /// <summary>
@@ -47,7 +49,7 @@ public class HealthManager : NetworkBehaviour {
         // TODO: implement the incoming damage bar
         incomingDamage[0] += damage;
 
-        UpdateHpBarVisual();
+        UpdateHealthUI();
     }
 
     public void AdvanceDamageQueue() {
@@ -62,6 +64,6 @@ public class HealthManager : NetworkBehaviour {
 
         incomingDamage[0] = 0;
 
-        UpdateHpBarVisual();
+        UpdateHealthUI();
     }
 }

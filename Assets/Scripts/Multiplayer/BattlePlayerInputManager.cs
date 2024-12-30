@@ -62,6 +62,8 @@ public class BattlePlayerInputManager : MonoBehaviour {
     private void OnPlayerLeft(PlayerInput playerInput) {
         BattlePlayer battlePlayer = playerInput.GetComponent<BattlePlayer>();
 
+        if (!battlePlayer) return;
+
         players.Remove(battlePlayer);
 
         battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour.OnPlayerLeft(battlePlayer.GetId());
