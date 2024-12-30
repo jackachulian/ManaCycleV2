@@ -1,16 +1,18 @@
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class BattleManager : MonoBehaviour
+/// <summary>
+/// Manages the current battle.
+/// </summary>
+public class BattleManager : NetworkBehaviour
 {
-    /// <summary>
-    /// The BattleManager for the scene. Only one should exist at a time, a warning will be raised if there is more than one.
-    /// </summary>
-    public static BattleManager instance {get; set;}
+    private NetworkVariable<BattleData> battleData = new NetworkVariable<BattleData>();
 
     /// <summary>
-    /// The current settings being used for the battle, such as RNG seed, etc
+    /// Stores shared battle lobby dependencies
     /// </summary>
-    public static BattleSettings battleSettings {get; private set;}
+    [SerializeField] public BattleLobbyManager battleLobbyManager;
 
     /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
@@ -38,44 +40,100 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private ManaTile manaTilePrefab;
 
     /// <summary>
-    /// Use this to set all the settings to use for the battle.
+    /// only true once initialized. will initialize the first time the networkvariable BattleData is changed/set on this client
     /// </summary>
-    /// <param name="settings">the BattleSettings object to use</param>
-    public static void Configure(BattleSettings settings) {
-        battleSettings = settings;
-    }
+    private bool initialized = false;
 
     private void Awake() {
-        if (instance != null) {
-            Debug.LogWarning("A new BattleManager has replaced the old one! Make sure there is only one BattleManager.");
+        if (this == null) {
+            Debug.LogWarning("Self battlemanager is null, destroying self");
+            Destroy(gameObject);
+            return;
         }
 
-        instance = this;
+        if (!gameObject.activeSelf) {
+            Debug.LogWarning("battlemanager is not activeSelf, destroying self");
+            Destroy(gameObject);
+            return;
+        }
+
+        if (battleLobbyManager.battleManager == this) {
+            Debug.LogWarning("BattleManager instance awoke twice?");
+            return;
+        }
+
+        if (battleLobbyManager.battleManager != null) {
+            Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
+            Destroy(battleLobbyManager.battleManager.gameObject);
+        }
+
+        battleLobbyManager.battleManager = this;
+        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
     }
 
-    public void Start() {
-        // TODO: synchronize RNG between clients
+    public override void OnNetworkSpawn() {
+        Debug.Log("BattleManager spawned");
+        if (battleLobbyManager.networkManager.IsServer) {
+            battleData.Value = battleLobbyManager.battleData;
+        }
+
+        InitializeBattle();
+    }
+
+    /// <summary>
+    /// Initialize the battle with the given data. Will decide RNG, cycle sequence, etc
+    /// </summary>
+    public void InitializeBattle() {
+        if (initialized) {
+            Debug.LogWarning("BattleManager already initialized");
+            return;
+        }
+        initialized = true;
+
+        Debug.Log("BattleManager initialized via RPC");
+        battleLobbyManager.SetBattleData(battleData.Value);
+
+        battleLobbyManager.battleManager = this;
+        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
         manaCycle.InitializeBattle(this);
 
-        // Used for mana color RNG during the match.
-        // All boards share the same seed, and will have the same piece colors if the same RNG mode is selected.
-
+        
         foreach (Board board in boards) {
-            board.InitializeBattle(this, battleSettings.seed);
+            board.InitializeBattle(this, battleLobbyManager.battleData.seed);
         }
 
-        // Connects all players found to their respective boards.
-        // This works for both online and local, as both use BattlePlayers.
-        var players = FindObjectsByType<BattlePlayer>(FindObjectsSortMode.None);
-        Debug.Log("Players: "+players+" - count: "+players.Length);
+        // Server spawns board and assigns ownership based on player's boardIndex
+        if (battleLobbyManager.networkManager.IsServer) {
+            Debug.Log("This is the server, spawning boards");
+            foreach (BattlePlayer player in battleLobbyManager.playerManager.GetPlayers()) {
+                if (!player) {
+                    Debug.LogError("Null player detected");
+                    continue;
+                }
 
-        foreach (BattlePlayer player in players) {
-            player.BattleConnectBoard();
-            player.EnableBattleInputs();
+                if (player.boardIndex.Value < 0 || player.boardIndex.Value >= boards.Length) {
+                    Debug.LogError("Player with ID "+player.GetId()+" has out-of-range board index: "+player.boardIndex.Value);
+                    continue;
+                };
+
+                Board board = boards[player.boardIndex.Value];
+                if (!board) {
+                    Debug.LogError("Null board detected at index "+player.boardIndex.Value);
+                    continue;
+                }
+
+                Debug.Log("Spawning board "+board+" with owner of clientID "+player.OwnerClientId);
+                board.GetComponent<NetworkObject>().ChangeOwnership(player.OwnerClientId);
+            }
+        } else {
+            Debug.Log("This is not the server");
         }
+
+        battleLobbyManager.playerManager.ConnectAllPlayersToBoards();
+        battleLobbyManager.playerManager.EnableBattleInputs();
     }
 
     /// <summary>

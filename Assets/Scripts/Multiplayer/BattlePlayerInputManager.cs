@@ -7,30 +7,29 @@ using UnityEngine.InputSystem;
 /// Manages the connecting of seperate input devices as separate players in local multiplayer.
 /// </summary>
 public class BattlePlayerInputManager : MonoBehaviour {
-    public InputActionAsset actions;
-
-    public static BattlePlayerInputManager instance {get; set;}
+    [SerializeField] public BattleLobbyManager battleLobbyManager;
 
     private PlayerInputManager playerInputManager;
 
     private List<BattlePlayer> players;
 
     private void Awake() {
-        if (instance != null) {
-            Debug.LogWarning("More than one BattlePlayerInputManager was loaded!");
-        }
-
-        instance = this;
-
         players = new List<BattlePlayer>();
 
         playerInputManager = GetComponent<PlayerInputManager>();
 
-        // enable all actions - the action asses tend to remain disabled when they shouldnt be
-        actions.Enable();
-        foreach (var map in actions.actionMaps) {
-            map.Enable();
+        if (battleLobbyManager.battlePlayerInputManager != null) {
+            Debug.LogWarning("Duplicate BattlePlayerInputManager! Destroying the new one.");
+            Destroy(gameObject);
+            return;
         }
+
+        battleLobbyManager.battlePlayerInputManager = this;
+
+        playerInputManager.onPlayerJoined += OnPlayerJoined;
+        playerInputManager.onPlayerLeft -= OnPlayerJoined;
+
+        DisableJoining();
     }
 
     private void Start() {
@@ -40,28 +39,43 @@ public class BattlePlayerInputManager : MonoBehaviour {
     private void OnPlayerJoined(PlayerInput playerInput) {
         BattlePlayer battlePlayer = playerInput.gameObject.GetComponent<BattlePlayer>();
         if (!battlePlayer) {
-            Debug.Log("No battle player on spawned player");
+            Debug.LogError("No battle player on spawned player");
             return;
         }
 
         players.Add(battlePlayer);
         DontDestroyOnLoad(playerInput.gameObject);
 
-        // needed for NetworkVariables to work without raising warnings, but theoretically not needed for singleplayer
-        battlePlayer.GetComponent<NetworkObject>().Spawn();
+        // Assign a local player id based on the current length of the players list
+        battlePlayer.localPlayerId = (ulong)(players.Count - 1);
 
-        Debug.Log(battlePlayer.gameObject+" joined");
+        // Character select network behaviour menu needs to know this player joined so it knows when to check if all players are ready
+        // var charSelect = battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour;
+        // charSelect.OnPlayerJoined(battlePlayer.GetId());
+
+        // needed for NetworkVariables to work without raising warnings, but theoretically not needed for singleplayer
+        // battlePlayer.GetComponent<NetworkObject>().Spawn();
+
+        Debug.Log(battlePlayer.gameObject+" local player joined");
     }
 
     private void OnPlayerLeft(PlayerInput playerInput) {
-        players.Remove(playerInput.GetComponent<BattlePlayer>());
+        BattlePlayer battlePlayer = playerInput.GetComponent<BattlePlayer>();
+
+        if (!battlePlayer) return;
+
+        players.Remove(battlePlayer);
+
+        battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour.OnPlayerLeft(battlePlayer.GetId());
     }
 
     public void EnableJoining() {
+        Debug.Log("Player joining enabled on player input manager");
         playerInputManager.EnableJoining();
     }
 
     public void DisableJoining() {
+        Debug.Log("Player joining disabled on player input manager");
         playerInputManager.DisableJoining();
     }
 
