@@ -25,10 +25,6 @@ public class ConnectionMenu : MonoBehaviour
     [SerializeField] private Selectable[] disableWhileJoining;
 
     private void Start() {
-        // ONLNE_MULTIPLAYER by default when connection menu is open and join buttons may be pressed, 
-        // will change to LOCAL_MULTIPLAYER if offline button is pressed
-        battleLobbyManager.battleType = BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER;
-
         AuthenticationService.Instance.SignedIn += OnSignedIn;
     }
 
@@ -43,13 +39,14 @@ public class ConnectionMenu : MonoBehaviour
         Debug.Log("Session has ben joined: "+session.Code);
 
         battleLobbyManager.current_session = session;
-        battleLobbyManager.battleSetupManager.InitializeCharSelect();
+        battleLobbyManager.battleSetupManager.ShowCharSelect();
     }
 
     /// <summary>
     /// Disables the UI while joining a session.
     /// </summary>
     public void OnJoiningSession() {
+        // TODO: should probably set this before starting the network host so that onspawns work correctly
         battleLobbyManager.battleType = BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER;
         foreach (Selectable s in disableWhileJoining) {
             s.interactable = false;
@@ -92,6 +89,6 @@ public class ConnectionMenu : MonoBehaviour
         battleLobbyManager.networkManager.StartHost();
 
 
-        battleLobbyManager.battleSetupManager.InitializeCharSelect();
+        battleLobbyManager.battleSetupManager.ShowCharSelect();
     }
 }

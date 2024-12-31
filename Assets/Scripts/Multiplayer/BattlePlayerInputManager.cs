@@ -87,13 +87,13 @@ public class BattlePlayerInputManager : MonoBehaviour {
 
     public void EnableBattleInputs() {
         foreach (BattlePlayer player in players) {
-            player.EnableBattleInputs();
+            if (player) player.EnableBattleInputs();
         }
     }
 
     public void DisableBattleInputs() {
         foreach (BattlePlayer player in players) {
-            player.DisableBattleInputs();
+            if (player) player.DisableBattleInputs();
         }
     }
 }

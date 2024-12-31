@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the current battle.
@@ -120,6 +121,7 @@ public class BattleManager : NetworkBehaviour
         
         foreach (Board board in boards) {
             board.InitializeBattle(this, battleLobbyManager.battleData.seed);
+            board.onDefeat.AddListener(CheckForWinner);
         }
 
         // Server spawns board and assigns ownership based on player's boardIndex
@@ -194,24 +196,26 @@ public class BattleManager : NetworkBehaviour
     /// Check if only one board remains active and is not defeated (still has health).
     /// </summary>
     public void CheckForWinner() {
+        Debug.Log("Checking for winner");
+
         int livingBoards = 0;
         // tentative winner; will only actually be the winner if no other non-defeated boards are found
         Board winner = null;
         foreach (Board board in boards) {
             if (!board.defeated) {
-                if (livingBoards == 0) {
+                livingBoards += 1;
+                if (livingBoards == 1) {
                     winner = board;
                 } else {
                     return;
                 }
-            } else {
-                livingBoards += 1;
             }
         }
 
         if (winner) {
             winner.Win();
             gameCompleted = true;
+            PostGame();
         }
     }
 
@@ -222,6 +226,24 @@ public class BattleManager : NetworkBehaviour
 
         battleStart.canStartBattle = true;
 
+        // disconnect players from boards, they no longer need to be connected
+        foreach (var player in battleLobbyManager.playerManager.GetPlayers()) {
+            player.DisconnectFromBattleBoard();
+        }
+
         postGameMenuUI.ShowPostGameMenuUI();
+    }
+
+    /// <summary>
+    /// Go back to the character select screen.
+    /// Only works on server/host.
+    /// </summary>
+    public void GoToCharacterSelect() {
+        if (battleLobbyManager.networkManager.IsServer) {
+            battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
+            battleLobbyManager.networkManager.SceneManager.LoadScene("BattleSetup", LoadSceneMode.Single);
+        } else {
+            Debug.LogWarning("Only the server/host can send session back to character select");
+        }
     }
 }

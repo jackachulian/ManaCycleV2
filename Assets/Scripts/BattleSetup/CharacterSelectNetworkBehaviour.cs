@@ -8,12 +8,30 @@ using UnityEngine.SceneManagement;
 /// This is a server-owned NetworkObject.
 /// </summary>
 public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
+    public static CharacterSelectNetworkBehaviour instance {get; private set;}
+
     [SerializeField] private BattleLobbyManager battleLobbyManager;
 
     /// <summary>
     /// Used to start battles
     /// </summary>
     [SerializeField] private BattleStartNetworkBehaviour battleStart;
+
+    private void Awake() {
+        if (instance != null) {
+            Debug.LogWarning("Destroying duplicate charselect in awake");
+            Destroy(gameObject);
+            return;
+        }
+
+        if (instance == this) {
+            Debug.LogWarning("Same CharSelect woke up twice");
+            return;
+        }
+
+        Debug.Log("CharSelect instance set in awake");
+        instance = this;
+    }
 
     public override void OnNetworkSpawn() {
         // In online multiplayer, listen for connected clients
@@ -24,6 +42,14 @@ public class CharacterSelectNetworkBehaviour : NetworkBehaviour {
         // otherwise, player input manager will send OnPlayerJoined to this script
 
         Debug.Log("character select network behaviour spawned!");
+
+        // Connect any aleady existing players to their boards
+        // will come into effect when moving from battle to battle setup scene during a multiplayer session
+        foreach (BattlePlayer player in battleLobbyManager.playerManager.GetPlayers()) {
+            player.BattleSetupConnectPanel(player.boardIndex.Value);
+        }
+
+        DontDestroyOnLoad(this);
     }
 
     public void OnPlayerJoined(ulong id) {

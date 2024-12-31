@@ -118,6 +118,8 @@ public class SpellcastManager : NetworkBehaviour {
     }
 
     void Update() {
+        if (!board || !board.boardActive) return;
+
         SpellcastUpdate();
     }
 
@@ -270,6 +272,8 @@ public class SpellcastManager : NetworkBehaviour {
     /// Try to perform a spellcast.
     /// </summary>
     public void TrySpellcast() {
+        if (!board.boardActive) return;
+
         if (clearableManaCounts[GetCurrentCycleColor()] <= 0) {
             // TODO: shake pointer, buzzer sound
             Debug.Log("Can't spellcast!");

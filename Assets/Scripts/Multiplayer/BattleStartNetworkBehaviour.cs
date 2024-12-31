@@ -47,12 +47,6 @@ public class BattleStartNetworkBehaviour : NetworkBehaviour {
             }
         }
 
-        // Mach has officially started.
-        // Set ready back to false so their next ready choice will be for next rematch choice / characterselect choice.
-        foreach (var player in battleLobbyManager.playerManager.GetPlayers()) {
-            player.ready.Value = false;
-        }
-
         // The server/host chooses the seed that will be used for piece RNG.
         // TODO: may want to initialize these settings at the start of the scene, use them in the UI, 
         // and then send it to startgamerpc from here when the game starts
@@ -72,6 +66,9 @@ public class BattleStartNetworkBehaviour : NetworkBehaviour {
     [Rpc(SendTo.Everyone)]
     public void StartGameRpc(BattleData battleData) {
         battleLobbyManager.SetBattleData(battleData);
+
+        // Set ready of the local player back to false so their next ready choice will be for next rematch choice / characterselect choice.
+        battleLobbyManager.playerManager.GetLocalPlayer().ready.Value = false;
         
         if (battleLobbyManager.networkManager.IsServer) {
             battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;

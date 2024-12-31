@@ -414,7 +414,7 @@ MonoBehaviour:
   boards:
   - {fileID: 262004901}
   - {fileID: 1495945859}
-  postGameMenuUI: {fileID: 0}
+  postGameMenuUI: {fileID: 1481242569}
   cosmetics: {fileID: 11400000, guid: 6d37034fe6289064184c49808436ed7f, type: 2}
   manaPiecePrefab: {fileID: 4739590568304164122, guid: bf6b3eb5ac3a1ed47b928acdde94e7e4, type: 3}
   manaTilePrefab: {fileID: 3662205671954021063, guid: e42c7f7f7aab59d42a4a3f025032c5d6, type: 3}
@@ -516,6 +516,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bd4325197f5ead4482af532cff5e357, type: 3}
+--- !u!1 &1481242567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481242570}
+  - component: {fileID: 1481242569}
+  m_Layer: 0
+  m_Name: PostGame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1481242569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481242567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c99f5048746e0a4c95c1acecb0072a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleManager: {fileID: 590613157}
+--- !u!4 &1481242570
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481242567}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 488.105, y: 273.1731, z: -4.411054}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1495945858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -788,5 +833,6 @@ SceneRoots:
   - {fileID: 262004900}
   - {fileID: 1495945858}
   - {fileID: 329450550000180566}
+  - {fileID: 1481242570}
   - {fileID: 1767628046}
   - {fileID: 1012525813}

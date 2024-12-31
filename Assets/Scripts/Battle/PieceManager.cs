@@ -56,6 +56,12 @@ public class PieceManager : NetworkBehaviour {
     // Update is called once per frame
     void Update()
     {
+        if (!board || !board.boardActive) return;
+
+        PieceFallingUpdate();
+    }
+
+    void PieceFallingUpdate() {
         // Only perform fall logic if this board is owned
         if (!IsOwner) return;
 
@@ -121,6 +127,8 @@ public class PieceManager : NetworkBehaviour {
     /// <param name="offset">the offset of the piece, in board grid space</param>
     /// <returns>true if the tile was able to move.</returns>
     public bool TryMovePiece(Vector2Int offset) {
+        if (!board.boardActive) return false;
+
         currentPiece.position += offset;
 
         if (!IsValidPlacement(currentPiece)) {
@@ -141,6 +149,8 @@ public class PieceManager : NetworkBehaviour {
     /// <param name="rotation">amount of clockwise rotations. negative is counter-clockwise rotations</param>
     /// <returns>true if the piece was successfully rotated</returns>
     public bool TryRotatePiece(int rotations) {
+        if (!board.boardActive) return false;
+
         if (rotations == 0) {
             Debug.LogWarning("Piece was rotated zero times");
             return true;
@@ -181,7 +191,7 @@ public class PieceManager : NetworkBehaviour {
         // In fact, other clients don't even need to know if the current piece is quickfalling, because *all* movements are currently sent,
         // including the moving down that happens when the client manages its own piece falling
         if (!IsOwner) {
-            Debug.Log("Only the owner of a board should manage its own quickfall.");
+            Debug.LogError("Only the owner of a board should manage its own quickfall.");
             return;
         }
 
@@ -218,6 +228,12 @@ public class PieceManager : NetworkBehaviour {
         PlacePiece(currentPiece);
         board.healthManager.AdvanceDamageQueue();
         SpawnNewPiece();
+
+        // If the newly spawned piece is in an invalid position, player has topped out
+        if (!IsValidPlacement(currentPiece)) {
+            Destroy(currentPiece.gameObject);
+            board.Defeat();
+        }
     }
 
     /// <summary>

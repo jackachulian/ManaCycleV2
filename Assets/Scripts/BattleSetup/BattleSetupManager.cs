@@ -35,11 +35,19 @@ public class BattleSetupManager : MonoBehaviour
 
         battleLobbyManager.battleSetupManager = this;
         battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
+        
+        if (!battleLobbyManager.networkManager.IsHost && !battleLobbyManager.networkManager.IsClient) {
+            battleLobbyManager.battleType = BattleLobbyManager.BattleType.NONE;
+        }
     }
 
     private void Start() {
-        // TODO: skip the connection screen if in singleplayer.
-        ShowConnectionMenu();
+        // If a game is already active, show the char select menu. If not, show the connection menu.
+        if (battleLobbyManager.battleType != BattleLobbyManager.BattleType.NONE) {
+            ShowCharSelect();
+        } else {
+            ShowConnectionMenu();
+        }
     }
 
     /// <summary>
@@ -48,6 +56,7 @@ public class BattleSetupManager : MonoBehaviour
     public void ShowConnectionMenu() {
         Debug.Log("Showing connection menu");
         state = BattleSetupState.CONNECT_MENU;
+        battleLobbyManager.battleType = BattleLobbyManager.BattleType.NONE;
         connectMenu.gameObject.SetActive(true);
         characterSelectMenu.HideUI();
         battleLobbyManager.battlePlayerInputManager.DisableJoining();
@@ -57,7 +66,7 @@ public class BattleSetupManager : MonoBehaviour
     /// <summary>
     /// Initialize and show the char select menu.
     /// </summary>
-    public void InitializeCharSelect() {
+    public void ShowCharSelect() {
         Debug.Log("Showing char select menu");
         state = BattleSetupState.CHARACTER_SELECT;
         connectMenu.gameObject.SetActive(false);

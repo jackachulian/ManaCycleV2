@@ -205,4 +205,8 @@ public class PlayerManager : MonoBehaviour {
             }
         }
     }
+
+    public BattlePlayer GetLocalPlayer() {
+        return GetPlayerById(battleLobbyManager.networkManager.LocalClientId);
+    }
 }

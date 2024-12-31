@@ -43,6 +43,8 @@ public class CharacterSelectMenu : MonoBehaviour
         // show the menu
         gameObject.SetActive(true);
 
+        Debug.Log("Initializing character select - battle type: "+battleLobbyManager.battleType);
+
         // show the session code (Online mode only)
         if (battleLobbyManager.battleType == BattleLobbyManager.BattleType.ONLINE_MULTIPLAYER) {
             showJoinCode.gameObject.SetActive(true);

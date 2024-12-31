@@ -162,6 +162,10 @@ public class BattlePlayer : NetworkBehaviour {
         }
     }
 
+    public void DisconnectFromBattleBoard() {
+        playerInputController.board = null;
+    }
+
     /// <summary>
     /// Connect the player to their battle setup player panel based on the passed index.
     /// </summary>

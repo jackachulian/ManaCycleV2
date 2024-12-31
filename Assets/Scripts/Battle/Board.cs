@@ -47,7 +47,7 @@ public class Board : MonoBehaviour
     /// Invoked when player is defeated.
     /// BattleManager will listen for this to know when to check when only one player is alive.
     /// </summary>
-    public UnityEvent onDefeat {get; set;}
+    public UnityEvent onDefeat {get; private set;} = new UnityEvent();
 
     /// <summary>
     /// Piece spawning will only happen while boardActive is true.
@@ -107,6 +107,7 @@ public class Board : MonoBehaviour
     /// Destroy the current piece, stop piece spawning, etc
     /// </summary>
     public void Defeat() {
+        Debug.Log(this+" defeated!");
         boardActive = false;
         defeated = true;
         onDefeat.Invoke();
@@ -117,6 +118,7 @@ public class Board : MonoBehaviour
     /// In multiplayer, called when all other boards are defeated.
     /// </summary>
     public void Win() {
+        Debug.Log(this+" won!");
         boardActive = false;
     }
 }
