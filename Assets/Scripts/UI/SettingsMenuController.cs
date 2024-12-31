@@ -10,6 +10,8 @@ namespace Menus
         [SerializeField] private GameObject[] subMenus;
 
         [SerializeField] private AudioClip sliderSFX;
+        [SerializeField] private AudioClip returnSFX;
+        [SerializeField] private AudioClip selectionSFX;
         // first item to select in each submenu
         private int lastIndex = -1;
         // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,11 +31,21 @@ namespace Menus
             }
         }
 
-        //
-        public void PlaySelectionSound()
+        public void PlaySliderSound()
         {
             AudioManager.instance.PlaySound(sliderSFX);   
         }
+
+        public void PlaySelectionSound()
+        {
+            AudioManager.instance.PlaySound(selectionSFX);   
+        }
+
+        public void PlayReturnSound()
+        {
+            AudioManager.instance.PlaySound(returnSFX);
+        }
+
 
         public void VolumeSliderChanged()
         {

@@ -267,7 +267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlaySelectionSound
+      value: PlaySliderSound
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -385,6 +385,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9004926877481231587, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -392,6 +396,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3535279525095989004, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1223014822}
+    - targetCorrespondingSourceObject: {fileID: 3535279525095989004, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1223014823}
   m_SourcePrefab: {fileID: 100100000, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
 --- !u!224 &8005775 stripped
 RectTransform:
@@ -586,6 +593,8 @@ MonoBehaviour:
   - {fileID: 608816420}
   - {fileID: 666733169}
   sliderSFX: {fileID: 8300000, guid: 75c7186a5a4bf6644b0437097f59409b, type: 3}
+  returnSFX: {fileID: 8300000, guid: 8e529e8cabd3e8744942651e8df9f4b6, type: 3}
+  selectionSFX: {fileID: 8300000, guid: 5eaf47309766ff742b57d9bfd3e645d2, type: 3}
 --- !u!1 &33610254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,7 +1525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlaySelectionSound
+      value: PlaySliderSound
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1634,6 +1643,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9004926877481231587, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1641,6 +1654,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3535279525095989004, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1022911218}
+    - targetCorrespondingSourceObject: {fileID: 3535279525095989004, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1022911219}
   m_SourcePrefab: {fileID: 100100000, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
 --- !u!224 &223857490 stripped
 RectTransform:
@@ -3953,6 +3969,7 @@ GameObject:
   - component: {fileID: 926232289}
   - component: {fileID: 926232290}
   - component: {fileID: 926232291}
+  - component: {fileID: 926232292}
   m_Layer: 5
   m_Name: ReturnButton
   m_TagString: Untagged
@@ -4070,6 +4087,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 32623288}
+          m_TargetAssemblyTypeName: Menus.SettingsMenuController, Assembly-CSharp
+          m_MethodName: PlayReturnSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!95 &926232291
 Animator:
   serializedVersion: 7
@@ -4092,6 +4121,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &926232292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926232284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 32623288}
+          m_TargetAssemblyTypeName: Menus.SettingsMenuController, Assembly-CSharp
+          m_MethodName: PlaySelectionSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &959385090
 GameObject:
   m_ObjectHideFlags: 0
@@ -4193,6 +4251,35 @@ MonoBehaviour:
   key: SFXVol
   slider: {fileID: 1022911216}
   toggle: {fileID: 0}
+--- !u!114 &1022911219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440759677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 32623288}
+          m_TargetAssemblyTypeName: Menus.SettingsMenuController, Assembly-CSharp
+          m_MethodName: PlaySelectionSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1040812526 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3067007007906170285, guid: 39af4b50717fcc64999ce2d95ff13d2e, type: 3}
@@ -4653,6 +4740,35 @@ MonoBehaviour:
   key: MusicVol
   slider: {fileID: 1223014820}
   toggle: {fileID: 0}
+--- !u!114 &1223014823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416265834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 32623288}
+          m_TargetAssemblyTypeName: Menus.SettingsMenuController, Assembly-CSharp
+          m_MethodName: PlaySelectionSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &1232335365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6014,6 +6130,35 @@ MonoBehaviour:
   key: MainVol
   slider: {fileID: 1712933866}
   toggle: {fileID: 0}
+--- !u!114 &1712933869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712933864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 32623288}
+          m_TargetAssemblyTypeName: Menus.SettingsMenuController, Assembly-CSharp
+          m_MethodName: PlaySelectionSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1755891174
 GameObject:
   m_ObjectHideFlags: 0
@@ -6884,7 +7029,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: PlaySelectionSound
+      value: PlaySliderSound
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -7002,6 +7147,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9004926877481231587, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      propertyPath: m_FillAmount
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7009,6 +7158,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3535279525095989004, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1712933868}
+    - targetCorrespondingSourceObject: {fileID: 3535279525095989004, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1712933869}
   m_SourcePrefab: {fileID: 100100000, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
 --- !u!1001 &6298468192721891856
 PrefabInstance:
