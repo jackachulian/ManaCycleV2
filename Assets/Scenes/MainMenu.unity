@@ -231,7 +231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -595,6 +595,7 @@ MonoBehaviour:
   sliderSFX: {fileID: 8300000, guid: 75c7186a5a4bf6644b0437097f59409b, type: 3}
   returnSFX: {fileID: 8300000, guid: 8e529e8cabd3e8744942651e8df9f4b6, type: 3}
   selectionSFX: {fileID: 8300000, guid: 5eaf47309766ff742b57d9bfd3e645d2, type: 3}
+  specialSFX: {fileID: 8300000, guid: 0b448af17685d4645a6572d37451c0ad, type: 3}
 --- !u!1 &33610254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,7 +1490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1538,6 +1539,10 @@ PrefabInstance:
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: Menus.SettingsMenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -6993,7 +6998,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3257074258498568157, guid: 197700a319d3a4747a77b81d87924f03, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
