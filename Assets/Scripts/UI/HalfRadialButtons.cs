@@ -33,8 +33,13 @@ namespace Menus
         // called when the selected button is changed.
         public event ButtonSelectedHandler ButtonSelected;
 
-        public delegate void MenuOpenedHandler();
-        public event MenuOpenedHandler MenuOpened;
+        public delegate void ButtonSubmittedHandler(int index);
+        // called when the selected button is submitted/confirmed.
+        public event ButtonSubmittedHandler ButtonSubmitted;
+
+        public delegate void MenuChangedHandler();
+        public event MenuChangedHandler MenuOpened;
+        public event MenuChangedHandler MenuClosed;
 
         // Start is called before the first frame update
         void Start()
@@ -62,6 +67,14 @@ namespace Menus
                 { 
                     int y = (int) (eventData as AxisEventData).moveVector.y;
                     if (y != 0) SelectNext(-y); 
+                } );
+                items[i].gameObject.GetComponent<EventTrigger>().triggers.Add(entry);
+                // set up submit events
+                entry = new EventTrigger.Entry();
+                entry.eventID = EventTriggerType.Submit;
+                entry.callback.AddListener( (eventData) => 
+                { 
+                    ButtonSubmitted?.Invoke(i);
                 } );
                 items[i].gameObject.GetComponent<EventTrigger>().triggers.Add(entry);
             }
@@ -153,6 +166,7 @@ namespace Menus
         {
             // transition out before closing
             TransitionRadius(closeRadius);
+            MenuClosed?.Invoke();
             // wait for transition time before deactivating
             // TODO CLEANUP don't hardcode 0.1f, maybe use callback on transition complete
             yield return new WaitForSeconds(0.1f);
