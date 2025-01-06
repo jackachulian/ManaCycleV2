@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AquaGradient
+  m_Name: BithecaryGradient
   m_Shader: {fileID: 4800000, guid: 1ad1dd92e13115b40b68dc818c985079, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -114,9 +114,9 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color0: {r: 0.05291026, g: 0.05291026, b: 0.38679242, a: 1}
-    - _Color1: {r: 0.32547164, g: 0.58117527, b: 1, a: 1}
-    - _Color2: {r: 0.06076084, g: 0.06964215, b: 0.41004825, a: 1}
+    - _Color0: {r: 0.4811321, g: 0.052198302, b: 0.31615612, a: 1}
+    - _Color1: {r: 0.84544235, g: 0.5066305, b: 0.9339623, a: 1}
+    - _Color2: {r: 0.48235297, g: 0.050980397, b: 0.31764707, a: 1}
     - _Color3: {r: 1, g: 0, b: 1, a: 1}
     - _Color4: {r: 1, g: 0, b: 1, a: 1}
     - _Color5: {r: 1, g: 0, b: 1, a: 1}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550ff57951fc4664d9b6f28a50e9772e, type: 3}
+  m_Name: Pyro
+  m_EditorClassIdentifier: 
+  _battlerId: pyro
+  displayName: Pyro
+  sprite: {fileID: 21300000, guid: c323de5363d3d4d45910d3b22ff4b020, type: 3}
+  portraitOffset: {x: 0, y: 0}
+  gradientMat: {fileID: 2100000, guid: 073220ae053bb4cff932ae0a53a85c8a, type: 2}
+  mainColor: {r: 0.98039216, g: 0.6509804, b: 0.09803922, a: 1}
+  altColor: {r: 0.5647059, g: 0.2, b: 0.13725491, a: 1}
+  gameLogo: {fileID: 0}
