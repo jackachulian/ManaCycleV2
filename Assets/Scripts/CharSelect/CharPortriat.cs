@@ -16,7 +16,7 @@ public class CharPortriat : MonoBehaviour
     private RectTransform portriatRectTransform;
     private Vector2 defaultPos;
 
-    private bool ready;
+    public bool ready;
 
     public delegate void ReadyStateChangedHandler(bool ready);
     public event ReadyStateChangedHandler ReadyStateChanged;
@@ -64,8 +64,8 @@ public class CharPortriat : MonoBehaviour
 
     public void CloseOptions(PlayerCursorController cursor)
     {
+        SetReady(false);
         optionsWindow.SetActive(false);
-        readyWindow.SetActive(false);
         cursor.GetComponent<MultiplayerEventSystem>()
             .SetSelectedGameObject(null);
         cursor.GetComponent<MultiplayerEventSystem>().enabled = false;

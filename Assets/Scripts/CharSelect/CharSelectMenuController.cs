@@ -9,10 +9,12 @@ public class CharSelectMenuController : MonoBehaviour
 {
     [SerializeField] private CharPortriat[] portriats;
     [SerializeField] private List<PlayerCursorController> cursors = new();
+    [SerializeField] private GameObject allReadyWindow;
 
     public void PlayerJoinHandler(PlayerInput playerInput)
     {
         var cursor = playerInput.gameObject.GetComponent<PlayerCursorController>();
+        cursor.cursorInteracter.Initialize();
         cursor.cursorInteracter.CursorSubmit += CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover += CursorHoverHandler;
         cursor.cursorInteracter.CursorReturn += CursorReturnHandler;
@@ -68,7 +70,16 @@ public class CharSelectMenuController : MonoBehaviour
 
     public void OnReadyStateChanged(bool ready)
     {
-        
+        Debug.Log("State change");
+        allReadyWindow.SetActive(false);
+        foreach (var portrait in portriats)
+        {
+            Debug.Log(portrait.ready);
+            if (!portrait.ready) return;
+        }
+
+        // the following code is ran if all players have readied up
+        allReadyWindow.SetActive(true);
     }
 
 }

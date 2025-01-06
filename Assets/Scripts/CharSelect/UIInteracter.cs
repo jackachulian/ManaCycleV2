@@ -19,8 +19,8 @@ public class UIInteracter : MonoBehaviour
     public delegate void OnCursorReturnHandler(int playerNum);
     public event OnCursorReturnHandler CursorReturn;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // called by menu
+    public void Initialize()
     {
         // place self under canvas if spawned by input manager
         Transform canvas = GameObject.Find("Canvas").transform;
