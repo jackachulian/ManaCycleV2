@@ -31,11 +31,16 @@ public class CharPortriat : MonoBehaviour
         nameText.text = defaultText;
     }
 
-    public void SetBattler(Battler battler, bool locked)
+    public void SetBattler(Battler battler)
     {
         battlerPortrait.sprite = battler.sprite;
-        battlerPortrait.color = new Color(1f, 1f, 1f, locked ? 1f : 0.5f);
+        battlerPortrait.color = new Color(1f, 1f, 1f, 1f);
         portriatRectTransform.anchoredPosition = defaultPos + battler.portraitOffset;
         nameText.text = battler.displayName;
+    }
+
+    public void SetLocked(bool locked)
+    {
+        battlerPortrait.color = new Color(1f, 1f, 1f, locked ? 1f : 0.5f);
     }
 }

@@ -16,6 +16,9 @@ public class UIInteracter : MonoBehaviour
     public event OnCursorInteractionHandler CursorSubmit;
     public event OnCursorInteractionHandler CursorHover;
 
+    public delegate void OnCursorReturnHandler(int playerNum);
+    public event OnCursorReturnHandler CursorReturn;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -62,6 +65,11 @@ public class UIInteracter : MonoBehaviour
 
     void OnSubmit(InputValue value)
     {
-        submitPressed = value.isPressed;
+        submitPressed = value.isPressed && enabled;
+    }
+
+    void OnCancel(InputValue value)
+    {
+        if (value.isPressed) CursorReturn?.Invoke(playerNum);
     }
 }

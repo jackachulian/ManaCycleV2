@@ -14,6 +14,7 @@ public class CharSelectMenuController : MonoBehaviour
         var cursor = playerInput.gameObject.GetComponent<PlayerCursorController>();
         cursor.cursorInteracter.CursorSubmit += CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover += CursorHoverHandler;
+        cursor.cursorInteracter.CursorReturn += CursorReturnHandler;
         cursors.Add(cursor);
     }
 
@@ -22,6 +23,7 @@ public class CharSelectMenuController : MonoBehaviour
         var cursor = playerInput.gameObject.GetComponent<PlayerCursorController>();
         cursor.cursorInteracter.CursorSubmit -= CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover -= CursorHoverHandler;
+        cursor.cursorInteracter.CursorReturn -= CursorReturnHandler;
         cursors.Remove(cursor);
     }
 
@@ -29,7 +31,8 @@ public class CharSelectMenuController : MonoBehaviour
     public void CursorSubmitHandler(int playerNum, GameObject interacted)
     {
         Battler b = interacted.GetComponent<CharButton>().battler;
-        portriats[playerNum].SetBattler(b, true);
+        portriats[playerNum].SetBattler(b);
+        portriats[playerNum].SetLocked(true);
         // freeze cursor
         cursors[playerNum].SetEnabled(false);
     }
@@ -38,6 +41,13 @@ public class CharSelectMenuController : MonoBehaviour
     public void CursorHoverHandler(int playerNum, GameObject interacted)
     {
         Battler b = interacted.GetComponent<CharButton>().battler;
-        portriats[playerNum].SetBattler(b, false);
+        portriats[playerNum].SetBattler(b);
+        portriats[playerNum].SetLocked(false);
+    }
+
+    public void CursorReturnHandler(int playerNum)
+    {
+        cursors[playerNum].SetEnabled(true);
+        portriats[playerNum].SetLocked(false);
     }
 }

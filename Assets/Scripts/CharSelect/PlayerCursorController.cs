@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCursorController : MonoBehaviour
 {
     public PlayerCursorMovement cursorMovement;
     public UIInteracter cursorInteracter;
-    
+        
     void Awake()
     {
 

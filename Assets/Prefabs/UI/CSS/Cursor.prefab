@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorMovement: {fileID: 5397975186139859845}
   cursorInteracter: {fileID: 5573801662332867673}
+  playerInput: {fileID: 7504804390769564815}
 --- !u!114 &5397975186139859845
 MonoBehaviour:
   m_ObjectHideFlags: 0
