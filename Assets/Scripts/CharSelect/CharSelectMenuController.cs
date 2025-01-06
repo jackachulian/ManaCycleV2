@@ -10,6 +10,7 @@ public class CharSelectMenuController : MonoBehaviour
     [SerializeField] private CharPortriat[] portriats;
     [SerializeField] private List<PlayerCursorController> cursors = new();
     [SerializeField] private GameObject allReadyWindow;
+    private bool allReady = false;
 
     public void PlayerJoinHandler(PlayerInput playerInput)
     {
@@ -18,7 +19,12 @@ public class CharSelectMenuController : MonoBehaviour
         cursor.cursorInteracter.CursorSubmit += CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover += CursorHoverHandler;
         cursor.cursorInteracter.CursorReturn += CursorReturnHandler;
-        portriats[cursor.cursorInteracter.playerNum].ReadyStateChanged += OnReadyStateChanged;
+        cursor.OnEmptySubmit += CursorEmptySubmitHandler;
+
+        var p = portriats[cursor.cursorInteracter.playerNum];
+        p.gameObject.SetActive(true);
+        p.SetSelectText();
+        p.ReadyStateChanged += OnReadyStateChanged;
 
         cursors.Add(cursor);
     }
@@ -29,8 +35,18 @@ public class CharSelectMenuController : MonoBehaviour
         cursor.cursorInteracter.CursorSubmit -= CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover -= CursorHoverHandler;
         cursor.cursorInteracter.CursorReturn -= CursorReturnHandler;
-        portriats[cursor.cursorInteracter.playerNum].ReadyStateChanged -= OnReadyStateChanged;
+
+        var p = portriats[cursor.cursorInteracter.playerNum];
+        p.ReadyStateChanged -= OnReadyStateChanged;
+        p.SetDefault();
+        if (cursor.cursorInteracter.playerNum < 2) p.gameObject.SetActive(false);
         cursors.Remove(cursor);
+    }
+
+    // TODO this is slightly hacky
+    public void CursorEmptySubmitHandler()
+    {
+        if (allReady) Debug.Log("Scene Transition Here");
     }
 
     // character button is selected
@@ -72,12 +88,14 @@ public class CharSelectMenuController : MonoBehaviour
     {
         Debug.Log("State change");
         allReadyWindow.SetActive(false);
+        allReady = false;
         foreach (var portrait in portriats)
         {
             Debug.Log(portrait.ready);
             if (!portrait.ready) return;
         }
 
+        allReady = true;
         // the following code is ran if all players have readied up
         allReadyWindow.SetActive(true);
     }

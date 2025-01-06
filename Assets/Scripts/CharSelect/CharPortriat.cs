@@ -6,10 +6,11 @@ using UnityEngine.InputSystem.UI;
 
 public class CharPortriat : MonoBehaviour
 {
-    [SerializeField] Image battlerPortrait;
-    [SerializeField] Image background;
-    [SerializeField] TMP_Text nameText;
+    [SerializeField] private Image battlerPortrait;
+    [SerializeField] private Image background;
+    [SerializeField] private TMP_Text nameText;
     [SerializeField] string defaultText;
+    [SerializeField] string selectText;
     [SerializeField] public GameObject optionsWindow;
     [SerializeField] private GameObject readyWindow;
     [SerializeField] public GameObject firstOption;
@@ -38,6 +39,11 @@ public class CharPortriat : MonoBehaviour
         battlerPortrait.sprite = null;
         battlerPortrait.color = new Color(1f, 1f, 1f, 0f);
         nameText.text = defaultText;
+    }
+
+    public void SetSelectText()
+    {
+        nameText.text = selectText;
     }
 
     public void SetBattler(Battler battler)
