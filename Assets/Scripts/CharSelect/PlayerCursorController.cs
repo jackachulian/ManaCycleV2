@@ -5,11 +5,9 @@ public class PlayerCursorController : MonoBehaviour
 {
     public PlayerCursorMovement cursorMovement;
     public UIInteracter cursorInteracter;
-        
-    void Awake()
-    {
 
-    }
+    // true when character and options are fully submitted
+    public bool locked = false;
 
     public void SetEnabled(bool enable)
     {

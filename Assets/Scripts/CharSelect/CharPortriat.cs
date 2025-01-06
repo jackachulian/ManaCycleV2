@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Battle;
+using UnityEngine.InputSystem.UI;
 
 public class CharPortriat : MonoBehaviour
 {
@@ -9,8 +10,16 @@ public class CharPortriat : MonoBehaviour
     [SerializeField] Image background;
     [SerializeField] TMP_Text nameText;
     [SerializeField] string defaultText;
+    [SerializeField] public GameObject optionsWindow;
+    [SerializeField] private GameObject readyWindow;
+    [SerializeField] public GameObject firstOption;
     private RectTransform portriatRectTransform;
     private Vector2 defaultPos;
+
+    private bool ready;
+
+    public delegate void ReadyStateChangedHandler(bool ready);
+    public event ReadyStateChangedHandler ReadyStateChanged;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,5 +51,32 @@ public class CharPortriat : MonoBehaviour
     public void SetLocked(bool locked)
     {
         battlerPortrait.color = new Color(1f, 1f, 1f, locked ? 1f : 0.5f);
+    }
+
+    public void OpenOptions(PlayerCursorController cursor)
+    {
+        optionsWindow.SetActive(true);
+        cursor.GetComponent<MultiplayerEventSystem>()
+            .SetSelectedGameObject(firstOption);
+        cursor.GetComponent<MultiplayerEventSystem>().enabled = true;
+        
+    }
+
+    public void CloseOptions(PlayerCursorController cursor)
+    {
+        optionsWindow.SetActive(false);
+        readyWindow.SetActive(false);
+        cursor.GetComponent<MultiplayerEventSystem>()
+            .SetSelectedGameObject(null);
+        cursor.GetComponent<MultiplayerEventSystem>().enabled = false;
+    }
+
+    // after options are selected
+    public void SetReady(bool ready)
+    {
+        this.ready = ready;
+        ReadyStateChanged?.Invoke(ready);
+        optionsWindow.SetActive(!ready);
+        readyWindow.SetActive(ready);
     }
 }

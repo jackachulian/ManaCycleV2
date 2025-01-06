@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Battle;
 using System.Collections.Generic;
+using UnityEngine.InputSystem.UI;
 
 // ties multiple systems in the CSS together
 public class CharSelectMenuController : MonoBehaviour
@@ -15,6 +16,8 @@ public class CharSelectMenuController : MonoBehaviour
         cursor.cursorInteracter.CursorSubmit += CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover += CursorHoverHandler;
         cursor.cursorInteracter.CursorReturn += CursorReturnHandler;
+        portriats[cursor.cursorInteracter.playerNum].ReadyStateChanged += OnReadyStateChanged;
+
         cursors.Add(cursor);
     }
 
@@ -24,6 +27,7 @@ public class CharSelectMenuController : MonoBehaviour
         cursor.cursorInteracter.CursorSubmit -= CursorSubmitHandler;
         cursor.cursorInteracter.CursorHover -= CursorHoverHandler;
         cursor.cursorInteracter.CursorReturn -= CursorReturnHandler;
+        portriats[cursor.cursorInteracter.playerNum].ReadyStateChanged -= OnReadyStateChanged;
         cursors.Remove(cursor);
     }
 
@@ -31,23 +35,40 @@ public class CharSelectMenuController : MonoBehaviour
     public void CursorSubmitHandler(int playerNum, GameObject interacted)
     {
         Battler b = interacted.GetComponent<CharButton>().battler;
-        portriats[playerNum].SetBattler(b);
-        portriats[playerNum].SetLocked(true);
+        var portrait = portriats[playerNum];
+        var cursor = cursors[playerNum];
+
+        portrait.SetBattler(b);
+        portrait.SetLocked(true);
         // freeze cursor
-        cursors[playerNum].SetEnabled(false);
+        cursor.SetEnabled(false);
+        // select options window
+        portrait.OpenOptions(cursor);
     }
 
     // character button is hovered
     public void CursorHoverHandler(int playerNum, GameObject interacted)
     {
         Battler b = interacted.GetComponent<CharButton>().battler;
-        portriats[playerNum].SetBattler(b);
-        portriats[playerNum].SetLocked(false);
+        var portrait = portriats[playerNum];
+        
+        portrait.SetBattler(b);
+        portrait.SetLocked(false);
     }
 
     public void CursorReturnHandler(int playerNum)
     {
-        cursors[playerNum].SetEnabled(true);
-        portriats[playerNum].SetLocked(false);
+        var portrait = portriats[playerNum];
+        var cursor = cursors[playerNum];
+
+        cursor.SetEnabled(true);
+        portrait.SetLocked(false);
+        portrait.CloseOptions(cursor);
     }
+
+    public void OnReadyStateChanged(bool ready)
+    {
+        
+    }
+
 }
