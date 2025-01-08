@@ -11,13 +11,6 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class Board : MonoBehaviour
 {
-    // ================ Non-Serialized Fields ================
-    /// <summary>
-    /// The battleManager that is managing this board. Also contains dependencies needed for SpawnPiece, etc
-    /// Is set upon battle initialization.
-    /// </summary>
-    public BattleManager battleManager {get; private set;}
-
     /// <summary>
     /// Stores all placed mana tiles. Cached on initialization.
     /// </summary>
@@ -72,8 +65,6 @@ public class Board : MonoBehaviour
         } else {
             Debug.Log("Initializing battle board "+this);
         }
-
-        this.battleManager = battleManager;
 
         defeated = false;
         boardActive = true;

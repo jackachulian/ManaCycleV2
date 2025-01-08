@@ -211,7 +211,7 @@ public class SpellcastManager : NetworkBehaviour {
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
         if (IsOwner) {
             for (int i = 0; i < 2; i++) {
-                Board otherBoard = board.battleManager.GetBoardByIndex(i);
+                Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
                 // Only send the damage if this client owns this board
                 if (otherBoard != board) {
                     otherBoard.healthManager.EnqueueDamageRpc(damage);
@@ -260,7 +260,7 @@ public class SpellcastManager : NetworkBehaviour {
     }
 
     private void RepositionCyclePointer() {
-        var cycleManaTile = board.battleManager.manaCycle.GetCycleTile(cycleIndex);
+        var cycleManaTile = BattleManager.Instance.manaCycle.GetCycleTile(cycleIndex);
         
         // TODO: in 2-player mode, player 2's pointer is offset to the right instead of left. 
         // in 3 and 4-player mode, half and half on each side and handle overlaps by spreading out the sprites slightly
@@ -298,7 +298,7 @@ public class SpellcastManager : NetworkBehaviour {
     /// </summary>
     /// <returns>the int representing the current color</returns>
     private int GetCurrentCycleColor() {
-        return board.battleManager.manaCycle.GetSequenceColor(cycleIndex);
+        return BattleManager.Instance.manaCycle.GetSequenceColor(cycleIndex);
     }
 
     /// <summary>

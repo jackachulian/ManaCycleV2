@@ -5,10 +5,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Manages the current battle.
+/// Manages the current battle in the battle scene this is in.
 /// </summary>
 public class BattleManager : MonoBehaviour
-{
+{   
+    public static BattleManager Instance { get; private set; }
+
     /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
@@ -50,20 +52,25 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public bool gameCompleted {get; private set;}
 
-    private void Awake() {
-        if (this == null) {
-            Debug.LogWarning("Self battlemanager is null, destroying self");
-            Destroy(gameObject);
-            return;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-
-        if (!gameObject.activeSelf) {
-            Debug.LogWarning("battlemanager is not activeSelf, destroying self");
+        else
+        {
+            Debug.Log("Duplicate GameManager spawned, destroying the newly instantiated one");
             Destroy(gameObject);
-            return;
         }
+    }
 
+    private void Start() {
+        // TESTING ONLY - create new battle data and use that in the game manager, then initialize the battle
         BattleData battleData = new BattleData();
+        battleData.cycleUniqueColors = 5;
+        battleData.cycleLength = 7;
         battleData.Randomize();
         GameManager.Instance.battleData = battleData;
 
@@ -83,7 +90,6 @@ public class BattleManager : MonoBehaviour
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
         manaCycle.InitializeBattle(this);
-
         
         foreach (Board board in boards) {
             board.InitializeBattle(this, GameManager.Instance.battleData.seed);

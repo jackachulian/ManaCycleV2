@@ -63,7 +63,8 @@ public class PieceManager : NetworkBehaviour {
 
     void PieceFallingUpdate() {
         // Only perform fall logic if this board is owned
-        if (!IsOwner) return;
+        // TODO: disabled for now while working on new gamemanager
+        // if (!IsOwner) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
@@ -97,10 +98,10 @@ public class PieceManager : NetworkBehaviour {
     /// </summary>
     /// <returns>current amount of delay in seconds between piece falls</returns>
     float GetCurrentFallFrequency() {
-        if (!IsOwner) {
-            Debug.Log("Trying to get fall speed on a non-owner client! Ony the owner should handle piece falling");
-            return 0;
-        }
+        // if (!IsOwner) {
+        //     Debug.Log("Trying to get fall speed on a non-owner client! Ony the owner should handle piece falling");
+        //     return 0;
+        // }
 
         if (quickfall) {
             return quickFallFrequency;
@@ -279,7 +280,7 @@ public class PieceManager : NetworkBehaviour {
             return;
         }
 
-        currentPiece = board.battleManager.SpawnPiece();
+        currentPiece = BattleManager.Instance.SpawnPiece();
         currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
 
         // spawn position will be the top row, middle column
@@ -289,7 +290,7 @@ public class PieceManager : NetworkBehaviour {
 
         for (int i = 0; i < currentPiece.tiles.Length; i++) {
             int color = rng.Next(5);
-            currentPiece.tiles[i].SetColor(color, board.battleManager.cosmetics);
+            currentPiece.tiles[i].SetColor(color, BattleManager.Instance.cosmetics);
         }
     }
 }

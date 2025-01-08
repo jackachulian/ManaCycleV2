@@ -8,7 +8,7 @@ using UnityEngine.Events;
 /// Handles the spawning, despawning and tracking of player objects and assigning IDs / retreiving by ID.
 /// Should only be used on the server!
 /// </summary>
-public abstract class ServerPlayerManager : NetworkBehaviour {
+public class ServerPlayerManager : MonoBehaviour {
     /// <summary>
     /// Called when a player connects, after the player object is spawned. First arg is the connecting player's player object.
     /// </summary>
@@ -44,7 +44,7 @@ public abstract class ServerPlayerManager : NetworkBehaviour {
     /// <returns>the newly created player object</returns?
     protected Player ServerAddPlayer(ulong playerId) {
         // Server/host only
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             Debug.LogError("Only the server can add new players!");
         }
 
@@ -73,7 +73,7 @@ public abstract class ServerPlayerManager : NetworkBehaviour {
     /// Not needed on the server because the player is already registered in the dictionary in ServerAddPlayer.
     /// </summary>
     public void NonServerAddPlayer(Player player) {
-        if (IsServer) {
+        if (NetworkManager.Singleton.IsServer) {
             Debug.LogError("Server is trying to call NonServerAddPlayer! Only non-servers should call this method.");
             return;
         }
@@ -86,7 +86,7 @@ public abstract class ServerPlayerManager : NetworkBehaviour {
     /// <param name="playerId">ID of the disconnecting player</param>
     /// </summary>
     protected void ServerRemovePlayer(ulong playerId) {
-        if (!IsServer) {
+        if (!NetworkManager.Singleton.IsServer) {
             Debug.LogError("Only the server can remove players!");
             return;
         }

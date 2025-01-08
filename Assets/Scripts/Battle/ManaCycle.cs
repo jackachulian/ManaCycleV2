@@ -21,7 +21,7 @@ public class ManaCycle : MonoBehaviour
     /// <summary>
     /// All visual Tiles that are displayed on the display the cycle
     /// </summary>
-    private ManaTile[] tiles;
+    public ManaTile[] tiles {get; private set;}
 
     /// <summary>
     /// The cycle randonly generated upon battle initialization.
