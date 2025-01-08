@@ -112,7 +112,7 @@ public class SpellcastManager : NetworkBehaviour {
     public void InitializeBattle(Board board) {
         this.board = board;
         blobGrid = new List<Vector2Int>[board.manaTileGrid.width, board.manaTileGrid.height];
-        clearableManaCounts = new int[board.battleManager.battleLobbyManager.battleData.cycleUniqueColors];
+        clearableManaCounts = new int[GameManager.Instance.battleData.cycleUniqueColors];
 
         RepositionCyclePointer();
     }
@@ -251,7 +251,7 @@ public class SpellcastManager : NetworkBehaviour {
     private void AdvanceCycle() {
         
         cycleIndex += 1;
-        if (cycleIndex >= board.battleManager.battleLobbyManager.battleData.cycleLength) {
+        if (cycleIndex >= GameManager.Instance.battleData.cycleLength) {
             cycleIndex = 0;
             // TODO: cycle multiplier
         }

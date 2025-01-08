@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     private IServerPlayerConnectionManager serverPlayerConnectionManager;
 
+    /// <summary>
+    /// Battle data to use for the current game, such as the RNG seed, cycle length and color count, etc
+    /// </summary>
+    public BattleData battleData;
+
     public enum GameConnectionType {
         /// <summary>
         /// Means that no game is initialized right now, meaning player is in main menu or some other non-lobby scene

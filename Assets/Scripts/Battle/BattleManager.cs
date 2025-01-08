@@ -7,15 +7,8 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Manages the current battle.
 /// </summary>
-public class BattleManager : NetworkBehaviour
+public class BattleManager : MonoBehaviour
 {
-    private NetworkVariable<BattleData> battleData = new NetworkVariable<BattleData>();
-
-    /// <summary>
-    /// Stores shared battle lobby dependencies
-    /// </summary>
-    [SerializeField] public BattleLobbyManager battleLobbyManager;
-
     /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
@@ -57,11 +50,6 @@ public class BattleManager : NetworkBehaviour
     /// </summary>
     public bool gameCompleted {get; private set;}
 
-    /// <summary>
-    /// Used to start rematches
-    /// </summary>
-    [SerializeField] private BattleStartNetworkBehaviour battleStart;
-
     private void Awake() {
         if (this == null) {
             Debug.LogWarning("Self battlemanager is null, destroying self");
@@ -75,25 +63,9 @@ public class BattleManager : NetworkBehaviour
             return;
         }
 
-        if (battleLobbyManager.battleManager == this) {
-            Debug.LogWarning("BattleManager instance awoke twice?");
-            return;
-        }
-
-        if (battleLobbyManager.battleManager != null) {
-            Debug.LogWarning("Duplicate BattleManager! Destroying the old one.");
-            Destroy(battleLobbyManager.battleManager.gameObject);
-        }
-
-        battleLobbyManager.battleManager = this;
-        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
-    }
-
-    public override void OnNetworkSpawn() {
-        Debug.Log("BattleManager spawned");
-        if (battleLobbyManager.networkManager.IsServer) {
-            battleData.Value = battleLobbyManager.battleData;
-        }
+        BattleData battleData = new BattleData();
+        battleData.Randomize();
+        GameManager.Instance.battleData = battleData;
 
         InitializeBattle();
     }
@@ -108,51 +80,15 @@ public class BattleManager : NetworkBehaviour
         }
         initialized = true;
 
-        Debug.Log("BattleManager initialized via RPC");
-        battleLobbyManager.SetBattleData(battleData.Value);
-
-        battleLobbyManager.battleManager = this;
-        battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE;
-
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
         manaCycle.InitializeBattle(this);
 
         
         foreach (Board board in boards) {
-            board.InitializeBattle(this, battleLobbyManager.battleData.seed);
+            board.InitializeBattle(this, GameManager.Instance.battleData.seed);
             board.onDefeat.AddListener(CheckForWinner);
         }
-
-        // Server spawns board and assigns ownership based on player's boardIndex
-        if (battleLobbyManager.networkManager.IsServer) {
-            Debug.Log("This is the server, spawning boards");
-            foreach (BattlePlayer player in battleLobbyManager.playerManager.GetPlayers()) {
-                if (!player) {
-                    Debug.LogError("Null player detected");
-                    continue;
-                }
-
-                if (player.boardIndex.Value < 0 || player.boardIndex.Value >= boards.Length) {
-                    Debug.LogError("Player with ID "+player.GetId()+" has out-of-range board index: "+player.boardIndex.Value);
-                    continue;
-                };
-
-                Board board = boards[player.boardIndex.Value];
-                if (!board) {
-                    Debug.LogError("Null board detected at index "+player.boardIndex.Value);
-                    continue;
-                }
-
-                Debug.Log("Spawning board "+board+" with owner of clientID "+player.OwnerClientId);
-                board.GetComponent<NetworkObject>().ChangeOwnership(player.OwnerClientId);
-            }
-        } else {
-            Debug.Log("This is not the server");
-        }
-
-        battleLobbyManager.playerManager.ConnectAllPlayersToBoards();
-        battleLobbyManager.playerManager.EnableBattleInputs();
     }
 
     /// <summary>
@@ -180,16 +116,6 @@ public class BattleManager : NetworkBehaviour
     /// <returns>the board at the given index in teh baords array</returns>
     public Board GetBoardByIndex(int index) {
         return boards[index];
-    }
-
-    /// <summary>
-    /// To be called when a player connects to one of this battle manager's boards
-    /// </summary>
-    public void OnPlayerConnectedToBoard(BattlePlayer battlePlayer) {        
-        if (battleLobbyManager.networkManager.IsServer) {
-            // listen for when their readiness changes to know when to check if all players are ready for a rematch
-            battlePlayer.ready.OnValueChanged += battleStart.OnAnyPlayerReadyChanged;
-        }
     }
 
     /// <summary>
@@ -223,14 +149,6 @@ public class BattleManager : NetworkBehaviour
     public async void PostGame() {
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
-
-        battleStart.canStartBattle = true;
-
-        // disconnect players from boards, they no longer need to be connected
-        foreach (var player in battleLobbyManager.playerManager.GetPlayers()) {
-            player.DisconnectFromBattleBoard();
-        }
-
         postGameMenuUI.ShowPostGameMenuUI();
     }
 
@@ -239,11 +157,6 @@ public class BattleManager : NetworkBehaviour
     /// Only works on server/host.
     /// </summary>
     public void GoToCharacterSelect() {
-        if (battleLobbyManager.networkManager.IsServer) {
-            battleLobbyManager.battlePhase = BattleLobbyManager.BattlePhase.BATTLE_SETUP;
-            battleLobbyManager.networkManager.SceneManager.LoadScene("BattleSetup", LoadSceneMode.Single);
-        } else {
-            Debug.LogWarning("Only the server/host can send session back to character select");
-        }
+        
     }
 }

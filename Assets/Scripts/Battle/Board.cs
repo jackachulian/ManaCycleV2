@@ -61,13 +61,6 @@ public class Board : MonoBehaviour
     public bool defeated {get; private set;}
 
     /// <summary>
-    /// Called when any player connects to this board.
-    /// Expects a BattlePlayer as the parameter passed.
-    /// </summary>
-    public UnityEvent<BattlePlayer> onPlayerConnected {get; private set;} = new UnityEvent<BattlePlayer>();
-    public UnityEvent<BattlePlayer> onPlayerDisconnected {get; private set;} = new UnityEvent<BattlePlayer>();
-
-    /// <summary>
     /// Called by BattleManager when battle is initialized
     /// Any initialization should go here (no Start() method)
     /// </summary>

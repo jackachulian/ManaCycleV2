@@ -36,7 +36,7 @@ public class ManaCycle : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        var battleData = battleManager.battleLobbyManager.battleData;
+        var battleData = GameManager.Instance.battleData;
 
         // Seed is used to determine the cycle
         Random.InitState(battleData.seed);
