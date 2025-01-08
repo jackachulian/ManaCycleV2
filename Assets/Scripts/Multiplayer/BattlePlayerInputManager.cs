@@ -66,7 +66,7 @@ public class BattlePlayerInputManager : MonoBehaviour {
 
         players.Remove(battlePlayer);
 
-        battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour.OnPlayerLeft(battlePlayer.GetId());
+        // battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour.OnPlayerLeft(battlePlayer.GetId());
     }
 
     public void EnableJoining() {

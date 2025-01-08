@@ -39,11 +39,6 @@ public class BattleLobbyManager : ScriptableObject {
     public BattlePlayerInputManager battlePlayerInputManager;
 
     /// <summary>
-    /// The battle setup manager in the battle setup scene. Value set by battlesetupmanager on awake. Null while in battle
-    /// </summary>
-    public BattleSetupManager battleSetupManager;
-
-    /// <summary>
     /// The battle manager in the battle scene. Value set by battlemanager on awake. Null while in battle setup
     /// </summary>
     public BattleManager battleManager;

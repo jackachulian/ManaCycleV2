@@ -46,11 +46,6 @@ public class BattlePlayer : NetworkBehaviour {
     /// </summary>
     private BattleInputController playerInputController;
 
-    /// <summary>
-    /// The current setup panel assigned to this player
-    /// </summary>
-    private BattleSetupPlayerPanel playerPanel;
-
     private void Awake() {
         playerInput = GetComponent<PlayerInput>();
         playerInputController = GetComponent<BattleInputController>();
@@ -89,8 +84,8 @@ public class BattlePlayer : NetworkBehaviour {
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
             // Let CharSelect know this player now exists
             // Will assign this player a panel and listen for when it is ready to start the game
-            var charSelect = battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour;
-            charSelect.OnPlayerJoined(GetId());
+            // var charSelect = battleLobbyManager.battleSetupManager.characterSelectMenu.characterSelectNetworkBehaviour;
+            // charSelect.OnPlayerJoined(GetId());
 
             DisableBattleInputs();
             // BattleSetupConnectPanel();
@@ -143,7 +138,7 @@ public class BattlePlayer : NetworkBehaviour {
     }
 
     public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
-        if (playerPanel) playerPanel.SetUsername(current.ToString());
+        // if (playerPanel) playerPanel.SetUsername(current.ToString());
     }
 
     /// <summary>
@@ -156,7 +151,7 @@ public class BattlePlayer : NetworkBehaviour {
 
     public void ConnectToBoard(int index) {
         if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE_SETUP) {
-            BattleSetupConnectPanel(index);
+            // BattleSetupConnectPanel(index);
         } else if (battleLobbyManager.battlePhase == BattleLobbyManager.BattlePhase.BATTLE) {
             BattleConnectBoard(index);
         }
@@ -164,34 +159,6 @@ public class BattlePlayer : NetworkBehaviour {
 
     public void DisconnectFromBattleBoard() {
         playerInputController.board = null;
-    }
-
-    /// <summary>
-    /// Connect the player to their battle setup player panel based on the passed index.
-    /// </summary>
-    public void BattleSetupConnectPanel(int index) {
-        // don't connect if value is the default -1
-        if (index < 0) {
-            Debug.LogError("Trying to connect battleplayer to setup panel but index is invalid: "+index);
-            return;
-        };
-
-        BattleSetupPlayerPanel panel = battleLobbyManager.battleSetupManager.characterSelectMenu.GetPanel(index);
-
-        // If panel does not change or is still null, return
-        if (playerPanel == panel) return;
-
-        // If a non-null panel is already assigned, unassign this player from it
-        if (playerPanel) {
-            playerPanel.AssignPlayer(null);
-        }
-
-        playerPanel = panel;
-
-        // If new panel is non-null, assign this player to it
-        if (playerPanel) {
-            playerPanel.AssignPlayer(this);
-        }
     }
 
     /// <summary>
