@@ -4,9 +4,6 @@ using Unity.Netcode;
 using UnityEngine;
 
 public class OnlinePlayerConnectionManager : IServerPlayerConnectionManager {
-    public event Action<ulong> onPlayerConnected;
-    public event Action<ulong> onPlayerDisconnected;
-
     private bool isListening = false;
 
     public void StartListeningForPlayers()
@@ -28,6 +25,8 @@ public class OnlinePlayerConnectionManager : IServerPlayerConnectionManager {
 
         isListening = true;
         NetworkManager.Singleton.OnClientConnectedCallback += ServerOnClientConnected;
+
+        Debug.Log("OnlinePlayerConnectionManager is listening for players");
     }
 
     public void StopListeningForPlayers() {
@@ -38,6 +37,6 @@ public class OnlinePlayerConnectionManager : IServerPlayerConnectionManager {
     }
 
     public void ServerOnClientConnected(ulong clientId) {
-        onPlayerConnected.Invoke(clientId);
+        // onPlayerConnected.Invoke(clientId);
     }
 }

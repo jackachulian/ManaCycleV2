@@ -5,19 +5,21 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-public class UIInteracter : MonoBehaviour
+public class CursorUIInteractor : MonoBehaviour
 {
     private GraphicRaycaster graphicRaycaster;
     private bool submitPressed;
     private List<GameObject> lastFrameResults = new();
-    public int playerNum;
 
-    public delegate void OnCursorInteractionHandler(int playerNum, GameObject interacted);
-    public event OnCursorInteractionHandler CursorSubmit;
-    public event OnCursorInteractionHandler CursorHover;
+    // Player that can be associated with inputs.
+    private Player player;
 
-    public delegate void OnCursorReturnHandler(int playerNum);
-    public event OnCursorReturnHandler CursorReturn;
+    // public delegate void OnCursorInteractionHandler(int playerNum, GameObject interacted);
+    // public event OnCursorInteractionHandler OnCursorSubmit;
+    // public event OnCursorInteractionHandler OnCursorHover;
+
+    // public delegate void OnCursorReturnHandler(int playerNum);
+    // public event OnCursorReturnHandler OnCursorReturn;
 
     // called by menu
     public void Initialize()
@@ -26,9 +28,13 @@ public class UIInteracter : MonoBehaviour
         Transform canvas = GameObject.Find("Canvas").transform;
         transform.SetParent(canvas, false);
         graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
+    }
 
-        playerNum = GameObject.FindObjectsByType<PlayerCursorMovement>(FindObjectsSortMode.None).Count() - 1;
-        Debug.Log("Player" + playerNum + " join");
+    /// <summary>
+    /// Make it so clicks from this cursor are associated with a player ID.
+    /// </summary>
+    public void SetPlayer(Player player) {
+        this.player = player;
     }
 
     // Update is called once per frame
@@ -45,7 +51,12 @@ public class UIInteracter : MonoBehaviour
         if (submitPressed) results.ForEach(r => 
         {
             ExecuteEvents.Execute(r, pointer, ExecuteEvents.submitHandler);
-            CursorSubmit?.Invoke(playerNum, r);
+            // OnCursorSubmit?.Invoke(playerNum, r);
+            
+            ICursorPressable pressable = r.GetComponent<ICursorPressable>();
+            if (pressable != null) {
+                pressable.OnCursorPressed(player);
+            }
         });
         
         lastFrameResults.Where(r => !results.Contains(r)).ToList().ForEach(r => 
@@ -56,20 +67,27 @@ public class UIInteracter : MonoBehaviour
         results.Where(r => !lastFrameResults.Contains(r)).ToList().ForEach(r => 
         {
             ExecuteEvents.Execute(r, pointer, ExecuteEvents.pointerEnterHandler);
-            CursorHover?.Invoke(playerNum, r);
+            
+            ICursorHoverable pressable = r.GetComponent<ICursorHoverable>();
+            if (pressable != null) {
+                pressable.OnCursorHovered(player);
+            }
         });
 
         submitPressed = false;
         lastFrameResults = new List<GameObject>(results);
     }
 
-    void OnSubmit(InputValue value)
+    /// <summary>
+    /// Send a submit event to the hovered object(s?).
+    /// </summary>
+    public void Submit()
     {
-        submitPressed = value.isPressed && enabled;
+        submitPressed = true;
     }
 
-    void OnCancel(InputValue value)
+    public void Cancel()
     {
-        if (value.isPressed) CursorReturn?.Invoke(playerNum);
+        
     }
 }

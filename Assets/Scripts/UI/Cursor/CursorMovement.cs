@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerCursorMovement : MonoBehaviour
+public class CursorMovement : MonoBehaviour
 {
     private RectTransform rt;
     [SerializeField] private Vector2 cursorSpeed;
-    private Vector2 posDelta;
+
+    /// <summary>
+    /// The current vector to move the cursor with as set by the CharSelectInputHandler
+    /// </summary>
+    private Vector2 inputVector;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,12 +20,11 @@ public class PlayerCursorMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rt.anchoredPosition += posDelta * Time.deltaTime;
+        rt.anchoredPosition += inputVector * cursorSpeed * Time.deltaTime;
     }
 
-    public void OnNavigate(InputValue value)
+    public void SetCursorMovement(Vector2 inputVector)
     {
-        Vector2 v = value.Get<Vector2>();
-        posDelta = v.normalized * cursorSpeed;
+        this.inputVector = inputVector;
     }
 }

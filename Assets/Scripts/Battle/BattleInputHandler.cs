@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Handles a PlayerInput's messages for the battle scene, controlling the board that is assigned.
 /// </summary>
-public class BattleInputController : MonoBehaviour
+public class BattleInputHandler : MonoBehaviour
 {
     public Board board;
 

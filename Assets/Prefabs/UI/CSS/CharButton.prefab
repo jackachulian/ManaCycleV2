@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7032168521786370675}
   - component: {fileID: 5741903359011555579}
+  - component: {fileID: 4714840542947755102}
   - component: {fileID: 4291107701405824904}
   - component: {fileID: 3356176124403583774}
   - component: {fileID: 2460426438468424170}
-  - component: {fileID: 4714840542947755102}
   m_Layer: 5
   m_Name: CharButton
   m_TagString: Untagged
@@ -50,6 +50,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 287998416656725606}
   m_CullTransparentMesh: 0
+--- !u!114 &4714840542947755102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287998416656725606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e77e1b41b6f954cb1d3b942485ac0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battler: {fileID: 11400000, guid: 808f26159863848d2be4d566709a387a, type: 2}
+  charImage: {fileID: 3133530173438020218}
+  gradient: {fileID: 8789900273337146480}
+  selectable: {fileID: 3356176124403583774}
 --- !u!114 &4291107701405824904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,22 +172,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &4714840542947755102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 287998416656725606}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64e77e1b41b6f954cb1d3b942485ac0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  battler: {fileID: 11400000, guid: 808f26159863848d2be4d566709a387a, type: 2}
-  charImage: {fileID: 3133530173438020218}
-  gradient: {fileID: 8789900273337146480}
-  selectable: {fileID: 3356176124403583774}
 --- !u!1 &1595807591671260850
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using Battle;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CharButton : MonoBehaviour
+public class CharButton : MonoBehaviour, ICursorHoverable, ICursorPressable
 {
     [SerializeField] public Battler battler;
     [SerializeField] private Image charImage;
@@ -23,9 +23,16 @@ public class CharButton : MonoBehaviour
         selectable.colors = newColors;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnCursorHovered(Player player)
     {
+        CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
+        charSelector.SetDisplayedBattler(battler);
+    }
+
+    public void OnCursorPressed(Player player)
+    {
+        CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
+        charSelector.ConfirmCharacterChoice(battler);
         
     }
 }
