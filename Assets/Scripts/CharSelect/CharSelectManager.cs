@@ -10,9 +10,9 @@ public class CharSelectManager : MonoBehaviour
 {
     public static CharSelectManager Instance { get; private set; }
 
-    [SerializeField] [FormerlySerializedAs("portraits")] private CharSelector[] charSelectors;
+    [SerializeField] private CharSelector[] _charSelectors;
+    public CharSelector[] charSelectors => _charSelectors;
     [SerializeField] private GameObject allReadyWindow;
-    private bool allReady = false;
 
     private void Awake()
     {
@@ -47,21 +47,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public void OnReadyStateChanged()
-    {
-        foreach (CharSelector selector in charSelectors)
-        {
-            if (!selector.IsReady()) {
-                allReadyWindow.SetActive(false);
-                allReady = false;
-            }
-        }
-
-        allReady = true;
-        allReadyWindow.SetActive(true);
-    }
-
     public CharSelector GetCharSelector(int boardIndex) {
-        return charSelectors[boardIndex];
+        return _charSelectors[boardIndex];
     }
 }
