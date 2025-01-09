@@ -33,7 +33,7 @@ public class Player : NetworkBehaviour {
     /// <summary>
     /// the Unity engine's Input System player input manager
     /// </summary>
-    private PlayerInput playerInput {get; set;}
+    public PlayerInput playerInput {get; private set;}
 
     /// <summary>
     /// Input handler for the char select scene
@@ -56,8 +56,10 @@ public class Player : NetworkBehaviour {
         charSelectInputHandler = GetComponent<CharSelectInputHandler>();
         battleInputHandler = GetComponent<BattleInputHandler>();
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
-        
+
         boardIndex.OnValueChanged += OnBoardIndexChanged;
+
+        playerInput.onControlsChanged += UpdateSelectorPlayerData;
 
         // make sure this persists between the charselect and the battle scene!
         DontDestroyOnLoad(gameObject);
@@ -86,6 +88,21 @@ public class Player : NetworkBehaviour {
         GameManager.Instance.playerManager.PlayerSpawned(this);
     }
 
+    public override void OnNetworkDespawn()
+    {
+        // Notify the char selector of a disconnect if a non-null char selector is assigned to this player
+        if (charSelectInputHandler.charSelector) {
+            charSelectInputHandler.charSelector.UnassignPlayer();
+        }
+
+        // If this is the server, remove from the server player manager
+        if (NetworkManager.Singleton.IsServer) {
+            GameManager.Instance.playerManager.ServerRemovePlayer(this);
+        }
+
+        GameManager.Instance.playerManager.PlayerDespawned(this);
+    }
+
     /// <summary>
     /// Called when the board index changes.
     /// Board index should only be changed during char select phase - this will raise an error if not in charselect phase.
@@ -103,14 +120,18 @@ public class Player : NetworkBehaviour {
         selector.AssignPlayer(this);
     }
 
-    public override void OnNetworkDespawn()
-    {
-        // If this is the server, remove from the server player manager
-        if (NetworkManager.Singleton.IsServer) {
-            GameManager.Instance.playerManager.ServerRemovePlayer(this);
-        }
+    public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
+        UpdateSelectorPlayerData(playerInput);
+    }
 
-        GameManager.Instance.playerManager.PlayerDespawned(this);
+    /// <summary>
+    /// To be called whenever player specific data such as the username is changed. 
+    /// If a selector is attached to the charselectinputhandler it will be updated.
+    /// </summary>
+    public void UpdateSelectorPlayerData(PlayerInput playerInput) {
+        if (charSelectInputHandler.charSelector) {
+            charSelectInputHandler.charSelector.ui.UpdatePlayerData(this);
+        }
     }
 
     public void EnableUserInput() {
@@ -123,15 +144,15 @@ public class Player : NetworkBehaviour {
         playerInput.enabled = false;
     }
 
-    public async void EnableBattleInputs() {
+    public void EnableBattleInputs() {
         // has to be after a delay because unity is jank
-        await Awaitable.NextFrameAsync();
+        // await Awaitable.NextFrameAsync();
         Debug.Log("Enabled battle inputs on "+this);
         playerInput.actions.FindActionMap("Battle", true).Enable();
     }
 
-    public async void DisableBattleInputs() {
-        await Awaitable.NextFrameAsync();
+    public void DisableBattleInputs() {
+        // await Awaitable.NextFrameAsync();
         Debug.Log("Disabled battle inputs on "+this);
         playerInput.actions.FindActionMap("Battle", true).Disable();
     }

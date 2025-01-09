@@ -21,6 +21,7 @@ public class CursorMovement : MonoBehaviour
     void Update()
     {
         rt.anchoredPosition += inputVector * cursorSpeed * Time.deltaTime;
+        rt.position = new Vector2(Mathf.Clamp(rt.position.x, 0, Screen.width), Mathf.Clamp(rt.position.y, 0, Screen.height));
     }
 
     public void SetCursorMovement(Vector2 inputVector)

@@ -51,12 +51,21 @@ public class CharSelector : MonoBehaviour {
         if (player) {
             player.charSelectInputHandler.SetCharSelector(this);
             ui.ShowSelectText();
+            ui.UpdatePlayerData(player);
             cursor.Show();
             cursor.SetPlayer(player);
         } else {
             cursor.Hide();
             ui.ShowUnconnectedText();
         }
+    }
+
+    /// <summary>
+    /// Called by a Player when it disconnects from a char selector.
+    /// </summary>
+    public void UnassignPlayer() {
+        ui.ShowDisconnectedText();
+        ui.UpdatePlayerData(null);
     }
 
     /// <summary>
@@ -120,7 +129,7 @@ public class CharSelector : MonoBehaviour {
         Assert.AreEqual(state, CharSelectorState.Options);
 
         ui.CloseOptions(player.multiplayerEventSystem);
-        UnlockCursor();
+        LockCursor();
         state = CharSelectorState.Ready;
         ui.ShowReadyVisual();
     }

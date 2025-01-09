@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Battle;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Serialization;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Handles the visuals for a charselector.
@@ -12,8 +13,10 @@ public class CharSelectorUI : MonoBehaviour
 {
     [SerializeField] private Image battlerPortrait;
     [SerializeField] private Image background;
-    [SerializeField] private TMP_Text nameText;
-    [SerializeField] [FormerlySerializedAs("defaultText")] private string unconnectedText;
+    [SerializeField] private TMP_Text usernameText;
+    [SerializeField] [FormerlySerializedAs("nameText")] private TMP_Text battlerNameText;
+    [SerializeField] private string unconnectedText;
+    [SerializeField] private string disconnectedText = "Disconnected";
     [SerializeField] private string selectText;
     [SerializeField] private GameObject optionsWindow;
     [SerializeField] private GameObject readyWindow;
@@ -37,16 +40,27 @@ public class CharSelectorUI : MonoBehaviour
     {
         SetBattler(null);
         ShowUnconnectedText();
+        UpdatePlayerData(null);
     }
 
     public void ShowSelectText() {
         SetBattler(null);
-        nameText.text = selectText;
+        battlerNameText.text = selectText;
     }
 
     public void ShowUnconnectedText() {
         SetBattler(null);
-        nameText.text = unconnectedText;
+        battlerNameText.text = unconnectedText;
+    }
+
+    /// <summary>
+    /// Show the disconnected text, then show the unconnected text ("Press button to join") after a delay
+    /// </summary>
+    public async void ShowDisconnectedText() {
+        SetBattler(null);
+        battlerNameText.text = disconnectedText;
+        await Awaitable.WaitForSecondsAsync(3.0f);
+        ShowUnconnectedText();
     }
 
     /// <summary>
@@ -58,11 +72,31 @@ public class CharSelectorUI : MonoBehaviour
         if (battler) {
             battlerPortrait.sprite = battler.sprite;
             portriatRectTransform.anchoredPosition = defaultPos + battler.portraitOffset;
-            nameText.text = battler.displayName;
+            battlerNameText.text = battler.displayName;
             SetLockedVisual();
         } else {
             battlerPortrait.sprite = null;
             battlerPortrait.color = new Color(1f, 1f, 1f, 0f);
+        }
+    }
+
+    /// <summary>
+    /// Should be called whenever player data (username, etc) is changed.
+    /// </summary>
+    public void UpdatePlayerData(Player player) {
+        if (!player) {
+            usernameText.text = "";
+            return;
+        }
+
+        // local multiplayer - show the playernumber and the device name, may change to just player number
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer) {
+            int playerNumber = player.playerInput.playerIndex + 1;
+            var deviceName = player.playerInput.devices[0].shortDisplayName;
+            if (deviceName == null || deviceName == "") deviceName = player.playerInput.devices[0].displayName;
+            if (deviceName == null || deviceName == "") deviceName = player.playerInput.devices[0].name;
+            if (deviceName == "Mouse") deviceName = "Keyboard";
+            usernameText.text = "P"+playerNumber+" - "+deviceName;
         }
     }
 

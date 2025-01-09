@@ -50,7 +50,9 @@ public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnecti
     public void OnPlayerLeft(PlayerInput playerInput) {
         Debug.Log("PlayerInput left locally: "+playerInput);
         Player player = playerInput.GetComponent<Player>();
-        player.GetComponent<NetworkObject>().Despawn(destroy: true);
+        
+        // only despawn if still spawned, since network closing should try to auto destroy these, but player disconnecting their controller wont
+        if (player.IsSpawned) player.GetComponent<NetworkObject>().Despawn(destroy: true);
     }
 
     public void OnPlayerDespawned(Player player) {
