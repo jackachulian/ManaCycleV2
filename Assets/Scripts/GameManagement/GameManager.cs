@@ -140,21 +140,35 @@ public class GameManager : MonoBehaviour {
         // Start the approprite player connection manager based on the connection type of the game
         if (gameConnectionType == GameConnectionType.OnlineMultiplayer) {
             serverPlayerConnectionManager = new OnlinePlayerConnectionManager();
+            // Start a host if in online mode; so this client can have its own player
+            NetworkManager.Singleton.StartHost();
         }
         else if (gameConnectionType == GameConnectionType.LocalMultiplayer) {
-            serverPlayerConnectionManager = new LocalPlayerConnectionManager();
+            serverPlayerConnectionManager = GetComponent<LocalPlayerConnectionManager>();
+            // Start server, because this client shouldnt have just one player, but rather a player for each device
+            NetworkManager.Singleton.StartServer();
         }
         else {
             serverPlayerConnectionManager = new SingleplayerConnectionManager();
+            // Start a host; this client's player is the one singleplayer player
+            NetworkManager.Singleton.StartHost();
         }
 
-        bool listening = NetworkManager.Singleton.StartHost();
-        if (!listening) {
+        if (!NetworkManager.Singleton.IsListening) {
             Debug.LogError("Failed to start networkmanager as a host; stopping game");
             return;
         }
 
         serverPlayerConnectionManager.StartListeningForPlayers();
+    }
+
+    public void StartListening() {
+        
+    }
+
+    public void StopListening() {
+        serverPlayerConnectionManager.StopListeningForPlayers();
+
     }
 
     /// <summary>
@@ -176,7 +190,7 @@ public class GameManager : MonoBehaviour {
         NetworkManager.Singleton.Shutdown();
 
         if (serverPlayerConnectionManager != null) {
-            serverPlayerConnectionManager.StopListeningForPlayers();
+            // serverPlayerConnectionManager.StopListeningForPlayers();
         } else {
             Debug.LogWarning("The server player connection manager may have been set to null during the game or never set at all, cannot perform game stop tasks on it");
         }        

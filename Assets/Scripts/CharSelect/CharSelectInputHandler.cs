@@ -11,7 +11,7 @@ public class CharSelectInputHandler : MonoBehaviour
     /// The character selector this player is currently controlling.
     /// Contains the character selector box, portrait, cursor and options menu currently being controlled by this player
     /// </summary>
-    public CharSelector charSelector {get; private set;}
+    public CharSelector charSelector;
 
     /// <summary>
     /// Set the char selector that this player should now control. Called from CharSelectManager when a player is added.
@@ -22,16 +22,17 @@ public class CharSelectInputHandler : MonoBehaviour
 
     public void OnSubmit()
     {
-        charSelector.Submit();
+        if (charSelector) charSelector.Submit();
     }
 
     void OnCancel()
     {
-        charSelector.Cancel();
+        if (charSelector) charSelector.Cancel();
     }
 
     public void OnNavigate(InputValue value)
     {
+        if (!charSelector) return;
         Vector2 inputVector = value.Get<Vector2>();
         charSelector.MoveCursor(inputVector);
     }

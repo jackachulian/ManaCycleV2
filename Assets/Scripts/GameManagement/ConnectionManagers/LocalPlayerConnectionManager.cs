@@ -4,8 +4,17 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LocalPlayerConnectionManager : IServerPlayerConnectionManager {
+/// <summary>
+/// Should be placed on the same gameobject as the PlayerInputManager
+/// </summary>
+public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnectionManager {
     private bool isListening = false;
+
+    private PlayerInputManager playerInputManager;
+
+    void Awake() {
+        playerInputManager = GetComponent<PlayerInputManager>();
+    }
 
     public void StartListeningForPlayers()
     {
@@ -14,10 +23,7 @@ public class LocalPlayerConnectionManager : IServerPlayerConnectionManager {
             return;
         }
 
-        GameManager.Instance.playerInputManager.onPlayerJoined += PlayerJoined;
-        GameManager.Instance.playerInputManager.onPlayerLeft += PlayerLeft;
-        GameManager.Instance.playerInputManager.EnableJoining();
-
+        playerInputManager.EnableJoining();
         isListening = true;
 
         Debug.Log("LocalPlayerConnectionManager is listening for players");
@@ -25,25 +31,29 @@ public class LocalPlayerConnectionManager : IServerPlayerConnectionManager {
 
     public void StopListeningForPlayers()
     {
-        GameManager.Instance.playerInputManager.DisableJoining();
-        GameManager.Instance.playerInputManager.onPlayerJoined -= PlayerJoined;
-        GameManager.Instance.playerInputManager.onPlayerLeft -= PlayerLeft;
-
+        playerInputManager.DisableJoining();
         isListening = false;
     }
 
-    public void PlayerJoined(PlayerInput playerInput) {
+    public void OnPlayerJoined(PlayerInput playerInput) {
         Debug.Log("PlayerInput joined locally: "+playerInput);
         Player player = playerInput.GetComponent<Player>();
-        ulong playerId = (ulong)playerInput.devices[0].deviceId; // use device ID as the player ID
-
         player.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
+    }
+
+    // Set the player's player ID after they are spawned.
+    public void OnPlayerSpawned(Player player) {
+        ulong playerId = (ulong)player.GetComponent<PlayerInput>().devices[0].deviceId; // use device ID as the player ID
         player.playerId.Value = playerId;
     }
 
-    public void PlayerLeft(PlayerInput playerInput) {
+    public void OnPlayerLeft(PlayerInput playerInput) {
         Debug.Log("PlayerInput left locally: "+playerInput);
         Player player = playerInput.GetComponent<Player>();
         player.GetComponent<NetworkObject>().Despawn(destroy: true);
+    }
+
+    public void OnPlayerDespawned(Player player) {
+        
     }
 }

@@ -50,16 +50,15 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public MultiplayerEventSystem multiplayerEventSystem {get; private set;}
 
-    private void Awake() {
+    public override void OnNetworkSpawn()
+    {
         playerInput = GetComponent<PlayerInput>();
         charSelectInputHandler = GetComponent<CharSelectInputHandler>();
         battleInputHandler = GetComponent<BattleInputHandler>();
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
+        
         boardIndex.OnValueChanged += OnBoardIndexChanged;
-    }
 
-    public override void OnNetworkSpawn()
-    {
         // make sure this persists between the charselect and the battle scene!
         DontDestroyOnLoad(gameObject);
 

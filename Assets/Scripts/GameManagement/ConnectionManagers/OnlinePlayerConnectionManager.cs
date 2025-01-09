@@ -39,4 +39,12 @@ public class OnlinePlayerConnectionManager : IServerPlayerConnectionManager {
     public void ServerOnClientConnected(ulong clientId) {
         // onPlayerConnected.Invoke(clientId);
     }
+
+    public void OnPlayerSpawned(Player player) {
+        
+    }
+
+    public void OnPlayerDespawned(Player player) {
+        
+    }
 }

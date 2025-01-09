@@ -16,4 +16,7 @@ public interface IServerPlayerConnectionManager {
     /// Called when the game is no longer in the character select phase, or when the game is stopped.
     /// </summary>
     public void StopListeningForPlayers();
+
+    public void OnPlayerSpawned(Player player);
+    public void OnPlayerDespawned(Player player);
 }
