@@ -29,7 +29,7 @@ public class CharSelector : MonoBehaviour {
     public event Action onStateChanged;
 
 
-    private Battler selectedBattler;
+    public Battler selectedBattler {get; private set;}
 
 
     // Player currently controlling this board as set by the CharSelectManager, or null if no player.

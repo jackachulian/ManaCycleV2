@@ -79,11 +79,14 @@ public class CharSelectManager : MonoBehaviour
 
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 1;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        connectionMenuUi.connectionMenuEventSystem.enabled = true;
     }
 
     public void ShowCharSelectMenu() {
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 0;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = false;
+        connectionMenuUi.connectionMenuEventSystem.enabled = false;
+
 
         charSelectMenuUi.GetComponent<CanvasGroup>().alpha = 1;
         charSelectMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = true;

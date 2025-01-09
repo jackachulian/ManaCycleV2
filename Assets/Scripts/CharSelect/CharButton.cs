@@ -37,7 +37,15 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     {
         if (player) {
             CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
-            charSelector.ConfirmCharacterChoice(battler);
+            if (charSelector.state == CharSelector.CharSelectorState.ChoosingCharacter) {
+                charSelector.ConfirmCharacterChoice(battler);
+            } else if (charSelector.state == CharSelector.CharSelectorState.Options) {
+                // if the character the player chose before the options menu was clicked, confirm the options
+                if (charSelector.selectedBattler == battler) {
+                    charSelector.ConfirmOptions();
+                } 
+                // otherwise, dont do anything
+            }
         }
     }
 
@@ -49,6 +57,7 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
         base.OnPointerDown(eventData);
 
         var player = eventData.currentInputModule.gameObject.GetComponent<Player>();
+        
         OnCursorPressed(player);
     }
 }

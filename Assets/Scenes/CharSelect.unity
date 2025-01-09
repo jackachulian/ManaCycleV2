@@ -476,7 +476,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Refresh
+  m_text: Refresh List
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dee91bf385b00c44182fd3597a7a13d7, type: 2}
   m_sharedMaterial: {fileID: -4875525899413214240, guid: dee91bf385b00c44182fd3597a7a13d7, type: 2}
@@ -1801,7 +1801,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -19.99997, y: 20}
-  m_SizeDelta: {x: 275, y: 74.548}
+  m_SizeDelta: {x: 359, y: 74.548}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &580178630
 MonoBehaviour:
@@ -4162,7 +4162,7 @@ GameObject:
   - component: {fileID: 1575810348}
   - component: {fileID: 1575810347}
   m_Layer: 0
-  m_Name: EventSystem
+  m_Name: ConnectionMenuEventSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4222,8 +4222,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575810346}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 409.5608, y: 254.98647, z: -3.9360657}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 409.5608, y: 254.98647, z: -3.9360654}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4284,6 +4284,8 @@ MonoBehaviour:
   statusText: {fileID: 269845226}
   lobbyListParent: {fileID: 1449345586}
   lobbyItemPrefab: {fileID: 3814839225698568322, guid: feecb4ba8d6f11d438e2c4cb86b7df5e, type: 3}
+  _refreshButton: {fileID: 580178630}
+  _connectionMenuEventSystem: {fileID: 1575810348}
 --- !u!225 &1596147375
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4656,7 +4658,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 19.99997, y: 20}
-  m_SizeDelta: {x: 275, y: 74.548}
+  m_SizeDelta: {x: 350, y: 74.548}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1705857944
 MonoBehaviour:
@@ -6365,7 +6367,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 578872636}
   - {fileID: 724842831}
-  - {fileID: 1575810349}
   - {fileID: 1236775998}
   - {fileID: 1698380333}
+  - {fileID: 1575810349}
   - {fileID: 2014533804}

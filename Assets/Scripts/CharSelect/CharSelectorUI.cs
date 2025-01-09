@@ -15,7 +15,8 @@ public class CharSelectorUI : MonoBehaviour
     [SerializeField] private Image background;
     [SerializeField] private TMP_Text usernameText;
     [SerializeField] [FormerlySerializedAs("nameText")] private TMP_Text battlerNameText;
-    [SerializeField] private string unconnectedText;
+    [SerializeField] private string unconnectedLocalText = "<Press Button To Connect>";
+    [SerializeField] private string unconnectedOnlineText = "Waiting for players...";
     [SerializeField] private string disconnectedText = "Disconnected";
     [SerializeField] private string selectText;
     [SerializeField] private Color connectedTextColor, unconnectedTextColor;
@@ -53,7 +54,7 @@ public class CharSelectorUI : MonoBehaviour
     public void ShowUnconnectedText() {
         SetBattler(null);
         battlerNameText.color = unconnectedTextColor;
-        battlerNameText.text = unconnectedText;
+        battlerNameText.text = GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer ? unconnectedOnlineText :  unconnectedLocalText;
     }
 
     /// <summary>

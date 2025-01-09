@@ -99,10 +99,15 @@ public class LobbyManager : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Disable the refresh button, refresh the lobbies, then allow another refresh after a short delay.
+    /// </summary>
     public async void RefreshLobbies() {
+        connectionMenuUi.refreshButton.interactable = false;
         QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync();
-
         connectionMenuUi.ShowLobbies(queryResponse.Results);
+        await Awaitable.WaitForSecondsAsync(2.0f);
+        connectionMenuUi.refreshButton.interactable = true;
     }
 
     // Send a heartbeat every 15 seconds to ensure the lobby doesn't time out (do this on the host)

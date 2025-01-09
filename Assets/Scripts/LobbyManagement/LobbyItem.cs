@@ -10,7 +10,7 @@ public class LobbyItem : MonoBehaviour {
 
     public void SetLobby(Lobby lobby) {
         this.lobby = lobby;
-        lobbyNameText.text = lobby.Name;
+        lobbyNameText.text = lobby.Data["RelayJoinCode"].Value;
         lobbyPlayerCountText.text = lobby.Players.Count+"/"+lobby.MaxPlayers;
     }
 
