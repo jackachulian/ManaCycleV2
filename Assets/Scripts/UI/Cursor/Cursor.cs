@@ -21,6 +21,14 @@ public class Cursor : MonoBehaviour
         interactor.enabled = !locked;
     }
 
+    public void Hide() {
+        gameObject.SetActive(false);
+    }
+
+    public void Show() {
+        gameObject.SetActive(true);
+    }
+
     public void SetPlayer(Player player) {
         interactor.SetPlayer(player);
     }

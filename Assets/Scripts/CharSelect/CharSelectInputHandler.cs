@@ -22,18 +22,18 @@ public class CharSelectInputHandler : MonoBehaviour
 
     public void OnSubmit()
     {
-        charSelector.cursor.Submit();
+        charSelector.Submit();
     }
 
     void OnCancel()
     {
-        // if (value.isPressed) OnCursorReturn?.Invoke(playerNum);
+        charSelector.Cancel();
     }
 
     public void OnNavigate(InputValue value)
     {
         Vector2 inputVector = value.Get<Vector2>();
-        charSelector.cursor.Move(inputVector);
+        charSelector.MoveCursor(inputVector);
     }
 }
 

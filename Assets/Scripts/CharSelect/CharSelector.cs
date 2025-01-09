@@ -11,8 +11,7 @@ public class CharSelector : MonoBehaviour {
     // TODO: move locked in status and other things that need a concrete value here.
     // Should also either move the options UI here or make a seperate behaviour for it.
     // The cursor that belongs to this charselector. There is one attached to each charselector.
-    [SerializeField] private Cursor _cursor;
-    public Cursor cursor => _cursor;
+    [SerializeField] private Cursor cursor;
 
 
     public enum CharSelectorState {
@@ -40,16 +39,24 @@ public class CharSelector : MonoBehaviour {
 
     void Awake() {
         ui = GetComponent<CharSelectorUI>();
+        cursor.Hide();
     }
 
     /// <summary>
     /// Assign a player to control this char selector.
+    /// Null to have no player assigned to this selector
     /// </summary>
     public void AssignPlayer(Player player) {
         this.player = player;
-        player.charSelectInputHandler.SetCharSelector(this);
-        ui.ShowSelectText();
-        cursor.SetPlayer(player);
+        if (player) {
+            player.charSelectInputHandler.SetCharSelector(this);
+            ui.ShowSelectText();
+            cursor.Show();
+            cursor.SetPlayer(player);
+        } else {
+            cursor.Hide();
+            ui.ShowUnconnectedText();
+        }
     }
 
     /// <summary>
@@ -61,6 +68,11 @@ public class CharSelector : MonoBehaviour {
 
     public void LockCursor() {
         cursor.SetLocked(true);
+    }
+
+    public void MoveCursor(Vector2 inputVector)
+    {
+        cursor.Move(inputVector);
     }
 
     /// <summary>
@@ -86,6 +98,7 @@ public class CharSelector : MonoBehaviour {
         Assert.AreEqual(state, CharSelectorState.ChoosingCharacter);
 
         selectedBattler = battler;
+        ui.characterChoiceConfirmed = true;
         ui.SetBattler(battler);
         OpenOptions();
     }
@@ -115,13 +128,15 @@ public class CharSelector : MonoBehaviour {
     /// <summary>
     /// Called when player presses cancel on either the options menu or the ready state, taking them back to the character selection cursor.
     /// </summary>
-    public void CancelOptionsOrReady() {
+    public void Cancel() {
         Debug.Log("Going back to choosing character");
 
         state = CharSelectorState.ChoosingCharacter;
+        ui.characterChoiceConfirmed = false;
         ui.CloseOptions(player.multiplayerEventSystem);
         UnlockCursor();
         ui.HideReadyVisual();
+        ui.SetLockedVisual();
     }
 
     public void SetDisplayedBattler(Battler battler) {

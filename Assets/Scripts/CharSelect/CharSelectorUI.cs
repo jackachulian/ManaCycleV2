@@ -21,6 +21,12 @@ public class CharSelectorUI : MonoBehaviour
     private RectTransform portriatRectTransform;
     private Vector2 defaultPos;
 
+
+    /// <summary>
+    /// true if choice locked in, false if still moving the cursor to choose a character
+    /// </summary>
+    public bool characterChoiceConfirmed {get; set;} = false;
+
     void Awake()
     {
         portriatRectTransform = battlerPortrait.GetComponent<RectTransform>();
@@ -51,9 +57,9 @@ public class CharSelectorUI : MonoBehaviour
     {
         if (battler) {
             battlerPortrait.sprite = battler.sprite;
-            battlerPortrait.color = new Color(1f, 1f, 1f, 1f);
             portriatRectTransform.anchoredPosition = defaultPos + battler.portraitOffset;
             nameText.text = battler.displayName;
+            SetLockedVisual();
         } else {
             battlerPortrait.sprite = null;
             battlerPortrait.color = new Color(1f, 1f, 1f, 0f);
@@ -63,9 +69,9 @@ public class CharSelectorUI : MonoBehaviour
     /// <summary>
     /// Display the portrait differently based on whether or not the player has locked in their player choice.
     /// </summary>
-    public void SetLockedVisual(bool locked)
+    public void SetLockedVisual()
     {
-        battlerPortrait.color = new Color(1f, 1f, 1f, locked ? 1f : 0.5f);
+        battlerPortrait.color = new Color(1f, 1f, 1f, characterChoiceConfirmed ? 1f : 0.5f);
     }
 
     /// <summary>

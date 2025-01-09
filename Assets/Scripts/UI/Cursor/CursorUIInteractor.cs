@@ -92,6 +92,7 @@ public class CursorUIInteractor : MonoBehaviour
     /// </summary>
     public void Submit()
     {
+        Debug.Log("Clicked with cursor");
         submitPressed = true;
     }
 

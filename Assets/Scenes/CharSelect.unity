@@ -144,6 +144,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: edcb16772958c0241bf23d3f331ff59c, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -25
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1091,6 +1095,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: 8436eff51d1c0ba46acb1cd44b7838a4, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1276,6 +1284,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: 3173dff97c2cf0b40a51ac27d8584dcc, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1632,6 +1644,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: 9ad7016868fa32b4f9de97945445cc70, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2006,6 +2022,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: 235939d6378ef1b409dfec3b5f186654, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2353,6 +2373,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: 1432c017534373d499c689f0eef0accb, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2496,6 +2520,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: de522e1d813bf96438ccac5d82888171, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2792,7 +2820,7 @@ GameObject:
   - component: {fileID: 1887723448}
   - component: {fileID: 1887723449}
   m_Layer: 5
-  m_Name: 'PlayerLayout '
+  m_Name: CharSelectorLayout
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2947,6 +2975,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: cfd3f097c2fa70347b5372c0d73efece, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -25
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3127,6 +3159,10 @@ PrefabInstance:
       propertyPath: battler
       value: 
       objectReference: {fileID: 11400000, guid: ecf1bc4b4166b1d4eac916f703352a01, type: 2}
+    - target: {fileID: 5637095363874548894, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3724,7 +3760,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2125173806
 MonoBehaviour:
   m_ObjectHideFlags: 0
