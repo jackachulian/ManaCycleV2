@@ -56,10 +56,7 @@ public class CursorUIInteractor : MonoBehaviour
             
             ICursorPressable pressable = r.GetComponent<ICursorPressable>();
             if (pressable != null) {
-                Debug.Log("Pressing pressable "+r);
                 pressable.OnCursorPressed(player);
-            } else {
-                Debug.Log("Pressed a non-pressable object: "+r);
             }
         });
         
@@ -74,10 +71,7 @@ public class CursorUIInteractor : MonoBehaviour
             
             ICursorHoverable hoverable = r.GetComponent<ICursorHoverable>();
             if (hoverable != null) {
-                Debug.Log("Hovering hoverable "+r);
                 hoverable.OnCursorHovered(player);
-            } else {
-                Debug.Log("Hovered a non-hoverable object: "+r);
             }
         });
 

@@ -25,7 +25,7 @@ public class CharSelector : MonoBehaviour {
         get {return _state;} 
         private set {
             _state = value;
-            onStateChanged.Invoke();
+            onStateChanged?.Invoke();
         }}
     public event Action onStateChanged;
 
@@ -68,13 +68,21 @@ public class CharSelector : MonoBehaviour {
     /// Use the cursor if it's unlocked.
     /// </summary>
     public void Submit() {
-        if (!cursor.locked) cursor.Submit();
+        // Ready up when pressing submit while the options menu is open
+        if (state == CharSelectorState.Options) {
+            ConfirmOptions();
+        } 
+        // otherwise, click with the cursor if it is not locked due to already being ready
+        else if (!cursor.locked) {
+            cursor.Submit();
+        }
     }
 
     /// <summary>
     /// Called when the player pressed a character with their cursor, confirming their choice. Open the options menu next.
     /// </summary>
     public void ConfirmCharacterChoice(Battler battler) {
+        Debug.Log("Character choice confirmed");
         Assert.AreEqual(state, CharSelectorState.ChoosingCharacter);
 
         selectedBattler = battler;
@@ -83,6 +91,7 @@ public class CharSelector : MonoBehaviour {
     }
 
     public void OpenOptions() {
+        Debug.Log("Options opened");
         Assert.AreEqual(state, CharSelectorState.ChoosingCharacter);
 
         state = CharSelectorState.Options;
@@ -94,6 +103,7 @@ public class CharSelector : MonoBehaviour {
     /// Called after player pressed submit on the options menu and confirms their selected battle settings
     /// </summary>
     public void ConfirmOptions() {
+        Debug.Log("Options confirmed and closed");
         Assert.AreEqual(state, CharSelectorState.Options);
 
         ui.CloseOptions(player.multiplayerEventSystem);
@@ -106,9 +116,11 @@ public class CharSelector : MonoBehaviour {
     /// Called when player presses cancel on either the options menu or the ready state, taking them back to the character selection cursor.
     /// </summary>
     public void CancelOptionsOrReady() {
-        Assert.AreEqual(state, CharSelectorState.Ready);
+        Debug.Log("Going back to choosing character");
 
         state = CharSelectorState.ChoosingCharacter;
+        ui.CloseOptions(player.multiplayerEventSystem);
+        UnlockCursor();
         ui.HideReadyVisual();
     }
 
