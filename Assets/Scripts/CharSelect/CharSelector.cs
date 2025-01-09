@@ -84,6 +84,11 @@ public class CharSelector : MonoBehaviour {
         cursor.Move(inputVector);
     }
 
+    public void SetCursorPosition(Vector2 position)
+    {
+        cursor.SetPosition(position);
+    }
+
     /// <summary>
     /// When the submit action is pressed by the player
     /// Use the cursor if it's unlocked.
@@ -103,8 +108,10 @@ public class CharSelector : MonoBehaviour {
     /// Called when the player pressed a character with their cursor, confirming their choice. Open the options menu next.
     /// </summary>
     public void ConfirmCharacterChoice(Battler battler) {
+        // don't do anything when not choosing a character when this is pressed
+        if (state != CharSelectorState.ChoosingCharacter) return;
+        
         Debug.Log("Character choice confirmed");
-        Assert.AreEqual(state, CharSelectorState.ChoosingCharacter);
 
         selectedBattler = battler;
         ui.characterChoiceConfirmed = true;
@@ -138,6 +145,10 @@ public class CharSelector : MonoBehaviour {
     /// Called when player presses cancel on either the options menu or the ready state, taking them back to the character selection cursor.
     /// </summary>
     public void Cancel() {
+        // don't do anything when already choosing a character
+        // except TODO: maybe a player can hold cancel to go back to the previous menu.
+        if (state == CharSelectorState.ChoosingCharacter) return;
+
         Debug.Log("Going back to choosing character");
 
         state = CharSelectorState.ChoosingCharacter;

@@ -2,6 +2,7 @@ using UnityEngine;
 using Battle;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 public class CharButton : Selectable, ICursorHoverable, ICursorPressable
 {
@@ -38,5 +39,16 @@ public class CharButton : Selectable, ICursorHoverable, ICursorPressable
             CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
             charSelector.ConfirmCharacterChoice(battler);
         }
+    }
+
+    /// <summary>
+    /// Allows mouse clicks to also interact with this object.
+    /// </summary>
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        base.OnPointerDown(eventData);
+
+        var player = eventData.currentInputModule.gameObject.GetComponent<Player>();
+        OnCursorPressed(player);
     }
 }

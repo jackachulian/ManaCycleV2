@@ -45,5 +45,9 @@ public class Cursor : MonoBehaviour
     {
         cursorMovement.SetCursorMovement(inputVector);
     }
+
+    public void SetPosition(Vector2 position) {
+        cursorMovement.SetPosition(position);
+    }
 }
 

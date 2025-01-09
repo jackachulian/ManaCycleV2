@@ -235,6 +235,8 @@ MonoBehaviour:
   unconnectedText: <Press Button To Connect>
   disconnectedText: Disconnected
   selectText: Select Character
+  connectedTextColor: {r: 1, g: 1, b: 1, a: 1}
+  unconnectedTextColor: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 0.7176471}
   optionsWindow: {fileID: 1730388420128806697}
   readyWindow: {fileID: 638437921144066801}
   firstOption: {fileID: 6839772303263979861}

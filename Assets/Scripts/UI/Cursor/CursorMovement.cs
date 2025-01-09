@@ -28,4 +28,8 @@ public class CursorMovement : MonoBehaviour
     {
         this.inputVector = inputVector;
     }
+
+    public void SetPosition(Vector2 position) {
+        rt.position = new Vector2(Mathf.Clamp(position.x, 0, Screen.width), Mathf.Clamp(position.y, 0, Screen.height));
+    }
 }

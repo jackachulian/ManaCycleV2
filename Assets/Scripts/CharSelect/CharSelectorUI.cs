@@ -18,6 +18,7 @@ public class CharSelectorUI : MonoBehaviour
     [SerializeField] private string unconnectedText;
     [SerializeField] private string disconnectedText = "Disconnected";
     [SerializeField] private string selectText;
+    [SerializeField] private Color connectedTextColor, unconnectedTextColor;
     [SerializeField] private GameObject optionsWindow;
     [SerializeField] private GameObject readyWindow;
     [SerializeField] private GameObject firstOption;
@@ -45,11 +46,13 @@ public class CharSelectorUI : MonoBehaviour
 
     public void ShowSelectText() {
         SetBattler(null);
+        battlerNameText.color = connectedTextColor;
         battlerNameText.text = selectText;
     }
 
     public void ShowUnconnectedText() {
         SetBattler(null);
+        battlerNameText.color = unconnectedTextColor;
         battlerNameText.text = unconnectedText;
     }
 
@@ -58,6 +61,7 @@ public class CharSelectorUI : MonoBehaviour
     /// </summary>
     public async void ShowDisconnectedText() {
         SetBattler(null);
+        battlerNameText.color = unconnectedTextColor;
         battlerNameText.text = disconnectedText;
         await Awaitable.WaitForSecondsAsync(3.0f);
         ShowUnconnectedText();
@@ -72,6 +76,7 @@ public class CharSelectorUI : MonoBehaviour
         if (battler) {
             battlerPortrait.sprite = battler.sprite;
             portriatRectTransform.anchoredPosition = defaultPos + battler.portraitOffset;
+            battlerNameText.color = connectedTextColor;
             battlerNameText.text = battler.displayName;
             SetLockedVisual();
         } else {
