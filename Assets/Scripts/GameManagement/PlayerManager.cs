@@ -72,4 +72,32 @@ public class PlayerManager : MonoBehaviour {
         players.Remove(player);
         Debug.Log("Removed player with ID "+player.playerId.Value+" and board index "+player.boardIndex.Value);
     }
+
+    /// <summary>
+    /// To be called when the character scene is loaded from another scene. 
+    /// Attaches players to selectors based on their current board index.
+    /// </summary>
+    public void AttachPlayersToSelectors() {
+        Debug.Log("Attaching players to selectors");
+        foreach (var player in players) {
+            player.AttachToCharSelector();
+        }
+    }
+
+    /// <summary>
+    /// To be called when the battle scene is loaded from another scene.
+    /// Attaches players to boards based on their current board index.
+    /// </summary>
+    public void AttachPlayersToBoards() {
+        Debug.Log("Attaching players to boards");
+        foreach (var player in players) {
+            player.AttachToBattleBoard();
+        }
+    }
+
+    public void EnableBattleInputs() {
+        foreach (var player in players) {
+            player.EnableBattleInputs();
+        }
+    }
 }

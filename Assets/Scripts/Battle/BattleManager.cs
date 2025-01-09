@@ -75,6 +75,9 @@ public class BattleManager : MonoBehaviour
         GameManager.Instance.battleData = battleData;
 
         InitializeBattle();
+
+        GameManager.Instance.playerManager.AttachPlayersToBoards();
+        GameManager.Instance.playerManager.EnableBattleInputs();
     }
 
     /// <summary>

@@ -115,9 +115,8 @@ public class Player : NetworkBehaviour {
 
         Debug.Log("Assigning player with ID "+playerId.Value+" to board number "+current+" (previous: "+previous+")");
 
-        // Assign player to the charselector of the given index
-        CharSelector selector = CharSelectManager.Instance.GetCharSelector(boardIndex.Value);
-        selector.AssignPlayer(this);
+        // Assign player to the charselector of the newly set board index
+        AttachToCharSelector();
     }
 
     public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
@@ -155,5 +154,19 @@ public class Player : NetworkBehaviour {
         // await Awaitable.NextFrameAsync();
         Debug.Log("Disabled battle inputs on "+this);
         playerInput.actions.FindActionMap("Battle", true).Disable();
+    }
+
+    public void AttachToCharSelector() {
+        var selector = CharSelectManager.Instance.GetCharSelector(boardIndex.Value);
+        charSelectInputHandler.SetCharSelector(selector);
+        selector.AssignPlayer(this);
+    }
+
+    /// <summary>
+    /// For use in the battle scene. Attach inputs to the board with this player's current boardIndex.
+    /// </summary>
+    public void AttachToBattleBoard() {
+        var board = BattleManager.Instance.GetBoardByIndex(boardIndex.Value);
+        battleInputHandler.SetBoard(board);
     }
 }

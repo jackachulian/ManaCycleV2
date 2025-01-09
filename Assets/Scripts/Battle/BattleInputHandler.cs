@@ -21,6 +21,10 @@ public class BattleInputHandler : MonoBehaviour
     }
     private AnalogMoveDirection analogDirectionPressed = AnalogMoveDirection.NONE;
 
+    public void SetBoard(Board board) {
+        this.board = board;
+    }
+
     public void OnAnalogMove(InputValue value) {
         Vector2 inputVector = value.Get<Vector2>();
         AnalogMoveDirection newDirection;

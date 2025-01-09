@@ -47,6 +47,7 @@ public class Cursor : MonoBehaviour
     }
 
     public void SetPosition(Vector2 position) {
+        if (locked) return;
         cursorMovement.SetPosition(position);
     }
 }
