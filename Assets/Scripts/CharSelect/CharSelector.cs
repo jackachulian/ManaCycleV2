@@ -49,6 +49,10 @@ public class CharSelector : MonoBehaviour {
     public void AssignPlayer(Player player) {
         this.player = player;
         if (player) {
+            if (!ui) {
+                Debug.LogError("UI not found");
+                return;
+            }
             ui.ShowSelectText();
             ui.UpdatePlayerData(player);
             cursor.Show();

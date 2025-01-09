@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour {
         networkManager = GetComponent<NetworkManager>();
         playerManager = GetComponent<PlayerManager>();
         playerInputManager = GetComponent<PlayerInputManager>();
+        playerInputManager.enabled = false;
     }
 
     /// <summary>
@@ -121,7 +122,6 @@ public class GameManager : MonoBehaviour {
     /// <param name="gameConnectionType">The type of connection used to connect with other players</param>
     /// <param name="host">Start host if true, start client if false (should only be false if connecting to another player in online mode)</param>
     public void StartGameHost(GameConnectionType gameConnectionType) {
-        // TODO: pass any other per-game settings needed here, such as the solo mode level
         // Network manager needed for GameManager to work properly
         if (!NetworkManager.Singleton) {
             Debug.LogError("Trying to start a game, but there is no NetworkManager present!");
@@ -135,9 +135,10 @@ public class GameManager : MonoBehaviour {
         }
 
         _currentConnectionType = gameConnectionType;
+        _currentGameState = GameState.CharSelect;
         Debug.Log("Starting a game as a host with connection type "+_currentConnectionType+"...");
 
-        // Start the approprite player connection manager based on the connection type of the game
+        // Start the appropriate player connection manager based on the connection type of the game
         if (gameConnectionType == GameConnectionType.OnlineMultiplayer) {
             serverPlayerConnectionManager = new OnlinePlayerConnectionManager();
             // Start a host if in online mode; so this client can have its own player
@@ -147,6 +148,7 @@ public class GameManager : MonoBehaviour {
             serverPlayerConnectionManager = GetComponent<LocalPlayerConnectionManager>();
             // Start server, because this client shouldnt have just one player, but rather a player for each device
             NetworkManager.Singleton.StartServer();
+            playerInputManager.enabled = true;
         }
         else {
             serverPlayerConnectionManager = new SingleplayerConnectionManager();
@@ -159,7 +161,31 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
+        CharSelectManager.Instance.ShowCharSelectMenu();
         serverPlayerConnectionManager.StartListeningForPlayers();
+    }
+
+    /// <summary>
+    /// Join another online game as a client.
+    /// Online multiplayer only.
+    /// </summary>
+    public void JoinGameClient() {
+        _currentConnectionType = GameConnectionType.OnlineMultiplayer;
+
+        if (!NetworkManager.Singleton) {
+            Debug.LogError("Trying to join a game, but there is no NetworkManager present!");
+            return;
+        }
+
+        if (NetworkManager.Singleton.IsListening) {
+            Debug.LogError("Trying to join a game, but network manager is already listening, a game may already be in progress!");
+            return;
+        }
+
+        Debug.Log("Joining an online game...");
+
+        NetworkManager.Singleton.StartClient();
+        CharSelectManager.Instance.ShowCharSelectMenu();
     }
 
     public void StartListening() {
@@ -187,6 +213,7 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
+        playerInputManager.enabled = false;
         NetworkManager.Singleton.Shutdown();
 
         if (serverPlayerConnectionManager != null) {
