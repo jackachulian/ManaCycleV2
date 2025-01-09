@@ -10,7 +10,7 @@ public class Cursor : MonoBehaviour
     public event Action<CharButton> onCharButtonHovered;
 
     [SerializeField] private CursorMovement cursorMovement;
-    [SerializeField] public CursorUIInteractor interactor;
+    [SerializeField] private CursorUIInteractor interactor;
 
     public bool locked {get; private set;} = false;
 
@@ -19,6 +19,10 @@ public class Cursor : MonoBehaviour
         this.locked = locked;
         cursorMovement.enabled = !locked;
         interactor.enabled = !locked;
+    }
+
+    public void SetPlayer(Player player) {
+        interactor.SetPlayer(player);
     }
 
     /// <summary>

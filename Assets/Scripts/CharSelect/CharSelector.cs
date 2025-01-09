@@ -49,6 +49,7 @@ public class CharSelector : MonoBehaviour {
         this.player = player;
         player.charSelectInputHandler.SetCharSelector(this);
         ui.ShowSelectText();
+        cursor.SetPlayer(player);
     }
 
     /// <summary>

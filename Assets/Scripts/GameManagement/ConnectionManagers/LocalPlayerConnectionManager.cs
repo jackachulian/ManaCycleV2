@@ -44,6 +44,6 @@ public class LocalPlayerConnectionManager : IServerPlayerConnectionManager {
     public void PlayerLeft(PlayerInput playerInput) {
         Debug.Log("PlayerInput left locally: "+playerInput);
         Player player = playerInput.GetComponent<Player>();
-        player.GetComponent<NetworkObject>().Despawn();
+        player.GetComponent<NetworkObject>().Despawn(destroy: true);
     }
 }

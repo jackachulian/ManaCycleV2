@@ -1,7 +1,5 @@
 using Unity.Collections;
 using Unity.Netcode;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -57,7 +55,6 @@ public class Player : NetworkBehaviour {
         charSelectInputHandler = GetComponent<CharSelectInputHandler>();
         battleInputHandler = GetComponent<BattleInputHandler>();
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
-        EnableBattleInputs();
         boardIndex.OnValueChanged += OnBoardIndexChanged;
     }
 
@@ -71,6 +68,14 @@ public class Player : NetworkBehaviour {
             EnableUserInput();
         } else {
             DisableUserInput();
+        }
+
+        // only enable the battle input upon joining if not in the charselect menu
+        // battle inputs will be enabled when leaving this scene to go to the battle scene
+        if (GameManager.Instance.currentGameState != GameManager.GameState.CharSelect) {
+            EnableBattleInputs();
+        } else {
+            DisableBattleInputs();
         }
 
         // If this is the server, add to the server player manager
@@ -110,18 +115,25 @@ public class Player : NetworkBehaviour {
     }
 
     public void EnableUserInput() {
+        Debug.Log("Enabling user input on "+this);
         playerInput.enabled = true;
     }
 
     public void DisableUserInput() {
+        Debug.Log("Disabling user input on "+this);
         playerInput.enabled = false;
     }
 
-    public void EnableBattleInputs() {
-        playerInput.actions.FindActionMap("Battle").Enable();
+    public async void EnableBattleInputs() {
+        // has to be after a delay because unity is jank
+        await Awaitable.NextFrameAsync();
+        Debug.Log("Enabled battle inputs on "+this);
+        playerInput.actions.FindActionMap("Battle", true).Enable();
     }
 
-    public void DisableBattleInputs() {
-        playerInput.actions.FindActionMap("Battle").Disable();
+    public async void DisableBattleInputs() {
+        await Awaitable.NextFrameAsync();
+        Debug.Log("Disabled battle inputs on "+this);
+        playerInput.actions.FindActionMap("Battle", true).Disable();
     }
 }

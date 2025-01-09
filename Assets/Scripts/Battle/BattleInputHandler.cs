@@ -7,7 +7,10 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class BattleInputHandler : MonoBehaviour
 {
-    public Board board;
+    /// <summary>
+    /// The board this player is controlling.
+    /// </summary>
+    public Board board {get; private set;}
 
     enum AnalogMoveDirection {
         NONE,

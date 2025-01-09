@@ -9,7 +9,7 @@ public class CursorUIInteractor : MonoBehaviour
 {
     private GraphicRaycaster graphicRaycaster;
     private bool submitPressed;
-    private List<GameObject> lastFrameResults = new();
+    private List<GameObject> lastFrameResults;
 
     // Player that can be associated with inputs.
     private Player player;
@@ -22,24 +22,25 @@ public class CursorUIInteractor : MonoBehaviour
     // public event OnCursorReturnHandler OnCursorReturn;
 
     // called by menu
-    public void Initialize()
+    void Start()
     {
         // place self under canvas if spawned by input manager
         Transform canvas = GameObject.Find("Canvas").transform;
         transform.SetParent(canvas, false);
-        graphicRaycaster = GetComponentInParent<GraphicRaycaster>();
-    }
 
-    /// <summary>
-    /// Make it so clicks from this cursor are associated with a player ID.
-    /// </summary>
-    public void SetPlayer(Player player) {
-        this.player = player;
+        graphicRaycaster = GameObject.Find("Canvas").GetComponent<GraphicRaycaster>();
+        if (!graphicRaycaster) {
+            Debug.LogError("Graphic raycaster not found in scene; cursor will not work properly!");
+        }
+
+        lastFrameResults = new List<GameObject>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!graphicRaycaster) return;
+
         PointerEventData pointer = new (EventSystem.current) {position = transform.position};
 
         List<RaycastResult> raycastResults = new List<RaycastResult>();
@@ -55,7 +56,10 @@ public class CursorUIInteractor : MonoBehaviour
             
             ICursorPressable pressable = r.GetComponent<ICursorPressable>();
             if (pressable != null) {
+                Debug.Log("Pressing pressable "+r);
                 pressable.OnCursorPressed(player);
+            } else {
+                Debug.Log("Pressed a non-pressable object: "+r);
             }
         });
         
@@ -68,15 +72,26 @@ public class CursorUIInteractor : MonoBehaviour
         {
             ExecuteEvents.Execute(r, pointer, ExecuteEvents.pointerEnterHandler);
             
-            ICursorHoverable pressable = r.GetComponent<ICursorHoverable>();
-            if (pressable != null) {
-                pressable.OnCursorHovered(player);
+            ICursorHoverable hoverable = r.GetComponent<ICursorHoverable>();
+            if (hoverable != null) {
+                Debug.Log("Hovering hoverable "+r);
+                hoverable.OnCursorHovered(player);
+            } else {
+                Debug.Log("Hovered a non-hoverable object: "+r);
             }
         });
 
         submitPressed = false;
         lastFrameResults = new List<GameObject>(results);
     }
+
+    /// <summary>
+    /// Make it so clicks from this cursor are associated with a player ID.
+    /// </summary>
+    public void SetPlayer(Player player) {
+        this.player = player;
+    }
+
 
     /// <summary>
     /// Send a submit event to the hovered object(s?).
