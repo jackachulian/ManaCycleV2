@@ -120,6 +120,7 @@ public class CharSelectorUI : MonoBehaviour
     public void OpenOptions(MultiplayerEventSystem multiplayerEventSystem)
     {
         optionsWindow.SetActive(true);
+        battlerNameText.enabled = false;
         multiplayerEventSystem.SetSelectedGameObject(firstOption);
         multiplayerEventSystem.enabled = true;
     }
@@ -127,6 +128,7 @@ public class CharSelectorUI : MonoBehaviour
     public void CloseOptions(MultiplayerEventSystem multiplayerEventSystem)
     {
         optionsWindow.SetActive(false);
+        battlerNameText.enabled = true;
         multiplayerEventSystem.SetSelectedGameObject(null);
         multiplayerEventSystem.enabled = false;
     }

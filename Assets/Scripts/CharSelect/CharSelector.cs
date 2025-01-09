@@ -114,7 +114,6 @@ public class CharSelector : MonoBehaviour {
         Debug.Log("Character choice confirmed");
 
         selectedBattler = battler;
-        ui.characterChoiceConfirmed = true;
         ui.SetBattler(battler);
         OpenOptions();
     }
@@ -138,6 +137,8 @@ public class CharSelector : MonoBehaviour {
         ui.CloseOptions(player.multiplayerEventSystem);
         LockCursor();
         state = CharSelectorState.Ready;
+        ui.characterChoiceConfirmed = true;
+        ui.SetLockedVisual();
         ui.ShowReadyVisual();
     }
 

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 
-public class CharButton : Selectable, ICursorHoverable, ICursorPressable
+public class CharButton : Button, ICursorHoverable, ICursorPressable
 {
     [SerializeField] public Battler battler;
     [SerializeField] private Image charImage;
