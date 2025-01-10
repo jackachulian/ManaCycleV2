@@ -71,7 +71,7 @@ public class LobbyManager : MonoBehaviour {
             };
             createdLobby = await LobbyService.Instance.CreateLobbyAsync("Lobby", 4, options);
             joinedLobby = createdLobby;
-            LobbyHeartbeat(createdLobby);
+            LobbyHeartbeat();
 
             connectionMenuUi.ShowStatus("Creating Relay allocation...");
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(4);
@@ -111,10 +111,10 @@ public class LobbyManager : MonoBehaviour {
     }
 
     // Send a heartbeat every 15 seconds to ensure the lobby doesn't time out (do this on the host)
-    public async void LobbyHeartbeat(Lobby lobby) {
+    public async void LobbyHeartbeat() {
         
-        while (lobby != null) {
-            await LobbyService.Instance.SendHeartbeatPingAsync(lobby.Id);
+        while (joinedLobby != null) {
+            await LobbyService.Instance.SendHeartbeatPingAsync(joinedLobby.Id);
             await Task.Delay(15000);
         }
     }

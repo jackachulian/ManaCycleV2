@@ -7,7 +7,7 @@ using UnityEngine;
 public class CharSelectNetworkBehaviour : NetworkBehaviour {
     private CharSelectManager charSelectManager;
 
-    void Awake() {
+    public override void OnNetworkSpawn() {
         charSelectManager = GetComponent<CharSelectManager>();
 
         // If this is the server, listen for board readiness changes to know when to check if the game can be started

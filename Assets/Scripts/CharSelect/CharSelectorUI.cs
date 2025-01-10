@@ -123,7 +123,6 @@ public class CharSelectorUI : MonoBehaviour
                 MultiplayerEventSystem multiplayerEventSystem = charSelector.player.GetComponent<MultiplayerEventSystem>();
                 multiplayerEventSystem.SetSelectedGameObject(null);
                 multiplayerEventSystem.SetSelectedGameObject(optionsFirstSelected);
-                Debug.Log("Selecting first option");
             }
         } else {
             optionsWindow.SetActive(false);
