@@ -20,7 +20,7 @@ public class CharButtonList : MonoBehaviour {
     }
 
     public Battler GetBattlerByIndex(int index) {
-        if (index > 0) {
+        if (index >= 0) {
             return battlers[index];
         } else {
             return null;

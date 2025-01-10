@@ -907,6 +907,14 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 36
       objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3279850047
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1466945741
+      objectReference: {fileID: 0}
     - target: {fileID: 3356233329121676604, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2359,11 +2367,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: _currentGameState
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: _currentConnectionType
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4894162350889392540, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2630,13 +2638,17 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1834403901459994286, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
+    - target: {fileID: 2925589484961530873, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: m_fontSize
+      value: 96
       objectReference: {fileID: 0}
-    - target: {fileID: 1834403901459994286, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1297507865
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1466945741
       objectReference: {fileID: 0}
     - target: {fileID: 3387177900563759932, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_Color.b
@@ -3730,6 +3742,14 @@ PrefabInstance:
     - target: {fileID: 1834403901459994286, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 223790283
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1466945741
       objectReference: {fileID: 0}
     - target: {fileID: 3356233329121676604, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_Sprite
@@ -5798,6 +5818,14 @@ PrefabInstance:
     - target: {fileID: 2329197564177166358, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_fontSize
       value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1880063664
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118311148940567118, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1466945741
       objectReference: {fileID: 0}
     - target: {fileID: 3356233329121676604, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_Sprite

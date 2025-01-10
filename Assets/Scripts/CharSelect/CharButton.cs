@@ -3,12 +3,15 @@ using Battle;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using Unity.Netcode;
 
 public class CharButton : Button, ICursorHoverable, ICursorPressable
 {
     [SerializeField] public Battler battler;
     [SerializeField] private Image charImage;
     [SerializeField] private Image gradient;
+
+    
 
     /// <summary>
     /// Assigned by CharButtonList. Used to tell other clients that this character in the list was selected.
@@ -34,7 +37,11 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     {
         if (player) {
             CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
-            charSelector.SetDisplayedBattler(battler);
+            if (charSelector.IsOwner) {
+                charSelector.selectedBattlerIndex.Value = index;
+            } else {
+                Debug.LogWarning("Non-owned player hovered a button");
+            }
         }
     }
 
@@ -42,27 +49,12 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     {
         if (player) {
             CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
-            if (charSelector.state == CharSelector.CharSelectorState.ChoosingCharacter) {
-                charSelector.ConfirmCharacterChoice(battler);
-            } else if (charSelector.state == CharSelector.CharSelectorState.Options) {
-                // if the character the player chose before the options menu was clicked, confirm the options
-                if (charSelector.selectedBattler == battler) {
-                    charSelector.ConfirmOptions();
-                } 
-                // otherwise, dont do anything
+            if (charSelector.IsOwner) {
+                charSelector.selectedBattlerIndex.Value = index;
+                charSelector.characterChosen.Value = true;
+            } else {
+                Debug.LogWarning("Non-owned player pressed a button");
             }
         }
     }
-
-    // /// <summary>
-    // /// Allows mouse clicks to also interact with this object.
-    // /// </summary>
-    // public override void OnPointerDown(PointerEventData eventData)
-    // {
-    //     base.OnPointerDown(eventData);
-
-    //     var player = eventData.currentInputModule.gameObject.GetComponent<Player>();
-        
-    //     OnCursorPressed(player);
-    // }
 }

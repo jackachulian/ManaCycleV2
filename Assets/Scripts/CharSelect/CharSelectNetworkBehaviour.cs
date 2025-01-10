@@ -9,26 +9,39 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
 
     void Awake() {
         charSelectManager = GetComponent<CharSelectManager>();
-        foreach (var selector in charSelectManager.charSelectors) {
-            selector.onStateChanged += ServerStartIfAllReady;
+
+        // If this is the server, listen for board readiness changes to know when to check if the game can be started
+        if (NetworkManager.Singleton.IsServer) {
+            foreach (var selector in charSelectManager.charSelectors) {
+                selector.optionsChosen.OnValueChanged += OnAnyBoardReadinessChanged;
+            }
         }
+    }
+
+    public void OnAnyBoardReadinessChanged(bool previous, bool current) {
+        ServerStartIfAllReady();
     }
 
     public async void ServerStartIfAllReady() {
         // Only try to start the game if this is the server/host
-        if (!NetworkManager.Singleton.IsServer) return;
+        if (!NetworkManager.Singleton.IsServer) {
+            Debug.LogError("Only the server can attempt to start the game!");
+            return;
+        }
 
         // Check that there are at least 2 players and there are no un-ready players
         int readyCount = 0;
 
         foreach (var selector in charSelectManager.charSelectors) {
-            if (selector.IsPlayerConnected()) {
-                if (selector.IsReady()) {
+            if (selector.player) {
+                if (selector.optionsChosen.Value) {
                     readyCount++;
                 } else {
                     // a connected player is not ready; stop checking
                     return;
                 }
+            } else {
+                // don't check selectors that don't have any player controlling them
             }
         }
 

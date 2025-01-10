@@ -11,141 +11,167 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class CharSelectorUI : MonoBehaviour
 {
+    /// <summary>
+    /// The cursor that belongs to this charselector. There is one attached to each charselector.
+    /// Only enable this if a local player is controlling this char selector, otherwise it isn't needed.
+    /// </summary>
+    [SerializeField] private Cursor _cursor;
+    public Cursor cursor => _cursor;
+
+    [Header("Main UI")]
     [SerializeField] private Image battlerPortrait;
     [SerializeField] private Image background;
     [SerializeField] private TMP_Text usernameText;
+    [SerializeField] private TMP_Text playerIdText; // only for debugging, shouldnt be in full release
     [SerializeField] [FormerlySerializedAs("nameText")] private TMP_Text battlerNameText;
+
+    [Header("Status Strings")]
     [SerializeField] private string unconnectedLocalText = "<Press Button To Connect>";
     [SerializeField] private string unconnectedOnlineText = "Waiting for players...";
     [SerializeField] private string disconnectedText = "Disconnected";
-    [SerializeField] private string selectText = "Select a Character";
-    [SerializeField] private string selectingText = "Selecting...";
-    [SerializeField] private Color connectedTextColor, unconnectedTextColor;
+    [SerializeField] private string localSelectText = "Select a Character";
+    [SerializeField] private string onlineSelectText = "Selecting...";
+
+    [Header("Colors")]
+    [SerializeField] private Color connectedTextColor;
+    [SerializeField] private Color unconnectedTextColor;
+
+    [Header("Menus")]
     [SerializeField] private GameObject optionsWindow;
     [SerializeField] private GameObject readyWindow;
-    [SerializeField] private GameObject firstOption;
+    [SerializeField] [FormerlySerializedAs("firstOption")] private GameObject optionsFirstSelected;
+
+
     private RectTransform portriatRectTransform;
     private Vector2 defaultPos;
+    private CharSelector charSelector;
 
-
-    /// <summary>
-    /// true if choice locked in, false if still moving the cursor to choose a character
-    /// </summary>
-    public bool characterChoiceConfirmed {get; set;} = false;
 
     void Awake()
     {
+        charSelector = GetComponent<CharSelector>();
         portriatRectTransform = battlerPortrait.GetComponent<RectTransform>();
         defaultPos = portriatRectTransform.anchoredPosition;
     }
-
-    void Start()
-    {
-        SetBattler(null);
-        ShowUnconnectedText();
-        UpdatePlayerData(null);
-    }
-
-    public void ShowSelectText() {
-        SetBattler(null);
-        battlerNameText.color = connectedTextColor;
-        battlerNameText.text = selectText;
-    }
-
-    public void ShowSelectingText() {
-        SetBattler(null);
-        battlerNameText.color = connectedTextColor;
-        battlerNameText.text = selectingText;
-    }
-
-    public void ShowUnconnectedText() {
-        SetBattler(null);
-        battlerNameText.color = unconnectedTextColor;
-        battlerNameText.text = GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer ? unconnectedOnlineText :  unconnectedLocalText;
+    
+    void Start() {
+        // when starting, call OnAssignedPlayer while there is no player assigned so that graphics show no player and no selected battler
+        OnAssignedPlayer();
     }
 
     /// <summary>
-    /// Show the disconnected text, then show the unconnected text ("Press button to join") after a delay
+    /// Call this whenever a new player is assigned or a player is removed.
     /// </summary>
-    public async void ShowDisconnectedText() {
-        SetBattler(null);
-        battlerNameText.color = unconnectedTextColor;
-        battlerNameText.text = disconnectedText;
-        await Awaitable.WaitForSecondsAsync(3.0f);
-        ShowUnconnectedText();
+    public void OnAssignedPlayer() {
+        // If there is a player and the client owns the player, enable the cursor, otherwise disable it.
+        if (charSelector.player && charSelector.player.IsOwner)  {
+            cursor.gameObject.SetActive(true);
+            cursor.SetPlayer(charSelector.player);
+        } else {
+            cursor.gameObject.SetActive(false);
+            cursor.SetPlayer(null);
+        }
+
+        Debug.Log("Updating UI after player assign!");
+
+        UpdatePlayerName();
+        UpdateSelectedBattler();
+        UpdateReadinessStatus();
     }
 
     /// <summary>
-    /// Show a battler on this charselector, or show nothing if battler is null.
+    /// Call this whenever the selected battler index of the charselector changes.
     /// </summary>
-    /// <param name="battler">the battler to show the portrait and name of, or null to show no battler</param>
-    public void SetBattler(Battler battler)
-    {
+    public void UpdateSelectedBattler() {
+        Battler battler = CharSelectManager.Instance.GetBattlerByIndex(charSelector.selectedBattlerIndex.Value);
         if (battler) {
             battlerPortrait.sprite = battler.sprite;
             portriatRectTransform.anchoredPosition = defaultPos + battler.portraitOffset;
             battlerNameText.color = connectedTextColor;
             battlerNameText.text = battler.displayName;
-            SetLockedVisual();
+
+            // Grey out if not fully ready
+            battlerPortrait.color = new Color(1f, 1f, 1f, charSelector.optionsChosen.Value ? 1f : 0.5f);
         } else {
             battlerPortrait.sprite = null;
             battlerPortrait.color = new Color(1f, 1f, 1f, 0f);
+
+            if (charSelector.player) {
+                // Show "Select a Character" if a local palyer controls this selector
+                // show "Selecting..." if controlled by a remote player
+                battlerNameText.color = connectedTextColor;
+                battlerNameText.text = charSelector.IsOwner ? localSelectText : onlineSelectText;
+            } else {
+                battlerNameText.color = unconnectedTextColor;
+                battlerNameText.text = GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer ? unconnectedLocalText : unconnectedOnlineText;
+            }
         }
     }
 
     /// <summary>
-    /// Should be called whenever player data (username, etc) is changed.
+    /// Call this whenever the charselector's characterChosen or optionsChosen bool changes.
     /// </summary>
-    public void UpdatePlayerData(Player player) {
-        if (!player) {
+    public void UpdateReadinessStatus() {
+        // Show the options menu if character is chosen but options are not
+        if (charSelector.characterChosen.Value && !charSelector.optionsChosen.Value) {
+            optionsWindow.SetActive(true);
+            battlerNameText.enabled = false;
+
+            // If player is locally controlled, select the first option with the player's event system 
+            // (may want to do after 1 frame delay because the event system is dumb)
+            if (charSelector.IsOwner && charSelector.player) {
+                MultiplayerEventSystem multiplayerEventSystem = charSelector.player.GetComponent<MultiplayerEventSystem>();
+                multiplayerEventSystem.SetSelectedGameObject(null);
+                multiplayerEventSystem.SetSelectedGameObject(optionsFirstSelected);
+                Debug.Log("Selecting first option");
+            }
+        } else {
+            optionsWindow.SetActive(false);
+            battlerNameText.enabled = true;
+        }
+
+        if (charSelector.optionsChosen.Value) {
+            readyWindow.SetActive(true);
+        } else {
+            readyWindow.SetActive(false);
+        }
+
+        // Only check for cursor unlock if this player is on the local client, otherwise they won't use a cursor here if they are a remote player
+        if (charSelector.IsOwner) {
+            // Cursor is only unlocked (moveable) if character not already selected
+            if (!charSelector.characterChosen.Value) {
+                cursor.SetLocked(false);
+            } else {
+                cursor.SetLocked(true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Should be called whenever player data (username, etc) is changed, or a player is assigned or unassigned.
+    /// </summary>
+    public void UpdatePlayerName() {
+        if (!charSelector.player) {
             usernameText.text = "";
+            playerIdText.text = "";
             return;
         }
 
+        playerIdText.text = "ID: "+charSelector.player.playerId.Value;
+
         // local multiplayer - show the playernumber and the device name, may change to just player number
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer) {
-            int playerNumber = player.playerInput.playerIndex + 1;
-            var deviceName = player.playerInput.devices[0].shortDisplayName;
-            if (deviceName == null || deviceName == "") deviceName = player.playerInput.devices[0].displayName;
-            if (deviceName == null || deviceName == "") deviceName = player.playerInput.devices[0].name;
+            int playerNumber = charSelector.player.playerInput.playerIndex + 1;
+            var deviceName = charSelector.player.playerInput.devices[0].shortDisplayName;
+            if (deviceName == null || deviceName == "") deviceName = charSelector.player.playerInput.devices[0].displayName;
+            if (deviceName == null || deviceName == "") deviceName = charSelector.player.playerInput.devices[0].name;
             if (deviceName == "Mouse") deviceName = "Keyboard";
             usernameText.text = "P"+playerNumber+" - "+deviceName;
         }
-    }
 
-    /// <summary>
-    /// Display the portrait differently based on whether or not the player has locked in their player choice.
-    /// </summary>
-    public void SetLockedVisual()
-    {
-        battlerPortrait.color = new Color(1f, 1f, 1f, characterChoiceConfirmed ? 1f : 0.5f);
-    }
-
-    /// <summary>
-    /// Open the options menu and have the player select the first option.
-    /// </summary>
-    /// <param name="multiplayerEventSystem">the multiplayer event system of the player using the options menu</param>
-    public void OpenOptions(MultiplayerEventSystem multiplayerEventSystem)
-    {
-        optionsWindow.SetActive(true);
-        battlerNameText.enabled = false;
-        multiplayerEventSystem.SetSelectedGameObject(firstOption);
-        multiplayerEventSystem.enabled = true;
-    }
-
-    public void CloseOptions(MultiplayerEventSystem multiplayerEventSystem)
-    {
-        optionsWindow.SetActive(false);
-        battlerNameText.enabled = true;
-        multiplayerEventSystem.SetSelectedGameObject(null);
-        multiplayerEventSystem.enabled = false;
-    }
-
-    public void ShowReadyVisual() {
-        readyWindow.SetActive(true);
-    }
-
-    public void HideReadyVisual() {
-        readyWindow.SetActive(false);
+        else if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
+            // TODO: implement this!
+            usernameText.text = "username123";
+        }
     }
 }

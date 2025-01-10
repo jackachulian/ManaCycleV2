@@ -25,16 +25,7 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public NetworkVariable<FixedString128Bytes> username = new NetworkVariable<FixedString128Bytes>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-    /// <summary>
-    /// ID of the current battler selected, or null for none selected.
-    /// </summary>
-    public NetworkVariable<int> selectedBattler = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-    /// <summary>
-    /// True when this player is done choosing their character.
-    /// (The client can write to this value, not just the server)
-    /// </summary>
-    public NetworkVariable<CharSelector.CharSelectorState> charSelectorState = new NetworkVariable<CharSelector.CharSelectorState>(CharSelector.CharSelectorState.ChoosingCharacter, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     /// <summary>
     /// the Unity engine's Input System player input manager
@@ -57,7 +48,7 @@ public class Player : NetworkBehaviour {
     public MultiplayerEventSystem multiplayerEventSystem {get; private set;}
 
     private void Awake() {
-        if (!IsSpawned) {
+        if (GameManager.Instance && GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer && !IsSpawned) {
             playerInput = GetComponent<PlayerInput>();
             multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
             DisableUserInput();
@@ -71,11 +62,11 @@ public class Player : NetworkBehaviour {
         battleInputHandler = GetComponent<BattleInputHandler>();
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
 
+        playerId.OnValueChanged += OnPlayerIdChanged;
         boardIndex.OnValueChanged += OnBoardIndexChanged;
-        selectedBattler.OnValueChanged += OnSelectedBattlerChanged;
-        charSelectorState.OnValueChanged += OnCharSelectorStateChanged;
+        username.OnValueChanged += OnUsernameChanged;
 
-        playerInput.onControlsChanged += UpdateSelectorPlayerData;
+        playerInput.onControlsChanged += OnControlsChanged;
 
         // make sure this persists between the charselect and the battle scene!
         DontDestroyOnLoad(gameObject);
@@ -105,17 +96,10 @@ public class Player : NetworkBehaviour {
 
         // Call this so board index can hook to board if it is already the correct and set value upon joining the game
         OnBoardIndexChanged(-1, boardIndex.Value);
-        OnSelectedBattlerChanged(default, selectedBattler.Value);
-        OnCharSelectorStateChanged(default, charSelectorState.Value);
     }
 
     public override void OnNetworkDespawn()
     {
-        // Notify the char selector of a disconnect if a non-null char selector is assigned to this player
-        if (charSelectInputHandler.charSelector) {
-            charSelectInputHandler.charSelector.UnassignPlayer();
-        }
-
         // If this is the server, remove from the server player manager
         if (NetworkManager.Singleton.IsServer) {
             GameManager.Instance.playerManager.ServerRemovePlayer(this);
@@ -145,40 +129,35 @@ public class Player : NetworkBehaviour {
         AttachToCharSelector();
     }
 
+    /// <summary>
+    /// When player ID changes, reflect the change on the char selector
+    /// </summary>
+    public void OnPlayerIdChanged(ulong previous, ulong current) {
+        UpdateSelectorPlayerData();
+    }
+
+    /// <summary>
+    /// When username changes, reflect the change on the char selector
+    /// </summary>
     public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
-        UpdateSelectorPlayerData(playerInput);
+        UpdateSelectorPlayerData();
     }
 
-    public void OnSelectedBattlerChanged(int previous, int current) {
-        Battler battler = GetSelectedBattler();
-        if (battler) {
-            charSelectInputHandler.charSelector.SetDisplayedBattler(battler);
-        } else {
-            charSelectInputHandler.charSelector.ui.ShowSelectingText();
-        }
-    }
-
-    public void OnCharSelectorStateChanged(CharSelector.CharSelectorState previous, CharSelector.CharSelectorState current) {
-        if (current == CharSelector.CharSelectorState.ChoosingCharacter) {
-            charSelectInputHandler.charSelector.BackToCharacterChoice();
-        }
-        else if (current == CharSelector.CharSelectorState.Options) {
-            charSelectInputHandler.charSelector.OpenOptions();
-        }
+    /// <summary>
+    /// When controls change in local multiplayer, make sure to update player information so the new device can be shown
+    /// </summary>
+    public void OnControlsChanged(PlayerInput playerInput) {
+        UpdateSelectorPlayerData();
     }
 
     /// <summary>
     /// To be called whenever player specific data such as the username is changed. 
     /// If a selector is attached to the charselectinputhandler it will be updated.
     /// </summary>
-    public void UpdateSelectorPlayerData(PlayerInput playerInput) {
-        if (charSelectInputHandler.charSelector) {
-            charSelectInputHandler.charSelector.ui.UpdatePlayerData(this);
+    public void UpdateSelectorPlayerData() {
+        if (charSelectInputHandler && charSelectInputHandler.charSelector) {
+            charSelectInputHandler.charSelector.ui.UpdatePlayerName();
         }
-    }
-
-    public Battler GetSelectedBattler() {
-        return CharSelectManager.Instance.GetBattlerByIndex(selectedBattler.Value);
     }
 
     public void EnableUserInput() {
@@ -209,7 +188,7 @@ public class Player : NetworkBehaviour {
     public void AttachToCharSelector() {
         var selector = CharSelectManager.Instance.GetCharSelector(boardIndex.Value);
         charSelectInputHandler.SetCharSelector(selector);
-        selector.AssignPlayer(this);
+        if (IsOwner) selector.AssignLocalPlayer(this);
     }
 
     /// <summary>

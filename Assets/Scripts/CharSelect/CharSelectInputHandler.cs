@@ -25,7 +25,7 @@ public class CharSelectInputHandler : MonoBehaviour
         if (charSelector) charSelector.Submit();
     }
 
-    void OnCancel()
+    public void OnCancel()
     {
         if (charSelector) charSelector.Cancel();
     }
@@ -34,7 +34,7 @@ public class CharSelectInputHandler : MonoBehaviour
     {
         if (!charSelector) return;
         Vector2 inputVector = value.Get<Vector2>();
-        charSelector.MoveCursor(inputVector);
+        charSelector.ui.cursor.Move(inputVector);
     }
 
     // controlling cursor with actual mouse is buggy, disabling it for now, may re-enable later

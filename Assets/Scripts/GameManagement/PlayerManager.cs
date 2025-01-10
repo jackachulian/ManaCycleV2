@@ -27,7 +27,7 @@ public class PlayerManager : MonoBehaviour {
     public void ServerAddPlayer(Player player) {
         // Server/host only
         if (!NetworkManager.Singleton.IsServer) {
-            Debug.LogError("Only the server can add new players!");
+            Debug.LogError("Only the server/host can add new players!");
             return;
         }
 
@@ -39,7 +39,13 @@ public class PlayerManager : MonoBehaviour {
 
         int boardIndex = players.Count;
 
+        // Change the owner of the char selector the player is about to control
+        if (GameManager.Instance.currentGameState == GameManager.GameState.CharSelect) {
+            CharSelectManager.Instance.GetCharSelector(boardIndex).GetComponent<NetworkObject>().ChangeOwnership(player.OwnerClientId);
+        }
+
         // Assign the board index to be the player's index in the list
+        // With boardIndex's OnValueChanged callbacks, players will attach to their respective CharSelectors based on the index that is set by this server
         player.boardIndex.Value = boardIndex;
 
         Debug.Log("Spawned player with board index "+boardIndex);
@@ -58,7 +64,7 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     public void ServerRemovePlayer(Player player) {
         if (!NetworkManager.Singleton.IsServer) {
-            Debug.LogError("Only the server can remove players!");
+            Debug.LogError("Only the server/host can remove players!");
             return;
         }
 

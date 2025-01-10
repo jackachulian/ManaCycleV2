@@ -43,8 +43,7 @@ public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnecti
 
     // Set the player's player ID after they are spawned.
     public void OnPlayerSpawned(Player player) {
-        ulong playerId = (ulong)player.GetComponent<PlayerInput>().devices[0].deviceId; // use device ID as the player ID
-        player.playerId.Value = playerId;
+        player.playerId.Value = (ulong)player.playerInput.playerIndex;
     }
 
     public void OnPlayerLeft(PlayerInput playerInput) {

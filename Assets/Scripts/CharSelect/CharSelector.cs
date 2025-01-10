@@ -1,5 +1,6 @@
 using System;
 using Battle;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -7,192 +8,77 @@ using UnityEngine.Assertions;
 /// Handles a char selector, locked status, etc. 
 /// Visuals should be handled by CharSelectorPortrait on this same object.
 /// </summary>
-public class CharSelector : MonoBehaviour {
-    // TODO: move locked in status and other things that need a concrete value here.
-    // Should also either move the options UI here or make a seperate behaviour for it.
-    // The cursor that belongs to this charselector. There is one attached to each charselector.
-    [SerializeField] private Cursor cursor;
+public class CharSelector : NetworkBehaviour {
+    /// <summary>
+    /// The index of the battler this player has selected
+    /// </summary>
+    public NetworkVariable<int> selectedBattlerIndex = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// True when this player has locked in their character choice
+    /// </summary>
+    public NetworkVariable<bool> characterChosen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// True when this player has locked in their options choices and is now ready to start the game
+    /// </summary>
+    public NetworkVariable<bool> optionsChosen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
 
-    public enum CharSelectorState {
-        ChoosingCharacter,
-        Options,
-        Ready
-    }
-    private CharSelectorState _state;
-    public CharSelectorState state {
-        get {return _state;} 
-        private set {
-            _state = value;
-            player.charSelectorState.Value = _state;
-            onStateChanged?.Invoke();
-        }}
-    public event Action onStateChanged;
+    public Player player {get; private set;}
 
-
-    public Battler selectedBattler {get; private set;}
-    public int selectedBattlerIndex;
-
-
-    // Player currently controlling this board as set by the CharSelectManager, or null if no player.
-    private Player player;
 
     public CharSelectorUI ui {get; private set;}
 
-    void Awake() {
+    public override void OnNetworkSpawn() {
         ui = GetComponent<CharSelectorUI>();
-        cursor.Hide();
+
+        selectedBattlerIndex.OnValueChanged += OnSelectedBattlerIndexChanged;
+        characterChosen.OnValueChanged += OnCharacterChosenChanged;
+        optionsChosen.OnValueChanged += OnOptionsChosenChanged;
     }
 
     /// <summary>
-    /// Assign a player to control this char selector.
-    /// Null to have no player assigned to this selector
+    /// Call this when this client's local player has been assigned to control this charselector.
     /// </summary>
-    public void AssignPlayer(Player player) {
+    public void AssignLocalPlayer(Player player) {
+        // if a player was already assigned, make sure to do any unassign logic needed here!
+
         this.player = player;
-        if (player) {
-            if (!ui) {
-                Debug.LogError("UI not found");
-                return;
-            }
-            ui.ShowSelectText();
-            ui.UpdatePlayerData(player);
-            cursor.Show();
-            cursor.SetPlayer(player);
-        } else {
-            cursor.Hide();
-            ui.ShowUnconnectedText();
-        }
+        Debug.Log("Assigned "+player+" to char selector "+this);
+        ui.OnAssignedPlayer();
     }
 
     /// <summary>
-    /// Called by a Player when it disconnects from a char selector.
-    /// </summary>
-    public void UnassignPlayer() {
-        BackToCharacterChoice();
-        ui.ShowDisconnectedText();
-        ui.UpdatePlayerData(null);
-    }
-
-    /// <summary>
-    /// Unlock the cursor, hide the options menu, and allow player to choose a character with the on-screen cursor
-    /// </summary>
-    public void UnlockCursor() {
-        cursor.SetLocked(false);
-    }
-
-    public void LockCursor() {
-        cursor.SetLocked(true);
-    }
-
-    public void MoveCursor(Vector2 inputVector)
-    {
-        cursor.Move(inputVector);
-    }
-
-    public void SetCursorPosition(Vector2 position)
-    {
-        cursor.SetPosition(position);
-    }
-
-    /// <summary>
-    /// When the submit action is pressed by the player
-    /// Use the cursor if it's unlocked.
+    /// Called when a LOCAL player pressed confirm to lock in their current choices (character or options).
     /// </summary>
     public void Submit() {
-        // Ready up when pressing submit while the options menu is open
-        if (state == CharSelectorState.Options) {
-            ConfirmOptions();
-        } 
-        // otherwise, click with the cursor if it is not locked due to already being ready
-        else if (!cursor.locked) {
-            cursor.Submit();
+        if (characterChosen.Value) {
+            optionsChosen.Value = true;
+        } else if (selectedBattlerIndex.Value >= 0) {
+            characterChosen.Value = true;
         }
     }
 
     /// <summary>
-    /// Called when the player pressed a character with their cursor, confirming their choice. Open the options menu next.
-    /// </summary>
-    public void ConfirmCharacterChoice(Battler battler) {
-        // don't do anything when not choosing a character when this is pressed
-        if (state != CharSelectorState.ChoosingCharacter) return;
-        
-        Debug.Log("Character choice confirmed");
-
-        selectedBattler = battler;
-        player.selectedBattler.Value = selectedBattlerIndex;
-        ui.SetBattler(battler);
-        OpenOptions();
-    }
-
-    public void OpenOptions() {
-        Debug.Log("Options opened");
-        Assert.AreEqual(state, CharSelectorState.ChoosingCharacter);
-
-        state = CharSelectorState.Options;
-        ui.characterChoiceConfirmed = true;
-        LockCursor();
-        ui.OpenOptions(player.multiplayerEventSystem);
-        ui.SetLockedVisual();
-        ui.ShowReadyVisual();
-    }
-
-    /// <summary>
-    /// Called after player pressed submit on the options menu and confirms their selected battle settings
-    /// </summary>
-    public void ConfirmOptions() {
-        Debug.Log("Options confirmed and closed");
-        Assert.AreEqual(state, CharSelectorState.Options);
-
-
-        ui.CloseOptions(player.multiplayerEventSystem);
-        player.selectedBattler.Value = selectedBattlerIndex;
-        state = CharSelectorState.Ready;
-        ui.characterChoiceConfirmed = true;
-        LockCursor();
-        ui.SetLockedVisual();
-        ui.ShowReadyVisual();
-    }
-
-    /// <summary>
-    /// Called when player presses cancel on either the options menu or the ready state, taking them back to the character selection cursor.
+    /// Called when a LOCAL player presses the cancel button.
+    /// Go back to the character select, no matter if this player is ready or still choosing options.
     /// </summary>
     public void Cancel() {
-        BackToCharacterChoice();
+        optionsChosen.Value = false;
+        characterChosen.Value = false;
     }
 
-    public void BackToCharacterChoice() {
-        // don't do anything when already choosing a character
-        // except TODO: maybe a player can hold cancel to go back to the previous menu.
-        if (state == CharSelectorState.ChoosingCharacter) return;
-
-        Debug.Log("Going back to choosing character");
-
-        state = CharSelectorState.ChoosingCharacter;
-        ui.characterChoiceConfirmed = false;
-        ui.CloseOptions(player.multiplayerEventSystem);
-        UnlockCursor();
-        ui.HideReadyVisual();
-        ui.SetLockedVisual();
+    public void OnSelectedBattlerIndexChanged(int previous, int current) {
+        ui.UpdateSelectedBattler();
     }
 
-    public void SetDisplayedBattler(Battler battler) {
-        ui.SetBattler(battler);
+    public void OnCharacterChosenChanged(bool previous, bool current) {
+        ui.UpdateReadinessStatus();
     }
 
-    public bool IsPlayerConnected() {
-        return player != null;
-    }
-
-    public bool IsCharacterDecided() {
-        return state != CharSelectorState.ChoosingCharacter;
-    }
-
-    public bool IsOptionsDecided() {
-        return state == CharSelectorState.Ready;
-    }
-
-    public bool IsReady() {
-        return state == CharSelectorState.Ready;
+    public void OnOptionsChosenChanged(bool previous, bool current) {
+        ui.UpdateReadinessStatus();
+        ui.UpdateSelectedBattler();
     }
 }
