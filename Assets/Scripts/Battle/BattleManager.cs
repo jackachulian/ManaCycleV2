@@ -65,13 +65,6 @@ public class BattleManager : NetworkBehaviour
             Destroy(gameObject);
         }
 
-        // TESTING ONLY - create new battle data and use that in the game manager, then initialize the battle
-        BattleData battleData = new BattleData();
-        battleData.cycleUniqueColors = 5;
-        battleData.cycleLength = 7;
-        battleData.Randomize();
-        GameManager.Instance.battleData = battleData;
-
         InitializeBattle();
 
         GameManager.Instance.playerManager.AttachPlayersToBoards();

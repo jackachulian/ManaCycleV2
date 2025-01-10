@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 
     /// <summary>
     /// Battle data to use for the current game, such as the RNG seed, cycle length and color count, etc
+    /// Sent by the charselectmanager or postgamemanager before starting a new game
     /// </summary>
     public BattleData battleData;
 

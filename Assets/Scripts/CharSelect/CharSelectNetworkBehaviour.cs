@@ -60,13 +60,21 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
         if (readyCount >= 2) {
             Debug.Log("All players ready - starting game after delay!");
             await Awaitable.WaitForSecondsAsync(0.5f);
-            StartBattleRpc();
+
+            // Generate random battle data (seed) to be used for the upcoming battle, send this allong with the start game RPC
+            BattleData battleData = new BattleData();
+            battleData.cycleUniqueColors = 5;
+            battleData.cycleLength = 7;
+            battleData.Randomize();
+
+            StartBattleRpc(battleData);
         }
     }
 
     [Rpc(SendTo.Everyone)]
-    public void StartBattleRpc() {
+    public void StartBattleRpc(BattleData battleData) {
         Debug.Log("Moving to battle scene");
+        GameManager.Instance.battleData = battleData;
         NetworkManager.SceneManager.LoadScene("Battle", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }
