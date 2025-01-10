@@ -41,7 +41,7 @@ public class PlayerManager : MonoBehaviour {
 
         // Change the owner of the char selector the player is about to control
         if (GameManager.Instance.currentGameState == GameManager.GameState.CharSelect) {
-            var selectorNetworkObject = CharSelectManager.Instance.GetCharSelector(boardIndex).GetComponent<NetworkObject>();
+            var selectorNetworkObject = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex).GetComponent<NetworkObject>();
             if (selectorNetworkObject.IsSpawned) {
                 selectorNetworkObject.ChangeOwnership(player.OwnerClientId);
             } else {
@@ -91,7 +91,19 @@ public class PlayerManager : MonoBehaviour {
     public void AttachPlayersToSelectors() {
         Debug.Log("Attaching players to selectors");
         foreach (var player in players) {
-            player.AttachToCharSelector();
+            var selector = CharSelectManager.Instance.GetCharSelectorByIndex(player.boardIndex.Value);
+            if (NetworkManager.Singleton.IsServer && selector) {
+                var selectorNetworkObject = selector.GetComponent<NetworkObject>();
+                if (selectorNetworkObject.OwnerClientId != player.OwnerClientId) {
+                    if (selectorNetworkObject.IsSpawned) {
+                        selectorNetworkObject.ChangeOwnership(player.OwnerClientId);
+                    } else {
+                        selectorNetworkObject.SpawnWithOwnership(player.OwnerClientId);
+                    }
+                }
+            }
+
+            player.AttachToCharSelector(selector);
         }
     }
 
@@ -102,7 +114,19 @@ public class PlayerManager : MonoBehaviour {
     public void AttachPlayersToBoards() {
         Debug.Log("Attaching players to boards");
         foreach (var player in players) {
-            player.AttachToBattleBoard();
+            var board = BattleManager.Instance.GetBoardByIndex(player.boardIndex.Value);
+            if (NetworkManager.Singleton.IsServer && board) {
+                var boardNetworkObject = board.GetComponent<NetworkObject>();
+                if (boardNetworkObject.OwnerClientId != player.OwnerClientId) {
+                    if (boardNetworkObject.IsSpawned) {
+                        boardNetworkObject.ChangeOwnership(player.OwnerClientId);
+                    } else {
+                        boardNetworkObject.SpawnWithOwnership(player.OwnerClientId);
+                    }
+                }
+            }
+
+            player.AttachToBattleBoard(board);
         }
     }
 

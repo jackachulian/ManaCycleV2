@@ -68,7 +68,7 @@ public class CharSelectManager : MonoBehaviour
         }
     }
 
-    public CharSelector GetCharSelector(int boardIndex) {
+    public CharSelector GetCharSelectorByIndex(int boardIndex) {
         return _charSelectors[boardIndex];
     }
 

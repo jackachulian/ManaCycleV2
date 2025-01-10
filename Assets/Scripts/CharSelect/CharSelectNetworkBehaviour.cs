@@ -16,6 +16,17 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
                 selector.optionsChosen.OnValueChanged += OnAnyBoardReadinessChanged;
             }
         }
+
+        GameManager.Instance.playerManager.AttachPlayersToSelectors();
+    }
+
+    public override void OnNetworkDespawn() {
+        // If this is the server, listen for board readiness changes to know when to check if the game can be started
+        if (NetworkManager.Singleton.IsServer) {
+            foreach (var selector in charSelectManager.charSelectors) {
+                selector.optionsChosen.OnValueChanged -= OnAnyBoardReadinessChanged;
+            }
+        }
     }
 
     public void OnAnyBoardReadinessChanged(bool previous, bool current) {

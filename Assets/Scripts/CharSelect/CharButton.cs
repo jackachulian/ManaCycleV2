@@ -36,7 +36,7 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     public void OnCursorHovered(Player player)
     {
         if (player) {
-            CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
+            CharSelector charSelector = CharSelectManager.Instance.GetCharSelectorByIndex(player.boardIndex.Value);
             if (charSelector.IsOwner) {
                 charSelector.selectedBattlerIndex.Value = index;
             } else {
@@ -48,7 +48,7 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     public void OnCursorPressed(Player player)
     {
         if (player) {
-            CharSelector charSelector = CharSelectManager.Instance.GetCharSelector(player.boardIndex.Value);
+            CharSelector charSelector = CharSelectManager.Instance.GetCharSelectorByIndex(player.boardIndex.Value);
             if (charSelector.IsOwner) {
                 charSelector.selectedBattlerIndex.Value = index;
                 charSelector.characterChosen.Value = true;

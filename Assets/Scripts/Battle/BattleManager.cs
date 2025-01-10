@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Manages the current battle in the battle scene this is in.
 /// </summary>
-public class BattleManager : MonoBehaviour
+public class BattleManager : NetworkBehaviour
 {   
     public static BattleManager Instance { get; private set; }
 
@@ -52,8 +52,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public bool gameCompleted {get; private set;}
 
-    private void Awake()
-    {
+
+    public override void OnNetworkSpawn() {
         if (Instance == null)
         {
             Instance = this;
@@ -61,12 +61,10 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Duplicate GameManager spawned, destroying the newly instantiated one");
+            Debug.LogWarning("Duplicate GameManager spawned, destroying the newly instantiated one");
             Destroy(gameObject);
         }
-    }
 
-    private void Start() {
         // TESTING ONLY - create new battle data and use that in the game manager, then initialize the battle
         BattleData battleData = new BattleData();
         battleData.cycleUniqueColors = 5;

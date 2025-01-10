@@ -63,8 +63,7 @@ public class PieceManager : NetworkBehaviour {
 
     void PieceFallingUpdate() {
         // Only perform fall logic if this board is owned
-        // TODO: disabled for now while working on new gamemanager
-        // if (!IsOwner) return;
+        if (!IsOwner) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
