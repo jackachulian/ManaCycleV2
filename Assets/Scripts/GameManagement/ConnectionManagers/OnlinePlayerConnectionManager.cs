@@ -41,7 +41,7 @@ public class OnlinePlayerConnectionManager : IServerPlayerConnectionManager {
     }
 
     public void OnPlayerSpawned(Player player) {
-        
+        player.playerId.Value = player.OwnerClientId;
     }
 
     public void OnPlayerDespawned(Player player) {

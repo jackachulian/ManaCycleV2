@@ -10,11 +10,16 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     [SerializeField] private Image charImage;
     [SerializeField] private Image gradient;
 
+    /// <summary>
+    /// Assigned by CharButtonList. Used to tell other clients that this character in the list was selected.
+    /// </summary>
+    public int index {get; set;}
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
         base.Start();
-
+        
         charImage.sprite = battler.sprite;
         charImage.GetComponent<RectTransform>().anchoredPosition = battler.portraitOffset;
         gradient.material = battler.gradientMat;
@@ -49,15 +54,15 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
         }
     }
 
-    /// <summary>
-    /// Allows mouse clicks to also interact with this object.
-    /// </summary>
-    public override void OnPointerDown(PointerEventData eventData)
-    {
-        base.OnPointerDown(eventData);
+    // /// <summary>
+    // /// Allows mouse clicks to also interact with this object.
+    // /// </summary>
+    // public override void OnPointerDown(PointerEventData eventData)
+    // {
+    //     base.OnPointerDown(eventData);
 
-        var player = eventData.currentInputModule.gameObject.GetComponent<Player>();
+    //     var player = eventData.currentInputModule.gameObject.GetComponent<Player>();
         
-        OnCursorPressed(player);
-    }
+    //     OnCursorPressed(player);
+    // }
 }

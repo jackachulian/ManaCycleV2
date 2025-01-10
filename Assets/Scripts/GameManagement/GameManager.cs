@@ -171,6 +171,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void JoinGameClient() {
         _currentConnectionType = GameConnectionType.OnlineMultiplayer;
+        _currentGameState = GameState.CharSelect;
 
         if (!NetworkManager.Singleton) {
             Debug.LogError("Trying to join a game, but there is no NetworkManager present!");

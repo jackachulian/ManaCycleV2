@@ -24,12 +24,14 @@ public class CharSelector : MonoBehaviour {
         get {return _state;} 
         private set {
             _state = value;
+            player.charSelectorState.Value = _state;
             onStateChanged?.Invoke();
         }}
     public event Action onStateChanged;
 
 
     public Battler selectedBattler {get; private set;}
+    public int selectedBattlerIndex;
 
 
     // Player currently controlling this board as set by the CharSelectManager, or null if no player.
@@ -67,6 +69,7 @@ public class CharSelector : MonoBehaviour {
     /// Called by a Player when it disconnects from a char selector.
     /// </summary>
     public void UnassignPlayer() {
+        BackToCharacterChoice();
         ui.ShowDisconnectedText();
         ui.UpdatePlayerData(null);
     }
@@ -117,6 +120,7 @@ public class CharSelector : MonoBehaviour {
         Debug.Log("Character choice confirmed");
 
         selectedBattler = battler;
+        player.selectedBattler.Value = selectedBattlerIndex;
         ui.SetBattler(battler);
         OpenOptions();
     }
@@ -126,8 +130,11 @@ public class CharSelector : MonoBehaviour {
         Assert.AreEqual(state, CharSelectorState.ChoosingCharacter);
 
         state = CharSelectorState.Options;
+        ui.characterChoiceConfirmed = true;
         LockCursor();
         ui.OpenOptions(player.multiplayerEventSystem);
+        ui.SetLockedVisual();
+        ui.ShowReadyVisual();
     }
 
     /// <summary>
@@ -137,10 +144,12 @@ public class CharSelector : MonoBehaviour {
         Debug.Log("Options confirmed and closed");
         Assert.AreEqual(state, CharSelectorState.Options);
 
+
         ui.CloseOptions(player.multiplayerEventSystem);
-        LockCursor();
+        player.selectedBattler.Value = selectedBattlerIndex;
         state = CharSelectorState.Ready;
         ui.characterChoiceConfirmed = true;
+        LockCursor();
         ui.SetLockedVisual();
         ui.ShowReadyVisual();
     }
@@ -149,6 +158,10 @@ public class CharSelector : MonoBehaviour {
     /// Called when player presses cancel on either the options menu or the ready state, taking them back to the character selection cursor.
     /// </summary>
     public void Cancel() {
+        BackToCharacterChoice();
+    }
+
+    public void BackToCharacterChoice() {
         // don't do anything when already choosing a character
         // except TODO: maybe a player can hold cancel to go back to the previous menu.
         if (state == CharSelectorState.ChoosingCharacter) return;
@@ -169,6 +182,14 @@ public class CharSelector : MonoBehaviour {
 
     public bool IsPlayerConnected() {
         return player != null;
+    }
+
+    public bool IsCharacterDecided() {
+        return state != CharSelectorState.ChoosingCharacter;
+    }
+
+    public bool IsOptionsDecided() {
+        return state == CharSelectorState.Ready;
     }
 
     public bool IsReady() {

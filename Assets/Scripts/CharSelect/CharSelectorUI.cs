@@ -18,7 +18,8 @@ public class CharSelectorUI : MonoBehaviour
     [SerializeField] private string unconnectedLocalText = "<Press Button To Connect>";
     [SerializeField] private string unconnectedOnlineText = "Waiting for players...";
     [SerializeField] private string disconnectedText = "Disconnected";
-    [SerializeField] private string selectText;
+    [SerializeField] private string selectText = "Select a Character";
+    [SerializeField] private string selectingText = "Selecting...";
     [SerializeField] private Color connectedTextColor, unconnectedTextColor;
     [SerializeField] private GameObject optionsWindow;
     [SerializeField] private GameObject readyWindow;
@@ -49,6 +50,12 @@ public class CharSelectorUI : MonoBehaviour
         SetBattler(null);
         battlerNameText.color = connectedTextColor;
         battlerNameText.text = selectText;
+    }
+
+    public void ShowSelectingText() {
+        SetBattler(null);
+        battlerNameText.color = connectedTextColor;
+        battlerNameText.text = selectingText;
     }
 
     public void ShowUnconnectedText() {

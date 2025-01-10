@@ -37,10 +37,11 @@ public class CharSelectInputHandler : MonoBehaviour
         charSelector.MoveCursor(inputVector);
     }
 
-    public void OnPoint(InputValue value) {
-        if (!charSelector) return;
-        Vector2 screenPosition = value.Get<Vector2>();
-        charSelector.SetCursorPosition(screenPosition);
-    }
+    // controlling cursor with actual mouse is buggy, disabling it for now, may re-enable later
+    // public void OnPoint(InputValue value) {
+    //     if (!charSelector) return;
+    //     Vector2 screenPosition = value.Get<Vector2>();
+    //     charSelector.SetCursorPosition(screenPosition);
+    // }
 }
 

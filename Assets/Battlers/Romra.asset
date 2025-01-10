@@ -18,5 +18,5 @@ MonoBehaviour:
   portraitOffset: {x: 10, y: 0}
   gradientMat: {fileID: 2100000, guid: 29ea05b4d37861b49b71d05ef5987113, type: 2}
   mainColor: {r: 0.39607844, g: 0.65882355, b: 0.34509805, a: 1}
-  altColor: {r: 0.14901961, g: 0.39607844, b: 0.101960786, a: 1}
+  altColor: {r: 0.074136704, g: 0.3207547, b: 0.19492415, a: 1}
   gameLogo: {fileID: 0}

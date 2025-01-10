@@ -12,6 +12,7 @@ public class CharSelectManager : MonoBehaviour
 
     [SerializeField] private CharSelector[] _charSelectors;
     public CharSelector[] charSelectors => _charSelectors;
+    [SerializeField] private CharButtonList charButtonList;
     [SerializeField] private GameObject allReadyWindow;
 
 
@@ -71,6 +72,14 @@ public class CharSelectManager : MonoBehaviour
         return _charSelectors[boardIndex];
     }
 
+    /// <summary>
+    /// Returns the battler with the given ID found on the char button list, 
+    /// or null if there is no battler with that ID, or ID id empty/null.
+    /// </summary>
+    public Battler GetBattlerByIndex(int index) {
+        return charButtonList.GetBattlerByIndex(index);
+    }
+
     // TODO: maybe use animations to make a better transition between these menus
     public void ShowConnectionMenu() {
         // Use CanvasGroups instead of disabling the object so that the objects' Awake can call properly to initialize them before a battle starts
@@ -80,12 +89,14 @@ public class CharSelectManager : MonoBehaviour
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 1;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = true;
         connectionMenuUi.connectionMenuEventSystem.enabled = true;
+        connectionMenuUi.connectionMenuEventSystem.sendNavigationEvents = true;
     }
 
     public void ShowCharSelectMenu() {
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 0;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = false;
         connectionMenuUi.connectionMenuEventSystem.enabled = false;
+        connectionMenuUi.connectionMenuEventSystem.sendNavigationEvents = false;
 
 
         charSelectMenuUi.GetComponent<CanvasGroup>().alpha = 1;

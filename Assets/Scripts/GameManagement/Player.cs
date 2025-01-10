@@ -1,3 +1,4 @@
+using Battle;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -25,10 +26,15 @@ public class Player : NetworkBehaviour {
     public NetworkVariable<FixedString128Bytes> username = new NetworkVariable<FixedString128Bytes>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     /// <summary>
-    /// True when this player is ready to start the game, and false when still choosing their character/settings.
+    /// ID of the current battler selected, or null for none selected.
+    /// </summary>
+    public NetworkVariable<int> selectedBattler = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// True when this player is done choosing their character.
     /// (The client can write to this value, not just the server)
     /// </summary>
-    public NetworkVariable<bool> ready = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<CharSelector.CharSelectorState> charSelectorState = new NetworkVariable<CharSelector.CharSelectorState>(CharSelector.CharSelectorState.ChoosingCharacter, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     /// <summary>
     /// the Unity engine's Input System player input manager
@@ -50,6 +56,14 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public MultiplayerEventSystem multiplayerEventSystem {get; private set;}
 
+    private void Awake() {
+        if (!IsSpawned) {
+            playerInput = GetComponent<PlayerInput>();
+            multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
+            DisableUserInput();
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -58,13 +72,15 @@ public class Player : NetworkBehaviour {
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
 
         boardIndex.OnValueChanged += OnBoardIndexChanged;
+        selectedBattler.OnValueChanged += OnSelectedBattlerChanged;
+        charSelectorState.OnValueChanged += OnCharSelectorStateChanged;
 
         playerInput.onControlsChanged += UpdateSelectorPlayerData;
 
         // make sure this persists between the charselect and the battle scene!
         DontDestroyOnLoad(gameObject);
 
-        // only enable input if the client owns this. (always true in singleplayer, varies in multiplayer)
+        // only enable input if the client owns this player. (always true in singleplayer, varies in multiplayer)
         if (IsOwner) {
             EnableUserInput();
         } else {
@@ -86,6 +102,11 @@ public class Player : NetworkBehaviour {
 
         // call playerspawned on all clients (including host)
         GameManager.Instance.playerManager.PlayerSpawned(this);
+
+        // Call this so board index can hook to board if it is already the correct and set value upon joining the game
+        OnBoardIndexChanged(-1, boardIndex.Value);
+        OnSelectedBattlerChanged(default, selectedBattler.Value);
+        OnCharSelectorStateChanged(default, charSelectorState.Value);
     }
 
     public override void OnNetworkDespawn()
@@ -113,6 +134,11 @@ public class Player : NetworkBehaviour {
             return;
         }
 
+        if (boardIndex.Value < 0) {
+            Debug.Log("Not attaching player with ID "+playerId.Value+" to a board yet because board index is invalid: "+boardIndex.Value);
+            return;
+        }
+
         Debug.Log("Assigning player with ID "+playerId.Value+" to board number "+current+" (previous: "+previous+")");
 
         // Assign player to the charselector of the newly set board index
@@ -121,6 +147,24 @@ public class Player : NetworkBehaviour {
 
     public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
         UpdateSelectorPlayerData(playerInput);
+    }
+
+    public void OnSelectedBattlerChanged(int previous, int current) {
+        Battler battler = GetSelectedBattler();
+        if (battler) {
+            charSelectInputHandler.charSelector.SetDisplayedBattler(battler);
+        } else {
+            charSelectInputHandler.charSelector.ui.ShowSelectingText();
+        }
+    }
+
+    public void OnCharSelectorStateChanged(CharSelector.CharSelectorState previous, CharSelector.CharSelectorState current) {
+        if (current == CharSelector.CharSelectorState.ChoosingCharacter) {
+            charSelectInputHandler.charSelector.BackToCharacterChoice();
+        }
+        else if (current == CharSelector.CharSelectorState.Options) {
+            charSelectInputHandler.charSelector.OpenOptions();
+        }
     }
 
     /// <summary>
@@ -133,14 +177,20 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    public Battler GetSelectedBattler() {
+        return CharSelectManager.Instance.GetBattlerByIndex(selectedBattler.Value);
+    }
+
     public void EnableUserInput() {
         Debug.Log("Enabling user input on "+this);
         playerInput.enabled = true;
+        multiplayerEventSystem.enabled = true;
     }
 
     public void DisableUserInput() {
         Debug.Log("Disabling user input on "+this);
         playerInput.enabled = false;
+        multiplayerEventSystem.enabled = false;
     }
 
     public void EnableBattleInputs() {
