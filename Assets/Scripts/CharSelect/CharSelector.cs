@@ -39,20 +39,25 @@ public class CharSelector : NetworkBehaviour {
     }
 
     /// <summary>
-    /// Call this when this client's local player has been assigned to control this charselector.
+    /// Call this when a player, local or remote, has been assigned to control this charselector.
     /// </summary>
-    public void AssignLocalPlayer(Player player) {
+    public void AssignPlayer(Player player) {
         // if a player was already assigned, make sure to do any unassign logic needed here!
 
         this.player = player;
         Debug.Log("Assigned "+player+" to char selector "+this);
-        ui.OnAssignedPlayer();
+        GetComponent<CharSelectorUI>().OnAssignedPlayer();
     }
 
     /// <summary>
     /// Called when a LOCAL player pressed confirm to lock in their current choices (character or options).
     /// </summary>
     public void Submit() {
+        if (!IsOwner) {
+            Debug.LogError("Cannot submit on a charselector you do not own!");
+            return;
+        }
+
         if (characterChosen.Value) {
             optionsChosen.Value = true;
         } else if (selectedBattlerIndex.Value >= 0) {
@@ -65,6 +70,11 @@ public class CharSelector : NetworkBehaviour {
     /// Go back to the character select, no matter if this player is ready or still choosing options.
     /// </summary>
     public void Cancel() {
+        if (!IsOwner) {
+            Debug.LogError("Cannot cancel on a charselector you do not own!");
+            return;
+        }
+
         optionsChosen.Value = false;
         characterChosen.Value = false;
     }

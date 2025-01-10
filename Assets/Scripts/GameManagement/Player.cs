@@ -188,7 +188,7 @@ public class Player : NetworkBehaviour {
     public void AttachToCharSelector() {
         var selector = CharSelectManager.Instance.GetCharSelector(boardIndex.Value);
         charSelectInputHandler.SetCharSelector(selector);
-        if (IsOwner) selector.AssignLocalPlayer(this);
+        if (selector) selector.AssignPlayer(this);
     }
 
     /// <summary>

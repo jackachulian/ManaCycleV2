@@ -173,5 +173,14 @@ public class CharSelectorUI : MonoBehaviour
             // TODO: implement this!
             usernameText.text = "username123";
         }
+
+        // mostly for testing
+        else if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Singleplayer) {
+            usernameText.text = "Player";
+        }
+
+        else {
+            usernameText.text = "Anomaly";
+        }
     }
 }

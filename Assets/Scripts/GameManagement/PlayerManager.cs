@@ -41,7 +41,12 @@ public class PlayerManager : MonoBehaviour {
 
         // Change the owner of the char selector the player is about to control
         if (GameManager.Instance.currentGameState == GameManager.GameState.CharSelect) {
-            CharSelectManager.Instance.GetCharSelector(boardIndex).GetComponent<NetworkObject>().ChangeOwnership(player.OwnerClientId);
+            var selectorNetworkObject = CharSelectManager.Instance.GetCharSelector(boardIndex).GetComponent<NetworkObject>();
+            if (selectorNetworkObject.IsSpawned) {
+                selectorNetworkObject.ChangeOwnership(player.OwnerClientId);
+            } else {
+                selectorNetworkObject.SpawnWithOwnership(player.OwnerClientId);
+            }
         }
 
         // Assign the board index to be the player's index in the list
