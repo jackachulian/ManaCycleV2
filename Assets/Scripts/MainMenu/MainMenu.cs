@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Menus;
 using Audio;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
-namespace MainMenu
-{
-    // ties multiple parts of the main menu together
-    public class MainMenuController : MonoBehaviour
+// ties multiple parts of the main menu together
+public class MainMenu : MonoBehaviour
     {
         // should correspond to the color of each button
         [SerializeField] private Color[] menuColors;
@@ -28,7 +28,6 @@ namespace MainMenu
         {
             rootMenu.ButtonSelected += OnRootButtonSelected;
             rootMenu.ButtonSelected += sceneSwapper.OnButtonSelected;
-
 
             rootMenu.MenuOpened += RootMenuOpened;
             settingsMenu.MenuOpened += SettingsMenuOpened;
@@ -75,12 +74,30 @@ namespace MainMenu
             AudioManager.instance.PlaySound(backSFX);
         }
 
-        public void Quit()
+        public void SingleplayerPressed() {
+            if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
+
+            GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
+            SceneManager.LoadScene("CharSelect");
+        }
+
+        public void LocalMultiplayerPressed() {
+            if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
+
+            GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.LocalMultiplayer);
+            SceneManager.LoadScene("CharSelect");
+        }
+
+        public void OnlineMultiplayerPressed() {
+            if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
+            
+            GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.OnlineMultiplayer);
+            SceneManager.LoadScene("CharSelect");
+        }
+
+        public void QuitPressed()
         {
             Debug.Log("Quiting");
             Application.Quit();
         }
-
     }
-}
-

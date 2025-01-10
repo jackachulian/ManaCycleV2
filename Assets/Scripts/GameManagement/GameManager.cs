@@ -116,6 +116,10 @@ public class GameManager : MonoBehaviour {
         playerInputManager.enabled = false;
     }
 
+    public void SetConnectionType(GameConnectionType connectionType) {
+        _currentConnectionType = connectionType;
+    }
+
     /// <summary>
     /// Used to start a new game, or join an existing game.
     /// Should be called after the network manager starts.

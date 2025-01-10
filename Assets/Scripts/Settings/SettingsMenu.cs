@@ -4,7 +4,7 @@ using Audio;
 
 namespace Menus
 {
-    public class SettingsMenuController : MonoBehaviour
+    public class SettingsMenu : MonoBehaviour
     {
         [SerializeField] private HalfRadialButtons settingsMenu;
         [SerializeField] private GameObject[] subMenus;

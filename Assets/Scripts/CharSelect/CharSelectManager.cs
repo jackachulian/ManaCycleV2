@@ -62,9 +62,17 @@ public class CharSelectManager : MonoBehaviour
             }
         }
 
-        // if not, open the connection menu and wait for player to join an online game
+        // if type is not already charselect
         else {
-            ShowConnectionMenu();
+            // if connect type is online, open the connection menu and wait for player to join an online game
+            if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
+                ShowConnectionMenu();
+            }
+            // otherwise, in singleplayer and local multiplayer, start a game and go to the char select screen
+            else {
+                GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
+                ShowCharSelectMenu();
+            }
         }
     }
 
