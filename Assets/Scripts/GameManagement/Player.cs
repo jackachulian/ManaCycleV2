@@ -25,6 +25,20 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public NetworkVariable<FixedString128Bytes> username = new NetworkVariable<FixedString128Bytes>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+    /// <summary>
+    /// The index of the battler this player has selected
+    /// </summary>
+    public NetworkVariable<int> selectedBattlerIndex = new NetworkVariable<int>(-1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// True when this player has locked in their character choice
+    /// </summary>
+    public NetworkVariable<bool> characterChosen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+    /// <summary>
+    /// True when this player has locked in their options choices and is now ready to start the game
+    /// </summary>
+    public NetworkVariable<bool> optionsChosen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
 
     /// <summary>
@@ -47,6 +61,13 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public MultiplayerEventSystem multiplayerEventSystem {get; private set;}
 
+
+    /// <summary>
+    /// Is set when this player's board index is set and this player is hiooked up to one of the char selectors
+    /// </summary>
+    public CharSelector selector {get; private set;}
+
+
     private void Awake() {
         // If not in local multiplayer, disable the user inputs. these will be enabled if the player is owned once it spawns.
         // for local multiplayer the inputs need to be enabled when the player is added, so this would mess that up
@@ -67,6 +88,9 @@ public class Player : NetworkBehaviour {
         playerId.OnValueChanged += OnPlayerIdChanged;
         boardIndex.OnValueChanged += OnBoardIndexChanged;
         username.OnValueChanged += OnUsernameChanged;
+        selectedBattlerIndex.OnValueChanged += OnSelectedBattlerIndexChanged;
+        characterChosen.OnValueChanged += OnCharacterChosenChanged;
+        optionsChosen.OnValueChanged += OnOptionsChosenChanged;
 
         playerInput.onControlsChanged += OnControlsChanged;
 
@@ -127,6 +151,11 @@ public class Player : NetworkBehaviour {
 
         Debug.Log("Assigning player with ID "+playerId.Value+" to board number "+current+" (previous: "+previous+")");
 
+        if (!CharSelectManager.Instance) {
+            Debug.LogError("No charselectmanager instance found");
+            return;
+        }
+
         // Assign player to the charselector of the newly set board index
         var selector = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex.Value);
         if (selector) AttachToCharSelector(selector);
@@ -144,6 +173,21 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public void OnUsernameChanged(FixedString128Bytes previous, FixedString128Bytes current) {
         UpdateSelectorPlayerData();
+    }
+
+    public void OnSelectedBattlerIndexChanged(int previous, int current) {
+        if (selector) selector.ui.UpdateSelectedBattler();
+    }
+
+    public void OnCharacterChosenChanged(bool previous, bool current) {
+        if (selector) selector.ui.UpdateReadinessStatus();
+    }
+
+    public void OnOptionsChosenChanged(bool previous, bool current) {
+        if (selector) {
+            selector.ui.UpdateReadinessStatus();
+            selector.ui.UpdateSelectedBattler();
+        }
     }
 
     /// <summary>
@@ -189,6 +233,7 @@ public class Player : NetworkBehaviour {
     }
 
     public void AttachToCharSelector(CharSelector selector) {
+        this.selector = selector;
         charSelectInputHandler.SetCharSelector(selector);
         if (selector) selector.AssignPlayer(this);
     }

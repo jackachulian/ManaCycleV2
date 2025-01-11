@@ -1,10 +1,7 @@
-using System.Threading.Tasks;
+using System;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the Battle and the CharSelect scenes, 
@@ -14,6 +11,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : MonoBehaviour {  
     public static GameManager Instance { get; private set; }
+
 
     /// <summary>
     /// NetworkManager component that sits on the same object as this GameManager. Cached on awake.
@@ -116,6 +114,8 @@ public class GameManager : MonoBehaviour {
         playerInputManager = GetComponent<PlayerInputManager>();
         playerInputManager.enabled = false;
 
+        networkManager.OnServerStarted += OnServerStarted;
+        networkManager.OnServerStopped += OnServerStopped;
         networkManager.OnClientStarted += OnClientStarted;
         networkManager.OnClientStopped += OnClientStopped;
     }
@@ -231,7 +231,27 @@ public class GameManager : MonoBehaviour {
         LobbyManager.Instance.LeaveLobby();
     }
 
+    public void OnServerStarted() {
+        Debug.Log("Server started");
+        if (currentConnectionType == GameConnectionType.LocalMultiplayer) {
+            CharSelectManager.Instance.ShowCharSelectMenu();
+
+            if (networkManager.IsServer) {
+                serverPlayerConnectionManager.StartListeningForPlayers();
+            }
+        }        
+    }
+
+    public void OnServerStopped(bool wasHost) {
+        Debug.Log("Server stopped");
+        if (currentConnectionType == GameConnectionType.LocalMultiplayer) {
+            _currentGameState = GameState.None;
+            if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
+        }        
+    }
+
     public void OnClientStarted() {
+        Debug.Log("Client started");
         CharSelectManager.Instance.ShowCharSelectMenu();
 
         if (networkManager.IsServer) {

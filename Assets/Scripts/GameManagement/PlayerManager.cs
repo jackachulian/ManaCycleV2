@@ -11,13 +11,17 @@ public class PlayerManager : MonoBehaviour {
     const int playerLimit = 4;
 
 
+    public event Action<Player> onPlayerSpawned;
+    public event Action<Player> onPlayerDespawned;
+
+
     /// <summary>
     /// All players that are connected to the battle
     /// Index - int representing the board index of the player from 0-3
     /// Value - the player object, or null if no player with this ID
     /// ID assignment differs based on the implementation
     /// </summary>
-    private List<Player> players = new List<Player>(4);
+    public List<Player> players {get; private set;} = new List<Player>(4);
 
     /// <summary>
     /// Add a player to the player list and assign them a board index.
@@ -39,16 +43,6 @@ public class PlayerManager : MonoBehaviour {
 
         int boardIndex = players.Count;
 
-        // Change the owner of the char selector the player is about to control
-        if (GameManager.Instance.currentGameState == GameManager.GameState.CharSelect) {
-            var selectorNetworkObject = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex).GetComponent<NetworkObject>();
-            if (selectorNetworkObject.IsSpawned) {
-                selectorNetworkObject.ChangeOwnership(player.OwnerClientId);
-            } else {
-                selectorNetworkObject.SpawnWithOwnership(player.OwnerClientId);
-            }
-        }
-
         // Assign the board index to be the player's index in the list
         // With boardIndex's OnValueChanged callbacks, players will attach to their respective CharSelectors based on the index that is set by this server
         player.boardIndex.Value = boardIndex;
@@ -61,6 +55,7 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     public void PlayerSpawned(Player player) {
         players.Add(player);
+        onPlayerSpawned.Invoke(player);
         Debug.Log("Added player with board index "+player.boardIndex.Value);
     }
 
@@ -81,6 +76,7 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     public void PlayerDespawned(Player player) {
         players.Remove(player);
+        onPlayerDespawned.Invoke(player);
         Debug.Log("Removed player with ID "+player.playerId.Value+" and board index "+player.boardIndex.Value);
     }
 

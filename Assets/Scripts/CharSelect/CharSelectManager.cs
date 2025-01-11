@@ -1,11 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Battle;
-using System.Collections.Generic;
-using UnityEngine.InputSystem.UI;
-using UnityEngine.Serialization;
-using UnityEngine.EventSystems;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
 
 // ties multiple systems in the CSS together
@@ -13,8 +7,8 @@ public class CharSelectManager : MonoBehaviour
 {
     public static CharSelectManager Instance { get; private set; }
 
-    [SerializeField] private CharSelector[] _charSelectors;
-    public CharSelector[] charSelectors => _charSelectors;
+    [SerializeField] private CharSelectorLayout _charSelectorLayout;
+    public CharSelectorLayout charSelectorLayout => _charSelectorLayout;
     [SerializeField] private CharButtonList charButtonList;
     [SerializeField] private GameObject allReadyWindow;
 
@@ -91,16 +85,20 @@ public class CharSelectManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public CharSelector GetCharSelectorByIndex(int boardIndex) {
-        return _charSelectors[boardIndex];
-    }
-
     /// <summary>
     /// Returns the battler with the given ID found on the char button list, 
     /// or null if there is no battler with that ID, or ID id empty/null.
     /// </summary>
     public Battler GetBattlerByIndex(int index) {
         return charButtonList.GetBattlerByIndex(index);
+    }
+
+    public CharSelector GetCharSelectorByIndex(int boardIndex) {
+        return _charSelectorLayout.GetCharSelectorByIndex(boardIndex);
+    }
+
+    public void SetAllReadyWindowActive(bool active) {
+        allReadyWindow.SetActive(active);
     }
 
     // TODO: maybe use animations to make a better transition between these menus

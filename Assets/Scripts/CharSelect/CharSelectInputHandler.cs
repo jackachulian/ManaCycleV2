@@ -1,17 +1,29 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.LowLevel;
 
 /// <summary>
 /// Handles inputs in the character select screen.
 /// Should only be enabled on players during the character select scene.
 /// </summary>
-public class CharSelectInputHandler : MonoBehaviour
+public class CharSelectInputHandler : NetworkBehaviour
 {
     /// <summary>
     /// The character selector this player is currently controlling.
     /// Contains the character selector box, portrait, cursor and options menu currently being controlled by this player
     /// </summary>
-    public CharSelector charSelector;
+    public CharSelector charSelector {get; private set;}
+
+    /// <summary>
+    /// Cached player component
+    /// </summary>
+    private Player player;
+
+    public override void OnNetworkSpawn()
+    {
+        player = GetComponent<Player>();
+    }
 
     /// <summary>
     /// Set the char selector that this player should now control. Called from CharSelectManager when a player is added.
@@ -22,12 +34,27 @@ public class CharSelectInputHandler : MonoBehaviour
 
     public void OnSubmit()
     {
-        if (charSelector) charSelector.Submit();
+        if (!IsOwner) {
+            Debug.LogError("Cannot submit on a charselector you do not own!");
+            return;
+        }
+
+        if (player.characterChosen.Value) {
+            player.optionsChosen.Value = true;
+        } else if (player.selectedBattlerIndex.Value >= 0) {
+            player.characterChosen.Value = true;
+        }
     }
 
     public void OnCancel()
     {
-        if (charSelector) charSelector.Cancel();
+        if (!IsOwner) {
+            Debug.LogError("Cannot cancel on a charselector you do not own!");
+            return;
+        }
+
+        player.optionsChosen.Value = false;
+        player.characterChosen.Value = false;
     }
 
     public void OnNavigate(InputValue value)

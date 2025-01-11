@@ -35,26 +35,24 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
 
     public void OnCursorHovered(Player player)
     {
-        if (player) {
-            CharSelector charSelector = CharSelectManager.Instance.GetCharSelectorByIndex(player.boardIndex.Value);
-            if (charSelector.IsOwner) {
-                charSelector.selectedBattlerIndex.Value = index;
-            } else {
-                Debug.LogWarning("Non-owned player hovered a button");
-            }
+        if (player && player.IsOwner) {
+            player.selectedBattlerIndex.Value = index;
+        } else if (player) {
+            Debug.LogWarning("Non-owned player hovered a button");
+        } else {
+            Debug.LogWarning("Cursor without a player hovered a button");
         }
     }
 
     public void OnCursorPressed(Player player)
     {
-        if (player) {
-            CharSelector charSelector = CharSelectManager.Instance.GetCharSelectorByIndex(player.boardIndex.Value);
-            if (charSelector.IsOwner) {
-                charSelector.selectedBattlerIndex.Value = index;
-                charSelector.characterChosen.Value = true;
-            } else {
-                Debug.LogWarning("Non-owned player pressed a button");
-            }
+        if (player.IsOwner) {
+            player.selectedBattlerIndex.Value = index;
+            player.characterChosen.Value = true;
+        } else if (player) {
+            Debug.LogWarning("Non-owned player pressed a button");
+        } else {
+            Debug.LogWarning("Cursor without a player hovered a button");
         }
     }
 }

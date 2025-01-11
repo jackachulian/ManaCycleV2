@@ -89,15 +89,16 @@ public class CharSelectorUI : MonoBehaviour
     /// Call this whenever the selected battler index of the charselector changes.
     /// </summary>
     public void UpdateSelectedBattler() {
-        Battler battler = CharSelectManager.Instance.GetBattlerByIndex(charSelector.selectedBattlerIndex.Value);
-        if (battler) {
+        if (charSelector.player && charSelector.player.selectedBattlerIndex.Value >= 0) {
+            Battler battler = CharSelectManager.Instance.GetBattlerByIndex(charSelector.player.selectedBattlerIndex.Value);
+
             battlerPortrait.sprite = battler.sprite;
             portriatRectTransform.anchoredPosition = defaultPos + battler.portraitOffset;
             battlerNameText.color = connectedTextColor;
             battlerNameText.text = battler.displayName;
 
             // Grey out if not fully ready
-            battlerPortrait.color = new Color(1f, 1f, 1f, charSelector.optionsChosen.Value ? 1f : 0.5f);
+            battlerPortrait.color = new Color(1f, 1f, 1f, charSelector.player.optionsChosen.Value ? 1f : 0.5f);
         } else {
             battlerPortrait.sprite = null;
             battlerPortrait.color = new Color(1f, 1f, 1f, 0f);
@@ -106,7 +107,7 @@ public class CharSelectorUI : MonoBehaviour
                 // Show "Select a Character" if a local palyer controls this selector
                 // show "Selecting..." if controlled by a remote player
                 battlerNameText.color = connectedTextColor;
-                battlerNameText.text = charSelector.IsOwner ? localSelectText : onlineSelectText;
+                battlerNameText.text = charSelector.player.IsOwner ? localSelectText : onlineSelectText;
             } else {
                 battlerNameText.color = unconnectedTextColor;
                 battlerNameText.text = GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer ? unconnectedLocalText : unconnectedOnlineText;
@@ -119,13 +120,13 @@ public class CharSelectorUI : MonoBehaviour
     /// </summary>
     public void UpdateReadinessStatus() {
         // Show the options menu if character is chosen but options are not
-        if (charSelector.characterChosen.Value && !charSelector.optionsChosen.Value) {
+        if (charSelector.player && charSelector.player.characterChosen.Value && !charSelector.player.optionsChosen.Value) {
             optionsWindow.SetActive(true);
             battlerNameText.enabled = false;
 
             // If player is locally controlled, select the first option with the player's event system 
             // (may want to do after 1 frame delay because the event system is dumb)
-            if (charSelector.IsOwner && charSelector.player) {
+            if (charSelector.player.IsOwner && charSelector.player) {
                 MultiplayerEventSystem multiplayerEventSystem = charSelector.player.GetComponent<MultiplayerEventSystem>();
                 multiplayerEventSystem.SetSelectedGameObject(null);
                 multiplayerEventSystem.SetSelectedGameObject(optionsFirstSelected);
@@ -135,16 +136,16 @@ public class CharSelectorUI : MonoBehaviour
             battlerNameText.enabled = true;
         }
 
-        if (charSelector.optionsChosen.Value) {
+        if (charSelector.player && charSelector.player.optionsChosen.Value) {
             readyWindow.SetActive(true);
         } else {
             readyWindow.SetActive(false);
         }
 
         // Only check for cursor unlock if this player is on the local client, otherwise they won't use a cursor here if they are a remote player
-        if (charSelector.IsOwner) {
+        if (charSelector.player && charSelector.player.IsOwner) {
             // Cursor is only unlocked (moveable) if character not already selected
-            if (!charSelector.characterChosen.Value) {
+            if (!charSelector.player.characterChosen.Value) {
                 cursor.SetLocked(false);
             } else {
                 cursor.SetLocked(true);

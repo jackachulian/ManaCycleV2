@@ -4,29 +4,18 @@ using UnityEngine;
 /// <summary>
 /// Networking-related functionalities for synchronizing data in the char select screen.
 /// </summary>
-public class CharSelectNetworkBehaviour : NetworkBehaviour {
-    private CharSelectManager charSelectManager;
-
-    public override void OnNetworkSpawn() {
-        charSelectManager = GetComponent<CharSelectManager>();
-
-        // If this is the server, listen for board readiness changes to know when to check if the game can be started
-        if (NetworkManager.Singleton.IsServer) {
-            foreach (var selector in charSelectManager.charSelectors) {
-                selector.optionsChosen.OnValueChanged += OnAnyBoardReadinessChanged;
-            }
-        }
-
-        GameManager.Instance.playerManager.AttachPlayersToSelectors();
+public class GameStartNetworkBehaviour : NetworkBehaviour {
+    private void Awake() {
+        GameManager.Instance.playerManager.onPlayerSpawned += SubscibeToReadinessChanges;
+        GameManager.Instance.playerManager.onPlayerDespawned += UnsubscibeToReadinessChanges;
     }
 
-    public override void OnNetworkDespawn() {
-        // If this is the server, listen for board readiness changes to know when to check if the game can be started
-        if (NetworkManager.Singleton.IsServer) {
-            foreach (var selector in charSelectManager.charSelectors) {
-                selector.optionsChosen.OnValueChanged -= OnAnyBoardReadinessChanged;
-            }
-        }
+    public void SubscibeToReadinessChanges(Player player) {
+        player.optionsChosen.OnValueChanged += OnAnyBoardReadinessChanged;
+    }
+
+    public void UnsubscibeToReadinessChanges(Player player) {
+        player.optionsChosen.OnValueChanged -= OnAnyBoardReadinessChanged;
     }
 
     public void OnAnyBoardReadinessChanged(bool previous, bool current) {
@@ -43,16 +32,12 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
         // Check that there are at least 2 players and there are no un-ready players
         int readyCount = 0;
 
-        foreach (var selector in charSelectManager.charSelectors) {
-            if (selector.player) {
-                if (selector.optionsChosen.Value) {
-                    readyCount++;
-                } else {
-                    // a connected player is not ready; stop checking
-                    return;
-                }
+        foreach (var player in GameManager.Instance.playerManager.players) {
+            if (player.optionsChosen.Value) {
+                readyCount++;
             } else {
-                // don't check selectors that don't have any player controlling them
+                // a connected player is not ready. game can not start, stop checking
+                return;
             }
         }
 
@@ -70,6 +55,8 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
             battleData.Randomize();
 
             StartBattleRpc(battleData);
+
+            NetworkManager.SceneManager.LoadScene("Battle", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
 
@@ -77,6 +64,5 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
     public void StartBattleRpc(BattleData battleData) {
         Debug.Log("Moving to battle scene");
         GameManager.Instance.battleData = battleData;
-        NetworkManager.SceneManager.LoadScene("Battle", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 }
