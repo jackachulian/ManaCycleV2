@@ -2171,11 +2171,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: _currentGameState
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: _currentConnectionType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4894162350889392540, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: m_LocalPosition.x
