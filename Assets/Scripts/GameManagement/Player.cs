@@ -57,10 +57,14 @@ public class Player : NetworkBehaviour {
     public BattleInputHandler battleInputHandler {get; private set;}
 
     /// <summary>
+    /// Handles RPCs during the battle scene
+    /// </summary>
+    public PlayerBoardNetworkBehaviour boardNetworkBehaviour {get; private set;}
+
+    /// <summary>
     /// Used for layer-specific ui events during charselect on the Options menu
     /// </summary>
     public MultiplayerEventSystem multiplayerEventSystem {get; private set;}
-
 
     /// <summary>
     /// Is set when this player's board index is set and this player is hiooked up to one of the char selectors
@@ -74,6 +78,7 @@ public class Player : NetworkBehaviour {
         if (GameManager.Instance && GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.LocalMultiplayer) {
             playerInput = GetComponent<PlayerInput>();
             multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
+            boardNetworkBehaviour = GetComponent<PlayerBoardNetworkBehaviour>();
             DisableUserInput();
         }
     }
@@ -84,6 +89,7 @@ public class Player : NetworkBehaviour {
         charSelectInputHandler = GetComponent<CharSelectInputHandler>();
         battleInputHandler = GetComponent<BattleInputHandler>();
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
+        boardNetworkBehaviour = GetComponent<PlayerBoardNetworkBehaviour>();
 
         playerId.OnValueChanged += OnPlayerIdChanged;
         boardIndex.OnValueChanged += OnBoardIndexChanged;
@@ -243,5 +249,7 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public void AttachToBattleBoard(Board board) {
         battleInputHandler.SetBoard(board);
+        board.SetPlayer(this);
+        Debug.Log("Attached player "+this+" to board "+board);
     }
 }

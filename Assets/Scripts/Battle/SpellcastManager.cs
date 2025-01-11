@@ -7,7 +7,7 @@ using UnityEngine;
 /// A component to be used on the same gameobject as the Board.
 /// Handles spellcasting and the timing associated with it.
 /// </summary>
-public class SpellcastManager : NetworkBehaviour {
+public class SpellcastManager : MonoBehaviour {
     // ================ Serialized fields ================
     /// <summary>
     /// Minimum possible time between clears before a cascade can be triggered. 
@@ -132,7 +132,7 @@ public class SpellcastManager : NetworkBehaviour {
         if (!spellcasting) return;
 
         // Only perform spellcast timing logic if this board is owned
-        if (!IsOwner) return;
+        if (!board.player || !board.player.IsOwner) return;
 
         timeSinceLastClear += Time.deltaTime;
 
@@ -143,14 +143,14 @@ public class SpellcastManager : NetworkBehaviour {
             && timeSinceLastClear < chainDelay      // must happen before chain delay
             && IsCurrentColorClearable()            // current color in cycle must be clearable
         ) {
-            SpellcastClearRpc();
+            board.player.boardNetworkBehaviour.SpellcastClearRpc();
             timeSinceLastClear = 0;
         } 
         // If a cascade is ongoing, but there is not a valid cascade and cascade period has passed (chain delay reached), 
         // end the cascade and move to the next color in the chain.
         // note: this will only be reached if a cascade is set to happen right after a clear, but an ability tile breaks the cascade before cascadeDelay passes
         else if (currentCascade > 0 && timeSinceLastClear >= chainDelay) {
-            EndCascadeRpc();
+            board.player.boardNetworkBehaviour.EndCascadeRpc();
         }
 
         // Check to see if there is a valid chain
@@ -159,29 +159,28 @@ public class SpellcastManager : NetworkBehaviour {
             && timeSinceLastClear < maxChainDelay   // must happen before max chain delay
             && IsCurrentColorClearable()            // current color in cycle must be clearable
         ) {
-            SpellcastClearRpc();
+            board.player.boardNetworkBehaviour.SpellcastClearRpc();
             timeSinceLastClear = 0;
         } 
 
         // otherwise, if past max chain delay, end the chain here
         else if (timeSinceLastClear >= maxChainDelay) {
-            EndChainRpc();
+            board.player.boardNetworkBehaviour.EndChainRpc();
         }
     }
 
-    [Rpc(SendTo.Everyone, RequireOwnership = true)]
-    private void EndChainRpc() {
+    public void EndChain() {
         spellcasting = false;
         currentChain = 0;
         currentCascade = 0;
         Debug.Log("Chain ended");
     }
 
+    
     /// <summary>
-    /// Called when a chain or cascade is triggered. Clear the current color, add to chain/cascade, and score appropriate amount of points
+    /// (Rpc Target) Clear the current color, add to chain/cascade, and score appropriate amount of points
     /// </summary>
-    [Rpc(SendTo.Everyone, RequireOwnership = true)]
-    private void SpellcastClearRpc() {
+    public void SpellcastClear() {
         // if a cascade is happening, add to cascade, otherwise add to chain
         if (currentCascade > 0) {
             Debug.Log("Cascade clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
@@ -209,12 +208,12 @@ public class SpellcastManager : NetworkBehaviour {
 
         // another possible security improvement: 
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
-        if (IsOwner) {
+        if (board.player && !board.player.IsOwner) {
             for (int i = 0; i < 2; i++) {
                 Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
                 // Only send the damage if this client owns this board
                 if (otherBoard != board) {
-                    otherBoard.healthManager.EnqueueDamageRpc(damage);
+                    otherBoard.player.boardNetworkBehaviour.EnqueueDamageRpc(damage);
                 }
             }
         } else {
@@ -237,10 +236,9 @@ public class SpellcastManager : NetworkBehaviour {
     }
 
     /// <summary>
-    /// RPC that will end the current cascade and advance to the next color in the sequence.
+    /// (Rpc Target) End the current cascade and advance to the next color in the sequence.
     /// </summary>
-    [Rpc(SendTo.Everyone, RequireOwnership = true)]
-    public void EndCascadeRpc() {
+    public void EndCascade() {
         currentCascade = 0;
         AdvanceCycle();
     }
@@ -249,7 +247,6 @@ public class SpellcastManager : NetworkBehaviour {
     /// Move this board's pointer to the next sequential color in the cycle.
     /// </summary>
     private void AdvanceCycle() {
-        
         cycleIndex += 1;
         if (cycleIndex >= GameManager.Instance.battleData.cycleLength) {
             cycleIndex = 0;
@@ -280,11 +277,13 @@ public class SpellcastManager : NetworkBehaviour {
             return;
         }
 
-        SpellcastStartedRpc();
+        board.player.boardNetworkBehaviour.StartSpellcastRpc();
     }
 
-    [Rpc(SendTo.Everyone, RequireOwnership = true)]
-    private void SpellcastStartedRpc() {
+    /// <summary>
+    /// (Rpc Target) Called when a player begins a spellcast on their client.
+    /// </summary>
+    public void StartSpellcast() {
         // TODO: play spellcast startup sound
         spellcasting = true;
         timeSinceLastClear = 0;

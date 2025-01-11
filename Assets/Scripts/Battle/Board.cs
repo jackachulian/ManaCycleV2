@@ -54,6 +54,15 @@ public class Board : MonoBehaviour
     public bool defeated {get; private set;}
 
     /// <summary>
+    /// Current player assigned. Set by BattleManager when players enter the battle scene.
+    /// </summary>
+    public Player player {get; private set;}
+
+    public void SetPlayer(Player player) {
+        this.player = player;
+    }
+
+    /// <summary>
     /// Called by BattleManager when battle is initialized
     /// Any initialization should go here (no Start() method)
     /// </summary>

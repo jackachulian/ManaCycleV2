@@ -6,7 +6,7 @@ using UnityEngine;
 /// Sync'd over the network to have the same order of events as piece placing and spellcasting.
 /// (Is on the same NetworkObject as PieceManager and SpellcastManager, so same RPC execution order is guaranteed.)
 /// </summary>
-public class HealthManager : NetworkBehaviour {
+public class HealthManager : MonoBehaviour {
     /// <summary>
     /// Current health. When this reaches 0, player is defeated.
     /// </summary>
@@ -44,12 +44,11 @@ public class HealthManager : NetworkBehaviour {
         incomingDamageUI.UpdateUI(incomingDamage);
     }
 
+
     /// <summary>
-    /// Receive damage from another board.
+    /// (Rpc Target) Add damage to the start of the damage queue.
     /// </summary>
-    /// <param name="damage">the amount of damage dealt by the other player</param>
-    [Rpc(SendTo.Everyone)]
-    public void EnqueueDamageRpc(int damage) {
+    public void EnqueueDamage(int damage) {
         // TODO: implement the incoming damage bar
         incomingDamage[0] += damage;
 

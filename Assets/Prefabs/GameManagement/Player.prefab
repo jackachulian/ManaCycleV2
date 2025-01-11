@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3412633086392716045}
   - component: {fileID: 298183042389427978}
   - component: {fileID: 3847509232912038728}
+  - component: {fileID: 7815916357644253201}
   - component: {fileID: 3697927577131559751}
   - component: {fileID: 2210366655099914486}
   m_Layer: 0
@@ -217,7 +218,11 @@ MonoBehaviour:
         byte0123: 0
         byte0124: 0
         byte0125: 0
-  ready:
+  selectedBattlerIndex:
+    m_InternalValue: -1
+  characterChosen:
+    m_InternalValue: 0
+  optionsChosen:
     m_InternalValue: 0
 --- !u!114 &3412633086392716045
 MonoBehaviour:
@@ -261,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d7c46fa5e7804a9daa75594dbe071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charSelector: {fileID: 0}
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &3847509232912038728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +279,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb257676bf31b7e429dbfebae6420586, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7815916357644253201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7397280237258723983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 991268f02c650444d86366a439b33107, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!114 &3697927577131559751
 MonoBehaviour:
   m_ObjectHideFlags: 0

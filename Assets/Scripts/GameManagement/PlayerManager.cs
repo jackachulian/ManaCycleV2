@@ -111,18 +111,11 @@ public class PlayerManager : MonoBehaviour {
         Debug.Log("Attaching players to boards");
         foreach (var player in players) {
             var board = BattleManager.Instance.GetBoardByIndex(player.boardIndex.Value);
-            if (NetworkManager.Singleton.IsServer && board) {
-                var boardNetworkObject = board.GetComponent<NetworkObject>();
-                if (boardNetworkObject.OwnerClientId != player.OwnerClientId) {
-                    if (boardNetworkObject.IsSpawned) {
-                        boardNetworkObject.ChangeOwnership(player.OwnerClientId);
-                    } else {
-                        boardNetworkObject.SpawnWithOwnership(player.OwnerClientId);
-                    }
-                }
+            if (board) {
+                player.AttachToBattleBoard(board);
+            } else {
+                Debug.LogError("Player "+player+" could not be attached to board, there is no board with index "+player.boardIndex.Value);
             }
-
-            player.AttachToBattleBoard(board);
         }
     }
 

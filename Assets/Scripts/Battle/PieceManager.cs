@@ -6,7 +6,7 @@ using UnityEngine;
 /// Manages the piece falling on this board.
 /// Responsibilities include piece movement, spawning new randomized pieces, falling, etc.
 /// </summary>
-public class PieceManager : NetworkBehaviour {
+public class PieceManager : MonoBehaviour {
     /// <summary>
     /// The amount of rows the piece should fall per second while not quickfalling.
     /// </summary>
@@ -63,7 +63,7 @@ public class PieceManager : NetworkBehaviour {
 
     void PieceFallingUpdate() {
         // Only perform fall logic if this board is owned
-        if (!IsOwner) return;
+        if (!board.player || !board.player.IsOwner) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
@@ -79,7 +79,7 @@ public class PieceManager : NetworkBehaviour {
                 // TODO: add a little bit of buffer time before placing the piece to allow sliding
                 bool moved = TryMovePiece(Vector2Int.down);
                 if (!moved) {
-                    PlaceCurrentPieceRpc();
+                    board.player.boardNetworkBehaviour.PlaceCurrentPieceRpc();
                 }
 
                 iters++;
@@ -110,10 +110,9 @@ public class PieceManager : NetworkBehaviour {
     }
 
     /// <summary>
-    /// RPC to send to other clients when the position of the piece successfully changes.
+    /// (Rpc Target) Update the position and rotation of the current piece being dropped.
     /// </summary>
-    [Rpc(SendTo.NotOwner, RequireOwnership = true)]
-    public void UpdateCurrentPieceRpc(Vector2Int position, int rotation) {
+    public void UpdateCurrentPiece(Vector2Int position, int rotation) {
         currentPiece.position = position;
         currentPiece.rotation = rotation;
         currentPiece.UpdateVisualPositions();
@@ -136,7 +135,7 @@ public class PieceManager : NetworkBehaviour {
             return false;
         }
 
-        UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
+        board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
         return true;
     }
@@ -177,7 +176,7 @@ public class PieceManager : NetworkBehaviour {
             }
         }
 
-        UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
+        board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
         return true;
     }
@@ -187,14 +186,6 @@ public class PieceManager : NetworkBehaviour {
     /// </summary>
     /// <param name="newQuickFall">the new quickfall value, true = quickfalling, false = not quickfalling</param>
     public void SetQuickfall(bool newQuickFall) {
-        // Only the client's board should manage its own quickfall.
-        // In fact, other clients don't even need to know if the current piece is quickfalling, because *all* movements are currently sent,
-        // including the moving down that happens when the client manages its own piece falling
-        if (!IsOwner) {
-            Debug.LogError("Only the owner of a board should manage its own quickfall.");
-            return;
-        }
-
         quickfall = newQuickFall;
     }
 
@@ -221,18 +212,20 @@ public class PieceManager : NetworkBehaviour {
     }
 
     /// <summary>
-    /// RPC to place the current piece and spawn the next one.
+    /// (Rpc Target) Place the current piece.
+    /// Check fr topout and defeat if so.
+    /// If not topped out, spawn the next piece.
     /// </summary>
-    [Rpc(SendTo.Everyone, RequireOwnership = true)]
-    void PlaceCurrentPieceRpc() {
+    public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
         board.healthManager.AdvanceDamageQueue();
-        SpawnNewPiece();
 
         // If the newly spawned piece is in an invalid position, player has topped out
         if (!IsValidPlacement(currentPiece)) {
             Destroy(currentPiece.gameObject);
             board.Defeat();
+        } else {
+            SpawnNewPiece();
         }
     }
 

@@ -109,7 +109,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8790791077440325607}
-  - component: {fileID: 7394692469015450872}
   - component: {fileID: 749915984811662644}
   - component: {fileID: 7937252907019752811}
   - component: {fileID: 7214213313452791491}
@@ -142,31 +141,6 @@ Transform:
   - {fileID: 7731109668579434360}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7394692469015450872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2840813426677701198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 12812476
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 0
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 1
-  AutoObjectParentSync: 0
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &749915984811662644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08ed01b2cd3b13b4398db5cec589ddda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   fallFrequency: 1.2
   quickFallFrequency: 8
 --- !u!114 &7100572983371869877
@@ -219,7 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cdd2a717e0914a8257e06b7bea959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   cascadeDelay: 0.5
   chainDelay: 0.75
   maxChainDelay: 2
@@ -238,7 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d39e4108ff9ce64ea811f72a8de17fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
   hpBarUI: {fileID: 8505423937813921920}
   incomingDamageUI: {fileID: 892581007495845712}
 --- !u!1 &3711184147245583017
