@@ -30,8 +30,6 @@ public class LobbyManager : MonoBehaviour {
             Debug.Log("Duplicate LobbyManager spawned! Destroying the new one.");
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(this);
     }
 
     private async void Start() {

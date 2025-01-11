@@ -119,6 +119,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &23712789
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 23712791}
+  - component: {fileID: 23712790}
+  m_Layer: 0
+  m_Name: LobbyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &23712790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23712789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ecd9737578d9d143aedb3a4aaebb751, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joinedRelayCode: 
+  connectionMenuUi: {fileID: 1596147374}
+--- !u!4 &23712791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23712789}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 407.6016, y: 198.75679, z: -1.4719083}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &25664628 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7032168521786370675, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
@@ -855,6 +901,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: P1Selector
       objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1346616310
+      objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1344950160
+      objectReference: {fileID: 0}
     - target: {fileID: 8191716451881024041, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1019,6 +1073,14 @@ PrefabInstance:
     - target: {fileID: 1133452604175850617, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3898789460
+      objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1344950160
       objectReference: {fileID: 0}
     - target: {fileID: 1834403901459994286, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1678,6 +1740,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: P2Selector
       objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1628524977
+      objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1344950160
+      objectReference: {fileID: 0}
     - target: {fileID: 3356233329121676604, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -2129,7 +2199,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1698380336}
+      - m_Target: {fileID: 23712790}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
         m_MethodName: RefreshLobbies
         m_Mode: 1
@@ -4395,17 +4465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf1a717579d8b74c8607b679e21c591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1698380336 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5870784186287061586, guid: 65533600d4e94d04a9b8512ecd295646, type: 3}
-  m_PrefabInstance: {fileID: 9078862099565799371}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ecd9737578d9d143aedb3a4aaebb751, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1705857942
 GameObject:
   m_ObjectHideFlags: 0
@@ -4489,7 +4548,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1698380336}
+      - m_Target: {fileID: 23712790}
         m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
         m_MethodName: CreateLobby
         m_Mode: 1
@@ -5554,6 +5613,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 372083521
+      objectReference: {fileID: 0}
+    - target: {fileID: 1493011655649404644, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1344950160
+      objectReference: {fileID: 0}
     - target: {fileID: 1834403901459994286, guid: 88f5962c905e6b24189262dacaa03977, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
@@ -6319,6 +6386,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharSelectManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7744278335008516579, guid: 65533600d4e94d04a9b8512ecd295646, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1560875035
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744278335008516579, guid: 65533600d4e94d04a9b8512ecd295646, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3057390496
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6331,6 +6406,7 @@ SceneRoots:
   - {fileID: 578872636}
   - {fileID: 724842831}
   - {fileID: 1236775998}
+  - {fileID: 23712791}
   - {fileID: 9078862099565799371}
   - {fileID: 1575810349}
   - {fileID: 2014533804}

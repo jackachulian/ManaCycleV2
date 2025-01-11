@@ -160,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8191716451881024041}
   - component: {fileID: 4227615194713993805}
-  - component: {fileID: 8822621092178671393}
+  - component: {fileID: 1493011655649404644}
   - component: {fileID: 4851686903432958956}
   - component: {fileID: 4913675601772368609}
   m_Layer: 5
@@ -205,7 +205,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 510104901420534444}
   m_CullTransparentMesh: 1
---- !u!114 &8822621092178671393
+--- !u!114 &1493011655649404644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,14 +217,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2110361284
+  GlobalObjectIdHash: 1344950160
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 1
   AutoObjectParentSync: 0
