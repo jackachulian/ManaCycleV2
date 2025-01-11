@@ -35,6 +35,9 @@ public class CharSelectorUI : MonoBehaviour
     [Header("Colors")]
     [SerializeField] private Color connectedTextColor;
     [SerializeField] private Color unconnectedTextColor;
+    [SerializeField] private Color connectedBackgroundColor;
+
+    [SerializeField] private Color unconnectedBackgroundColor;
 
     [Header("Menus")]
     [SerializeField] private GameObject optionsWindow;
@@ -45,7 +48,6 @@ public class CharSelectorUI : MonoBehaviour
     private RectTransform portriatRectTransform;
     private Vector2 defaultPos;
     private CharSelector charSelector;
-
 
     void Awake()
     {
@@ -63,11 +65,15 @@ public class CharSelectorUI : MonoBehaviour
     /// Call this whenever a new player is assigned or a player is removed.
     /// </summary>
     public void OnAssignedPlayer() {
-        // If there is a player and the client owns the player, enable the cursor, otherwise disable it.
-        if (charSelector.player && charSelector.player.IsOwner)  {
-            cursor.gameObject.SetActive(true);
-            cursor.SetPlayer(charSelector.player);
+        if (charSelector.player)  {
+            background.color = connectedBackgroundColor;
+            // Only enable the cursor if a locally owned player is controlling this char selector.
+            if (charSelector.player.IsOwner) {
+                cursor.gameObject.SetActive(true);
+                cursor.SetPlayer(charSelector.player);
+            }
         } else {
+            background.color = unconnectedBackgroundColor;
             cursor.gameObject.SetActive(false);
             cursor.SetPlayer(null);
         }
@@ -179,6 +185,7 @@ public class CharSelectorUI : MonoBehaviour
         }
 
         else {
+            Debug.LogError("A char selector is being assigned a player while there is no current connection type!");
             usernameText.text = "Anomaly";
         }
     }

@@ -4,6 +4,9 @@ using Battle;
 using System.Collections.Generic;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Serialization;
+using UnityEngine.EventSystems;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 // ties multiple systems in the CSS together
 public class CharSelectManager : MonoBehaviour
@@ -68,12 +71,24 @@ public class CharSelectManager : MonoBehaviour
             if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
                 ShowConnectionMenu();
             }
+            // if connection type is none, just start a local multiplayer in char select
+            else if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
+                ShowConnectionMenu();
+            }
             // otherwise, in singleplayer and local multiplayer, start a game and go to the char select screen
             else {
                 GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
                 ShowCharSelectMenu();
             }
         }
+    }
+
+    public void LeaveGamePressed() {
+        GameManager.Instance.LeaveGame();
+    }
+
+    public void BackToPreviousScenePressed() {
+        SceneManager.LoadScene("MainMenu");
     }
 
     public CharSelector GetCharSelectorByIndex(int boardIndex) {
@@ -90,6 +105,8 @@ public class CharSelectManager : MonoBehaviour
 
     // TODO: maybe use animations to make a better transition between these menus
     public void ShowConnectionMenu() {
+        if (!connectionMenuUi) return;
+        
         // Use CanvasGroups instead of disabling the object so that the objects' Awake can call properly to initialize them before a battle starts
         charSelectMenuUi.GetComponent<CanvasGroup>().alpha = 0;
         charSelectMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -97,10 +114,26 @@ public class CharSelectManager : MonoBehaviour
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 1;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = true;
         connectionMenuUi.connectionMenuEventSystem.enabled = true;
+        
+
+        // Need to do this because i think either PlayerInputs or MultiplayerEventSystesm are messing up the connection menu event system
+        // unity fix your engine
+        connectionMenuUi.connectionMenuEventSystem.gameObject.SetActive(false);
+        connectionMenuUi.connectionMenuEventSystem.gameObject.SetActive(true);
+        connectionMenuUi.connectionMenuEventSystem.SetSelectedGameObject(null);
+        
+        // var uiInputModule = connectionMenuUi.connectionMenuEventSystem.GetComponent<InputSystemUIInputModule>();
+        // var inputActions = uiInputModule.actionsAsset;
+        // Destroy(uiInputModule);
+        // uiInputModule = connectionMenuUi.connectionMenuEventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+        // uiInputModule.actionsAsset = inputActions;
+
         connectionMenuUi.connectionMenuEventSystem.sendNavigationEvents = true;
     }
 
     public void ShowCharSelectMenu() {
+        if (!charSelectMenuUi) return;
+
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 0;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = false;
         connectionMenuUi.connectionMenuEventSystem.enabled = false;

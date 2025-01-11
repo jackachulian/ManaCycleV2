@@ -107,13 +107,13 @@ public class LobbyManager : MonoBehaviour {
         QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync();
         connectionMenuUi.ShowLobbies(queryResponse.Results);
         await Awaitable.WaitForSecondsAsync(2.0f);
+        if (!connectionMenuUi) return;
         connectionMenuUi.refreshButton.interactable = true;
     }
 
     // Send a heartbeat every 15 seconds to ensure the lobby doesn't time out (do this on the host)
     public async void LobbyHeartbeat() {
-        
-        while (joinedLobby != null) {
+        while (Instance && joinedLobby != null && GameManager.Instance.currentGameState != GameManager.GameState.None) {
             await LobbyService.Instance.SendHeartbeatPingAsync(joinedLobby.Id);
             await Task.Delay(15000);
         }
@@ -139,6 +139,18 @@ public class LobbyManager : MonoBehaviour {
         } catch (Exception e) {
             Debug.LogError(e);
             connectionMenuUi.ShowStatus("Error joining lobby: "+e);
+        }
+    }
+
+    public async void LeaveLobby() {
+        string playerId = AuthenticationService.Instance.PlayerId;
+        
+        if (NetworkManager.Singleton.IsServer) {
+            Debug.Log("Deleting lobby");
+            await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);
+        } else {
+            Debug.Log("Leaving lobby");
+            await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, playerId);
         }
     }
 }

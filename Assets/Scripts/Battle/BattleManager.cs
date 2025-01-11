@@ -52,6 +52,11 @@ public class BattleManager : NetworkBehaviour
     /// </summary>
     public bool gameCompleted {get; private set;}
 
+    private void Awake() {
+        if (NetworkManager.Singleton.IsServer) {
+            GetComponent<NetworkObject>().Spawn();
+        }
+    }
 
     public override void OnNetworkSpawn() {
         if (Instance == null)

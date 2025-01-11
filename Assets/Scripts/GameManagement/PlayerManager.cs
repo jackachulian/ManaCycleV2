@@ -98,7 +98,7 @@ public class PlayerManager : MonoBehaviour {
                     if (selectorNetworkObject.IsSpawned) {
                         selectorNetworkObject.ChangeOwnership(player.OwnerClientId);
                     } else {
-                        selectorNetworkObject.SpawnWithOwnership(player.OwnerClientId);
+                        selectorNetworkObject.SpawnWithOwnership(player.OwnerClientId, false);
                     }
                 }
             }

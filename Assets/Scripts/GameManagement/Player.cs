@@ -48,7 +48,9 @@ public class Player : NetworkBehaviour {
     public MultiplayerEventSystem multiplayerEventSystem {get; private set;}
 
     private void Awake() {
-        if (GameManager.Instance && GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer && !IsSpawned) {
+        // If not in local multiplayer, disable the user inputs. these will be enabled if the player is owned once it spawns.
+        // for local multiplayer the inputs need to be enabled when the player is added, so this would mess that up
+        if (GameManager.Instance && GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.LocalMultiplayer) {
             playerInput = GetComponent<PlayerInput>();
             multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
             DisableUserInput();

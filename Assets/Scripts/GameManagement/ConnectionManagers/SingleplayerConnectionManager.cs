@@ -5,12 +5,7 @@ using UnityEngine;
 
 public class SingleplayerConnectionManager : IServerPlayerConnectionManager {
     private bool isListening = false;
-
-    /// <summary>
-    /// The spawned player instance in the scene
-    /// </summary>
-    private Player player;
-
+    
     public void StartListeningForPlayers()
     {
         if (isListening) {

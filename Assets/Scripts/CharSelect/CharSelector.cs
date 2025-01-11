@@ -38,6 +38,13 @@ public class CharSelector : NetworkBehaviour {
         optionsChosen.OnValueChanged += OnOptionsChosenChanged;
     }
 
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+        player = null;
+        if (ui) ui.OnAssignedPlayer();
+    }
+
     /// <summary>
     /// Call this when a player, local or remote, has been assigned to control this charselector.
     /// </summary>

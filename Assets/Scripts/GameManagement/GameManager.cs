@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -114,6 +115,9 @@ public class GameManager : MonoBehaviour {
         playerManager = GetComponent<PlayerManager>();
         playerInputManager = GetComponent<PlayerInputManager>();
         playerInputManager.enabled = false;
+
+        networkManager.OnClientStarted += OnClientStarted;
+        networkManager.OnClientStopped += OnClientStopped;
     }
 
     public void SetConnectionType(GameConnectionType connectionType) {
@@ -165,9 +169,6 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Failed to start networkmanager as a host; stopping game");
             return;
         }
-
-        CharSelectManager.Instance.ShowCharSelectMenu();
-        serverPlayerConnectionManager.StartListeningForPlayers();
     }
 
     /// <summary>
@@ -191,16 +192,16 @@ public class GameManager : MonoBehaviour {
         Debug.Log("Joining an online game...");
 
         NetworkManager.Singleton.StartClient();
-        CharSelectManager.Instance.ShowCharSelectMenu();
-    }
-
-    public void StartListening() {
         
     }
 
-    public void StopListening() {
-        serverPlayerConnectionManager.StopListeningForPlayers();
 
+    public void LeaveGame() {
+        if (networkManager.IsServer) {
+            StopGameHost();
+        } else {
+            ClientDisconnectFromGame();
+        }
     }
 
     /// <summary>
@@ -208,25 +209,45 @@ public class GameManager : MonoBehaviour {
     /// Current game must be stopped before another game can be started.
     /// </summary>
     public void StopGameHost() {
-        if (!NetworkManager.Singleton) {
-            Debug.LogError("Trying to stop a game, but there is no NetworkManager present!");
-            return;
-        }
-
         // Can't start a game if network manager is already active, meaning a game is already happening
-        if (!NetworkManager.Singleton.IsListening) {
+        if (!networkManager.IsListening) {
             Debug.LogError("Trying to stop a game, but network manager is not listening, there is no game to end");
             return;
         }
 
         playerInputManager.enabled = false;
-        NetworkManager.Singleton.Shutdown();
+        serverPlayerConnectionManager.StopListeningForPlayers();
+        networkManager.Shutdown();
+        LobbyManager.Instance.LeaveLobby();
+    }
 
-        if (serverPlayerConnectionManager != null) {
-            // serverPlayerConnectionManager.StopListeningForPlayers();
-        } else {
-            Debug.LogWarning("The server player connection manager may have been set to null during the game or never set at all, cannot perform game stop tasks on it");
-        }        
+    public void ClientDisconnectFromGame() {
+        if (!NetworkManager.Singleton.IsListening) {
+            Debug.LogError("Trying to disconnect from a game, but network manager is not listening, there is no game to end");
+            return;
+        }
+
+        networkManager.Shutdown();
+        LobbyManager.Instance.LeaveLobby();
+    }
+
+    public void OnClientStarted() {
+        CharSelectManager.Instance.ShowCharSelectMenu();
+
+        if (networkManager.IsServer) {
+            serverPlayerConnectionManager.StartListeningForPlayers();
+        }
+    }
+
+    public void OnClientStopped(bool wasHost) {
+        Debug.Log("Client stopped");
+        _currentGameState = GameState.None;
+        if (CharSelectManager.Instance)
+        CharSelectManager.Instance.ShowConnectionMenu();
+    }
+
+    public void OnClientDisconnected() {
+
     }
 
     /// <summary>

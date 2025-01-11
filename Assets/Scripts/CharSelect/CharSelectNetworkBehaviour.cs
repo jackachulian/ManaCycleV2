@@ -57,7 +57,9 @@ public class CharSelectNetworkBehaviour : NetworkBehaviour {
         }
 
         // start after a delay if all connected players are ready and there are at least 2
-        if (readyCount >= 2) {
+        // in singleplayer, only wait for 1 player
+        int requiredPlayers = GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Singleplayer ? 1 : 2;
+        if (readyCount >= requiredPlayers) {
             Debug.Log("All players ready - starting game after delay!");
             await Awaitable.WaitForSecondsAsync(0.5f);
 
