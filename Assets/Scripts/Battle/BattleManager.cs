@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Manages the current battle in the battle scene this is in.
 /// </summary>
-public class BattleManager : NetworkBehaviour
+public class BattleManager : MonoBehaviour
 {   
     public static BattleManager Instance { get; private set; }
 
@@ -52,13 +52,7 @@ public class BattleManager : NetworkBehaviour
     /// </summary>
     public bool gameCompleted {get; private set;}
 
-    private void Awake() {
-        if (NetworkManager.Singleton.IsServer) {
-            GetComponent<NetworkObject>().Spawn();
-        }
-    }
-
-    public override void OnNetworkSpawn() {
+    void Awake() {
         if (Instance == null)
         {
             Instance = this;
@@ -68,7 +62,9 @@ public class BattleManager : NetworkBehaviour
             Debug.LogWarning("Duplicate GameManager spawned, destroying the newly instantiated one");
             Destroy(gameObject);
         }
+    }
 
+    private void Start() {
         InitializeBattle();
 
         GameManager.Instance.playerManager.AttachPlayersToBoards();

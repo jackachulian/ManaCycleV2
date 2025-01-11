@@ -212,20 +212,18 @@ public class PieceManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// (Rpc Target) Place the current piece.
-    /// Check fr topout and defeat if so.
-    /// If not topped out, spawn the next piece.
+    /// (Rpc Target) Place the current piece and spawn the next piece.
+    /// Check for topout and defeat if so.
     /// </summary>
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
         board.healthManager.AdvanceDamageQueue();
+        SpawnNewPiece();
 
         // If the newly spawned piece is in an invalid position, player has topped out
         if (!IsValidPlacement(currentPiece)) {
             Destroy(currentPiece.gameObject);
             board.Defeat();
-        } else {
-            SpawnNewPiece();
         }
     }
 
