@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
     [SerializeField] private GameObject firstSelectedObject;
+    [SerializeField] private Animator animator;
 
     void Awake() {
         gameObject.SetActive(false);
@@ -12,7 +13,9 @@ public class PostGameMenuUI : MonoBehaviour {
 
     public void ShowPostGameMenuUI() {
         gameObject.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(firstSelectedObject);
+        animator.ResetTrigger("Open");
+        animator.SetTrigger("Open");
+
     }
 
     public void OnRematchPressed() {
@@ -26,5 +29,10 @@ public class PostGameMenuUI : MonoBehaviour {
     public void OnMainMenuPressed() {
         GameManager.Instance.LeaveGame();
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void OpenAnimationComplete()
+    {
+        EventSystem.current.SetSelectedGameObject(firstSelectedObject);
     }
 }
