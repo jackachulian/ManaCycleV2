@@ -30,10 +30,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _ReplaceMode: 0
-    - _ScaleX: 1.5
-    - _ScaleY: 1.5
-    - _SpeedX: -2
-    - _SpeedY: -2
+    - _ScaleX: 2
+    - _ScaleY: 2
+    - _SpeedX: 2
+    - _SpeedY: 2
     - _Tolerance: 0.1
     m_Colors:
     - _Color1: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 0.76862746}
