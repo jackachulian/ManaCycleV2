@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Current state that the game is in.
     /// </summary>
-    [SerializeField] private GameState _currentGameState = GameState.None;
+    private GameState _currentGameState = GameState.None;
     public GameState currentGameState => _currentGameState;
 
 
@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour {
 
     public void OnClientStarted() {
         Debug.Log("Client started");
-        CharSelectManager.Instance.ShowCharSelectMenu();
+        if (CharSelectManager.Instance) CharSelectManager.Instance.ShowCharSelectMenu();
 
         if (networkManager.IsServer) {
             serverPlayerConnectionManager.StartListeningForPlayers();
@@ -267,8 +267,7 @@ public class GameManager : MonoBehaviour {
     public void OnClientStopped(bool wasHost) {
         Debug.Log("Client stopped");
         _currentGameState = GameState.None;
-        if (CharSelectManager.Instance)
-        CharSelectManager.Instance.ShowConnectionMenu();
+        if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
     }
 
     public void OnClientDisconnected() {

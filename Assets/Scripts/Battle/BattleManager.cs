@@ -80,8 +80,9 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        // Default to starting a game in singleplayer if a game is not active
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
-            GameManager.Instance.StartGameHost(GameManager.GameConnectionType.LocalMultiplayer);
+            GameManager.Instance.StartGameHost(GameManager.GameConnectionType.Singleplayer);
             GameManager.Instance.SetGameState(GameManager.GameState.Playing);
         }
 

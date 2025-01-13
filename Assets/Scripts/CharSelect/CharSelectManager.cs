@@ -54,8 +54,6 @@ public class CharSelectManager : MonoBehaviour
             if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
                 Debug.Log("Game state set but no connection type set, auto selecting local multiplayer");
                 GameManager.Instance.StartGameHost(GameManager.GameConnectionType.LocalMultiplayer);
-            } else {
-                GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
             }
         }
 
@@ -74,6 +72,11 @@ public class CharSelectManager : MonoBehaviour
                 GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
                 ShowCharSelectMenu();
             }
+        }
+
+        // will attach players to selectors if entering char select scene from the battle scene
+        if (GameManager.Instance.IsGameActive()) {
+            GameManager.Instance.playerManager.AttachPlayersToSelectors();
         }
     }
 
@@ -109,6 +112,7 @@ public class CharSelectManager : MonoBehaviour
         charSelectMenuUi.GetComponent<CanvasGroup>().alpha = 0;
         charSelectMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = false;
 
+        connectionMenuUi.gameObject.SetActive(true);
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 1;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = true;
         connectionMenuUi.connectionMenuEventSystem.enabled = true;
@@ -132,6 +136,7 @@ public class CharSelectManager : MonoBehaviour
     public void ShowCharSelectMenu() {
         if (!charSelectMenuUi) return;
 
+        connectionMenuUi.gameObject.SetActive(false);
         connectionMenuUi.GetComponent<CanvasGroup>().alpha = 0;
         connectionMenuUi.GetComponent<CanvasGroup>().blocksRaycasts = false;
         connectionMenuUi.connectionMenuEventSystem.enabled = false;
