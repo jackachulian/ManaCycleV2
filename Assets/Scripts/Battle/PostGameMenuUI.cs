@@ -6,15 +6,13 @@ public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
     [SerializeField] private GameObject firstSelectedObject;
 
-    public GameObject firstSelected;
-
     void Awake() {
         gameObject.SetActive(false);
     }
 
     public void ShowPostGameMenuUI() {
         gameObject.SetActive(true);
-        EventSystem.current.SetSelectedGameObject(firstSelected);
+        EventSystem.current.SetSelectedGameObject(firstSelectedObject);
     }
 
     public void OnRematchPressed() {
