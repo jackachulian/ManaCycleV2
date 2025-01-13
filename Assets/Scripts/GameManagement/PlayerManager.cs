@@ -87,19 +87,7 @@ public class PlayerManager : MonoBehaviour {
     public void AttachPlayersToSelectors() {
         Debug.Log("Attaching players to selectors");
         foreach (var player in players) {
-            var selector = CharSelectManager.Instance.GetCharSelectorByIndex(player.boardIndex.Value);
-            if (NetworkManager.Singleton.IsServer && selector) {
-                var selectorNetworkObject = selector.GetComponent<NetworkObject>();
-                if (selectorNetworkObject.OwnerClientId != player.OwnerClientId) {
-                    if (selectorNetworkObject.IsSpawned) {
-                        selectorNetworkObject.ChangeOwnership(player.OwnerClientId);
-                    } else {
-                        selectorNetworkObject.SpawnWithOwnership(player.OwnerClientId, false);
-                    }
-                }
-            }
-
-            player.AttachToCharSelector(selector);
+            player.AttachToCharSelector();
         }
     }
 
@@ -110,12 +98,7 @@ public class PlayerManager : MonoBehaviour {
     public void AttachPlayersToBoards() {
         Debug.Log("Attaching players to boards");
         foreach (var player in players) {
-            var board = BattleManager.Instance.GetBoardByIndex(player.boardIndex.Value);
-            if (board) {
-                player.AttachToBattleBoard(board);
-            } else {
-                Debug.LogError("Player "+player+" could not be attached to board, there is no board with index "+player.boardIndex.Value);
-            }
+            player.AttachToBattleBoard();
         }
     }
 

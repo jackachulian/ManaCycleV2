@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour {
     public enum GameState {
         None,
         CharSelect,
+        Countdown,
         Playing,
         Paused,
         PostGame
@@ -122,6 +123,10 @@ public class GameManager : MonoBehaviour {
 
     public void SetConnectionType(GameConnectionType connectionType) {
         _currentConnectionType = connectionType;
+    }
+
+    public void SetGameState(GameState gameState) {
+        _currentGameState = gameState;
     }
 
     /// <summary>
@@ -234,7 +239,7 @@ public class GameManager : MonoBehaviour {
     public void OnServerStarted() {
         Debug.Log("Server started");
         if (currentConnectionType == GameConnectionType.LocalMultiplayer) {
-            CharSelectManager.Instance.ShowCharSelectMenu();
+            if (CharSelectManager.Instance) CharSelectManager.Instance.ShowCharSelectMenu();
 
             if (networkManager.IsServer) {
                 serverPlayerConnectionManager.StartListeningForPlayers();

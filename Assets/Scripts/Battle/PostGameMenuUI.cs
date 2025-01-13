@@ -1,13 +1,15 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
 
+    void Awake() {
+        gameObject.SetActive(false);
+    }
+
     public void ShowPostGameMenuUI() {
-        // TODO: implement the menu.
-        // For now, just take both players back to the character select screen if in a multiplayer game.
-        // This might end up being what happens in online mode anyways.
-        Debug.Log("Post game UI not implemented yet");
+        gameObject.SetActive(true);
     }
 
     public void OnRematchPressed() {
@@ -15,7 +17,12 @@ public class PostGameMenuUI : MonoBehaviour {
     }
 
     public void OnCharacterSelectPressed() {
-        battleManager.GoToCharacterSelect();
+        battleManager.gameStartNetworkBehaviour.RematchRpc();
+    }
+
+    public void OnMainMenuPressed() {
+        GameManager.Instance.LeaveGame();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnLeaveLobbyPressed() {

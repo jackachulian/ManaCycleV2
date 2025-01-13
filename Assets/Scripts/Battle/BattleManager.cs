@@ -43,6 +43,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private ManaTile manaTilePrefab;
 
     /// <summary>
+    /// Used for restarting matches / going back to character selector
+    /// </summary>
+    [SerializeField] private GameStartNetworkBehaviour _gameStartNetworkBehaviour;
+    public GameStartNetworkBehaviour gameStartNetworkBehaviour => _gameStartNetworkBehaviour;
+
+    /// <summary>
     /// only true once initialized. will initialize the first time the networkvariable BattleData is changed/set on this client
     /// </summary>
     private bool initialized = false;
@@ -62,11 +68,39 @@ public class BattleManager : MonoBehaviour
             Debug.LogWarning("Duplicate GameManager spawned, destroying the newly instantiated one");
             Destroy(gameObject);
         }
+
+        _gameStartNetworkBehaviour = GetComponent<GameStartNetworkBehaviour>();
     }
 
     private void Start() {
+        // When battle scene starts, if there is no game active, scene was likely loaded straight into from editor, 
+        // start a game in Local Multiplayer mode
+        if (!GameManager.Instance) {
+            Debug.LogError("A GameManager is required for the battle scene to work!");
+            return;
+        }
+
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
+            GameManager.Instance.StartGameHost(GameManager.GameConnectionType.LocalMultiplayer);
+            GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+        }
+
+        else if (GameManager.Instance.currentGameState == GameManager.GameState.None) {
+            GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
+            GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+        }
+
+        // If game data is null, battle scene was probbaly loaded straight into in editor, generate some new random battle data
+        BattleData battleData = new BattleData();
+        battleData.cycleUniqueColors = 5;
+        battleData.cycleLength = 7;
+        battleData.Randomize();
+        GameManager.Instance.battleData = battleData;
+
         InitializeBattle();
 
+        // TODO: set to Countdown, and then set to Playing after the synchronized countdown finishes
+        GameManager.Instance.SetGameState(GameManager.GameState.Playing);
         GameManager.Instance.playerManager.AttachPlayersToBoards();
         GameManager.Instance.playerManager.EnableBattleInputs();
     }
@@ -149,14 +183,7 @@ public class BattleManager : MonoBehaviour
     public async void PostGame() {
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
+        GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
         postGameMenuUI.ShowPostGameMenuUI();
-    }
-
-    /// <summary>
-    /// Go back to the character select screen.
-    /// Only works on server/host.
-    /// </summary>
-    public void GoToCharacterSelect() {
-        
     }
 }

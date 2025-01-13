@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5685718348528157538}
+  - component: {fileID: 5256190687837431016}
   - component: {fileID: 6875103078424749902}
+  - component: {fileID: 615975908181454852}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -32,6 +34,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5256190687837431016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7356562684146554855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1819870450
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 1
+  AutoObjectParentSync: 0
+  SyncOwnerTransformWhenParented: 0
+  AllowOwnerToParent: 0
 --- !u!114 &6875103078424749902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,3 +79,17 @@ MonoBehaviour:
   cosmetics: {fileID: 11400000, guid: 6d37034fe6289064184c49808436ed7f, type: 2}
   manaPiecePrefab: {fileID: 4739590568304164122, guid: bf6b3eb5ac3a1ed47b928acdde94e7e4, type: 3}
   manaTilePrefab: {fileID: 3662205671954021063, guid: e42c7f7f7aab59d42a4a3f025032c5d6, type: 3}
+  _gameStartNetworkBehaviour: {fileID: 615975908181454852}
+--- !u!114 &615975908181454852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7356562684146554855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a2afbaa9850384490053a07e0c1a86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1

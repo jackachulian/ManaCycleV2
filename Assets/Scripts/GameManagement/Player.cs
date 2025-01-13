@@ -145,10 +145,10 @@ public class Player : NetworkBehaviour {
     /// Board index should only be changed during char select phase - this will raise an error if not in charselect phase.
     /// </summary>
     public void OnBoardIndexChanged(int previous, int current) {
-        if (GameManager.Instance.currentGameState != GameManager.GameState.CharSelect) {
-            Debug.LogError("Board index changed while not in char select! Only change boardIndex while in charselect!");
-            return;
-        }
+        // if (GameManager.Instance.currentGameState != GameManager.GameState.CharSelect) {
+        //     Debug.LogError("Board index changed while not in char select! Only change boardIndex while in charselect!");
+        //     return;
+        // }
 
         if (boardIndex.Value < 0) {
             Debug.Log("Not attaching player with ID "+playerId.Value+" to a board yet because board index is invalid: "+boardIndex.Value);
@@ -157,14 +157,11 @@ public class Player : NetworkBehaviour {
 
         Debug.Log("Assigning player with ID "+playerId.Value+" to board number "+current+" (previous: "+previous+")");
 
-        if (!CharSelectManager.Instance) {
-            Debug.LogError("No charselectmanager instance found");
-            return;
+        if (CharSelectManager.Instance) {
+            AttachToCharSelector();
+        } else if (BattleManager.Instance) {
+            AttachToBattleBoard();
         }
-
-        // Assign player to the charselector of the newly set board index
-        var selector = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex.Value);
-        if (selector) AttachToCharSelector(selector);
     }
 
     /// <summary>
@@ -238,8 +235,8 @@ public class Player : NetworkBehaviour {
         playerInput.actions.FindActionMap("Battle", true).Disable();
     }
 
-    public void AttachToCharSelector(CharSelector selector) {
-        this.selector = selector;
+    public void AttachToCharSelector() {
+        selector = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex.Value);
         charSelectInputHandler.SetCharSelector(selector);
         if (selector) selector.AssignPlayer(this);
     }
@@ -247,9 +244,14 @@ public class Player : NetworkBehaviour {
     /// <summary>
     /// For use in the battle scene. Attach inputs to the board with this player's current boardIndex.
     /// </summary>
-    public void AttachToBattleBoard(Board board) {
-        battleInputHandler.SetBoard(board);
-        board.SetPlayer(this);
-        Debug.Log("Attached player "+this+" to board "+board);
+    public void AttachToBattleBoard() {
+        var board = BattleManager.Instance.GetBoardByIndex(boardIndex.Value);
+        if (board) {
+            battleInputHandler.SetBoard(board);
+            board.SetPlayer(this);
+            Debug.Log("Attached player "+this+" to board "+board);
+        } else {
+            Debug.LogError("Player "+this+" could not be attached to board, there is no board with index "+boardIndex.Value);
+        }
     }
 }

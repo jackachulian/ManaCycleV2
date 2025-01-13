@@ -62,8 +62,11 @@ public class PieceManager : MonoBehaviour {
     }
 
     void PieceFallingUpdate() {
-        // Only perform fall logic if this board is owned
-        if (!board.player || !board.player.IsOwner) return;
+        // Return if there is a player assigned but there is not the owner
+        if (board.player && !board.player.IsOwner) return;
+
+        // If there is no player, then let the server manage the board's piece while the player is unconnected
+        else if (!NetworkManager.Singleton || !NetworkManager.Singleton.IsServer) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
@@ -79,7 +82,7 @@ public class PieceManager : MonoBehaviour {
                 // TODO: add a little bit of buffer time before placing the piece to allow sliding
                 bool moved = TryMovePiece(Vector2Int.down);
                 if (!moved) {
-                    board.player.boardNetworkBehaviour.PlaceCurrentPieceRpc();
+                    if (board.player) board.player.boardNetworkBehaviour.PlaceCurrentPieceRpc();
                 }
 
                 iters++;
@@ -135,7 +138,7 @@ public class PieceManager : MonoBehaviour {
             return false;
         }
 
-        board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
+        if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
         return true;
     }
