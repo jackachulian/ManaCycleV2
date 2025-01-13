@@ -642,8 +642,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -7.5}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 977.0538, y: 302.34503}
-  m_SizeDelta: {x: 435.7325, y: 2085.6523}
+  m_AnchoredPosition: {x: 950, y: 302.34503}
+  m_SizeDelta: {x: 382.72, y: 2085.6523}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &487070863
 CanvasRenderer:
@@ -891,6 +891,10 @@ PrefabInstance:
       value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1763610065}
+    - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -945,6 +949,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6feea03c0e8dd87489dcfb28098c39ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &873591280 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5876694803251326324, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+  m_PrefabInstance: {fileID: 7086331243355953943}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &873591281 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+  m_PrefabInstance: {fileID: 7086331243355953943}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873591280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1023478669
@@ -1515,6 +1535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleManager: {fileID: 590613157}
+  firstSelectedObject: {fileID: 873591280}
 --- !u!1001 &1763610063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1620,6 +1641,14 @@ PrefabInstance:
       value: 66.45
       objectReference: {fileID: 0}
     - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 873591281}
+    - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 2098577435}
+    - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1665,6 +1694,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5080192997811101753, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
   m_PrefabInstance: {fileID: 1763610063}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1763610065 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+  m_PrefabInstance: {fileID: 1763610063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1829943793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1815,6 +1855,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866971221}
   m_CullTransparentMesh: 1
+--- !u!114 &2098577435 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+  m_PrefabInstance: {fileID: 538210253}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2124394156 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3108254941254783995, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
@@ -2133,6 +2184,10 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 1763610065}
     - target: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1

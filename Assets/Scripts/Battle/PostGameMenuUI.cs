@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
+    [SerializeField] private GameObject firstSelectedObject;
 
     void Awake() {
         gameObject.SetActive(false);
