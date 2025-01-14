@@ -81,10 +81,25 @@ public class CharSelectManager : MonoBehaviour
     }
 
     public void LeaveGamePressed() {
+        var connectionType = GameManager.Instance.currentConnectionType;
         GameManager.Instance.LeaveGame();
+
+        // Only take them back to connection menu if mode was online multiplayer
+        if (connectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
+            // GameManager's OnClientStopped will open the connection menu when the client closes
+        }
+
+        // Otherwise, take the player to the previous scene
+        else {
+            BackToPreviousScene();
+        }
     }
 
     public void BackToPreviousScenePressed() {
+        BackToPreviousScene();
+    }
+
+    public void BackToPreviousScene() {
         SceneManager.LoadScene("MainMenu");
     }
 

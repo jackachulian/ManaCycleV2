@@ -49,7 +49,7 @@ MonoBehaviour:
   GlobalObjectIdHash: 3057390496
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
-  Ownership: 1
+  Ownership: 8
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
   ActiveSceneSynchronization: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf1a717579d8b74c8607b679e21c591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _charSelectors: []
+  _charSelectorLayout: {fileID: 0}
   charButtonList: {fileID: 0}
   allReadyWindow: {fileID: 0}
   _connectionMenuUi: {fileID: 0}

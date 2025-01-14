@@ -39,10 +39,19 @@ public class CharSelectInputHandler : NetworkBehaviour
             return;
         }
 
+        if (!charSelector) {
+            Debug.LogError("No charselector assigned");
+            return;
+        }
+
+        // Confirm options if options is open
         if (player.characterChosen.Value) {
             player.optionsChosen.Value = true;
-        } else if (player.selectedBattlerIndex.Value >= 0) {
-            player.characterChosen.Value = true;
+        } 
+
+        // Click with the cursor if still choosing character
+        else {
+            charSelector.ui.cursor.interactor.Submit();
         }
     }
 

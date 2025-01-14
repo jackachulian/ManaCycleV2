@@ -222,8 +222,8 @@ public class GameManager : MonoBehaviour {
 
         playerInputManager.enabled = false;
         serverPlayerConnectionManager.StopListeningForPlayers();
+        if (currentConnectionType == GameConnectionType.OnlineMultiplayer) LobbyManager.Instance.LeaveLobby();
         networkManager.Shutdown();
-        LobbyManager.Instance.LeaveLobby();
     }
 
     public void ClientDisconnectFromGame() {
@@ -232,8 +232,8 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
+        if (currentConnectionType == GameConnectionType.OnlineMultiplayer) LobbyManager.Instance.LeaveLobby();
         networkManager.Shutdown();
-        LobbyManager.Instance.LeaveLobby();
     }
 
     public void OnServerStarted() {
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour {
     public void OnClientStopped(bool wasHost) {
         Debug.Log("Client stopped");
         _currentGameState = GameState.None;
-        if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
+        if (CharSelectManager.Instance && currentConnectionType == GameConnectionType.OnlineMultiplayer) CharSelectManager.Instance.ShowConnectionMenu();
     }
 
     public void OnClientDisconnected() {

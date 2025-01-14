@@ -1439,6 +1439,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6389733534284805521, guid: feecb4ba8d6f11d438e2c4cb86b7df5e, type: 3}
   m_PrefabInstance: {fileID: 421852035}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &571647657 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4689022289357443999, guid: 65533600d4e94d04a9b8512ecd295646, type: 3}
+  m_PrefabInstance: {fileID: 9078862099565799371}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf1a717579d8b74c8607b679e21c591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &578872633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3107,7 +3118,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1251355344}
+  - component: {fileID: 1251355348}
   - component: {fileID: 1251355345}
+  - component: {fileID: 1251355346}
+  - component: {fileID: 1251355347}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -3181,7 +3195,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 571647657}
         m_TargetAssemblyTypeName: CharSelectManager, Assembly-CSharp
         m_MethodName: LeaveGamePressed
         m_Mode: 1
@@ -3193,6 +3207,74 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1251355346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251355343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2937063c188ecf246848285cfb289536, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onCursorHovered:
+    m_PersistentCalls:
+      m_Calls: []
+  onCursorPressed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 571647657}
+        m_TargetAssemblyTypeName: CharSelectManager, Assembly-CSharp
+        m_MethodName: LeaveGamePressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!222 &1251355347
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251355343}
+  m_CullTransparentMesh: 1
+--- !u!114 &1251355348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251355343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &1304562382
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5767,7 +5849,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 571647657}
         m_TargetAssemblyTypeName: CharSelectManager, Assembly-CSharp
         m_MethodName: BackToPreviousScenePressed
         m_Mode: 1

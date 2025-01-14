@@ -9,10 +9,15 @@ public class Cursor : MonoBehaviour
 {
     public event Action<CharButton> onCharButtonHovered;
 
-    [SerializeField] private CursorMovement cursorMovement;
-    [SerializeField] private CursorUIInteractor interactor;
+    private CursorMovement cursorMovement;
+    public CursorUIInteractor interactor {get; private set;}
 
-    public bool locked {get; private set;} = false;
+    public bool locked = false;
+
+    void Awake() {
+        cursorMovement = GetComponent<CursorMovement>();
+        interactor = GetComponent<CursorUIInteractor>();
+    }
 
     public void SetLocked(bool locked)
     {

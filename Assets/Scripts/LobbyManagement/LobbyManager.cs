@@ -141,14 +141,18 @@ public class LobbyManager : MonoBehaviour {
     }
 
     public async void LeaveLobby() {
-        string playerId = AuthenticationService.Instance.PlayerId;
-        
-        if (NetworkManager.Singleton.IsServer) {
+        if (joinedLobby != null) {
+            string playerId = AuthenticationService.Instance.PlayerId;
+            if (NetworkManager.Singleton.IsServer) {
             Debug.Log("Deleting lobby");
             await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);
+            } else {
+                Debug.Log("Leaving lobby");
+                await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, playerId);
+            }
+            joinedLobby = null;
         } else {
-            Debug.Log("Leaving lobby");
-            await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, playerId);
+            Debug.LogWarning("Trying to leave a lobby but not in a lobby");
         }
     }
 }

@@ -1,6 +1,7 @@
 using Battle;
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -126,12 +127,26 @@ public class Player : NetworkBehaviour {
         // call playerspawned on all clients (including host)
         GameManager.Instance.playerManager.PlayerSpawned(this);
 
+        // In online mode, set the username on this object for others to see this player's username
+        if (IsOwner && GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
+            SetUsernameAsync();
+        }
+
         // Call this so board index can hook to board if it is already the correct and set value upon joining the game
         OnBoardIndexChanged(-1, boardIndex.Value);
     }
 
+    public async void SetUsernameAsync() {
+        username.Value = new FixedString128Bytes(await AuthenticationService.Instance.GetPlayerNameAsync());
+    }
+
     public override void OnNetworkDespawn()
     {
+        // Unassign this player from its charselector if assigned to one
+        if (charSelectInputHandler.charSelector && charSelectInputHandler.charSelector.player == this) {
+            charSelectInputHandler.charSelector.AssignPlayer(null);
+        }
+
         // If this is the server, remove from the server player manager
         if (NetworkManager.Singleton.IsServer) {
             GameManager.Instance.playerManager.ServerRemovePlayer(this);

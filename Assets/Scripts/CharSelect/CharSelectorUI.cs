@@ -5,6 +5,7 @@ using Battle;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Serialization;
 using UnityEngine.InputSystem;
+using Unity.Services.Lobbies.Models;
 
 /// <summary>
 /// Handles the visuals for a charselector.
@@ -26,6 +27,7 @@ public class CharSelectorUI : MonoBehaviour
     [SerializeField] [FormerlySerializedAs("nameText")] private TMP_Text battlerNameText;
 
     [Header("Status Strings")]
+    [SerializeField] private string unconnectedSingleplayerText = "";
     [SerializeField] private string unconnectedLocalText = "<Press Button To Connect>";
     [SerializeField] private string unconnectedOnlineText = "Waiting for players...";
     [SerializeField] private string disconnectedText = "Disconnected";
@@ -110,7 +112,17 @@ public class CharSelectorUI : MonoBehaviour
                 battlerNameText.text = charSelector.player.IsOwner ? localSelectText : onlineSelectText;
             } else {
                 battlerNameText.color = unconnectedTextColor;
-                battlerNameText.text = GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer ? unconnectedLocalText : unconnectedOnlineText;
+                switch (GameManager.Instance.currentConnectionType) {
+                    case GameManager.GameConnectionType.OnlineMultiplayer:
+                        battlerNameText.text = unconnectedOnlineText;
+                        break;
+                    case GameManager.GameConnectionType.LocalMultiplayer:
+                        battlerNameText.text = unconnectedLocalText;
+                        break;
+                    default:
+                        battlerNameText.text = unconnectedSingleplayerText;
+                        break;
+                }
             }
         }
     }
@@ -176,13 +188,12 @@ public class CharSelectorUI : MonoBehaviour
         }
 
         else if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
-            // TODO: implement this!
-            usernameText.text = "username123";
+            usernameText.text = charSelector.player.username.Value.ToString();
         }
 
         // mostly for testing
         else if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Singleplayer) {
-            usernameText.text = "Player";
+            usernameText.text = "";
         }
 
         else {
