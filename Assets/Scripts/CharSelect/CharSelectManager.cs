@@ -45,6 +45,17 @@ public class CharSelectManager : MonoBehaviour
             return;
         }
 
+        Debug.Log("Starting char select with game state "+GameManager.Instance.currentGameState);
+
+        // If loading from countdown, playing, paused or postgame state, then char select was just selected in pause menu / postgame menu.
+        if (GameManager.Instance.currentGameState == GameManager.GameState.Countdown
+        || GameManager.Instance.currentGameState == GameManager.GameState.Playing
+        || GameManager.Instance.currentGameState == GameManager.GameState.Paused
+        || GameManager.Instance.currentGameState == GameManager.GameState.PostGame) {
+            GameManager.Instance.SetGameState(GameManager.GameState.CharSelect);
+            Debug.Log("Game state changed to charselect automatically");
+        }
+
         // If the current connection type is CharSelect when this starts,
         // that means the scene is being loaded straight into a game without the connection menu.
         // so automatically start a game if so

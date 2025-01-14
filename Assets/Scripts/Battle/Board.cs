@@ -109,6 +109,7 @@ public class Board : MonoBehaviour
         if (!player) boardUI.ShowBattler(null);
 
         manaTileGrid.HideTiles(); // tiles will be shown when the game begins
+        upcomingPieces.HidePieces();
     }
 
     /// <summary>
@@ -117,6 +118,7 @@ public class Board : MonoBehaviour
     public void StartBattle() {
         boardActive = true;
         manaTileGrid.ShowTiles();
+        upcomingPieces.ShowPieces();
     }
 
     /// <summary>

@@ -13,10 +13,13 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
 
     public void SubscibeToReadinessChanges(Player player) {
         player.optionsChosen.OnValueChanged += OnAnyBoardReadinessChanged;
+        player.onBattleDataReceived += CheckIfAllBattleDataReceived;
     }
 
     public void UnsubscibeToReadinessChanges(Player player) {
         player.optionsChosen.OnValueChanged -= OnAnyBoardReadinessChanged;
+        player.onBattleDataReceived -= CheckIfAllBattleDataReceived;
+
     }
 
     public void OnAnyBoardReadinessChanged(bool previous, bool current) {
@@ -48,14 +51,14 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
         if (readyCount >= requiredPlayers) {
             Debug.Log("All players ready - starting game after delay!");
             await Awaitable.WaitForSecondsAsync(0.5f);
-            ServerStartGame();
+            SendBattleDataServer();
         }
     }
 
     /// <summary>
     /// Start game. Works wither from CharSelect or Battle scene.
     /// </summary>
-    public void ServerStartGame() {
+    public void SendBattleDataServer() {
         // Generate random battle data (seed) to be used for the upcoming battle.
         BattleData battleData = new BattleData();
         battleData.cycleUniqueColors = 5;
@@ -63,23 +66,37 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
         battleData.Randomize();
 
         // send this to other players via an RPC, so that RNG and other per-battle data is sync'ed properly
-        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) SetBattleDataRpc(battleData);
+        Debug.Log("Battle data set on server. RNG seed: "+battleData.seed);
+        GameManager.Instance.SetBattleData(battleData);
 
-        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += BattleManager.InstanceStartCountdownServer;
-        NetworkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
-
-        // Set all players unready so that the next char select will work properly after the upcoming battle
-        foreach (var player in GameManager.Instance.playerManager.players) {
-            player.selectedBattlerIndex.Value = -1;
-            player.characterChosen.Value = false;
-            player.optionsChosen.Value = false;
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
+            foreach (var player in GameManager.Instance.playerManager.players) {
+                player.onBattleDataReceived += CheckIfAllBattleDataReceived;
+                if (!player.IsOwner) player.SetBattleDataClientRpc(battleData);
+            }
         }
     }
 
-    [Rpc(SendTo.Everyone)]
-    public void SetBattleDataRpc(BattleData battleData) {
-        Debug.Log("Battle data set. RNG seed: "+battleData.seed);
-        GameManager.Instance.battleData = battleData;
+    private void CheckIfAllBattleDataReceived(Player playerReceivedFrom, BattleData battleData) {
+        if (battleData.seed != GameManager.Instance.battleData.seed) {
+            Debug.LogError("BattleData received by player with boardIndex "+playerReceivedFrom.boardIndex.Value+" has seed "
+                +battleData.seed+"! Expected seed: "+GameManager.Instance.battleData.seed);
+            return;
+        }
+
+        // Wait until seed of all non-server clients matches the seed set by the server
+        foreach (var player in GameManager.Instance.playerManager.players) {
+            if (!player.IsOwner && player.receivedBattleData.seed != GameManager.Instance.battleData.seed) return;
+        } 
+
+        // If all match, game can now be started
+        StartGameServer();
+    }
+
+    private void StartGameServer() {
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += BattleManager.InstanceStartCountdownServer;
+        GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
+        NetworkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
     }
 
     /// <summary>
@@ -109,6 +126,6 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
             return;
         }
 
-        ServerStartGame();
+        SendBattleDataServer();
     }
 }

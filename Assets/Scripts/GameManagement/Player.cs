@@ -1,3 +1,4 @@
+using System;
 using Battle;
 using Unity.Collections;
 using Unity.Netcode;
@@ -220,6 +221,34 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public void OnControlsChanged(PlayerInput playerInput) {
         UpdateSelectorPlayerData();
+    }
+
+    /// <summary>
+    /// Sets battle data on the local client, and then sends to the server the BattleData that was set.
+    /// </summary>
+    [Rpc(SendTo.Owner)]
+    public void SetBattleDataClientRpc(BattleData battleData) {
+        Debug.Log("Battle data set on client. RNG seed: "+battleData.seed);
+        GameManager.Instance.SetBattleData(battleData);
+        VerifyBattleDataServerRpc(battleData);
+    }
+
+    /// <summary>
+    /// Only used on the server. The BattleData that was received by the client.
+    /// Ensures that correct battledata was received by all clients.
+    /// </summary>
+    public BattleData receivedBattleData {get; set;}
+
+    /// <summary>
+    /// GameStartNetworkBehaviour listens for this to know when to check if all players have received the correct battle data
+    /// </summary>
+    public event Action<Player, BattleData> onBattleDataReceived;
+
+    [Rpc(SendTo.Server)]
+    public void VerifyBattleDataServerRpc(BattleData battleData) {
+        Debug.Log("Battle data set on player with board index "+boardIndex.Value+". RNG seed: "+battleData.seed);
+        receivedBattleData = battleData;
+        onBattleDataReceived?.Invoke(this, battleData);
     }
 
     /// <summary>

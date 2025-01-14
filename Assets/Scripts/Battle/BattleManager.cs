@@ -91,25 +91,19 @@ public class BattleManager : MonoBehaviour
         // Default to starting a game in singleplayer if a game is not active
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
             GameManager.Instance.StartGameHost(GameManager.GameConnectionType.Singleplayer);
-            GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+            GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
+            BattleData battleData = new BattleData();
+            battleData.cycleUniqueColors = 5;
+            battleData.cycleLength = 7;
+            battleData.Randomize();
+            GameManager.Instance.SetBattleData(battleData);
+            Debug.Log("Battle data generated within battle scene - seed: "+battleData.seed);
         }
-
-        else if (GameManager.Instance.currentGameState == GameManager.GameState.None) {
-            GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
-            GameManager.Instance.SetGameState(GameManager.GameState.Playing);
-        }
-
-        // If game data is null, battle scene was probbaly loaded straight into in editor, generate some new random battle data
-        BattleData battleData = new BattleData();
-        battleData.cycleUniqueColors = 5;
-        battleData.cycleLength = 7;
-        battleData.Randomize();
-        GameManager.Instance.battleData = battleData;
 
         InitializeBattle();
 
         // TODO: set to Countdown, and then set to Playing after the synchronized countdown finishes
-        GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+        GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
         GameManager.Instance.playerManager.AttachPlayersToBoards();
         GameManager.Instance.playerManager.EnableBattleInputs();
 
@@ -138,14 +132,30 @@ public class BattleManager : MonoBehaviour
             board.InitializeBattle(this, GameManager.Instance.battleData.seed);
             board.onDefeat.AddListener(CheckForWinner);
         }
+
+        foreach (Player player in GameManager.Instance.playerManager.players) {
+            if (player.IsOwner) {
+                // Set each player as unready so that the next char select will work properly after the upcoming battle
+                // (only the player's local client sets these values)
+                player.selectedBattlerIndex.Value = -1;
+                player.characterChosen.Value = false;
+                player.optionsChosen.Value = false;
+            }
+
+            // received battle data should also be null for when the next gamestart happens, data isnt leftover from previous game starts
+            player.receivedBattleData = default;
+        }
     }
 
     public static void InstanceStartCountdownServer(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= InstanceStartCountdownServer;
         Instance.countdown.StartCountdownServer();
     }
 
     public void StartBattle() {
         Debug.Log("Game started!");
+
+        GameManager.Instance.SetGameState(GameManager.GameState.Playing);
 
         foreach (Board board in boards) {
             board.StartBattle();

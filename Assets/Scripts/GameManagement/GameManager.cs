@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
     /// Battle data to use for the current game, such as the RNG seed, cycle length and color count, etc
     /// Sent by the charselectmanager or postgamemanager before starting a new game
     /// </summary>
-    public BattleData battleData;
+    public BattleData battleData {get; private set;}
 
     public enum GameConnectionType {
         /// <summary>
@@ -127,6 +127,10 @@ public class GameManager : MonoBehaviour {
 
     public void SetGameState(GameState gameState) {
         _currentGameState = gameState;
+    }
+
+    public void SetBattleData(BattleData battleData) {
+        this.battleData = battleData;
     }
 
     /// <summary>
