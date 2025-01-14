@@ -22,6 +22,11 @@ public class Board : MonoBehaviour
     public PieceManager pieceManager {get; private set;}
 
     /// <summary>
+    /// Cached UpcomingPieces component on the board. Manages the upcoming pieces list.
+    /// </summary>
+    public UpcomingPieces upcomingPieces {get; private set;}
+
+    /// <summary>
     /// Manages spellcasts for this board. Cached on initialization.
     /// </summary>
     public SpellcastManager spellcastManager {get; private set;}
@@ -87,8 +92,11 @@ public class Board : MonoBehaviour
         manaTileGrid = GetComponent<ManaTileGrid>();
         manaTileGrid.InitializeBattle();
 
+        upcomingPieces = GetComponent<UpcomingPieces>();
+        upcomingPieces.InitializeBattle(this, seed);
+
         pieceManager = GetComponent<PieceManager>();
-        pieceManager.InitializeBattle(this, seed);
+        pieceManager.InitializeBattle(this);
 
         spellcastManager = GetComponent<SpellcastManager>();
         spellcastManager.InitializeBattle(this);

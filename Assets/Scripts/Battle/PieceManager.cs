@@ -1,6 +1,5 @@
 using System;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -36,20 +35,18 @@ public class PieceManager : MonoBehaviour {
     private bool quickfall = false;
 
     /// <summary>
-    /// RNG instance used to determine the colors.
-    /// Seed is set on battle initialization.
-    /// </summary>
-    private System.Random rng;
-
-    /// <summary>
     /// The Board this is managing the spellcasts of. Cached on InitializeBattle()
     /// </summary>
     private Board board;
 
-    public void InitializeBattle(Board board, int seed) {
+    /// <summary>
+    /// Initialize the battle.
+    /// Is initialized after UpcomingPieceList so that the first piece can be spawned on initialization.
+    /// (The piece is spawned before the timer starts, in case boards' countdowns start at slightly different times on different clients)
+    /// </summary>
+    /// <param name="board"></param>
+    public void InitializeBattle(Board board) {
         this.board = board;
-
-        rng = new System.Random(seed);
 
         SpawnNewPiece();
     }
@@ -261,19 +258,20 @@ public class PieceManager : MonoBehaviour {
 
     /// <summary>
     /// Is called after the current piece is placed.
+    /// Replaces the current piece with the next piece from the upcomingpieces list.
     /// </summary>
     public void SpawnNewPiece() {
-        currentPiece = BattleManager.Instance.SpawnPiece();
+        // TODO: grab the new piece from the upcoming pieces list
+        currentPiece = board.upcomingPieces.PopNextPiece();
+
+        // parent the next piece onto the board so the player can see it
         currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
 
-        // spawn position will be the top row, middle column
+        // spawn position will be the top row, middle column of the board
         Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
         currentPiece.position = spawnPos;
         currentPiece.UpdateVisualPositions();
 
-        for (int i = 0; i < currentPiece.tiles.Length; i++) {
-            int color = rng.Next(5);
-            currentPiece.tiles[i].SetColor(color, BattleManager.Instance.cosmetics);
-        }
+        board.upcomingPieces.UpdatePieceListUI();
     }
 }
