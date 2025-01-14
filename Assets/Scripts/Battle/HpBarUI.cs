@@ -8,7 +8,7 @@ public class HpBarUI : MonoBehaviour {
     private Material material;
 
     private void Awake() {
-        material = GetComponent<SpriteRenderer>().material;
+        material = GetComponent<Renderer>().material;
     }
 
     public void UpdateUI(float hp, float maxHp, int[] incomingDamage) {

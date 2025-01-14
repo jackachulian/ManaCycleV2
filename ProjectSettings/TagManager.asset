@@ -47,5 +47,8 @@ TagManager:
   - name: ManaTiles
     uniqueID: 3573849399
     locked: 0
+  - name: AboveManaTiles
+    uniqueID: 689461535
+    locked: 0
   m_RenderingLayers:
   - Default

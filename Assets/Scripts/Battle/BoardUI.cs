@@ -2,9 +2,9 @@ using Battle;
 using UnityEngine;
 
 /// <summary>
-/// Handles the battler portrait sprite and any other battler-specific visual elements on the board
+/// Handles the battler portrait sprite, fall anim, and any other board-specific visual elements on the board
 /// </summary>
-public class BattlerUI : MonoBehaviour {
+public class BoardUI : MonoBehaviour {
     [SerializeField] private SpriteRenderer portraitSpriteRenderer;
 
     public void ShowBattler(Battler battler) {

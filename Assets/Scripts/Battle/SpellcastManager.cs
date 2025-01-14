@@ -45,6 +45,16 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     [SerializeField] private BoardSide boardSide = BoardSide.LEFT;
 
+    /// <summary>
+    /// UI object that shows chain number and the duration remaining to extend the chain
+    /// </summary>
+    [SerializeField] private PopupUI chainPopup;
+
+    /// <summary>
+    /// UI object that shows cascade number and the duration remaining to extend the cascade
+    /// </summary>
+    [SerializeField] private PopupUI cascadePopup;
+
     // ================ Non-serialized fields ================
     // ======== General ========
     /// <summary>
@@ -80,7 +90,6 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     private bool spellcasting {get; set;}
 
-    // TODO: Make these private!! only public for debugging purposes
     /// <summary>
     /// Current cascade off the current color during a spellcast.
     /// Set to 0 when a spellcast is not occuring.
@@ -105,6 +114,11 @@ public class SpellcastManager : MonoBehaviour {
 
     
     // ================ Methods ================
+    void Awake() {
+        // Cascade popup will not use the time display (for now at least, may change this behaviour later)
+        cascadePopup.DisplayTimeLeft(0);
+    }
+    
     /// <summary>
     /// Called when the battle initializes, after the ManaCycle and the Board for this spellcastmanager is initialized.
     /// </summary>
@@ -135,6 +149,9 @@ public class SpellcastManager : MonoBehaviour {
         if (!board.player || !board.player.IsOwner) return;
 
         timeSinceLastClear += Time.deltaTime;
+
+        // Display the time remaining to extend the chain
+        chainPopup.DisplayTimeLeft((maxChainDelay - timeSinceLastClear) / maxChainDelay);
 
         // Check to see if there is a valid cascade
         if (
@@ -173,6 +190,8 @@ public class SpellcastManager : MonoBehaviour {
         spellcasting = false;
         currentChain = 0;
         currentCascade = 0;
+        chainPopup.Hide();
+        cascadePopup.Hide();
         Debug.Log("Chain ended");
     }
 
@@ -188,6 +207,16 @@ public class SpellcastManager : MonoBehaviour {
         } else {
             Debug.Log("Chain clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
             currentChain += 1;
+        }
+
+        // Show the chain popup if chain is 2 or greater
+        if (currentChain >= 2) {
+            chainPopup.Show(currentChain);
+        }
+
+        // Show the chain popup if cascade is 2 or greater
+        if (currentCascade >= 2) {
+            cascadePopup.Show(currentCascade);
         }
 
         // Clear the current cycle color and recalculate connected tiles
@@ -240,6 +269,7 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     public void EndCascade() {
         currentCascade = 0;
+        cascadePopup.Hide();
         AdvanceCycle();
     }
 
