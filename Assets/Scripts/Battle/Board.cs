@@ -125,6 +125,8 @@ public class Board : MonoBehaviour
         boardActive = false;
         defeated = true;
         onDefeat.Invoke();
+        boardUI.ShowLoseText();
+        boardUI.StartDefeatFall();
     }
 
     /// <summary>
@@ -134,5 +136,6 @@ public class Board : MonoBehaviour
     public void Win() {
         Debug.Log(this+" won!");
         boardActive = false;
+        boardUI.ShowWinText();
     }
 }
