@@ -32,6 +32,11 @@ public class Board : MonoBehaviour
     public HealthManager healthManager {get; private set;}
 
     /// <summary>
+    /// Handles the battler portrait sprite and any other battler-specific visual elements on the board.
+    /// </summary>
+    public BattlerUI battlerUi {get; private set;}
+
+    /// <summary>
     /// Set to true when initialized by the battlemanager.
     /// </summary>
     private bool initialized = false;
@@ -60,6 +65,7 @@ public class Board : MonoBehaviour
 
     public void SetPlayer(Player player) {
         this.player = player;
+        OnPlayerAssigned();
     }
 
     /// <summary>
@@ -89,6 +95,19 @@ public class Board : MonoBehaviour
 
         healthManager = GetComponent<HealthManager>();
         healthManager.InitializeBattle(this);
+
+        battlerUi = GetComponent<BattlerUI>();
+    }
+
+    /// <summary>
+    /// Called when a player is assigned, OR unassigned for some reason.
+    /// </summary>
+    public void OnPlayerAssigned() {
+        if (player) {
+            battlerUi.ShowBattler(player.battler);
+        } else {
+            battlerUi.ShowBattler(null);
+        }
     }
 
     public bool IsInitialized() {

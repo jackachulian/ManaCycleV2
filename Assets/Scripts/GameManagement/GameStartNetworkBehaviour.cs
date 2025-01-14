@@ -63,7 +63,7 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
         battleData.Randomize();
 
         // send this to other players via an RPC, so that RNG and other per-battle data is sync'ed properly
-        SetBattleDataRpc(battleData);
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) SetBattleDataRpc(battleData);
 
         NetworkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
 

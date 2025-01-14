@@ -41,6 +41,13 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public NetworkVariable<bool> optionsChosen = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+    /// <summary>
+    /// Selected battler object. 
+    /// Note: this is not netwok synchronized, but the value is set by CharSelect
+    /// before the game is started, and this value is read in the Battle scene.
+    /// </summary>
+    public Battler battler;
+
 
     /// <summary>
     /// the Unity engine's Input System player input manager
