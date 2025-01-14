@@ -11,6 +11,10 @@ public class BattleCountdown : NetworkBehaviour {
 
     public TMP_Text countdownText;
 
+    void Awake() {
+        countdownText.text = "";
+    }
+
     public void StartCountdownServer() {
         if (!NetworkManager.Singleton.IsServer) {
             Debug.LogError("Only the server can start the countdown!");
@@ -40,7 +44,6 @@ public class BattleCountdown : NetworkBehaviour {
 
         countdownRunning = true;
         int lastSecondsDisplayed = 9999;
-        countdownText.text = "";
 
         while (NetworkManager.ServerTime.Time < countdownEndTime) {
             int secondsRemaining = Mathf.CeilToInt(countdownEndTime - (float)NetworkManager.ServerTime.Time);

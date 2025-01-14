@@ -55,7 +55,7 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     public void PlayerSpawned(Player player) {
         players.Add(player);
-        onPlayerSpawned.Invoke(player);
+        onPlayerSpawned?.Invoke(player);
         Debug.Log("Added player with board index "+player.boardIndex.Value);
     }
 
@@ -76,7 +76,7 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     public void PlayerDespawned(Player player) {
         players.Remove(player);
-        onPlayerDespawned.Invoke(player);
+        onPlayerDespawned?.Invoke(player);
         Debug.Log("Removed player with ID "+player.playerId.Value+" and board index "+player.boardIndex.Value);
     }
 

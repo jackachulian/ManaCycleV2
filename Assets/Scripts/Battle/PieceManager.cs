@@ -67,7 +67,7 @@ public class PieceManager : MonoBehaviour {
         if (board.player && !board.player.IsOwner) return;
 
         // If there is NO player, then the server will have to manage the board's piece while the player is unconnected
-        else if (!NetworkManager.Singleton || !NetworkManager.Singleton.IsServer) return;
+        else if (!board.player && NetworkManager.Singleton && !NetworkManager.Singleton.IsServer) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();

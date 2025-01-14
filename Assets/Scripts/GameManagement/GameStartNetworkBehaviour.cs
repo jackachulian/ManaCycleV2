@@ -20,7 +20,7 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     }
 
     public void OnAnyBoardReadinessChanged(bool previous, bool current) {
-        if (GameManager.Instance.currentGameState == GameManager.GameState.CharSelect) ServerStartIfAllReady();
+        if (GameManager.Instance.currentGameState == GameManager.GameState.CharSelect && NetworkManager.Singleton.IsServer) ServerStartIfAllReady();
     }
 
     public async void ServerStartIfAllReady() {
