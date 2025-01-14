@@ -19,6 +19,30 @@ public class ManaTile : MonoBehaviour
     /// </summary>
     public int color {get; private set;}
 
+    // ========= Fall variables ========
+    /// <summary>
+    /// Position being animated towards, current position will fall towards this
+    /// </summary>
+    private Vector2 targetPosition;
+
+    /// <summary>
+    /// Current fall speed. Accelerated over time while falling
+    /// </summary>
+    private float currentFallSpeed;
+
+
+    const float initialFallSpeed = 55f;
+
+    const float fallAcceleration = 40f;
+
+    bool falling = false;
+
+    void Update() {
+        if (falling) {
+            currentFallSpeed += fallAcceleration * Time.deltaTime;
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetPosition, currentFallSpeed * Time.deltaTime);
+        }
+    }
 
     /// <summary>
     /// Sets the color of this mana. (both visual and game logic).
@@ -39,6 +63,8 @@ public class ManaTile : MonoBehaviour
     // Animate towards the new position
     public void AnimatePosition(Vector2 targetPosition) {
         // TODO: interpolate between current and target position over time
-        transform.localPosition = targetPosition;
+        this.targetPosition = targetPosition;
+        falling = true;
+        currentFallSpeed = initialFallSpeed;
     }
 }
