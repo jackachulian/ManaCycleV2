@@ -16,6 +16,8 @@ public class LobbyManager : MonoBehaviour {
     public static LobbyManager Instance {get; private set;}
     public Lobby joinedLobby;
     public string joinedRelayCode;
+
+    // Only for the lobbymanager in the charselect scene, wont work for the instance in the battle scene
     [SerializeField] private ConnectionMenuUI connectionMenuUi;
 
 
@@ -23,18 +25,19 @@ public class LobbyManager : MonoBehaviour {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Debug.Log("Duplicate LobbyManager spawned! Destroying the new one.");
+            Debug.Log("Duplicate LobbyManager instantiated in the scene! Destroying the new one.");
             Destroy(gameObject);
         }
     }
 
-    private async void Start() {
-        await LogInIfNotLoggedIn();
+    async void Start() {
+        if (!connectionMenuUi) return;
 
+        await LogInIfNotLoggedIn();
+        
         string username = await AuthenticationService.Instance.GetPlayerNameAsync();
         connectionMenuUi.ShowStatus("Logged in as guest: "+username);   
 

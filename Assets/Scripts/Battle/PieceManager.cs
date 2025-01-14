@@ -1,5 +1,6 @@
 using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -62,10 +63,10 @@ public class PieceManager : MonoBehaviour {
     }
 
     void PieceFallingUpdate() {
-        // Return if there is a player assigned but there is not the owner
+        // Return if there is a player assigned but this client is not the owner; let that client control this board.
         if (board.player && !board.player.IsOwner) return;
 
-        // If there is no player, then let the server manage the board's piece while the player is unconnected
+        // If there is NO player, then the server will have to manage the board's piece while the player is unconnected
         else if (!NetworkManager.Singleton || !NetworkManager.Singleton.IsServer) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
@@ -100,11 +101,6 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     /// <returns>current amount of delay in seconds between piece falls</returns>
     float GetCurrentFallFrequency() {
-        // if (!IsOwner) {
-        //     Debug.Log("Trying to get fall speed on a non-owner client! Ony the owner should handle piece falling");
-        //     return 0;
-        // }
-
         if (quickfall) {
             return quickFallFrequency;
         } else {
@@ -179,7 +175,7 @@ public class PieceManager : MonoBehaviour {
             }
         }
 
-        board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
+        if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
         return true;
     }
