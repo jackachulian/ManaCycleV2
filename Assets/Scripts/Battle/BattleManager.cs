@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -14,12 +15,18 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// The Mana Cycle object that dictates the order of color clears.
     /// </summary>
-    [SerializeField] public ManaCycle manaCycle;
+    [SerializeField] private ManaCycle _manaCycle;
+    public ManaCycle manaCycle => _manaCycle;
 
     /// <summary>
     /// All players in the game. 2-4 players per game
     /// </summary>
     [SerializeField] private Board[] boards;
+
+     /// <summary>
+    /// The Mana Cycle object that dictates the order of color clears.
+    /// </summary>
+    [SerializeField] private BattleCountdown countdown;
 
     /// <summary>
     /// UI for the postgame. Start the UI when the game completes.
@@ -70,6 +77,7 @@ public class BattleManager : MonoBehaviour
         }
 
         _gameStartNetworkBehaviour = GetComponent<GameStartNetworkBehaviour>();
+        countdown = GetComponent<BattleCountdown>();
     }
 
     private void Start() {
@@ -104,6 +112,12 @@ public class BattleManager : MonoBehaviour
         GameManager.Instance.SetGameState(GameManager.GameState.Playing);
         GameManager.Instance.playerManager.AttachPlayersToBoards();
         GameManager.Instance.playerManager.EnableBattleInputs();
+
+        // If the countdown isn't running, start it (only if this is the server!)
+        // BattleStartNetworkManager should handle this, but not if battle scene is loaded straight into
+        if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer && NetworkManager.Singleton.IsServer) {
+            countdown.StartCountdownServer();
+        }
     }
 
     /// <summary>
@@ -118,11 +132,23 @@ public class BattleManager : MonoBehaviour
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
-        manaCycle.InitializeBattle(this);
+        _manaCycle.InitializeBattle(this);
         
         foreach (Board board in boards) {
             board.InitializeBattle(this, GameManager.Instance.battleData.seed);
             board.onDefeat.AddListener(CheckForWinner);
+        }
+    }
+
+    public static void InstanceStartCountdownServer(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
+        Instance.countdown.StartCountdownServer();
+    }
+
+    public void StartBattle() {
+        Debug.Log("Game started!");
+
+        foreach (Board board in boards) {
+            board.StartBattle();
         }
     }
 

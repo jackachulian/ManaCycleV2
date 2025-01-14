@@ -1,17 +1,19 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
+
 public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
     [SerializeField] private GameObject firstSelectedObject;
     [SerializeField] private Animator animator;
+    private bool menuShown = false;
 
     void Awake() {
-        gameObject.SetActive(false);
+        if (!menuShown) gameObject.SetActive(false);
     }
 
     public void ShowPostGameMenuUI() {
+        menuShown = true;
         gameObject.SetActive(true);
         animator.ResetTrigger("Open");
         animator.SetTrigger("Open");

@@ -82,7 +82,7 @@ public class Board : MonoBehaviour
         }
 
         defeated = false;
-        boardActive = true;
+        boardActive = false; // will be set to true after countdown reaches 0
         
         manaTileGrid = GetComponent<ManaTileGrid>();
         manaTileGrid.InitializeBattle();
@@ -99,12 +99,24 @@ public class Board : MonoBehaviour
         boardUI = GetComponent<BoardUI>();
 
         if (!player) boardUI.ShowBattler(null);
+
+        manaTileGrid.HideTiles(); // tiles will be shown when the game begins
+    }
+
+    /// <summary>
+    /// Called when the battle countdown reaches 0, and this board will start dropping pieces.
+    /// </summary>
+    public void StartBattle() {
+        boardActive = true;
+        manaTileGrid.ShowTiles();
     }
 
     /// <summary>
     /// Called when a player is assigned, OR unassigned for some reason.
     /// </summary>
     public void OnPlayerAssigned() {
+        if (!boardUI) boardUI = GetComponent<BoardUI>();
+
         if (player && player.battler) {
             boardUI.ShowBattler(player.battler);
         } else {

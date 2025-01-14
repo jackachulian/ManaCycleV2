@@ -65,6 +65,7 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
         // send this to other players via an RPC, so that RNG and other per-battle data is sync'ed properly
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) SetBattleDataRpc(battleData);
 
+        NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += BattleManager.InstanceStartCountdownServer;
         NetworkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
 
         // Set all players unready so that the next char select will work properly after the upcoming battle

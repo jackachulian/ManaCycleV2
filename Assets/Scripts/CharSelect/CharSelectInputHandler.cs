@@ -40,7 +40,7 @@ public class CharSelectInputHandler : NetworkBehaviour
         }
 
         if (!charSelector) {
-            Debug.LogError("No charselector assigned");
+            // Debug.LogError("No charselector assigned");
             return;
         }
 

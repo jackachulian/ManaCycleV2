@@ -116,4 +116,17 @@ public class ManaTileGrid : MonoBehaviour {
             }
         }
     }
+
+    /// <summary>
+    /// The tiles parent will be hidden until the game starts.
+    /// This way if other clients have slightly offset countdowns, their piece movements can still be evaluated locally
+    /// but this client won't see it.
+    /// </summary>
+    public void ShowTiles() {
+        _manaTileTransform.gameObject.SetActive(true);
+    }
+
+    public void HideTiles() {
+        _manaTileTransform.gameObject.SetActive(false);
+    }
 }
