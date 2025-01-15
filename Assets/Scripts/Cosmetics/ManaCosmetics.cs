@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Mana Cosmetics", menuName = "ManaCycle/ManaCosmetics", order = 1)]
 public class ManaCosmetics : ScriptableObject
@@ -12,6 +13,14 @@ public class ManaCosmetics : ScriptableObject
 
 [System.Serializable]
 public class ManaVisual {
-    public Sprite sprite;
-    public Color tint;
+    /// <summary>
+    /// Material to apply to the quad on ManaTiles of this type
+    /// </summary>
+    public Material material;
+
+    /// <summary>
+    /// Material to apply to the quad on ManaTiles of this type if the manaTile is a ghost tile
+    /// </summary>
+    public Material ghostMaterial;
+
 }

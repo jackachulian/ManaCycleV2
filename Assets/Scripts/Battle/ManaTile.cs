@@ -54,9 +54,8 @@ public class ManaTile : MonoBehaviour
 
         if (manaCosmetics) {
             var manaVisual = manaCosmetics.manaVisuals[color];
-            var spriteRenderer = GetComponent<SpriteRenderer>();
-            spriteRenderer.sprite = manaVisual.sprite;
-            spriteRenderer.color = manaVisual.tint;
+            var renderer = GetComponent<Renderer>();
+            renderer.material = manaVisual.material;
         }
     }
 
