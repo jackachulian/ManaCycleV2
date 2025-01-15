@@ -1688,6 +1688,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.57
       objectReference: {fileID: 0}
+    - target: {fileID: 7275761014745212042, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: boardIndex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7394692469015450872, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2397918683

@@ -112,7 +112,13 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     private float timeSinceLastClear;
 
-    
+    /// <summary>
+    ///  Event raised when this board's position in the cycle is changed
+    /// </summary>
+    /// <param name="cycleIndex"></param>
+    public delegate void CycleChangedCallback(int cycleIndex);
+    public event CycleChangedCallback CycleChangedNotifier; 
+
     // ================ Methods ================
     void Awake() {
         // Cascade popup will not use the time display (for now at least, may change this behaviour later)
@@ -284,6 +290,7 @@ public class SpellcastManager : MonoBehaviour {
         }
 
         RepositionCyclePointer();
+        CycleChangedNotifier?.Invoke(cycleIndex);
     }
 
     private void RepositionCyclePointer() {

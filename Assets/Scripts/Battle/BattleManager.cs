@@ -65,6 +65,12 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public bool gameCompleted {get; private set;}
 
+    /// <summary>
+    /// Event invoked when the battle is initialized
+    /// </summary>
+    public delegate void BattleInitializedCallback();
+    public event BattleInitializedCallback BattleInitializedNotifier;
+
     void Awake() {
         if (Instance == null)
         {
@@ -144,6 +150,8 @@ public class BattleManager : MonoBehaviour
             // received battle data should also be null for when the next gamestart happens, data isnt leftover from previous game starts
             player.receivedBattleData = default;
         }
+
+        BattleInitializedNotifier?.Invoke();
     }
 
     public static void InstanceStartCountdownServer(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
