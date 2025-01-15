@@ -1,6 +1,8 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// Represents a cursor that can be controlled using analog move inputs and used to click UI elements.
@@ -9,14 +11,19 @@ public class Cursor : MonoBehaviour
 {
     public event Action<CharButton> onCharButtonHovered;
 
+    [SerializeField] private Image cursorImage;
+    [SerializeField] private TMP_Text playerNumberText;
+
     private CursorMovement cursorMovement;
     public CursorUIInteractor interactor {get; private set;}
+    public Animator animator {get; private set;}
 
     public bool locked = false;
 
     void Awake() {
         cursorMovement = GetComponent<CursorMovement>();
         interactor = GetComponent<CursorUIInteractor>();
+        animator = GetComponent<Animator>();
     }
 
     public void SetLocked(bool locked)
@@ -34,8 +41,10 @@ public class Cursor : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public void SetPlayer(Player player) {
+    public void SetPlayer(Player player, Color color, int playerNumber) {
         interactor.SetPlayer(player);
+        cursorImage.color = color;
+        playerNumberText.text = "P"+playerNumber;
     }
 
     /// <summary>

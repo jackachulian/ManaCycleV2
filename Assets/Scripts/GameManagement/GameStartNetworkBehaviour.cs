@@ -61,19 +61,21 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     public void SendBattleDataServer() {
         // Generate random battle data (seed) to be used for the upcoming battle.
         BattleData battleData = new BattleData();
-        battleData.cycleUniqueColors = 5;
-        battleData.cycleLength = 7;
+        battleData.SetDefaults();
         battleData.Randomize();
 
         // send this to other players via an RPC, so that RNG and other per-battle data is sync'ed properly
         Debug.Log("Battle data set on server. RNG seed: "+battleData.seed);
         GameManager.Instance.SetBattleData(battleData);
 
+        // in online mode, wait for other clients to receive battle data
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
             foreach (var player in GameManager.Instance.playerManager.players) {
                 player.onBattleDataReceived += CheckIfAllBattleDataReceived;
                 if (!player.IsOwner) player.SetBattleDataClientRpc(battleData);
             }
+        } else {
+            StartGameServer();
         }
     }
 

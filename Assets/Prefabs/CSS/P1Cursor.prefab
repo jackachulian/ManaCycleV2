@@ -403,8 +403,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89ad6a6e87a86a4795b2f6b93202e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursorMovement: {fileID: 8115730104650849475}
-  interactor: {fileID: 1658437703205419261}
+  cursorImage: {fileID: 6524801146554463752}
+  playerNumberText: {fileID: 6510840642489139755}
+  locked: 0
 --- !u!114 &8115730104650849475
 MonoBehaviour:
   m_ObjectHideFlags: 0

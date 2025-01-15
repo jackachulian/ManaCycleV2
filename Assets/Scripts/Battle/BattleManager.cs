@@ -93,8 +93,7 @@ public class BattleManager : MonoBehaviour
             GameManager.Instance.StartGameHost(GameManager.GameConnectionType.Singleplayer);
             GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
             BattleData battleData = new BattleData();
-            battleData.cycleUniqueColors = 5;
-            battleData.cycleLength = 7;
+            battleData.SetDefaults();
             battleData.Randomize();
             GameManager.Instance.SetBattleData(battleData);
             Debug.Log("Battle data generated within battle scene - seed: "+battleData.seed);

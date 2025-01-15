@@ -185,6 +185,8 @@ public class Player : NetworkBehaviour {
         } else if (BattleManager.Instance) {
             AttachToBattleBoard();
         }
+
+       if (selector) selector.ui.cursor.SetPlayer(this, selector.ui.cursorColor, boardIndex.Value + 1);
     }
 
     /// <summary>
@@ -206,7 +208,14 @@ public class Player : NetworkBehaviour {
     }
 
     public void OnCharacterChosenChanged(bool previous, bool current) {
-        if (selector) selector.ui.UpdateReadinessStatus();
+        if (selector) {
+            selector.ui.UpdateReadinessStatus();
+            if (!previous && current) {
+                selector.ui.cursor.animator.SetTrigger("Select");
+            } else if (previous && !current) {
+                selector.ui.cursor.animator.SetTrigger("Hover");
+            }
+        }
     }
 
     public void OnOptionsChosenChanged(bool previous, bool current) {

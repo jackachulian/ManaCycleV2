@@ -2,6 +2,7 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the Battle and the CharSelect scenes, 
@@ -256,6 +257,7 @@ public class GameManager : MonoBehaviour {
         if (currentConnectionType == GameConnectionType.LocalMultiplayer) {
             _currentGameState = GameState.None;
             if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
+            else if (BattleManager.Instance) SceneManager.LoadScene("CharSelect");
         }        
     }
 
@@ -271,7 +273,10 @@ public class GameManager : MonoBehaviour {
     public void OnClientStopped(bool wasHost) {
         Debug.Log("Client stopped");
         _currentGameState = GameState.None;
-        if (CharSelectManager.Instance && currentConnectionType == GameConnectionType.OnlineMultiplayer) CharSelectManager.Instance.ShowConnectionMenu();
+        if (currentConnectionType == GameConnectionType.OnlineMultiplayer) {
+            if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
+            else if (BattleManager.Instance) SceneManager.LoadScene("CharSelect");
+        }
     }
 
     public void OnClientDisconnected() {

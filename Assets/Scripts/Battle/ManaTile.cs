@@ -31,9 +31,9 @@ public class ManaTile : MonoBehaviour
     private float currentFallSpeed;
 
 
-    const float initialFallSpeed = 55f;
+    [SerializeField] private float initialFallSpeed = 40f;
 
-    const float fallAcceleration = 40f;
+    [SerializeField] private float fallAcceleration = 40f;
 
     bool falling = false;
 

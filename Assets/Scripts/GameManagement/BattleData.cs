@@ -10,16 +10,21 @@ public struct BattleData : INetworkSerializeByMemcpy {
     /// <summary>
     /// Seed used for the piece color RNG. By default, this is random.
     /// </summary>
-    public int seed;
+    public int seed {get; private set;}
 
     // (These will later depend on the level in solo mode, but constant for now)
-    public int cycleLength;
-    public int cycleUniqueColors;
+    public int cycleLength {get; private set;}
+    public int cycleUniqueColors {get; private set;}
 
-    public BattleData(int cycleLength = 7, int cycleUniqueColors = 5) {
+    public BattleData(int cycleLength = 5, int cycleUniqueColors = 5) {
         this.seed = -1;
         this.cycleLength = cycleLength;
         this.cycleUniqueColors = cycleUniqueColors;
+    }
+
+    public void SetDefaults() {
+        cycleLength = 5;
+        cycleUniqueColors = 5;
     }
 
     /// <summary>

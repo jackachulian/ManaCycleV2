@@ -38,8 +38,10 @@ public class CharSelectorUI : MonoBehaviour
     [SerializeField] private Color connectedTextColor;
     [SerializeField] private Color unconnectedTextColor;
     [SerializeField] private Color connectedBackgroundColor;
-
     [SerializeField] private Color unconnectedBackgroundColor;
+    [SerializeField] private Color _cursorColor;
+    public Color cursorColor => _cursorColor;
+
 
     [Header("Menus")]
     [SerializeField] private GameObject optionsWindow;
@@ -72,12 +74,12 @@ public class CharSelectorUI : MonoBehaviour
             // Only enable the cursor if a locally owned player is controlling this char selector.
             if (charSelector.player.IsOwner) {
                 cursor.gameObject.SetActive(true);
-                cursor.SetPlayer(charSelector.player);
+                cursor.SetPlayer(charSelector.player, Color.red, charSelector.player.boardIndex.Value + 1);
             }
         } else {
             background.color = unconnectedBackgroundColor;
             cursor.gameObject.SetActive(false);
-            cursor.SetPlayer(null);
+            cursor.SetPlayer(null, Color.black, 0);
         }
 
         Debug.Log("Updating UI after player assign!");
