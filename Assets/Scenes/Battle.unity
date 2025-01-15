@@ -2407,7 +2407,14 @@ PrefabInstance:
       value: ManaCycle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5815166341045159056, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
+    - {fileID: 4752453065832764431, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
+    - {fileID: 5552610193203390310, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
+    - {fileID: 4169094727044216719, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
+    - {fileID: 8523744447780098820, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
+    - {fileID: 4805249712448263964, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
+    - {fileID: 8579285534821548501, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0a2cf264ded7504da9a14eb050cc528, type: 3}

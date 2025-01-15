@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: DefaultCosmetics
   m_EditorClassIdentifier: 
   manaVisuals:
-  - sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
-    tint: {r: 0.9433962, g: 0.23584905, b: 0.23584905, a: 1}
-  - sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
-    tint: {r: 0.04405483, g: 0.8490566, b: 0.17875311, a: 1}
-  - sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
-    tint: {r: 0.19134924, g: 0.3758793, b: 0.9433962, a: 1}
-  - sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
-    tint: {r: 0.9811321, g: 0.87483376, b: 0.06941971, a: 1}
-  - sprite: {fileID: -2500255246611326318, guid: c32e7ab062008194eb18f217889ac558, type: 3}
-    tint: {r: 0.7042062, g: 0.12135102, b: 0.9528302, a: 1}
+  - material: {fileID: 2100000, guid: dbce949be03d9d84c81cf8327fb5defb, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 4ab4d48fa7ff5794682dc65270b32a2c, type: 2}
+  - material: {fileID: 2100000, guid: e68241e3b1f071848b175c3f58906b38, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 913476f3fc5b48a419b1d4fd5bf7e4e5, type: 2}
+  - material: {fileID: 2100000, guid: ef898171e2a16d546a2bf946261efc84, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: fe0e429698a5f604e9a5365dc99f81e5, type: 2}
+  - material: {fileID: 2100000, guid: 47e2bc472d9682c49884f7ff43140808, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 7182e9a2d98d9df4f89c5d9899c01df0, type: 2}
+  - material: {fileID: 2100000, guid: 62811520065d07d4782d816a00aef644, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: 3f005847c931e16418c6e397e812416e, type: 2}
