@@ -33,7 +33,7 @@ public class ManaPiece : MonoBehaviour
         for (int i = 0; i < tiles.Length; i++) {
             ManaTile tile = tiles[i];
             Vector2Int tilePosition = GetTilePosition(i);
-            tile.transform.localPosition = new Vector3(tilePosition.x, tilePosition.y);
+            tile.transform.localPosition = new Vector2(tilePosition.x, tilePosition.y);
         }
     }
 

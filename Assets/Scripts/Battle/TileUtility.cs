@@ -62,7 +62,7 @@ public class TileUtility {
 
         // if tile fell at all, animate its fall position to the new position
         if (position.y != tile.position.y) {
-            tile.SetPosition(position, animateFall);
+            tile.SetBoardPosition(position, animateFall);
         }
     }
 }

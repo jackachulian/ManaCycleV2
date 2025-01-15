@@ -61,7 +61,8 @@ public class ManaTile : MonoBehaviour
 
     // Set position of the tile. if animate is true, a falling animation will occur bewteen the previous and current tile position.
     // Note: the visual position will vary based on whether or not this is currently parented under either a piece or the board!
-    public void SetPosition(Vector2Int position, bool animate) {
+    // THis method should only be used when a piece has already been placed on the board, not while it is currently contained in a piece.
+    public void SetBoardPosition(Vector2Int position, bool animate) {
         this.position = position;
 
         if (animate) {

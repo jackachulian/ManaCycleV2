@@ -240,7 +240,7 @@ public class PieceManager : MonoBehaviour {
             placePositions[i] = boardPosition;
             board.manaTileGrid.PlaceTile(tile, boardPosition);
             tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
-            tile.SetPosition(boardPosition, false); // no animation; fall animation will perform the animation
+            tile.SetBoardPosition(boardPosition, false); // no animation; fall animation will perform the animation
         }
 
         // Destroy piece container that is no longer needed

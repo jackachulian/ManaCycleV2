@@ -82,7 +82,7 @@ public class GhostPieceManager : MonoBehaviour {
 
             // Move the ghost tile, not the actual tile on the piece!
             ManaTile ghostTile = ghostTiles[i];
-            ghostTile.SetPosition(boardPosition, false);
+            ghostTile.SetBoardPosition(boardPosition, false);
             placePositions[i] = boardPosition;
             simulatedTileGrid[boardPosition.x, boardPosition.y] = ghostTile;
         }
