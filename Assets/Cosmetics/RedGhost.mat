@@ -56,6 +56,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BorderRadius: 0.125
+    - _BorderSmoothRadius: 0.01
     - _EnableExternalAlpha: 0
     - _Ghost: 1
     - _GhostShapeRadius: 0.125

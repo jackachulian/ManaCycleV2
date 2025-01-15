@@ -63,7 +63,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SHAPE: 2
-    - _ShapeSize: 0.425
+    - _ShapeSize: 0.44
     - _ZWrite: 0
     m_Colors:
     - _BorderColor: {r: 0.049172312, g: 0.13619474, b: 0.6132076, a: 1}

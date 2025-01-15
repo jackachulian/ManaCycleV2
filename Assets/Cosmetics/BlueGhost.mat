@@ -56,16 +56,17 @@ Material:
     m_Ints: []
     m_Floats:
     - _BorderRadius: 0.125
+    - _BorderSmoothRadius: 0.01
     - _EnableExternalAlpha: 0
     - _Ghost: 1
     - _GhostShapeRadius: 0.125
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SHAPE: 2
-    - _ShapeSize: 0.425
+    - _ShapeSize: 0.44
     - _ZWrite: 0
     m_Colors:
-    - _BorderColor: {r: 0.06003024, g: 0.15191646, b: 0.6698113, a: 1}
+    - _BorderColor: {r: 0.050980393, g: 0.13725491, b: 0.6117647, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _InnerColor: {r: 0.17254902, g: 0.47843137, b: 0.99215686, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
