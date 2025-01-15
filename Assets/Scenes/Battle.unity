@@ -1456,6 +1456,10 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 68053484
       objectReference: {fileID: 0}
+    - target: {fileID: 260802914043614814, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 617155665307835769, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -1475,6 +1479,14 @@ PrefabInstance:
     - target: {fileID: 2840813426677701198, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_Name
       value: Board-P2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877463568640711907, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2877463568640711907, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_FlipY
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3308075542372886698, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_ShapeTexture
@@ -1649,8 +1661,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7109741597338406338, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109741597338406338, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109741597338406338, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.125
+      value: -4.2
       objectReference: {fileID: 0}
     - target: {fileID: 7109741597338406338, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1663,6 +1683,10 @@ PrefabInstance:
     - target: {fileID: 7394692469015450872, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 12812476
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693188498506617527, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8017675115257408722, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1707,6 +1731,10 @@ PrefabInstance:
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8952035548605011951, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

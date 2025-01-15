@@ -2,6 +2,7 @@ Shader "ManaCycle/Unlit/HPBarShader"
 {
     Properties
     {
+        _MainTex ("Texture", 2D) = "white" {}
         _HpColor ("HP Color", Color) = (0, 1, 0, 1)
         _BackColor ("Back Color", Color) = (0, 0, 0, 1)
         _DamageStartColor ("Damage Start Color", Color) = (1, 0.75, 0, 1)
@@ -13,12 +14,16 @@ Shader "ManaCycle/Unlit/HPBarShader"
     {
         Tags { "RenderType"="Transparent" }
         LOD 100
+        Blend SrcAlpha OneMinusSrcAlpha
+        Cull Off
 
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+
+            #include "UnityCG.cginc"
 
             struct appdata
             {
@@ -32,6 +37,8 @@ Shader "ManaCycle/Unlit/HPBarShader"
                 float4 vertex : SV_POSITION;
             };
 
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
             fixed4 _HpColor;
             fixed4 _BackColor;
             fixed4 _DamageStartColor;
@@ -44,13 +51,15 @@ Shader "ManaCycle/Unlit/HPBarShader"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.uv = v.uv;
                 return o;
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            fixed4 frag(v2f _i) : SV_Target
             {
-                float yUV = i.uv.y;
+                fixed4 baseCol = tex2D(_MainTex, _i.uv);
+                float yUV = _i.uv.y;
                 fixed4 hpBarColor = (yUV <= _HpPercentage) ? _HpColor : _BackColor;
 
                 float totalDamage = 0;
@@ -62,7 +71,7 @@ Shader "ManaCycle/Unlit/HPBarShader"
                     }
                 }
 
-                return hpBarColor;
+                return baseCol * hpBarColor;
             }
             ENDCG
         }
