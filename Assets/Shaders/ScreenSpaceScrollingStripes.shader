@@ -1,7 +1,10 @@
-Shader "Unlit/ScrollingStripes"
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Unlit/ScreenSpace ScrollingStripes"
 {
     Properties
     {
+        _MainTex ("Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
         _TimeScale ("TimeScale", float) = 1.0
         _Width ("Width", float) = 0.33
@@ -55,6 +58,8 @@ Shader "Unlit/ScrollingStripes"
             #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
 
             #include "UnityCG.cginc"
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
 
             float _TimeScale;
             float4 _Color;
@@ -78,11 +83,9 @@ Shader "Unlit/ScrollingStripes"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = v.uv;
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
-
-            sampler2D _MainTex;
 
             fixed4 frag (v2f i) : SV_Target
             {
@@ -90,11 +93,13 @@ Shader "Unlit/ScrollingStripes"
                 // i.uv.x = i.uv.x * aspect;
 
                 fixed4 col = tex2D(_MainTex, i.uv);
+                fixed2 pos = ComputeScreenPos(i.vertex) / 800;
                 col = (0.0, 0.0, 0.0, col.a);
                 // accessing col.rgb is causing weird channel shifting?
-                col.r += step((1.0 - (i.uv.x * _XFactor + i.uv.y + _Time * _TimeScale) % 1.0) * 0.5, _Width) * _Darken;
-                col.g += step((1.0 - (i.uv.x * _XFactor + i.uv.y + _Time * _TimeScale) % 1.0) * 0.5, _Width) * _Darken;
-                col.b += step((1.0 - (i.uv.x * _XFactor + i.uv.y + _Time * _TimeScale) % 1.0) * 0.5, _Width) * _Darken;
+                // col = pos.x / 100;
+                col.r += step((1.0 - (pos.x * _XFactor + pos.y + _Time * _TimeScale) % 1.0) * 0.5, _Width) * _Darken;
+                col.g += step((1.0 - (pos.x * _XFactor + pos.y + _Time * _TimeScale) % 1.0) * 0.5, _Width) * _Darken;
+                col.b += step((1.0 - (pos.x * _XFactor + pos.y + _Time * _TimeScale) % 1.0) * 0.5, _Width) * _Darken;
 
                 return col * _Color;
             }
