@@ -64,14 +64,14 @@ public class ManaTile : MonoBehaviour
     // THis method should only be used when a piece has already been placed on the board, not while it is currently contained in a piece.
     public void SetBoardPosition(Vector2Int position, bool animate) {
         this.position = position;
+        targetPosition = (Vector2)position;
 
         if (animate) {
-            targetPosition = (Vector2)position;
             falling = true;
             currentFallSpeed = initialFallSpeed;
         } else {
             falling = false;
-            transform.localPosition = (Vector2)position;
+            transform.localPosition = targetPosition;
         }
     }
 }

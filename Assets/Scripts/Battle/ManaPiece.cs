@@ -32,7 +32,7 @@ public class ManaPiece : MonoBehaviour
 
         for (int i = 0; i < tiles.Length; i++) {
             ManaTile tile = tiles[i];
-            Vector2Int tilePosition = GetTilePosition(i);
+            Vector2Int tilePosition = GetPieceTilePosition(i);
             tile.transform.localPosition = new Vector2(tilePosition.x, tilePosition.y);
         }
     }
@@ -42,7 +42,7 @@ public class ManaPiece : MonoBehaviour
     /// </summary>
     /// <param name="index">the index of the tile in this object's <c>tiles</c> array</param>
     /// <returns>the piece-relative position of the tile at the given index</returns>
-    public Vector2Int GetTilePosition(int index) {
+    public Vector2Int GetPieceTilePosition(int index) {
         ManaTile tile = tiles[index];
 
         switch(rotation) {

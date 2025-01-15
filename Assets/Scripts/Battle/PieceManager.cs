@@ -190,7 +190,7 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     bool IsValidPlacement(ManaPiece piece) {
         for (int i = 0; i < piece.tiles.Length; i++) {
-            Vector2Int piecePosition = piece.position + piece.GetTilePosition(i);
+            Vector2Int piecePosition = piece.position + piece.GetPieceTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
             if (!board.manaTileGrid.IsInBounds(piecePosition)) {
@@ -236,7 +236,7 @@ public class PieceManager : MonoBehaviour {
         // and reparent the mana tiles to this board
         for (int i = 0; i < piece.tiles.Length; i++) {
             ManaTile tile = piece.tiles[i];
-            Vector2Int boardPosition = piece.position + piece.GetTilePosition(i);
+            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
             placePositions[i] = boardPosition;
             board.manaTileGrid.PlaceTile(tile, boardPosition);
             tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);

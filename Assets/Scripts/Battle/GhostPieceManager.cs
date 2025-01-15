@@ -78,7 +78,7 @@ public class GhostPieceManager : MonoBehaviour {
         // Create ghost tiles at the location of the piece on the board
         for (int i = 0; i < piece.tiles.Length; i++) {
             // We're just grabbing the position of the actual tile that exists on the board
-            Vector2Int boardPosition = piece.position + piece.GetTilePosition(i);
+            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
 
             // Move the ghost tile, not the actual tile on the piece!
             ManaTile ghostTile = ghostTiles[i];
