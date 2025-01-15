@@ -20,7 +20,7 @@ public class PieceManager : MonoBehaviour {
     /// <summary>
     /// Current falling piece on this board.
     /// </summary>
-    private ManaPiece currentPiece;
+    public ManaPiece currentPiece {get; private set;}
 
     /// <summary>
     /// Incrementing value that tracks the percentage of time before a fall should happen.
@@ -35,7 +35,7 @@ public class PieceManager : MonoBehaviour {
     private bool quickfall = false;
 
     /// <summary>
-    /// The Board this is managing the spellcasts of. Cached on InitializeBattle()
+    /// The Board of which this is managing the piece movmeent and placement. Cached on InitializeBattle()
     /// </summary>
     private Board board;
 
@@ -237,10 +237,10 @@ public class PieceManager : MonoBehaviour {
         for (int i = 0; i < piece.tiles.Length; i++) {
             ManaTile tile = piece.tiles[i];
             Vector2Int boardPosition = piece.position + piece.GetTilePosition(i);
-            tile.position = boardPosition;
             placePositions[i] = boardPosition;
             board.manaTileGrid.PlaceTile(tile, boardPosition);
             tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
+            tile.SetPosition(boardPosition, false); // no animation; fall animation will perform the animation
         }
 
         // Destroy piece container that is no longer needed

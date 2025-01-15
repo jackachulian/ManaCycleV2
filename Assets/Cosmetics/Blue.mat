@@ -60,6 +60,7 @@ Material:
     - _EnableExternalAlpha: 0
     - _Ghost: 0
     - _GhostShapeRadius: 0.125
+    - _LitAmount: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SHAPE: 2

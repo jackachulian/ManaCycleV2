@@ -82,7 +82,7 @@ public class SpellcastManager : MonoBehaviour {
     /// <summary>
     /// Minimum blob size required to clear
     /// </summary>
-    private readonly int minBlobSize = 3;
+    public readonly int minBlobSize = 3;
 
     // ======== Spellcasting ========
     /// <summary>
@@ -342,6 +342,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Rebuild all blobs. Should be called after the grid has changed.
     /// </summary>
     public void RefreshBlobs() {
+        // Reset the blob array to empty
         for (int y = 0; y < board.manaTileGrid.height; y++) {
             for (int x = 0; x < board.manaTileGrid.width; x++) {
                 blobGrid[x,y] = null;
