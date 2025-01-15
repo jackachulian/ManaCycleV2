@@ -93,7 +93,7 @@ Shader "Unlit/ScreenSpace ScrollingStripes"
                 // i.uv.x = i.uv.x * aspect;
 
                 fixed4 col = tex2D(_MainTex, i.uv);
-                fixed2 pos = ComputeScreenPos(i.vertex) / 800;
+                fixed2 pos = ComputeScreenPos(i.vertex) / fixed2(800, 100);
                 col = (0.0, 0.0, 0.0, col.a);
                 // accessing col.rgb is causing weird channel shifting?
                 // col = pos.x / 100;
