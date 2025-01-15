@@ -50,6 +50,10 @@ public class GhostPieceManager : MonoBehaviour {
     /// Uses the current BattleManager instance's cosmetics to determine what cosmetics should be used.
     /// </summary>
     public void CreateGhostPiece() {
+        // Don't create the ghost piece unless there is a local player controlling this board
+        if (!board.player || !board.player.IsOwner) return;
+
+        // Destroy old ghost tiles
         ManaPiece currentPiece = board.pieceManager.currentPiece;
         ghostTiles = new ManaTile[currentPiece.tiles.Length];
 
@@ -59,6 +63,21 @@ public class GhostPieceManager : MonoBehaviour {
             ghostTile.SetColor(currentPiece.tiles[i].color, ghost: true, BattleManager.Instance.cosmetics);
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
         }
+
+        Debug.Log("Ghost piece created");
+
+        UpdateGhostPiece();
+    }
+
+    public void DestroyGhostPiece() {
+        if (ghostTiles == null) return;
+
+        foreach (var ghostTile in ghostTiles) {
+            Destroy(ghostTile.gameObject);
+        }
+
+        Debug.Log("Ghost piece destroyed");
+
     }
 
     /// <summary>

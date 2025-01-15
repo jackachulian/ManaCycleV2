@@ -22,7 +22,12 @@ public class Board : MonoBehaviour
     public PieceManager pieceManager {get; private set;}
 
     /// <summary>
-    /// Cached UpcomingPieces component on the board. Manages the upcoming pieces list.
+    /// Manages the preview of where the pieceManager's current piece is going to land. Cached on initilaization.
+    /// </summary>
+    public GhostPieceManager ghostPieceManager {get; private set;}
+
+    /// <summary>
+    /// Cached UpcomingPieces component on the board. Manages the upcoming pieces list. Cached on initialization.
     /// </summary>
     public UpcomingPieces upcomingPieces {get; private set;}
 
@@ -95,11 +100,14 @@ public class Board : MonoBehaviour
         upcomingPieces = GetComponent<UpcomingPieces>();
         upcomingPieces.InitializeBattle(this, seed);
 
-        pieceManager = GetComponent<PieceManager>();
-        pieceManager.InitializeBattle(this);
-
         spellcastManager = GetComponent<SpellcastManager>();
         spellcastManager.InitializeBattle(this);
+
+        ghostPieceManager = GetComponent<GhostPieceManager>();
+        ghostPieceManager.InitializeBattle(this);
+
+        pieceManager = GetComponent<PieceManager>();
+        pieceManager.InitializeBattle(this);
 
         healthManager = GetComponent<HealthManager>();
         healthManager.InitializeBattle(this);

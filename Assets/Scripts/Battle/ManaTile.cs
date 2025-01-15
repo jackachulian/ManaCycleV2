@@ -10,7 +10,8 @@ public class ManaTile : MonoBehaviour
     /// If contained within a piece, this is the offset from the center tile of the piece (BEFORE piece rotation).
     /// If contained within a board's tile grid, this is the offset from the bottom-left tile.
     /// </summary>
-    public Vector2Int position {get; private set;}
+    [SerializeField] private Vector2Int _position;
+    public Vector2Int position => _position;
 
     /// <summary>
     /// Integer representing the color used for tile clearing.
@@ -56,6 +57,7 @@ public class ManaTile : MonoBehaviour
             var manaVisual = manaCosmetics.manaVisuals[color];
             var renderer = GetComponent<Renderer>();
             renderer.material = ghost ? manaVisual.ghostMaterial : manaVisual.material;
+            renderer.sortingOrder = ghost ? -1 : 0; // draw ghost tiles behind regular tiles
         }
     }
 
@@ -63,7 +65,7 @@ public class ManaTile : MonoBehaviour
     // Note: the visual position will vary based on whether or not this is currently parented under either a piece or the board!
     // THis method should only be used when a piece has already been placed on the board, not while it is currently contained in a piece.
     public void SetBoardPosition(Vector2Int position, bool animate) {
-        this.position = position;
+        _position = position;
         targetPosition = (Vector2)position;
 
         if (animate) {

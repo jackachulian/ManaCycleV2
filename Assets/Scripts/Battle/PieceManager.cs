@@ -109,9 +109,18 @@ public class PieceManager : MonoBehaviour {
     /// (Rpc Target) Update the position and rotation of the current piece being dropped.
     /// </summary>
     public void UpdateCurrentPiece(Vector2Int position, int rotation) {
+        var prevPosition = position;
+        var prevRotation = rotation;
+
         currentPiece.position = position;
         currentPiece.rotation = rotation;
         currentPiece.UpdateVisualPositions();
+
+        // Only need to update the ghost piece if the piece moved columns or was rotated
+        if (prevPosition.x != position.x || prevRotation != rotation)
+        {
+            board.ghostPieceManager.UpdateGhostPiece();
+        }
     }
 
     /// <summary>
@@ -133,6 +142,13 @@ public class PieceManager : MonoBehaviour {
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
+
+        // Only need to update the ghost piece if the piece moved columns
+        if (offset.x != 0)
+        {
+            board.ghostPieceManager.UpdateGhostPiece();
+        }
+
         return true;
     }
 
@@ -174,6 +190,9 @@ public class PieceManager : MonoBehaviour {
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
+
+        board.ghostPieceManager.UpdateGhostPiece();
+
         return true;
     }
 
@@ -213,8 +232,11 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
+        board.ghostPieceManager.DestroyGhostPiece();
         board.healthManager.AdvanceDamageQueue();
+
         SpawnNewPiece();
+
 
         // If the newly spawned piece is in an invalid position, player has topped out
         if (!IsValidPlacement(currentPiece)) {
@@ -271,6 +293,8 @@ public class PieceManager : MonoBehaviour {
         Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
         currentPiece.position = spawnPos;
         currentPiece.UpdateVisualPositions();
+
+        board.ghostPieceManager.CreateGhostPiece();
 
         board.upcomingPieces.UpdatePieceListUI();
     }

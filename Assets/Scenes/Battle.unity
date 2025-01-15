@@ -2284,6 +2284,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866971221}
   m_CullTransparentMesh: 1
+--- !u!114 &1921825670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 851997579674134533, guid: 17662076faedc3e428988e1374587f3b, type: 3}
+  m_PrefabInstance: {fileID: 3910682926418923608}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93315be91ce67e94ea45162112418159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2098577435 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7026481828697392819, guid: d605ae53e14a10c4a9c34105c1c1c06f, type: 3}
@@ -2430,6 +2441,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6875103078424749902, guid: 17662076faedc3e428988e1374587f3b, type: 3}
+      propertyPath: countdown
+      value: 
+      objectReference: {fileID: 1921825670}
     - target: {fileID: 6875103078424749902, guid: 17662076faedc3e428988e1374587f3b, type: 3}
       propertyPath: manaCycle
       value: 
