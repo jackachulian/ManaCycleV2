@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Audio;
 
 /// <summary>
 /// A component to be used on the same gameobject as the Board.
@@ -290,6 +291,7 @@ public class SpellcastManager : MonoBehaviour {
         }
 
         RepositionCyclePointer();
+        AudioManager.Instance.PlaySound("cast", pitch: 1f + currentChain * 0.12f);
         CycleChangedNotifier?.Invoke(cycleIndex);
         // TODO: Maybe implement all board ui functions using c# events
         board.boardUI.OnSpellcast();
@@ -311,9 +313,9 @@ public class SpellcastManager : MonoBehaviour {
         if (!board.boardActive || spellcasting) return;
 
         if (clearableManaCounts[GetCurrentCycleColor()] <= 0) {
-            // TODO: shake pointer, buzzer sound
             Debug.Log("Can't spellcast!");
             board.boardUI.OnFailSpellcast(GetCurrentCycleColor());
+            AudioManager.Instance.PlaySound("cast_fail");
             return;
         }
 
@@ -324,11 +326,11 @@ public class SpellcastManager : MonoBehaviour {
     /// (Rpc Target) Called when a player begins a spellcast on their client.
     /// </summary>
     public void StartSpellcast() {
-        // TODO: play spellcast startup sound
         spellcasting = true;
         timeSinceLastClear = 0;
         currentCascade = 0;
         currentChain = 0;
+        AudioManager.Instance.PlaySound("cast_startup");
         Debug.Log("Spellcast has begun!");
     }
 

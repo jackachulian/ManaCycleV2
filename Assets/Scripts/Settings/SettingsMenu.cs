@@ -34,22 +34,22 @@ namespace Menus
 
         public void PlaySliderSound(bool special)
         {
-            AudioManager.instance.PlaySound(special ? specialSFX : sliderSFX);
+            AudioManager.Instance.PlaySound(special ? specialSFX : sliderSFX);
         }
 
         public void PlaySelectionSound()
         {
-            AudioManager.instance.PlaySound(selectionSFX);   
+            AudioManager.Instance.PlaySound(selectionSFX);   
         }
 
         public void PlayReturnSound()
         {
-            AudioManager.instance.PlaySound(returnSFX);
+            AudioManager.Instance.PlaySound(returnSFX);
         }
 
         public void VolumeSliderChanged()
         {
-            AudioManager.instance.UpdateVolumes();
+            AudioManager.Instance.UpdateVolumes();
         }
     }   
 }

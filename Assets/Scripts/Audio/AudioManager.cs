@@ -7,18 +7,21 @@ namespace Audio
 {
     public class AudioManager : MonoBehaviour
     {
-        public static AudioManager instance;
+        public static AudioManager Instance;
         [SerializeField] private AudioMixer mixer;
         [SerializeField] private AudioMixerGroup sfxMixerGroup;
         [SerializeField] private int maxSounds = 16;
         private List<AudioSource> sources = new List<AudioSource>();
         private AudioSource musicSource; 
 
+        [Header("Sound Collections")]
+        public SoundCollection boardSounds;
+
         void Awake()
         {
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
             }
             else
             {
@@ -44,7 +47,7 @@ namespace Audio
             }
         }
 
-        public void PlaySound(AudioClip clip, float pitch = 1.0f)
+        public void PlaySound(AudioClip clip, float pitch = 1.0f, float volumeScale = 1.0f)
         {
             List<AudioSource> freeSources = sources.Where(s => !s.isPlaying).ToList();
 
@@ -52,7 +55,20 @@ namespace Audio
 
             AudioSource freeSource = freeSources[0];
             freeSource.pitch = pitch;
+            freeSource.volume = volumeScale;
             freeSource.PlayOneShot(clip);
+        }
+
+        /// <summary>
+        /// Shorthand to play a sound specifically from the board collection
+        /// </summary>
+        /// <param name="key">Key from the board collection dictionary to play</param>
+        /// <param name="pitch">Randomized within 5% unless specified</param>
+        /// <param name="volumeScale"></param>
+        public void PlaySound(string key, float pitch = -1.0f, float volumeScale = 1f)
+        {
+            if (pitch < 0) pitch = Random.Range(0.95f, 1.05f);
+            PlaySound(boardSounds.sounds[key], pitch, volumeScale);
         }
 
         public void UpdateVolumes()

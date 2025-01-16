@@ -51,12 +51,14 @@ public class BattleCountdown : NetworkBehaviour {
                 lastSecondsDisplayed = secondsRemaining;
                 if (secondsRemaining <= 3) {
                     countdownText.text = secondsRemaining+"";
+                    Audio.AudioManager.Instance.PlaySound("timer_tick", pitch: 1f);
                 }
             }
             yield return null;
         }
 
         countdownText.text = "Go!";
+        Audio.AudioManager.Instance.PlaySound("timer_go", pitch: 1f);
         countdownRunning = false;
         StartGameAfterCountdown();
 

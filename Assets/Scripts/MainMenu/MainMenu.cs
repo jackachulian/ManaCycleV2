@@ -61,17 +61,17 @@ public class MainMenu : MonoBehaviour
 
         private void PlaySelectSFX(int index, bool direction = true)
         {
-            AudioManager.instance.PlaySound(selectSFX, direction ? 1.1f : 0.9f);
+            AudioManager.Instance.PlaySound(selectSFX, direction ? 1.1f : 0.9f);
         }
 
         private void PlaySubmitSFX()
         {
-            AudioManager.instance.PlaySound(submitSFX);
+            AudioManager.Instance.PlaySound(submitSFX);
         }
 
         private void PlayBackSFX()
         {
-            AudioManager.instance.PlaySound(backSFX);
+            AudioManager.Instance.PlaySound(backSFX);
         }
 
         public void SingleplayerPressed() {
