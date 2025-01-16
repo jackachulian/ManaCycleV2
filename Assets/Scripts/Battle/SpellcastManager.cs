@@ -211,11 +211,11 @@ public class SpellcastManager : MonoBehaviour {
         if (currentCascade > 0) {
             Debug.Log("Cascade clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
             currentCascade += 1;
-            AudioManager.Instance.PlaySound("cascade", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
+            AudioManager.Instance.PlayBoardSound("cascade", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
         } else {
             Debug.Log("Chain clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
             currentChain += 1;
-            AudioManager.Instance.PlaySound("cast", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
+            AudioManager.Instance.PlayBoardSound("cast", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
         }
 
         // Show the chain popup if chain is 2 or greater
@@ -316,7 +316,7 @@ public class SpellcastManager : MonoBehaviour {
         if (clearableManaCounts[GetCurrentCycleColor()] <= 0) {
             Debug.Log("Can't spellcast!");
             board.boardUI.OnFailSpellcast(GetCurrentCycleColor());
-            AudioManager.Instance.PlaySound("cast_fail");
+            AudioManager.Instance.PlayBoardSound("cast_fail");
             return;
         }
 
@@ -331,7 +331,7 @@ public class SpellcastManager : MonoBehaviour {
         timeSinceLastClear = 0;
         currentCascade = 0;
         currentChain = 0;
-        AudioManager.Instance.PlaySound("cast_startup");
+        AudioManager.Instance.PlayBoardSound("cast_startup");
         Debug.Log("Spellcast has begun!");
     }
 

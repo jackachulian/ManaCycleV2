@@ -156,7 +156,7 @@ public class Board : MonoBehaviour
     /// In multiplayer, called when all other boards are defeated.
     /// </summary>
     public void Win() {
-        Audio.AudioManager.Instance.PlaySound("win", pitch: 1f);
+        Audio.AudioManager.Instance.PlayBoardSound("win", pitch: 1f);
         Debug.Log(this+" won!");
         boardActive = false;
         boardUI.ShowWinText();
