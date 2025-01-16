@@ -211,9 +211,11 @@ public class SpellcastManager : MonoBehaviour {
         if (currentCascade > 0) {
             Debug.Log("Cascade clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
             currentCascade += 1;
+            AudioManager.Instance.PlaySound("cascade", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
         } else {
             Debug.Log("Chain clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
             currentChain += 1;
+            AudioManager.Instance.PlaySound("cast", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
         }
 
         // Show the chain popup if chain is 2 or greater
@@ -291,7 +293,6 @@ public class SpellcastManager : MonoBehaviour {
         }
 
         RepositionCyclePointer();
-        AudioManager.Instance.PlaySound("cast", pitch: 1f + currentChain * 0.12f);
         CycleChangedNotifier?.Invoke(cycleIndex);
         // TODO: Maybe implement all board ui functions using c# events
         board.boardUI.OnSpellcast();
