@@ -78,21 +78,21 @@ public class MainMenu : MonoBehaviour
             if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
 
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
-            SceneManager.LoadScene("CharSelect");
+            TransitionManager.Instance.TransitionToScene("CharSelect");
         }
 
         public void LocalMultiplayerPressed() {
             if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
 
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.LocalMultiplayer);
-            SceneManager.LoadScene("CharSelect");
+            TransitionManager.Instance.TransitionToScene("CharSelect");
         }
 
         public void OnlineMultiplayerPressed() {
             if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
             
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.OnlineMultiplayer);
-            SceneManager.LoadScene("CharSelect");
+            TransitionManager.Instance.TransitionToScene("CharSelect");
         }
 
         public void QuitPressed()

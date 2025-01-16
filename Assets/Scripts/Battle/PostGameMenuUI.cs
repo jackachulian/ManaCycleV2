@@ -48,7 +48,7 @@ public class PostGameMenuUI : MonoBehaviour {
 
     public void OnMainMenuPressed() {
         GameManager.Instance.LeaveGame();
-        SceneManager.LoadScene("MainMenu");
+        TransitionManager.Instance.TransitionToScene("MainMenu", "ReverseWipe");
     }
 
     public void OpenAnimationComplete()

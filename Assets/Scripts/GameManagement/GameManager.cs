@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour {
         if (currentConnectionType == GameConnectionType.LocalMultiplayer) {
             _currentGameState = GameState.None;
             if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
-            else if (BattleManager.Instance) SceneManager.LoadScene("CharSelect");
+            else if (BattleManager.Instance) TransitionManager.Instance.TransitionToScene("CharSelect", "ReverseWipe");
         }        
     }
 
@@ -275,7 +275,7 @@ public class GameManager : MonoBehaviour {
         _currentGameState = GameState.None;
         if (currentConnectionType == GameConnectionType.OnlineMultiplayer) {
             if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
-            else if (BattleManager.Instance) SceneManager.LoadScene("CharSelect");
+            else if (BattleManager.Instance) TransitionManager.Instance.TransitionToScene("CharSelect", "ReverseWipe");
         }
     }
 
