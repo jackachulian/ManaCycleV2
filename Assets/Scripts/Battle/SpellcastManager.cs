@@ -291,6 +291,8 @@ public class SpellcastManager : MonoBehaviour {
 
         RepositionCyclePointer();
         CycleChangedNotifier?.Invoke(cycleIndex);
+        // TODO: Maybe implement all board ui functions using c# events
+        board.boardUI.OnSpellcast();
     }
 
     private void RepositionCyclePointer() {
@@ -306,11 +308,12 @@ public class SpellcastManager : MonoBehaviour {
     /// Try to perform a spellcast.
     /// </summary>
     public void TrySpellcast() {
-        if (!board.boardActive) return;
+        if (!board.boardActive || spellcasting) return;
 
         if (clearableManaCounts[GetCurrentCycleColor()] <= 0) {
             // TODO: shake pointer, buzzer sound
             Debug.Log("Can't spellcast!");
+            board.boardUI.OnFailSpellcast(GetCurrentCycleColor());
             return;
         }
 

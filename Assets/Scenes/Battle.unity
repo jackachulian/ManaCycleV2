@@ -445,6 +445,22 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 8123279063529998444, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: doPlaceAnimation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8728664645115849563, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8728664645115849563, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_AnimatePhysics
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8728664645115849563, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9

@@ -28,6 +28,12 @@ public class ManaTileGrid : MonoBehaviour {
     private ManaTile[,] grid;
 
     /// <summary>
+    /// Event raised each time a single tile is cleared. passes in tile position and color.
+    /// </summary>
+    public delegate void TileClearedCallback(Vector2 position, int color);
+    public event TileClearedCallback TileClearedNotifier;
+
+    /// <summary>
     /// Called after this grid's Board is initialized.
     /// </summary>
     public void InitializeBattle() {
@@ -71,6 +77,7 @@ public class ManaTileGrid : MonoBehaviour {
     public void ClearTile(Vector2Int position) {
         ManaTile tile = grid[position.x, position.y];
         grid[position.x, position.y] = null;
+        TileClearedNotifier.Invoke(tile.transform.position, tile.color);
         Destroy(tile.gameObject);
     }
 

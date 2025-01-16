@@ -5,7 +5,7 @@ public class MatchMaterialColorToBoard : MonoBehaviour
     [SerializeField] private int boardIndex = 0;
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private string propName = "_Color";
-    [SerializeField] private float fadeTime = 0.1f;
+    [SerializeField] private float fadeTime = 0.5f;
     private Color lastCol;
     private Color targCol;
     private float refTime;
@@ -33,6 +33,6 @@ public class MatchMaterialColorToBoard : MonoBehaviour
 
     void Update()
     {
-        sr.material.SetColor(propName, Color.Lerp(lastCol, targCol, Time.time - refTime / fadeTime));
+        sr.material.SetColor(propName, Color.Lerp(lastCol, targCol, (Time.time - refTime) / fadeTime));
     }
 }

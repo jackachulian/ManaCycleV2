@@ -214,6 +214,7 @@ public class PieceManager : MonoBehaviour {
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
         board.healthManager.AdvanceDamageQueue();
+        board.boardUI.OnPiecePlaced();
         SpawnNewPiece();
 
         // If the newly spawned piece is in an invalid position, player has topped out

@@ -59,6 +59,7 @@ public class HealthManager : MonoBehaviour {
         if (incomingDamage[5] > 0) {
             // TODO: damage animation
             health -= incomingDamage[5];
+            board.boardUI.OnDamage();
         }
 
         for (int i = 5; i >= 1; i--) {
