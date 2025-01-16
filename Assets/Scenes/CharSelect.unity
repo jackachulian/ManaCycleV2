@@ -6099,6 +6099,10 @@ PrefabInstance:
       value: 1338259969
       objectReference: {fileID: 0}
     - target: {fileID: 4689022289357443999, guid: 65533600d4e94d04a9b8512ecd295646, type: 3}
+      propertyPath: menuMusic
+      value: 
+      objectReference: {fileID: 8300000, guid: ebeadebc23e11bf4ba2ce908da07c292, type: 3}
+    - target: {fileID: 4689022289357443999, guid: 65533600d4e94d04a9b8512ecd295646, type: 3}
       propertyPath: allReadyWindow
       value: 
       objectReference: {fileID: 1518566619}

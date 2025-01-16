@@ -6645,6 +6645,7 @@ MonoBehaviour:
   selectSFX: {fileID: 8300000, guid: 598930eb9eaf9b84e8b2d54545ef1c2d, type: 3}
   submitSFX: {fileID: 8300000, guid: 5919f9c68ca08674c8311ae690cb7ad9, type: 3}
   backSFX: {fileID: 8300000, guid: 8e529e8cabd3e8744942651e8df9f4b6, type: 3}
+  menuMusic: {fileID: 8300000, guid: ebeadebc23e11bf4ba2ce908da07c292, type: 3}
 --- !u!1 &2013867716
 GameObject:
   m_ObjectHideFlags: 0

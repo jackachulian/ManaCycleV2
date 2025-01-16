@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using Audio;
 
 /// <summary>
 /// Starts the battle, synchronized as closely as possible bewteen the clients.
@@ -16,6 +17,7 @@ public class BattleCountdown : NetworkBehaviour {
     }
 
     public void StartCountdownServer() {
+        AudioManager.Instance.StopMusic();
         if (!NetworkManager.Singleton.IsServer) {
             Debug.LogError("Only the server can start the countdown!");
             return;
@@ -51,14 +53,15 @@ public class BattleCountdown : NetworkBehaviour {
                 lastSecondsDisplayed = secondsRemaining;
                 if (secondsRemaining <= 3) {
                     countdownText.text = secondsRemaining+"";
-                    Audio.AudioManager.Instance.PlaySound("timer_tick", pitch: 1f);
+                    AudioManager.Instance.PlaySound("timer_tick", pitch: 1f);
                 }
             }
             yield return null;
         }
 
         countdownText.text = "Go!";
-        Audio.AudioManager.Instance.PlaySound("timer_go", pitch: 1f);
+        AudioManager.Instance.PlaySound("timer_go", pitch: 1f);
+        AudioManager.Instance.PlayMusic(AudioManager.Instance.battleMusic);
         countdownRunning = false;
         StartGameAfterCountdown();
 

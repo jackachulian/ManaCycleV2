@@ -49,6 +49,7 @@ MonoBehaviour:
   sfxMixerGroup: {fileID: -5503273986270594293, guid: 34bd7702cdd242a4a9bc270001b2f581, type: 2}
   maxSounds: 8
   boardSounds: {fileID: 11400000, guid: 45581d47d3c453946880e5adc0881058, type: 2}
+  battleMusic: {fileID: 11400000, guid: 4884a9c872ab51b4faede99d7c0e4a42, type: 2}
 --- !u!82 &6339090574922459382
 AudioSource:
   m_ObjectHideFlags: 0

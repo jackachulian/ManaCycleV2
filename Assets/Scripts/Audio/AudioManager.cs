@@ -16,6 +16,7 @@ namespace Audio
 
         [Header("Sound Collections")]
         public SoundCollection boardSounds;
+        public SoundCollection battleMusic;
 
         void Awake()
         {
@@ -45,6 +46,27 @@ namespace Audio
                 GameObject o = Instantiate(newObject, transform);
                 sources.Add(o.GetComponent<AudioSource>());
             }
+        }
+
+        public void PlayMusic(AudioClip clip)
+        {
+            if (clip == musicSource.clip) return;
+            musicSource.clip = clip;
+            musicSource.Play();
+        }
+
+        /// <summary>
+        /// Play random song from collection
+        /// </summary>
+        /// <param name="collection"></param>
+        public void PlayMusic(SoundCollection collection)
+        {
+            PlayMusic(collection.sounds.Values.ToList()[Random.Range(0, collection.sounds.Count - 1)]);
+        }
+
+        public void StopMusic()
+        {
+            musicSource.Stop();
         }
 
         public void PlaySound(AudioClip clip, float pitch = 1.0f, float volumeScale = 1.0f)

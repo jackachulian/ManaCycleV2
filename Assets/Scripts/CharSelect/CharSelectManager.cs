@@ -19,6 +19,8 @@ public class CharSelectManager : MonoBehaviour
     [SerializeField] private Transform _charSelectMenuUi;
     public Transform charSelectMenuUi => _charSelectMenuUi;
 
+    [SerializeField] private AudioClip menuMusic;
+
     private void Awake()
     {
         if (Instance == null)
@@ -40,6 +42,7 @@ public class CharSelectManager : MonoBehaviour
     }
 
     private void Start() {
+        Audio.AudioManager.Instance.PlayMusic(menuMusic);
         if (!GameManager.Instance) {
             Debug.LogError("A GameManager is required for CharSelectManager to work!");
             return;

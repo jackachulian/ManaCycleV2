@@ -23,9 +23,13 @@ public class MainMenu : MonoBehaviour
         [SerializeField] private AudioClip submitSFX;
         [SerializeField] private AudioClip backSFX;
 
+        [SerializeField] private AudioClip menuMusic;
+
         // Start is called before the first frame update
         void Start()
         {
+            AudioManager.Instance.PlayMusic(menuMusic);
+            
             rootMenu.ButtonSelected += OnRootButtonSelected;
             rootMenu.ButtonSelected += sceneSwapper.OnButtonSelected;
 
