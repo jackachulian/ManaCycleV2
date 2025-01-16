@@ -67,6 +67,11 @@ namespace Audio
         /// <param name="collection"></param>
         public void PlayMusic(SoundCollection collection)
         {
+            if (collection.sounds.Count == 0) {
+                Debug.LogError("No available music tracks to play");
+                return;
+            }
+
             PlayMusic(collection.sounds.Values.ToList()[Random.Range(0, collection.sounds.Count - 1)]);
         }
 
@@ -93,8 +98,14 @@ namespace Audio
         /// <param name="key">Key from the board collection dictionary to play</param>
         /// <param name="pitch">Randomized within 5% unless specified</param>
         /// <param name="volumeScale"></param>
-        public void PlaySound(string key, float pitch = -1.0f, float volumeScale = 1f)
+        public void PlayBoardSound(string key, float pitch = -1.0f, float volumeScale = 1f)
         {
+            // skip playing the sound if not found in the dictionary
+            if (!boardSounds.sounds.ContainsKey(key)){
+                Debug.LogError("No board sound with key: "+key);
+                return;
+            }
+
             if (pitch < 0) pitch = Random.Range(0.95f, 1.05f);
             PlaySound(boardSounds.sounds[key], pitch, volumeScale);
         }

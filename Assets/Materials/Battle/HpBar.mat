@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _HpPercentage: 0.6
+    - _HpPercentage: 0.5
     - _ZWrite: 0
     m_Colors:
     - _BackColor: {r: 0.091183186, g: 0.090334624, b: 0.09433961, a: 1}

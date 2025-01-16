@@ -134,7 +134,7 @@ public class PieceManager : MonoBehaviour {
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
-        AudioManager.Instance.PlaySound(
+        AudioManager.Instance.PlayBoardSound(
             offset == Vector2Int.down ? "fall" : "move", 
             volumeScale: offset == Vector2Int.down ? 0.15f : 0.5f
         );
@@ -179,7 +179,7 @@ public class PieceManager : MonoBehaviour {
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
-        AudioManager.Instance.PlaySound("rotate", volumeScale: 0.5f);
+        AudioManager.Instance.PlayBoardSound("rotate", volumeScale: 0.5f);
         return true;
     }
 
@@ -221,7 +221,7 @@ public class PieceManager : MonoBehaviour {
         PlacePiece(currentPiece);
         board.healthManager.AdvanceDamageQueue();
         board.boardUI.OnPiecePlaced();
-        AudioManager.Instance.PlaySound("place", volumeScale: 0.5f);
+        AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
         SpawnNewPiece();
 
         // If the newly spawned piece is in an invalid position, player has topped out
