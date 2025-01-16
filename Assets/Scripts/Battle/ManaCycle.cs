@@ -51,7 +51,7 @@ public class ManaCycle : MonoBehaviour
         {
             ManaTile tile = battleManager.SpawnTile();
             tiles[i] = tile;
-            tile.SetColor(colorSequence[i], false, battleManager.cosmetics);
+            tile.SetColor(colorSequence[i], false, false, battleManager.cosmetics);
             tile.transform.SetParent(manaTileTransform);
             tile.transform.localPosition = new Vector2(0, (i - (battleData.cycleLength-1)/2.0f) * -manaSeparation);
             tile.transform.localScale = new Vector2(manaScale, manaScale);

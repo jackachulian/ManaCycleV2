@@ -11,13 +11,19 @@ public class TileUtility {
     /// <param name="board">the board that blob simulation is happening on. Only used for things such as board bounds, etc</param>
     /// <param name="grid">the list of tiles that blobs will be checked for on.</param>
     /// <param name="blobGrid">Contains a grid of all tiles and the blob they have been added to, or null for no blob.</param>
-    public static void ExpandBlob(List<Vector2Int> blob, Vector2Int position, int color, Board board, ref ManaTile[,] tileGrid, ref List<Vector2Int>[,] blobGrid)
+    public static void ExpandBlob(ref List<Vector2Int> blob, Vector2Int position, int color, Board board, ref ManaTile[,] tileGrid, ref List<Vector2Int>[,] blobGrid)
     {
         // Don't add to blob if the tile is in an invalid position
-        if (!board.manaTileGrid.IsInBounds(position)) return;
+        if (!board.manaTileGrid.IsInBounds(position))
+        {
+            return;
+        }
 
         // Don't add to blob if already in this blob or another blob; this would cause an infinite loop
-        if (tileGrid[position.x, position.y] != null) return;
+        if (blobGrid[position.x, position.y] != null)
+        {
+            return;
+        }
 
         // Don't add if there is not a tile here
         ManaTile tile = tileGrid[position.x, position.y];
@@ -32,10 +38,10 @@ public class TileUtility {
         blobGrid[position.x, position.y] = blob;
 
         // Expand out the current blob on all sides, checking for the same colored tile to add to this blob
-        ExpandBlob(blob, position + Vector2Int.left, color, board, ref tileGrid, ref blobGrid);
-        ExpandBlob(blob, position + Vector2Int.right, color, board, ref tileGrid, ref blobGrid);
-        ExpandBlob(blob, position + Vector2Int.up, color, board, ref tileGrid, ref blobGrid);
-        ExpandBlob(blob, position + Vector2Int.down, color, board, ref tileGrid, ref blobGrid);
+        ExpandBlob(ref blob, position + Vector2Int.left, color, board, ref tileGrid, ref blobGrid);
+        ExpandBlob(ref blob, position + Vector2Int.right, color, board, ref tileGrid, ref blobGrid);
+        ExpandBlob(ref blob, position + Vector2Int.up, color, board, ref tileGrid, ref blobGrid);
+        ExpandBlob(ref blob, position + Vector2Int.down, color, board, ref tileGrid, ref blobGrid);
     }
 
     /// <summary>

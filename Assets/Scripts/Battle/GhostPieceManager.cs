@@ -60,7 +60,7 @@ public class GhostPieceManager : MonoBehaviour {
         for (int i = 0; i < ghostTiles.Length; i++) {
             ManaTile ghostTile = Instantiate(currentPiece.tiles[i]);
             ghostTiles[i] = ghostTile;
-            ghostTile.SetColor(currentPiece.tiles[i].color, ghost: true, BattleManager.Instance.cosmetics);
+            ghostTile.SetColor(currentPiece.tiles[i].color, ghost: true, pulseGlow: false, BattleManager.Instance.cosmetics);
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
         }
 
@@ -86,12 +86,28 @@ public class GhostPieceManager : MonoBehaviour {
     /// Only required when row of tiles of the piece change, because pieces will land in the same columns regardless of the current row.
     /// </summary>
     public void UpdateGhostPiece() {
+        // Unglow all currently glowed tiles from the last piece update
+        for (int y = 0; y < board.manaTileGrid.height; y++)
+        {
+            for (int x = 0; x < board.manaTileGrid.width; x++)
+            {
+                ManaTile tile = simulatedTileGrid[x, y];
+                if (tile)
+                {
+                    tile.SetColor(tile.color,
+                        ghost: tile.isGhost,
+                        pulseGlow: false, // <- undo pulse glow
+                        manaCosmetics: BattleManager.Instance.cosmetics);
+                }
+            }
+        }
+
         // Set the ghost tile grid to a fresh copy of the current state of the actual mana tile grid
         Array.Copy(board.manaTileGrid.tileGrid, simulatedTileGrid, board.manaTileGrid.width * board.manaTileGrid.height);
 
         ManaPiece piece = board.pieceManager.currentPiece;
 
-        Vector2Int[] placePositions = new Vector2Int[piece.tiles.Length];
+        Vector2Int[] placePositions = new Vector2Int[piece.tiles.Length]; 
 
         // Convert the position space of all tiles from piece-relative to board-relative (apply position and rotation).
         // Create ghost tiles at the location of the piece on the board
@@ -116,7 +132,6 @@ public class GhostPieceManager : MonoBehaviour {
         for (int y = 0; y < board.manaTileGrid.height; y++) {
             for (int x = 0; x < board.manaTileGrid.width; x++) {
                 simulatedBlobGrid[x,y] = null;
-                // TODO: unglow a blob's tile if it is currently glowed. set glowing to false
             }
         }
 
@@ -127,17 +142,33 @@ public class GhostPieceManager : MonoBehaviour {
 
             // If this ghost tile has already been added to a blob (ghost tile blob connected to itself), skip this ghost tile
             Vector2Int position = new Vector2Int(ghostTile.position.x, ghostTile.position.y);
+
             List<Vector2Int> blob = simulatedBlobGrid[position.x, position.y];
-            if (blob != null) continue;
+            if (blob != null)
+            {
+                Debug.Log("There's already a blob at " + position);
+                continue;
+            };
 
             // Try building a blob off this ghost tile
             blob = new List<Vector2Int>();
 
-            TileUtility.ExpandBlob(blob, position, ghostTile.color, board, ref simulatedTileGrid, ref simulatedBlobGrid);
+            Debug.Log("Creating and expanding blob at " + position);
+            TileUtility.ExpandBlob(ref blob, position, ghostTile.color, board, ref simulatedTileGrid, ref simulatedBlobGrid);
+            Debug.Log("Blob results: "+string.Join(", ", blob));
+
 
             // if blob is clearable, glow all the connected mana
             if (blob.Count >= board.spellcastManager.minBlobSize) {
-                // TODO: glow blobs here! set glowing to true
+                Debug.Log("Glowing blob with size " + blob.Count);
+                foreach (Vector2Int glowPosition in blob)
+                {
+                    ManaTile glowTile = simulatedTileGrid[glowPosition.x, glowPosition.y];
+                    glowTile.SetColor(glowTile.color, 
+                        ghost: glowTile.isGhost, 
+                        pulseGlow: true,
+                        manaCosmetics: BattleManager.Instance.cosmetics);
+                }
             }
         }
     }

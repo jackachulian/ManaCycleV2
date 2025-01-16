@@ -20,6 +20,9 @@ public class ManaTile : MonoBehaviour
     /// </summary>
     public int color {get; private set;}
 
+    public bool isGhost { get; private set; }
+    public bool isPulseGlowing { get; private set; }
+
     // ========= Fall variables ========
     /// <summary>
     /// Position being animated towards, current position will fall towards this
@@ -50,11 +53,13 @@ public class ManaTile : MonoBehaviour
     /// </summary>
     /// <param name="color">an integer representing the color.</param>
     /// <param name="manaCosmetics">Cosmetics object of the sprites and colors to use. If null, visuals are not changed.</param>
-    public void SetColor(int color, bool ghost = false, ManaCosmetics manaCosmetics = null) {
+    public void SetColor(int color, bool ghost, bool pulseGlow, ManaCosmetics manaCosmetics = null) {
         this.color = color;
+        this.isGhost = ghost;
+        this.isPulseGlowing = pulseGlow;
 
         if (manaCosmetics) {
-            var manaVisual = manaCosmetics.manaVisuals[color];
+            var manaVisual = pulseGlow ? manaCosmetics.pulseGlowManaVisuals[color] : manaCosmetics.manaVisuals[color];
             var renderer = GetComponent<Renderer>();
             renderer.material = ghost ? manaVisual.ghostMaterial : manaVisual.material;
             renderer.sortingOrder = ghost ? -1 : 0; // draw ghost tiles behind regular tiles

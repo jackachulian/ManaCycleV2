@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!212 &8321151740212686890
