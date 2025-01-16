@@ -2,9 +2,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Audio;
+using System;
+using Random = UnityEngine.Random;
+
+[Serializable] public class SoundCollectionDictionary : SerializableDictionary<string, AudioClip> {}
 
 namespace Audio
 {
+
     public class AudioManager : MonoBehaviour
     {
         public static AudioManager Instance;
@@ -13,6 +18,7 @@ namespace Audio
         [SerializeField] private int maxSounds = 16;
         private List<AudioSource> sources = new List<AudioSource>();
         private AudioSource musicSource; 
+        public SoundCollectionDictionary test;
 
         [Header("Sound Collections")]
         public SoundCollection boardSounds;
