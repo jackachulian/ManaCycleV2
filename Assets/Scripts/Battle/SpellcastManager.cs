@@ -134,14 +134,18 @@ public class SpellcastManager : MonoBehaviour {
     void Update() {
         if (!board || !board.boardActive) return;
 
-        SpellcastUpdate();
+        if (spellcasting)
+        {
+            SpellcastTimingUpdate();
+            SpellcastMaterialUpdate();
+        }
     }
 
     /// <summary>
     /// Updates the state of the spellcast based on several timing variables and the changing state of the board.
     /// Runs each frame. (Only on the owner of this board!)
     /// </summary>
-    void SpellcastUpdate() {
+    void SpellcastTimingUpdate() {
         // only manage spellcast timing while a spellcast is active
         if (!spellcasting) return;
 
@@ -186,12 +190,24 @@ public class SpellcastManager : MonoBehaviour {
         }
     }
 
+    void SpellcastMaterialUpdate()
+    {
+        for (int i = 0; i < BattleManager.Instance.fadeGlowMaterials.Length; i++)
+        {
+            Material fadeGlowMaterial = BattleManager.Instance.fadeGlowMaterials[i];
+            float litAmount = Mathf.Clamp01(Mathf.InverseLerp(0, chainDelay, timeSinceLastClear));
+            fadeGlowMaterial.SetFloat("_LitAmount", litAmount);
+        }
+    }
+
     public void EndChain() {
         spellcasting = false;
         currentChain = 0;
         currentCascade = 0;
         chainPopup.Hide();
         cascadePopup.Hide();
+        SpellcastMaterialUpdate();
+        UpdateFadeGlow();
         Debug.Log("Chain ended");
     }
 
@@ -253,6 +269,7 @@ public class SpellcastManager : MonoBehaviour {
 
         board.manaTileGrid.AllTileGravity();
         RefreshBlobs();
+        board.ghostPieceManager.UpdateGhostPiece();
 
         // If the next color is immediately clearable, start a cascade if not already cascading, or leave the current cascade continuing
         if (IsCurrentColorClearable()) {
@@ -262,6 +279,8 @@ public class SpellcastManager : MonoBehaviour {
         else {
             AdvanceCycle();
         }
+
+        UpdateFadeGlow();
     }
 
     /// <summary>
@@ -271,6 +290,7 @@ public class SpellcastManager : MonoBehaviour {
         currentCascade = 0;
         cascadePopup.Hide();
         AdvanceCycle();
+        UpdateFadeGlow();
     }
 
     /// <summary>
@@ -320,6 +340,28 @@ public class SpellcastManager : MonoBehaviour {
         currentCascade = 0;
         currentChain = 0;
         Debug.Log("Spellcast has begun!");
+        UpdateFadeGlow();
+    }
+
+    /// <summary>
+    /// Apply fade-glow to all tiles that are within a blob.
+    /// </summary>
+    public void UpdateFadeGlow()
+    {
+        for (int y = 0; y < board.manaTileGrid.height; y++)
+        {
+            for (int x = 0; x < board.manaTileGrid.width; x++)
+            {
+                ManaTile tile = board.manaTileGrid.GetTile(new Vector2Int(x, y));
+                if (tile)
+                {
+                    // only fade if in a blob while spellcasting
+                    var blob = blobGrid[x, y];
+                    tile.SetFadeGlow(spellcasting && blob != null && blob.Count >= minBlobSize && tile.color == GetCurrentCycleColor());
+                    tile.UpdateVisuals();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -376,6 +418,8 @@ public class SpellcastManager : MonoBehaviour {
                 }
             }
         }
+
+        UpdateFadeGlow();
     }
 
     /// <summary>

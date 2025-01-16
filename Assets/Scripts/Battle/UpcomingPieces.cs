@@ -54,7 +54,8 @@ public class UpcomingPieces : MonoBehaviour
 
         for (int i = 0; i < piece.tiles.Length; i++) {
             int color = rng.Next(GameManager.Instance.battleData.cycleUniqueColors);
-            piece.tiles[i].SetColor(color, false, false, BattleManager.Instance.cosmetics);
+            piece.tiles[i].SetColor(color);
+            piece.tiles[i].UpdateVisuals();
         }
 
         manaPieces.Add(piece);

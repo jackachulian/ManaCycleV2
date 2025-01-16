@@ -60,7 +60,10 @@ public class GhostPieceManager : MonoBehaviour {
         for (int i = 0; i < ghostTiles.Length; i++) {
             ManaTile ghostTile = Instantiate(currentPiece.tiles[i]);
             ghostTiles[i] = ghostTile;
-            ghostTile.SetColor(currentPiece.tiles[i].color, ghost: true, pulseGlow: false, BattleManager.Instance.cosmetics);
+            ghostTile.SetColor(currentPiece.tiles[i].color);
+            ghostTile.SetGhost(true);
+            ghostTile.SetPulseGlow(false);
+            ghostTile.UpdateVisuals(BattleManager.Instance.cosmetics);
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
         }
 
@@ -94,10 +97,8 @@ public class GhostPieceManager : MonoBehaviour {
                 ManaTile tile = simulatedTileGrid[x, y];
                 if (tile)
                 {
-                    tile.SetColor(tile.color,
-                        ghost: tile.isGhost,
-                        pulseGlow: false, // <- undo pulse glow
-                        manaCosmetics: BattleManager.Instance.cosmetics);
+                    tile.SetPulseGlow(false);
+                    tile.UpdateVisuals();
                 }
             }
         }
@@ -164,10 +165,8 @@ public class GhostPieceManager : MonoBehaviour {
                 foreach (Vector2Int glowPosition in blob)
                 {
                     ManaTile glowTile = simulatedTileGrid[glowPosition.x, glowPosition.y];
-                    glowTile.SetColor(glowTile.color, 
-                        ghost: glowTile.isGhost, 
-                        pulseGlow: true,
-                        manaCosmetics: BattleManager.Instance.cosmetics);
+                    glowTile.SetPulseGlow(true);
+                    glowTile.UpdateVisuals();
                 }
             }
         }

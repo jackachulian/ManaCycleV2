@@ -20,8 +20,10 @@ public class ManaTile : MonoBehaviour
     /// </summary>
     public int color {get; private set;}
 
-    public bool isGhost { get; private set; }
-    public bool isPulseGlowing { get; private set; }
+    public bool isGhost { get; private set; } = false;
+    public bool isPulseGlowing { get; private set; } = false;
+    public bool isFadeGlowing { get; private set; } = false;
+
 
     // ========= Fall variables ========
     /// <summary>
@@ -53,17 +55,42 @@ public class ManaTile : MonoBehaviour
     /// </summary>
     /// <param name="color">an integer representing the color.</param>
     /// <param name="manaCosmetics">Cosmetics object of the sprites and colors to use. If null, visuals are not changed.</param>
-    public void SetColor(int color, bool ghost, bool pulseGlow, ManaCosmetics manaCosmetics = null) {
+    public void SetColor(int color) {
         this.color = color;
-        this.isGhost = ghost;
-        this.isPulseGlowing = pulseGlow;
+    }
 
-        if (manaCosmetics) {
-            var manaVisual = pulseGlow ? manaCosmetics.pulseGlowManaVisuals[color] : manaCosmetics.manaVisuals[color];
-            var renderer = GetComponent<Renderer>();
-            renderer.material = ghost ? manaVisual.ghostMaterial : manaVisual.material;
-            renderer.sortingOrder = ghost ? -1 : 0; // draw ghost tiles behind regular tiles
+    public void SetGhost(bool isGhost)
+    {
+        this.isGhost = isGhost;
+    }
+
+    public void SetPulseGlow(bool isPulseGlow)
+    {
+        this.isPulseGlowing = isPulseGlow;
+    }
+
+    public void SetFadeGlow(bool isFadeGlow)
+    {
+        this.isFadeGlowing = isFadeGlow;
+    }
+
+    public void UpdateVisuals(ManaCosmetics manaCosmetics = null)
+    {
+        // if no mana cosmetics passed in parameters, default to the battlemanager's mana cosmetics
+        if (!manaCosmetics) manaCosmetics = BattleManager.Instance.cosmetics;
+        var renderer = GetComponent<Renderer>();
+
+        if (isFadeGlowing)
+        {
+            renderer.material = BattleManager.Instance.fadeGlowMaterials[color];
         }
+        else
+        {
+            ManaVisual manaVisual = isPulseGlowing ? BattleManager.Instance.pulseGlowManaVisuals[color] : manaCosmetics.manaVisuals[color];
+            renderer.material = isGhost ? manaVisual.ghostMaterial : manaVisual.material;
+        }
+
+        renderer.sortingOrder = isGhost ? -1 : 0; // draw ghost tiles behind regular tiles
     }
 
     // Set position of the tile. if animate is true, a falling animation will occur bewteen the previous and current tile position.
