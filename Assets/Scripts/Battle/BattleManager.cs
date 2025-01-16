@@ -219,15 +219,15 @@ public class BattleManager : MonoBehaviour
         if (winner) {
             winner.Win();
             gameCompleted = true;
-            PostGame();
+            PostGame(winner);
         }
     }
 
     // Waits a bit and then show the postgame menu
-    public async void PostGame() {
+    public async void PostGame(Board winner) {
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
         GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
-        postGameMenuUI.ShowPostGameMenuUI();
+        postGameMenuUI.ShowPostGameMenuUI(winner);
     }
 }
