@@ -530,6 +530,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7266254646988270610, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4862874819293388824, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 330302921926225396, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -1732,6 +1735,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 9.46
       objectReference: {fileID: 0}
+    - target: {fileID: 8728664645115849563, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9
@@ -1799,6 +1806,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 7266254646988270610, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4862874819293388824, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 330302921926225396, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
