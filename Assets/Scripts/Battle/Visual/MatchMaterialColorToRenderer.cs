@@ -9,11 +9,18 @@ public class MatchMaterialColorToRenderer : MonoBehaviour
     private Color lastCol;
     private Color targCol;
     private float refTime;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         spriteRenderer = GetComponent<Renderer>();
-        board.onInitialized += OnBoardInitialized;
+        if (board.IsInitialized())
+        {
+            OnBoardInitialized();
+        } else
+        {
+            board.onInitialized += OnBoardInitialized;
+        }
         lastCol = spriteRenderer.material.GetColor(propertyToAnimate);
     }
 

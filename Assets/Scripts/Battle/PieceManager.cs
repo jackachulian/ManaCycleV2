@@ -305,6 +305,7 @@ public class PieceManager : MonoBehaviour {
 
         // parent the next piece onto the board so the player can see it
         currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
+        currentPiece.transform.localScale = Vector3.one;
 
         // spawn position will be the top row, middle column of the board
         Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 

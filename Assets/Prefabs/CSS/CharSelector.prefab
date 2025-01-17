@@ -236,7 +236,7 @@ MonoBehaviour:
   playerIdText: {fileID: 3739026357054879755}
   battlerNameText: {fileID: 2925589484961530873}
   unconnectedSingleplayerText: 
-  unconnectedLocalText: <Press Button To Connect>
+  unconnectedLocalText: <Press Any Button>
   unconnectedOnlineText: Waiting for players...
   disconnectedText: Disconnected
   localSelectText: Select a Character
@@ -1803,8 +1803,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 509.52936}
-  m_SizeDelta: {x: -50, y: 1019.0577}
+  m_AnchoredPosition: {x: 0, y: 739.75}
+  m_SizeDelta: {x: -50, y: 558.61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5642856438406078368
 CanvasRenderer:
@@ -1834,7 +1834,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Infinity
+  m_text: <Press Any Button>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03bc80e1ccf448240bf79fabee49e2c6, type: 2}
   m_sharedMaterial: {fileID: -8302480514065152377, guid: 03bc80e1ccf448240bf79fabee49e2c6, type: 2}
@@ -1861,15 +1861,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 79.4
+  m_fontSize: 35.05
   m_fontSizeBase: 96
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 48
+  m_fontSizeMin: 32
   m_fontSizeMax: 96
   m_fontStyle: 17
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0

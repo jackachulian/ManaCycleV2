@@ -185,9 +185,9 @@ public class CharSelectorUI : MonoBehaviour
 
         // local multiplayer - show the playernumber and the device name, may change to just player number
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer) {
-            int playerNumber = charSelector.player.playerInput.playerIndex + 1;
+            int playerNumber = charSelector.player.boardIndex.Value + 1;
             if (charSelector.player.isCpu) {
-                usernameText.text = "CPU";
+                usernameText.text = "P" + playerNumber + " - CPU";
             }
             else if (charSelector.player.playerInput.devices.Count > 0) {
                 var deviceName = charSelector.player.playerInput.devices[0].shortDisplayName;

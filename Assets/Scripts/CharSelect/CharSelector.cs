@@ -28,4 +28,14 @@ public class CharSelector : MonoBehaviour {
         Debug.Log("Assigned "+player+" to char selector "+this);
         GetComponent<CharSelectorUI>().OnAssignedPlayer();
     }
+
+    public void ShowSelector()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void HideSelector()
+    {
+        gameObject.SetActive(false);
+    }
 }

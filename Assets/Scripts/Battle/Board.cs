@@ -119,6 +119,8 @@ public class Board : MonoBehaviour
 
         manaTileGrid.HideTiles(); // tiles will be shown when the game begins
         _upcomingPieces.HidePieces();
+
+        onInitialized?.Invoke();
     }
 
     /// <summary>

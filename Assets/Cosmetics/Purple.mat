@@ -59,8 +59,10 @@ Material:
     - _BorderSmoothRadius: 0.01
     - _EnableExternalAlpha: 0
     - _Ghost: 0
-    - _GhostShapeRadius: 0.125
+    - _GhostShapeRadius: 0.16
     - _LitAmount: 0
+    - _PulseGlowAmplitude: 0
+    - _PulseGlowFrequency: 3
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SHAPE: 4

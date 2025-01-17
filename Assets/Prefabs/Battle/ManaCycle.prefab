@@ -115,7 +115,14 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4175071975344855633}
+  - {fileID: 4763447504734280537}
+  - {fileID: 5268647255815680403}
+  - {fileID: 5355769535371037551}
+  - {fileID: 5420333185688582694}
+  - {fileID: 7378720661192490559}
+  - {fileID: 8605083988892842594}
   m_Father: {fileID: 5238884999018487179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4169094727044216719
@@ -218,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!1 &4752453065832764431
@@ -321,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!1 &4805249712448263964
@@ -424,7 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!1 &5415364402154905119
@@ -474,7 +481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manaScale: 1.25
-  manaSeparation: 1.65
+  manaOffset: {x: 0, y: -1.5}
   manaTileTransform: {fileID: 4725781609611307407}
 --- !u!1 &5552610193203390310
 GameObject:
@@ -576,7 +583,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!1 &5815166341045159056
@@ -679,7 +686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!1 &8523744447780098820
@@ -782,7 +789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!1 &8545535439976033960
@@ -886,6 +893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf2d8ba011896584a8899095a01f6588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _upcomingPieces: {fileID: 0}
 --- !u!1 &8579285534821548501
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,6 +994,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6b95f0a949f8347886e76217ae4397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0}
+  _position: {x: 0, y: 0}
   initialFallSpeed: 40
   fallAcceleration: 40

@@ -65,6 +65,7 @@ public class GhostPieceManager : MonoBehaviour {
             ghostTile.SetPulseGlow(false);
             ghostTile.UpdateVisuals(BattleManager.Instance.cosmetics);
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
+            ghostTile.transform.localScale = Vector3.one;
         }
 
         UpdateGhostPiece();
