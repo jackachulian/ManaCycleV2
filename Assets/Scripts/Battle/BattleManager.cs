@@ -261,6 +261,12 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        // If no boards are alive, start the postgame, the one player was defeated
+        if (livingBoards == 0) {
+            gameCompleted = true;
+            PostGame(winner);
+        }
+
         if (winner) {
             winner.Win();
             gameCompleted = true;
