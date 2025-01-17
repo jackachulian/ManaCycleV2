@@ -292,7 +292,7 @@ public class SpellcastManager : MonoBehaviour {
     public void TrySpellcast() {
         if (!board.boardActive || spellcasting) return;
 
-        if (clearableManaCounts[GetCurrentCycleColor()] <= 0) {
+        if (!IsCurrentColorClearable()) {
             Debug.Log("Can't spellcast!");
             board.ui.OnFailSpellcast(GetCurrentCycleColor());
             AudioManager.Instance.PlayBoardSound("cast_fail");
@@ -340,7 +340,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Returns the color that this board is currently on and has to clear in order to advance the cycle.
     /// </summary>
     /// <returns>the int representing the current color</returns>
-    private int GetCurrentCycleColor() {
+    public int GetCurrentCycleColor() {
         return BattleManager.Instance.manaCycle.GetSequenceColor(cycleIndex);
     }
 
@@ -348,7 +348,7 @@ public class SpellcastManager : MonoBehaviour {
     /// Returns true if, according to the last blob update, the current cycle color can be cleared.
     /// </summary>
     /// <returns>true if current cycle color is currently clearable</returns>
-    private bool IsCurrentColorClearable() {
+    public bool IsCurrentColorClearable() {
         return clearableManaCounts[GetCurrentCycleColor()] > 0;
     }
 

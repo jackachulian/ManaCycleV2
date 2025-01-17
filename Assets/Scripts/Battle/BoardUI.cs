@@ -83,10 +83,18 @@ public class BoardUI : MonoBehaviour {
     [SerializeField] private PopupUI _cascadePopup;
     public PopupUI cascadePopup => _cascadePopup;
 
-
+    // Falling anim variables
     Vector2 fallStartPos;
     float fallDistance, fallSpeed, rotation, angularSpeed;
     bool falling = false;
+
+
+    // Board component, cached on awake
+    private Board board;
+
+    void Awake() {
+        board = GetComponent<Board>();
+    }
 
     void Start() {
         winLoseText.text = "";
@@ -94,6 +102,7 @@ public class BoardUI : MonoBehaviour {
         GetComponent<ManaTileGrid>().TileClearedNotifier += OnTileCleared;
         particles.Stop();
 
+        board.pieceManager.onPiecePlaced += OnPiecePlaced;
     }
 
     void Update() {

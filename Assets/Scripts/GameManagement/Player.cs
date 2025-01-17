@@ -66,6 +66,11 @@ public class Player : NetworkBehaviour {
     public BattleInputHandler battleInputHandler {get; private set;}
 
     /// <summary>
+    /// Input handler for the battle scene
+    /// </summary>
+    public AIPlayerInput aiPlayerInput {get; private set;}
+
+    /// <summary>
     /// Handles RPCs during the battle scene
     /// </summary>
     public PlayerBoardNetworkBehaviour boardNetworkBehaviour {get; private set;}
@@ -79,6 +84,12 @@ public class Player : NetworkBehaviour {
     /// Is set when this player's board index is set and this player is hiooked up to one of the char selectors
     /// </summary>
     public CharSelector selector {get; private set;}
+
+
+    /// <summary>
+    /// Current board this player is attached to if in the battle scene
+    /// </summary>
+    private Board board;
 
 
     private void Awake() {
@@ -97,6 +108,7 @@ public class Player : NetworkBehaviour {
         playerInput = GetComponent<PlayerInput>();
         charSelectInputHandler = GetComponent<CharSelectInputHandler>();
         battleInputHandler = GetComponent<BattleInputHandler>();
+        aiPlayerInput = GetComponent<AIPlayerInput>();
         multiplayerEventSystem = GetComponent<MultiplayerEventSystem>();
         boardNetworkBehaviour = GetComponent<PlayerBoardNetworkBehaviour>();
 
@@ -126,6 +138,8 @@ public class Player : NetworkBehaviour {
         } else {
             DisableBattleInputs();
         }
+
+        DisableBattleAI(); // turn this on after spawning if ai is desired
 
         // If this is the server, add to the server player manager
         if (NetworkManager.Singleton.IsServer) {
@@ -295,6 +309,16 @@ public class Player : NetworkBehaviour {
         playerInput.actions.FindActionMap("Battle", true).Disable();
     }
 
+    public void EnableBattleAI() {
+        aiPlayerInput.enabled = true;
+        aiPlayerInput.AssignBoard(board);
+    }
+
+    public void DisableBattleAI() {
+        aiPlayerInput.enabled = false;
+        aiPlayerInput.UnassignBoard();
+    }
+
     public void AttachToCharSelector() {
         selector = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex.Value);
         charSelectInputHandler.SetCharSelector(selector);
@@ -305,10 +329,11 @@ public class Player : NetworkBehaviour {
     /// For use in the battle scene. Attach inputs to the board with this player's current boardIndex.
     /// </summary>
     public void AttachToBattleBoard() {
-        var board = BattleManager.Instance.GetBoardByIndex(boardIndex.Value);
+        board = BattleManager.Instance.GetBoardByIndex(boardIndex.Value);
         if (board) {
             battleInputHandler.SetBoard(board);
             board.SetPlayer(this);
+            if (aiPlayerInput.enabled) aiPlayerInput.AssignBoard(board);
             Debug.Log("Attached player "+this+" to board "+board);
         } else {
             Debug.LogError("Player "+this+" could not be attached to board, there is no board with index "+boardIndex.Value);

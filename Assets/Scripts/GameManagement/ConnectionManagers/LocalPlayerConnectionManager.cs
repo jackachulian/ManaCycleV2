@@ -12,8 +12,19 @@ public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnecti
 
     private PlayerInputManager playerInputManager;
 
+    /// <summary>
+    /// Only used to spawn AI players
+    /// </summary>
+    [SerializeField]  private Player playerPrefab;
+
     void Awake() {
         playerInputManager = GetComponent<PlayerInputManager>();
+    }
+    
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.P)) {
+            AddCPUPlayer();
+        }
     }
 
     public void StartListeningForPlayers()
@@ -56,5 +67,13 @@ public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnecti
 
     public void OnPlayerDespawned(Player player) {
         
+    }
+
+    public void AddCPUPlayer() {
+        Player player = Instantiate(playerPrefab);
+        player.DisableUserInput();
+        player.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
+        player.username.Value = "CPU";
+        player.EnableBattleAI();
     }
 }

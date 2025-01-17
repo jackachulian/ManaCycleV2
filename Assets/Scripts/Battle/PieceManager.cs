@@ -41,6 +41,16 @@ public class PieceManager : MonoBehaviour {
     private Board board;
 
     /// <summary>
+    /// Invoked when a new piece is spawned onto the board as the currentPiece.
+    /// </summary>
+    public event Action onPieceSpawned;
+
+    /// <summary>
+    /// Invoked when a new piece is placed onto the board's tile grid.
+    /// </summary>
+    public event Action onPiecePlaced;
+
+    /// <summary>
     /// Initialize the battle.
     /// Is initialized after UpcomingPieceList so that the first piece can be spawned on initialization.
     /// (The piece is spawned before the timer starts, in case boards' countdowns start at slightly different times on different clients)
@@ -238,7 +248,7 @@ public class PieceManager : MonoBehaviour {
         PlacePiece(currentPiece);
         board.ghostPieceManager.DestroyGhostPiece();
         board.healthManager.AdvanceDamageQueue();
-        board.ui.OnPiecePlaced();
+        onPiecePlaced?.Invoke();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
 
         SpawnNewPiece();
@@ -304,5 +314,7 @@ public class PieceManager : MonoBehaviour {
         board.ghostPieceManager.CreateGhostPiece();
 
         board.upcomingPieces.UpdatePieceListUI();
+
+        onPieceSpawned?.Invoke();
     }
 }
