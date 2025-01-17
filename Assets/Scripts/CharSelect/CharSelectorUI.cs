@@ -186,11 +186,16 @@ public class CharSelectorUI : MonoBehaviour
         // local multiplayer - show the playernumber and the device name, may change to just player number
         if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.LocalMultiplayer) {
             int playerNumber = charSelector.player.playerInput.playerIndex + 1;
-            var deviceName = charSelector.player.playerInput.devices[0].shortDisplayName;
-            if (deviceName == null || deviceName == "") deviceName = charSelector.player.playerInput.devices[0].displayName;
-            if (deviceName == null || deviceName == "") deviceName = charSelector.player.playerInput.devices[0].name;
-            if (deviceName == "Mouse") deviceName = "Keyboard";
-            usernameText.text = "P"+playerNumber+" - "+deviceName;
+            if (charSelector.player.isCpu) {
+                usernameText.text = "CPU";
+            }
+            else if (charSelector.player.playerInput.devices.Count > 0) {
+                var deviceName = charSelector.player.playerInput.devices[0].shortDisplayName;
+                if (deviceName == null || deviceName == "") deviceName = charSelector.player.playerInput.devices[0].displayName;
+                if (deviceName == null || deviceName == "") deviceName = charSelector.player.playerInput.devices[0].name;
+                if (deviceName == "Mouse") deviceName = "Keyboard";
+                usernameText.text = "P"+playerNumber+" - "+deviceName;
+            }
         }
 
         else if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
@@ -204,7 +209,7 @@ public class CharSelectorUI : MonoBehaviour
 
         else {
             Debug.LogError("A char selector is being assigned a player while there is no current connection type!");
-            usernameText.text = "Anomaly";
+            usernameText.text = "";
         }
     }
 }

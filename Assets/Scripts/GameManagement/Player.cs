@@ -13,6 +13,12 @@ using UnityEngine.InputSystem.UI;
 /// </summary>
 public class Player : NetworkBehaviour {
     /// <summary>
+    /// Whether or not the CPU is controlling this player.
+    /// Only do user input on this player locally if it is not a CPU.
+    /// </summary>
+    public bool isCpu {get; set;}
+
+    /// <summary>
     /// the ID of this player, assigned by the player manager.
     /// </summary>
     public NetworkVariable<ulong> playerId = new NetworkVariable<ulong>();
@@ -124,8 +130,9 @@ public class Player : NetworkBehaviour {
         // make sure this persists between the charselect and the battle scene!
         DontDestroyOnLoad(gameObject);
 
-        // only enable input if the client owns this player. (always true in singleplayer, varies in multiplayer)
-        if (IsOwner) {
+        // only enable input if the client owns this player.
+        // Don't immediately enable the input if this player is a CPU.
+        if (IsOwner && !isCpu) {
             EnableUserInput();
         } else {
             DisableUserInput();

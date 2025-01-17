@@ -45,6 +45,8 @@ public class AIPlayerInput : MonoBehaviour
     private bool spellcastNext = false;
 
     void Update() {
+        if (!board) return;
+
         timeUntilNextDecision -= Time.deltaTime;
         if (timeUntilNextDecision < 0) {
             timeUntilNextDecision += Random.Range(minDecisionTime, maxDecisionTime);

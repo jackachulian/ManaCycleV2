@@ -44,7 +44,7 @@ public class Cursor : MonoBehaviour
     public void SetPlayer(Player player, Color color, int playerNumber) {
         interactor.SetPlayer(player);
         cursorImage.color = color;
-        playerNumberText.text = "P"+playerNumber;
+        if (player) playerNumberText.text = player.isCpu ? "CPU" : "P"+playerNumber;
     }
 
     /// <summary>
