@@ -88,21 +88,19 @@ public class BoardUI : MonoBehaviour {
     float fallDistance, fallSpeed, rotation, angularSpeed;
     bool falling = false;
 
-
-    // Board component, cached on awake
+    // Board component, cached on InitializeBattle
     private Board board;
-
-    void Awake() {
-        board = GetComponent<Board>();
-    }
 
     void Start() {
         winLoseText.text = "";
         animator.enabled = true;
-        GetComponent<ManaTileGrid>().TileClearedNotifier += OnTileCleared;
         particles.Stop();
+    }
 
+    public void InitializeBattle(Board board) {
+        this.board = board;
         board.pieceManager.onPiecePlaced += OnPiecePlaced;
+        board.manaTileGrid.TileClearedNotifier += OnTileCleared;
     }
 
     void Update() {

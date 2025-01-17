@@ -3,6 +3,7 @@ using Battle;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -105,6 +106,12 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public Player otherPlayerControlling {get; private set;}
 
+    /// <summary>
+    /// Is set while being controlled by another player. 
+    /// Is null while not being controlled by anoter and controlling self.
+    /// </summary>
+    public Player otherPlayerControlledBy {get; set;}
+
     private void Awake() {
         // If not in local multiplayer, disable the user inputs. these will be enabled if the player is owned once it spawns.
         // for local multiplayer the inputs need to be enabled when the player is added, so this would mess that up
@@ -160,8 +167,9 @@ public class Player : NetworkBehaviour {
             GameManager.Instance.playerManager.ServerAddPlayer(this);
         }
 
-        // call playerspawned on all clients (including host)
-        GameManager.Instance.playerManager.PlayerSpawned(this);
+        GameManager.Instance.playerManager.onPlayerSpawned += OnAnyPlayerSpawned;
+        GameManager.Instance.playerManager.onPlayerDespawned += OnAnyPlayerDespawned;
+
 
         // In online mode, set the username on this object for others to see this player's username
         if (IsOwner && GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.OnlineMultiplayer) {
@@ -170,6 +178,9 @@ public class Player : NetworkBehaviour {
 
         // Call this so board index can hook to board if it is already the correct and set value upon joining the game
         OnBoardIndexChanged(-1, boardIndex.Value);
+
+        // call playerspawned on all clients (including host)
+        GameManager.Instance.playerManager.PlayerSpawned(this);
     }
 
     public async void SetUsernameAsync() {
@@ -187,6 +198,9 @@ public class Player : NetworkBehaviour {
         if (NetworkManager.Singleton.IsServer) {
             GameManager.Instance.playerManager.ServerRemovePlayer(this);
         }
+
+        GameManager.Instance.playerManager.onPlayerSpawned -= OnAnyPlayerSpawned;
+        GameManager.Instance.playerManager.onPlayerDespawned -= OnAnyPlayerDespawned;
 
         GameManager.Instance.playerManager.PlayerDespawned(this);
     }
@@ -207,6 +221,9 @@ public class Player : NetworkBehaviour {
         }
 
         Debug.Log("Assigning player with ID "+playerId.Value+" to board number "+current+" (previous: "+previous+")");
+
+        // rename this player gameobject - good for debugging
+        name = "Player"+(boardIndex.Value+1) + (isCpu ? " (CPU)" : "");
 
         if (CharSelectManager.Instance) {
             AttachToCharSelector();
@@ -250,21 +267,6 @@ public class Player : NetworkBehaviour {
         if (selector) {
             selector.ui.UpdateReadinessStatus();
             selector.ui.UpdateSelectedBattler();
-
-            // Once options are chosen, if ready, temporarily control the next non-ready CPU player
-            if (current) ControlNextCPUPlayer();
-        }
-    }
-
-    /// <summary>
-    /// Find the first CPU player in the charselect and control their character choice and options temporarily.
-    /// </summary>
-    public void ControlNextCPUPlayer() {
-        foreach (Player player in GameManager.Instance.playerManager.players) {
-            if (player.isCpu && !player.optionsChosen.Value) {
-                ControlAnotherPlayer(player);
-                return;
-            }
         }
     }
 
@@ -362,22 +364,37 @@ public class Player : NetworkBehaviour {
 
     public void ControlAnotherPlayer(Player player) {
         otherPlayerControlling = player;
+        otherPlayerControlling.otherPlayerControlledBy = this;
         AttachToCharSelector();
     }
 
-    public void StopControllingAnotherPlayer() {
-        if (!otherPlayerControlling) return;
-
-        // Stop controlling the other player.
+    /// <summary>
+    /// Find the first CPU player in the charselect and control their character choice and options temporarily.
+    /// If this player was controlling another player, stop controlling them.
+    /// </summary>
+    public void ControlNextCPUPlayer() {
+        if (otherPlayerControlling) otherPlayerControlling.otherPlayerControlledBy = null;
         otherPlayerControlling = null;
-        AttachToCharSelector();
+        
+        foreach (Player player in GameManager.Instance.playerManager.players) {
+            if (player.isCpu && !player.optionsChosen.Value) {
+                ControlAnotherPlayer(player);
+                return;
+            }
+        }
+    }
+
+    public void StopControllingAnotherPlayer() {
+        if (otherPlayerControlling) otherPlayerControlling.otherPlayerControlledBy = null;
+        otherPlayerControlling = null;
 
         // Find another CPU player to re-decide for, checking backwards through the player list,
         // and finding a ready CPU player to make un-ready.
+        // can't control CPUs that are being controlled by another different player already
         for (int i = GameManager.Instance.playerManager.players.Count-1; i >= 0; i--) {
             Player player = GameManager.Instance.playerManager.players[i];
 
-            if (player.isCpu && player.optionsChosen.Value) {
+            if (player.isCpu && player.optionsChosen.Value && player.otherPlayerControlledBy == null) {
                 player.optionsChosen.Value = false;
                 player.characterChosen.Value = false;
                 ControlAnotherPlayer(player);
@@ -389,6 +406,29 @@ public class Player : NetworkBehaviour {
         optionsChosen.Value = false;
         characterChosen.Value = false;
         AttachToCharSelector();
+    }
+
+    public void OnAnyPlayerSpawned(Player player) {
+        // If:
+        if (!isCpu                          // this player is not a CPU
+        && optionsChosen.Value              // this player is ready
+        && player != this                   // other player is not this player
+        && player.isCpu                     // other player must be a CPU to auto-control
+        && !player.optionsChosen.Value       // other player is not already somehow ready
+        && otherPlayerControlling == null   // this player is not aleady controlling another player
+        && player.otherPlayerControlledBy == null   // other player is not already being controlled by a player
+        )
+        // start controlling the newly-spawned CPU player
+        {
+            ControlAnotherPlayer(player);
+        }
+    }
+
+    public void OnAnyPlayerDespawned(Player player) {
+        // If player was controlling the player that just got despawned, go back to controlling self or another avialable CPU
+        if (player == otherPlayerControlling) {
+            StopControllingAnotherPlayer();
+        }
     }
 
     /// <summary>

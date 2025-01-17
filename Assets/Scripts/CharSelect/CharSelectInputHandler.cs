@@ -29,6 +29,7 @@ public class CharSelectInputHandler : NetworkBehaviour
     /// Set the char selector that this player should now control. Called from CharSelectManager when a player is added.
     /// </summary>
     public void SetCharSelector(CharSelector charSelector) {
+        Debug.Log(this+" is now controlling selector "+charSelector);
         this.charSelector = charSelector;
     }
 
@@ -48,8 +49,15 @@ public class CharSelectInputHandler : NetworkBehaviour
 
         // Confirm options if options is open
         if (playerToInputOn.characterChosen.Value) {
-            Debug.Log("choosing options on "+this);
+            Debug.Log("choosing options on "+playerToInputOn);
+            // Other player is now ready
             playerToInputOn.optionsChosen.Value = true;
+
+            // If THIS player are ready (they may be the same) and THIS player isnt a cpu,
+            // control the next non-ready CPU board
+            if (player.optionsChosen.Value && !player.isCpu) {
+                player.ControlNextCPUPlayer();
+            }
         } 
 
         // Click with the cursor if still choosing character
@@ -72,7 +80,7 @@ public class CharSelectInputHandler : NetworkBehaviour
         // stop controlling them and control a different player or go back to controlling self.
         if (playerToInputOn.characterChosen.Value == false) {
             // TODO: maybe hold cancel to leave the scene, if not controlling another player
-            player.StopControllingAnotherPlayer();
+             if (player.otherPlayerControlling) player.StopControllingAnotherPlayer();
         } 
         // otherwise if character already chosen, undo the choice and go back to selecting character
         else {

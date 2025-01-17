@@ -96,6 +96,7 @@ public class Board : MonoBehaviour
         boardActive = false; // will be set to true after countdown reaches 0
 
         ui = GetComponent<BoardUI>();
+        ui.InitializeBattle(this);
         
         manaTileGrid = GetComponent<ManaTileGrid>();
         manaTileGrid.InitializeBattle();
