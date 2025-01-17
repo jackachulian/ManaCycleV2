@@ -7989,7 +7989,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: -1
   m_Sprite: {fileID: 7482667652216324306, guid: 201b79be2fab9ef42a046e2a9629ce5f, type: 3}
-  m_Color: {r: 0.9528302, g: 0.1033731, b: 0.1033731, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
@@ -8011,9 +8011,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a74812ce82bd05428dbe78bd22d79f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardIndex: 0
-  sr: {fileID: 1928095382688310908}
-  propName: _Color
+  board: {fileID: 749915984811662644}
+  propertyToAnimate: _Color
   fadeTime: 0.5
 --- !u!1001 &958452123008763535
 PrefabInstance:

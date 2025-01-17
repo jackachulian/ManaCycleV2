@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentConnectionType: 0
+  autoAddCPUs: 0
 --- !u!114 &3629195201363629216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +63,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5660b8de14c76ce43aec9497ca926914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aiPlayerPrefab: {fileID: 4937803710727270688, guid: 3f663fa99586dbe469acac88c1320c7b, type: 3}
 --- !u!114 &377194312717643290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +120,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33fa70543a3b54348bbb278151ccc42b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 7121113658076555076, guid: 65db3c54736e3b345bda50bba099caae, type: 3}
 --- !u!114 &6949130229279153004
 MonoBehaviour:
   m_ObjectHideFlags: 0

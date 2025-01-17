@@ -11,6 +11,8 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class Board : MonoBehaviour
 {
+    public event Action onInitialized;
+
     /// <summary>
     /// Stores all placed mana tiles. Cached on initialization.
     /// </summary>

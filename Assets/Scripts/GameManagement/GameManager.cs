@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour {
     /// a battle with that mode will automatically be started with that connection mode.
     /// This can be used for easy testing in the editor without having to go throughthe match setup and character select process first.
     /// </summary>
+    [Tooltip("Current method of connecting players. If not None loading the scene, a game of this type will be automatically started.")]
     [SerializeField] private GameConnectionType _currentConnectionType = GameConnectionType.None;
     public GameConnectionType currentConnectionType => _currentConnectionType;
 
@@ -96,6 +97,13 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     private GameState _currentGameState = GameState.None;
     public GameState currentGameState => _currentGameState;
+
+
+    /// <summary>
+    /// Automatically add this many CPUs to the game when teh game starts. Only use for debugging!
+    /// </summary>
+    [Tooltip("Automatically add this many CPUs to the game when the game starts. Only use for debugging!")]
+    [SerializeField] private int autoAddCpus = 0;
 
 
     private void Awake()
@@ -178,6 +186,12 @@ public class GameManager : MonoBehaviour {
         if (!NetworkManager.Singleton.IsListening) {
             Debug.LogError("Failed to start networkmanager as a host; stopping game");
             return;
+        }
+
+        if (autoAddCpus > 0) {
+            for (int i = 0; i < autoAddCpus; i++) {
+                playerManager.AddCPUPlayer();
+            }
         }
     }
 

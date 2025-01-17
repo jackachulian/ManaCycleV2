@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Handles the spawning, despawning and tracking of player objects and assigning IDs / retreiving by ID.
@@ -10,10 +11,13 @@ using UnityEngine.Events;
 public class PlayerManager : MonoBehaviour {
     const int playerLimit = 4;
 
-
     public event Action<Player> onPlayerSpawned;
     public event Action<Player> onPlayerDespawned;
 
+    /// <summary>
+    /// Only used to spawn AI players
+    /// </summary>
+    [SerializeField]  private Player aiPlayerPrefab;
 
     /// <summary>
     /// All players that are connected to the battle
@@ -22,6 +26,13 @@ public class PlayerManager : MonoBehaviour {
     /// ID assignment differs based on the implementation
     /// </summary>
     public List<Player> players {get; private set;} = new List<Player>(4);
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.P)) {
+            AddCPUPlayer();
+        }
+    }
+
 
     /// <summary>
     /// Add a player to the player list and assign them a board index.
@@ -78,6 +89,18 @@ public class PlayerManager : MonoBehaviour {
         players.Remove(player);
         onPlayerDespawned?.Invoke(player);
         Debug.Log("Removed player with ID "+player.playerId.Value+" and board index "+player.boardIndex.Value);
+    }
+
+    public void AddCPUPlayer() {
+        // disabling this on the prefab will make it so the PlayerInputManager doesn't try to assign this a device when it is instantiated
+        aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
+
+        Player player = Instantiate(aiPlayerPrefab);
+        player.isCpu = true;
+        player.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
+        player.DisableUserInput();
+        player.username.Value = "CPU";
+        player.EnableBattleAI();
     }
 
     /// <summary>

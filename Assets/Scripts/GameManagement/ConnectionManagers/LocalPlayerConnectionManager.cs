@@ -12,19 +12,8 @@ public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnecti
 
     private PlayerInputManager playerInputManager;
 
-    /// <summary>
-    /// Only used to spawn AI players
-    /// </summary>
-    [SerializeField]  private Player aiPlayerPrefab;
-
     void Awake() {
         playerInputManager = GetComponent<PlayerInputManager>();
-    }
-    
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            AddCPUPlayer();
-        }
     }
 
     public void StartListeningForPlayers()
@@ -67,17 +56,5 @@ public class LocalPlayerConnectionManager : MonoBehaviour, IServerPlayerConnecti
 
     public void OnPlayerDespawned(Player player) {
         
-    }
-
-    public void AddCPUPlayer() {
-        // disabling this on the prefab will make it so the PlayerInputManager doesn't try to assign this a device when it is instantiated
-        aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
-
-        Player player = Instantiate(aiPlayerPrefab);
-        player.isCpu = true;
-        player.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
-        player.DisableUserInput();
-        player.username.Value = "CPU";
-        player.EnableBattleAI();
     }
 }

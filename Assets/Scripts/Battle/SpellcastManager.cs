@@ -87,9 +87,7 @@ public class SpellcastManager : MonoBehaviour {
     /// <summary>
     ///  Event raised when this board's position in the cycle is changed
     /// </summary>
-    /// <param name="cycleIndex"></param>
-    public delegate void CycleChangedCallback(int cycleIndex);
-    public event CycleChangedCallback CycleChangedNotifier; 
+    public event Action<int> onCycleIndexChanged; 
     
     /// <summary>
     /// Called when the battle initializes, after the ManaCycle and the Board for this spellcastmanager is initialized.
@@ -281,7 +279,7 @@ public class SpellcastManager : MonoBehaviour {
         }
 
         board.ui.RepositionCyclePointer(cycleIndex);
-        CycleChangedNotifier?.Invoke(cycleIndex);
+        onCycleIndexChanged?.Invoke(cycleIndex);
         // TODO: Maybe implement all board ui functions using c# events
         board.ui.OnSpellcast();
     }
