@@ -1974,6 +1974,18 @@ MonoBehaviour:
     m_Y: 367
     m_Width: 10
     m_Height: 656
+  - m_X: 0
+    m_Y: 516
+    m_Width: 1023
+    m_Height: 507
+  - m_X: 0
+    m_Y: 501
+    m_Width: 110
+    m_Height: 522
+  - m_X: 53
+    m_Y: 497
+    m_Width: 57
+    m_Height: 526
   - m_X: 110
     m_Y: 409
     m_Width: 5

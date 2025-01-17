@@ -60,6 +60,9 @@ Material:
     - _EnableExternalAlpha: 0
     - _Ghost: 1
     - _GhostShapeRadius: 0.125
+    - _LitAmount: 0
+    - _PulseGlowAmplitude: 0
+    - _PulseGlowFrequency: 3
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SHAPE: 2
@@ -67,7 +70,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BorderColor: {r: 0.050980393, g: 0.13725491, b: 0.6117647, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _InnerColor: {r: 0.17254902, g: 0.47843137, b: 0.99215686, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

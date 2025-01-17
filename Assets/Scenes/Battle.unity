@@ -2683,6 +2683,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6875103078424749902, guid: 17662076faedc3e428988e1374587f3b, type: 3}
+      propertyPath: countdown
+      value: 
+      objectReference: {fileID: 1921825670}
+    - target: {fileID: 6875103078424749902, guid: 17662076faedc3e428988e1374587f3b, type: 3}
       propertyPath: manaCycle
       value: 
       objectReference: {fileID: 2124394156}

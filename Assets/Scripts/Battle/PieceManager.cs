@@ -21,7 +21,7 @@ public class PieceManager : MonoBehaviour {
     /// <summary>
     /// Current falling piece on this board.
     /// </summary>
-    private ManaPiece currentPiece;
+    public ManaPiece currentPiece {get; private set;}
 
     /// <summary>
     /// Incrementing value that tracks the percentage of time before a fall should happen.
@@ -36,7 +36,7 @@ public class PieceManager : MonoBehaviour {
     private bool quickfall = false;
 
     /// <summary>
-    /// The Board this is managing the spellcasts of. Cached on InitializeBattle()
+    /// The Board of which this is managing the piece movmeent and placement. Cached on InitializeBattle()
     /// </summary>
     private Board board;
 
@@ -110,9 +110,18 @@ public class PieceManager : MonoBehaviour {
     /// (Rpc Target) Update the position and rotation of the current piece being dropped.
     /// </summary>
     public void UpdateCurrentPiece(Vector2Int position, int rotation) {
+        var prevPosition = position;
+        var prevRotation = rotation;
+
         currentPiece.position = position;
         currentPiece.rotation = rotation;
         currentPiece.UpdateVisualPositions();
+
+        // Only need to update the ghost piece if the piece moved columns or was rotated
+        if (prevPosition.x != position.x || prevRotation != rotation)
+        {
+            board.ghostPieceManager.UpdateGhostPiece();
+        }
     }
 
     /// <summary>
@@ -138,6 +147,13 @@ public class PieceManager : MonoBehaviour {
             offset == Vector2Int.down ? "fall" : "move", 
             volumeScale: offset == Vector2Int.down ? 0.15f : 0.5f
         );
+
+        // Only need to update the ghost piece if the piece moved columns
+        if (offset.x != 0)
+        {
+            board.ghostPieceManager.UpdateGhostPiece();
+        }
+
         return true;
     }
 
@@ -179,6 +195,9 @@ public class PieceManager : MonoBehaviour {
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
+
+        board.ghostPieceManager.UpdateGhostPiece();
+
         AudioManager.Instance.PlayBoardSound("rotate", volumeScale: 0.5f);
         return true;
     }
@@ -196,7 +215,7 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     bool IsValidPlacement(ManaPiece piece) {
         for (int i = 0; i < piece.tiles.Length; i++) {
-            Vector2Int piecePosition = piece.position + piece.GetTilePosition(i);
+            Vector2Int piecePosition = piece.position + piece.GetPieceTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
             if (!board.manaTileGrid.IsInBounds(piecePosition)) {
@@ -219,10 +238,13 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
+        board.ghostPieceManager.DestroyGhostPiece();
         board.healthManager.AdvanceDamageQueue();
         board.boardUI.OnPiecePlaced();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
+
         SpawnNewPiece();
+
 
         // If the newly spawned piece is in an invalid position, player has topped out
         if (!IsValidPlacement(currentPiece)) {
@@ -244,11 +266,11 @@ public class PieceManager : MonoBehaviour {
         // and reparent the mana tiles to this board
         for (int i = 0; i < piece.tiles.Length; i++) {
             ManaTile tile = piece.tiles[i];
-            Vector2Int boardPosition = piece.position + piece.GetTilePosition(i);
-            tile.position = boardPosition;
+            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
             placePositions[i] = boardPosition;
             board.manaTileGrid.PlaceTile(tile, boardPosition);
             tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
+            tile.SetBoardPosition(boardPosition, false); // no animation; fall animation will perform the animation
         }
 
         // Destroy piece container that is no longer needed
@@ -279,6 +301,8 @@ public class PieceManager : MonoBehaviour {
         Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
         currentPiece.position = spawnPos;
         currentPiece.UpdateVisualPositions();
+
+        board.ghostPieceManager.CreateGhostPiece();
 
         board.upcomingPieces.UpdatePieceListUI();
     }

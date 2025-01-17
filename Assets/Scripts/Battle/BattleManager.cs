@@ -40,6 +40,17 @@ public class BattleManager : MonoBehaviour
     [SerializeField] public ManaCosmetics cosmetics;
 
     /// <summary>
+    /// Collection of mana visuals created during runtime in BattleManager's InitializeBattle. Used for showing what mana is connected to ghost tiles and will be cleared if placed in that position.
+    /// </summary>
+    public ManaVisual[] pulseGlowManaVisuals { get; private set; }
+
+    /// <summary>
+    /// Materials used to display mana that is currently being cleared by a spellcast.
+    /// The LitAMount is animated over time based on spellcast values
+    /// </summary>
+    public Material[] fadeGlowMaterials { get; private set; }
+
+    /// <summary>
     /// The L-shaped Triomino ManaPiece that will be duplicated, spawned, and color-changed on all boards
     /// </summary>
     [SerializeField] private ManaPiece manaPiecePrefab;
@@ -119,6 +130,33 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    public void GenerateGlowMaterials()
+    {
+        // Generate the pulse-glow materials
+        pulseGlowManaVisuals = new ManaVisual[cosmetics.manaVisuals.Length];
+        fadeGlowMaterials = new Material[cosmetics.manaVisuals.Length];
+        for (int i = 0; i < cosmetics.manaVisuals.Length; i++)
+        {
+            ManaVisual visual = cosmetics.manaVisuals[i];
+            ManaVisual pulseGlowVisual = new ManaVisual();
+
+            // TODO: probably should move this to somewhere in the battle cosmetics class, but too lazy rn
+            pulseGlowVisual.material = new Material(visual.material);
+            pulseGlowVisual.material.SetFloat("_LitAmount", 0.25f);
+            pulseGlowVisual.material.SetFloat("_PulseGlowAmplitude", 0.2f);
+            pulseGlowVisual.material.SetFloat("_PulseGlowFrequency", 2f);
+
+            pulseGlowVisual.ghostMaterial = new Material(visual.ghostMaterial);
+            pulseGlowVisual.ghostMaterial.SetFloat("_LitAmount", 0.25f);
+            pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowAmplitude", 0.2f);
+            pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowFrequency", 2f);
+
+            fadeGlowMaterials[i] = new Material(visual.material);
+
+            pulseGlowManaVisuals[i] = pulseGlowVisual;
+        }
+    }
+
     /// <summary>
     /// Initialize the battle with the given data. Will decide RNG, cycle sequence, etc
     /// </summary>
@@ -132,6 +170,9 @@ public class BattleManager : MonoBehaviour
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
         _manaCycle.InitializeBattle(this);
+
+        // Create per-battle materials needed for ghost connected tile glowing
+        GenerateGlowMaterials();
         
         foreach (Board board in boards) {
             board.InitializeBattle(this, GameManager.Instance.battleData.seed);

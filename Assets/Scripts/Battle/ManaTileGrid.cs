@@ -25,7 +25,8 @@ public class ManaTileGrid : MonoBehaviour {
     /// <summary>
     /// Two-dimensional grid storing all tiles.
     /// </summary>
-    private ManaTile[,] grid;
+    private ManaTile[,] _tileGrid;
+    public ManaTile[,] tileGrid => _tileGrid;
 
     /// <summary>
     /// Event raised each time a single tile is cleared. passes in tile position and color.
@@ -37,7 +38,7 @@ public class ManaTileGrid : MonoBehaviour {
     /// Called after this grid's Board is initialized.
     /// </summary>
     public void InitializeBattle() {
-        grid = new ManaTile[width, height];
+        _tileGrid = new ManaTile[width, height];
     }
 
     public bool IsInBounds(Vector2Int position) {
@@ -48,7 +49,7 @@ public class ManaTileGrid : MonoBehaviour {
     /// Returns true if there is a tile at the given x and y coordinate.
     /// </summary>
     public bool HasTile(Vector2Int position) {
-        return grid[position.x, position.y] != null;
+        return _tileGrid[position.x, position.y] != null;
     }
 
     /// <summary>
@@ -57,16 +58,17 @@ public class ManaTileGrid : MonoBehaviour {
     /// <param name="position">x and y position of the tile on the grid</param>
     /// <returns>the ManaTile at the position, or null if there is no tile there</returns>
     public ManaTile GetTile(Vector2Int position) {
-        return grid[position.x, position.y];
+        return _tileGrid[position.x, position.y];
     }
 
     /// <summary>
     /// Place the tile at the given position.
+    /// Does NOT perform gravity. Make sure to call TileGravity() or AllTileGravity() after tiles are placed.
     /// </summary>
     /// <param name="tile">the tile to place</param>
     /// <param name="position">the grid coords to place the tile at</param>
     public void PlaceTile(ManaTile tile, Vector2Int position) {
-        grid[position.x, position.y] = tile;
+        _tileGrid[position.x, position.y] = tile;
     }
 
     /// <summary>
@@ -75,38 +77,14 @@ public class ManaTileGrid : MonoBehaviour {
     /// <param name="position"></param>
     /// <param name=""></param>
     public void ClearTile(Vector2Int position) {
-        ManaTile tile = grid[position.x, position.y];
-        grid[position.x, position.y] = null;
+        ManaTile tile = tileGrid[position.x, position.y];
+        _tileGrid[position.x, position.y] = null;
         TileClearedNotifier.Invoke(tile.transform.position, tile.color);
         Destroy(tile.gameObject);
     }
 
-    /// <summary>
-    /// Perform gravity on the tile at the given position.
-    /// </summary>
-    /// <param name="position">the position of the tile on the grid to fall</param>
     public void TileGravity(Vector2Int position) {
-        // if null, no tile here
-        ManaTile tile = grid[position.x, position.y];
-        if (tile == null) return;
-
-        // While the tile is above the bottom of the board, keep falling
-        while (position.y > 0) {
-            // If the tile below is not empty, tile cannot fall here
-            if (grid[position.x, position.y - 1] != null) {
-                break;
-            }
-
-            // Fall by one tile
-            grid[position.x, position.y] = null;
-            position.y -= 1;
-            grid[position.x, position.y] = tile;
-        }
-
-        // if tile fell at all, animate its fall position to the new position
-        if (position.y != tile.position.y) {
-            tile.AnimatePosition(position);
-        }
+        TileUtility.TileGravity(position, ref _tileGrid, true);
     }
 
     /// <summary>
@@ -119,7 +97,7 @@ public class ManaTileGrid : MonoBehaviour {
         {
             for (int x = 0; x < width; x++)
             {
-                TileGravity(new Vector2Int(x, y));
+                TileUtility.TileGravity(new Vector2Int(x, y), ref _tileGrid, true);
             }
         }
     }
