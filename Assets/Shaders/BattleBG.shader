@@ -97,11 +97,11 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
             
             for (float i = 0.0; i < hLines; i += 1.0)
             {
-                // adding 3.0 below as quick fix
+                // adding -3.0 below as quick fix
                 d += smoothstep(
                 lWidth, 
                 lWidth - aa * lineSmooth, 
-                fmod(height + abs(3.0 + _Time.y * scrollSpeed - exp(2.0 * uv.y + 0.8) - (i / hLines) - lWidth), 1.0)
+                fmod(height + abs(-3.0 + _Time.y * scrollSpeed - exp(2.0 * uv.y + 0.8) - (i / hLines) - lWidth), 1.0)
                 ) * float(uv.y < height);
             }
 

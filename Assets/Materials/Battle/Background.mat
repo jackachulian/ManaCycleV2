@@ -52,14 +52,14 @@ Material:
     - _scrollSpeed: 0.2
     - _vLines: 30
     - aa: 0.005
-    - finalDarken: 0
+    - finalDarken: 0.7
     - hLines: 5
     - height: -0.1
     - hole: 0
     - lWidth: 0.03
     - lineSmooth: 5
     - ringWidth: 0.68
-    - scrollSpeed: 0.15
+    - scrollSpeed: -0.15
     - vLines: 30
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
