@@ -13,18 +13,46 @@ MonoBehaviour:
   m_Name: Board Sound Effects
   m_EditorClassIdentifier: 
   sounds:
-    _Buckets: ffffffffffffffffffffffff
-    _HashCodes: 000000000000000000000000
-    _Next: 000000000000000000000000
-    _Count: 0
-    _Version: 0
+    _Buckets: ffffffffffffffffffffffff0c000000080000000a000000ffffffff070000000900000002000000ffffffff03000000ffffffffffffffff0b000000ffffffff04000000
+    _HashCodes: 63fd445f5792444de5f7f502c276802ffd93112989aa4b54179c31183d7fed4b46fb8b69f8ed401465aa4b542013b7128673124c00000000000000000000000000000000
+    _Next: ffffffffffffffffffffffffffffffffffffffffffffffffffffffff0500000001000000ffffffff0000000006000000ffffffff00000000000000000000000000000000
+    _Count: 13
+    _Version: 230
     _FreeList: -1
     _FreeCount: 0
     _Keys:
+    - place
+    - cast_startup
+    - cast
+    - cast_fail
+    - rotate
+    - move
+    - fall
+    - timer_tick
+    - timer_go
+    - win
+    - lose
+    - cascade
+    - test
+    - 
     - 
     - 
     - 
     _Values:
+    - {fileID: 8300000, guid: 3f09287045643d3429fc10e9d4bd371c, type: 3}
+    - {fileID: 8300000, guid: ff530569f1a1a2040aafeb15b6d776f1, type: 3}
+    - {fileID: 8300000, guid: 7e741fe16a28d444e83acefed386fe77, type: 3}
+    - {fileID: 8300000, guid: 554cb83c78b0fbc41bd9035e9a3b152a, type: 3}
+    - {fileID: 8300000, guid: 9fc4b6e4c13cd284d8675b90ff7c10f1, type: 3}
+    - {fileID: 8300000, guid: 08bdecf86c3bdf94395843ea7995d506, type: 3}
+    - {fileID: 8300000, guid: 1f9ab30951611874a832e9ba01db2ccc, type: 3}
+    - {fileID: 8300000, guid: 23c74b3f74b69ba478a5fc22fb4dcabc, type: 3}
+    - {fileID: 8300000, guid: 56a401528028172488f9c8b698b9c66e, type: 3}
+    - {fileID: 8300000, guid: eec4fda15ca00c44ab6fe61f888c5f36, type: 3}
+    - {fileID: 8300000, guid: 86f27ab63649c104d964945217a0aa27, type: 3}
+    - {fileID: 8300000, guid: 3fb19769d36189945ba8ea2669e5e199, type: 3}
+    - {fileID: 8300000, guid: 0b448af17685d4645a6572d37451c0ad, type: 3}
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}

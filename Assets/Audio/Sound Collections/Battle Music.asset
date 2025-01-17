@@ -13,18 +13,46 @@ MonoBehaviour:
   m_Name: Battle Music
   m_EditorClassIdentifier: 
   sounds:
-    _Buckets: ffffffffffffffffffffffff
-    _HashCodes: 000000000000000000000000
-    _Next: 000000000000000000000000
-    _Count: 0
-    _Version: 0
+    _Buckets: ffffffffffffffff02000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    _HashCodes: 0e3fe35bfa7dc70606cfa1240000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Next: ffffffffffffffff010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Count: 3
+    _Version: 480
     _FreeList: -1
     _FreeCount: 0
     _Keys:
+    - Aqua (Remix)
+    - Aqua
+    - Pyro
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
     - 
     - 
     - 
     _Values:
+    - {fileID: 8300000, guid: a2dec12e27b2a12448e5091307327fa8, type: 3}
+    - {fileID: 8300000, guid: 79452291ab55fff4faf1d87305a5fc62, type: 3}
+    - {fileID: 8300000, guid: 4dce9d5b8f72a1d46832c36c5dfe3e7b, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}

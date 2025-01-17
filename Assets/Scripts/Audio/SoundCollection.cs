@@ -12,18 +12,27 @@ namespace Audio
     public class SoundCollection : ScriptableObject
     {
         public SoundCollectionDictionary sounds;
-        public SoundCollectionDictionary Sounds
+
+        public void Save() 
         {
-            get => sounds;
-            set
-            {
-                Debug.Log(EditorUtility.IsDirty(this));
-                Undo.RecordObject(this, "Change");
+            Debug.Log("Saved Asset");
+            EditorUtility.SetDirty(this);
+        }
+    }
+
+    [CustomEditor(typeof(SoundCollection))]
+    public class SoundCollectionEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            var script = (SoundCollection)target;
+
+                if(GUILayout.Button("Save", GUILayout.Height(40)))
+                {
+                    script.Save();
+                }
             
-                sounds = value;
-                // Undo.FlushUndoRecordObjects();
-                Debug.Log(EditorUtility.IsDirty(this));
-            }
         }
     }
 
