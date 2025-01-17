@@ -120,6 +120,7 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
         {
             // Normalized pixel coordinates (from -1 to 1)
             float2 uv = (vertex_output.uv * 2.0 - 1) / 1;
+            uv.x *= _ScreenParams.x / _ScreenParams.y;
 
             float4 noise = tex2D(_MainTex, fmod(uv + _Time.y * 0.1, 1.0));
 
