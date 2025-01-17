@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Background
+  m_Shader: {fileID: 4800000, guid: 59040327f7999af47bb1a3a4380df629, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _EnableExternalAlpha: 0
+    - _ZWrite: 0
+    - _aa: 0.005
+    - _hLines: 5
+    - _height: -0.1
+    - _hole: 0
+    - _lWidth: 0.03
+    - _ringWidth: 0.68
+    - _scrollSpeed: 0.2
+    - _vLines: 30
+    - aa: 0.005
+    - finalDarken: 0.25
+    - hLines: 5
+    - height: -0.1
+    - hole: 0
+    - lWidth: 0.03
+    - ringWidth: 0.68
+    - scrollSpeed: 0.15
+    - vLines: 30
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - floorColor: {r: 0.06274508, g: 0.06274508, b: 0.1882353, a: 1}
+    - gridColor: {r: 0.65, g: 0.95, b: 0.95, a: 1}
+    - skyColorBottom: {r: 0.5, g: 0.05, b: 0.6, a: 1}
+    - skyColorTop: {r: 0.5, g: 0.05, b: 0.4, a: 1}
+    - sunColor: {r: 1, g: 0.6, b: 0.09999997, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
