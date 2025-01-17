@@ -13,27 +13,27 @@ MonoBehaviour:
   m_Name: Battle Music
   m_EditorClassIdentifier: 
   sounds:
-    _Buckets: ffffffffffffffff02000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-    _HashCodes: 0e3fe35bfa7dc70606cfa1240000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    _Next: ffffffffffffffff010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-    _Count: 3
-    _Version: 480
+    _Buckets: ffffffff0a00000001000000ffffffff020000000b000000ffffffff0800000003000000ffffffffffffffff09000000ffffffffffffffff05000000ffffffff0c000000
+    _HashCodes: 0e3fe35bfa7dc706dff32e578b51555e17402876b6f7b0372dbe8056eebad2220d671a346fd09a74644f467e02faa320b158ff1700000000000000000000000000000000
+    _Next: ffffffffffffffff00000000ffffffffffffffffffffffff04000000ffffffff06000000ffffffffffffffff07000000ffffffff00000000000000000000000000000000
+    _Count: 13
+    _Version: 834
     _FreeList: -1
     _FreeCount: 0
     _Keys:
     - Aqua (Remix)
     - Aqua
-    - Pyro
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
-    - 
+    - Pyro Battle Theme
+    - Aqua City
+    - Cryo
+    - Electro
+    - Electro Battle Theme
+    - Flare Infinity
+    - Geo
+    - Ice Metropolis
+    - Planet Knight Theme
+    - TDG Battle Theme
+    - Green (z?Game)
     - 
     - 
     - 
@@ -42,16 +42,16 @@ MonoBehaviour:
     - {fileID: 8300000, guid: a2dec12e27b2a12448e5091307327fa8, type: 3}
     - {fileID: 8300000, guid: 79452291ab55fff4faf1d87305a5fc62, type: 3}
     - {fileID: 8300000, guid: 4dce9d5b8f72a1d46832c36c5dfe3e7b, type: 3}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 8300000, guid: 046c5b2cdf4a2bf4292a7c2e6cf47427, type: 3}
+    - {fileID: 8300000, guid: 8ada911ce796a7b44bac5426bf6e179f, type: 3}
+    - {fileID: 8300000, guid: d75d475872753e04dadbfc1d69c3f7fa, type: 3}
+    - {fileID: 8300000, guid: edda428737156824ab4b06721b0fab1f, type: 3}
+    - {fileID: 8300000, guid: 7af0cda0630b8ec4b991c8e6b7cbbba7, type: 3}
+    - {fileID: 8300000, guid: fe6e12edd444e8b4f97ab30201707b4b, type: 3}
+    - {fileID: 8300000, guid: fd0ea9e2563b40943b91eb2573f47c8b, type: 3}
+    - {fileID: 8300000, guid: 9c046d08d952a294a87736684ce9c5f2, type: 3}
+    - {fileID: 8300000, guid: c583e76faefd23c46beda90afe4b1264, type: 3}
+    - {fileID: 8300000, guid: 97cc933571142ab4e881afee2e8299f4, type: 3}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
