@@ -11,6 +11,7 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
         lWidth("Line Width", float) = 0.03
         aa("Edge Smoothing", float) = 0.005
         scrollSpeed("Grid Speed", float) = 0.2
+        lineSmooth("Line Smoothstep Value", float) = 10.0
         finalDarken("Final Darken Amount", float) = 0.5
 
         skyColorTop("Top Sky Color", Color) = (0.5, 0.05, 0.4)
@@ -77,6 +78,7 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
         float lWidth;
         float aa;
         float scrollSpeed;
+        float lineSmooth;
         float finalDarken;
 
         float4 skyColorTop;
@@ -98,7 +100,7 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
                 // adding 3.0 below as quick fix
                 d += smoothstep(
                 lWidth, 
-                lWidth - aa, 
+                lWidth - aa * lineSmooth, 
                 fmod(height + abs(3.0 + _Time.y * scrollSpeed - exp(2.0 * uv.y + 0.8) - (i / hLines) - lWidth), 1.0)
                 ) * float(uv.y < height);
             }
@@ -107,7 +109,7 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
             {
                 d += smoothstep(
                 lWidth, 
-                lWidth - aa, 
+                lWidth - aa * lineSmooth, 
                 abs(uv.x + 0.5 + (uv.y * (-0.5 + vLines / 2.0 - j)) - (j / vLines - lWidth))
                 ) * float(uv.y < height);
             }

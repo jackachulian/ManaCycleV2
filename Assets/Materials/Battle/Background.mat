@@ -57,6 +57,7 @@ Material:
     - height: -0.1
     - hole: 0
     - lWidth: 0.03
+    - lineSmooth: 5
     - ringWidth: 0.68
     - scrollSpeed: 0.15
     - vLines: 30
