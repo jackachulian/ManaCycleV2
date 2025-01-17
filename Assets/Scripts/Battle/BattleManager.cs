@@ -140,15 +140,16 @@ public class BattleManager : MonoBehaviour
             ManaVisual visual = cosmetics.manaVisuals[i];
             ManaVisual pulseGlowVisual = new ManaVisual();
 
+            // TODO: probably should move this to somewhere in the battle cosmetics class, but too lazy rn
             pulseGlowVisual.material = new Material(visual.material);
             pulseGlowVisual.material.SetFloat("_LitAmount", 0.25f);
-            pulseGlowVisual.material.SetFloat("_PulseGlowAmplitude", 0.4f);
-            pulseGlowVisual.material.SetFloat("_PulseGlowFrequency", 2.5f);
+            pulseGlowVisual.material.SetFloat("_PulseGlowAmplitude", 0.2f);
+            pulseGlowVisual.material.SetFloat("_PulseGlowFrequency", 2f);
 
             pulseGlowVisual.ghostMaterial = new Material(visual.ghostMaterial);
             pulseGlowVisual.ghostMaterial.SetFloat("_LitAmount", 0.25f);
-            pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowAmplitude", 0.4f);
-            pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowFrequency", 2.5f);
+            pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowAmplitude", 0.2f);
+            pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowFrequency", 2f);
 
             fadeGlowMaterials[i] = new Material(visual.material);
 
