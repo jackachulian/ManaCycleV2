@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96a8496332658747b5cc38055964023, type: 3}
+  m_Name: Battle Music
+  m_EditorClassIdentifier: 
+  sounds:
+    _Buckets: ffffffffffffffff02000000ffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    _HashCodes: 0e3fe35bfa7dc70606cfa1240000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Next: ffffffffffffffff010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    _Count: 3
+    _Version: 480
+    _FreeList: -1
+    _FreeCount: 0
+    _Keys:
+    - Aqua (Remix)
+    - Aqua
+    - Pyro
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    - 
+    _Values:
+    - {fileID: 8300000, guid: a2dec12e27b2a12448e5091307327fa8, type: 3}
+    - {fileID: 8300000, guid: 79452291ab55fff4faf1d87305a5fc62, type: 3}
+    - {fileID: 8300000, guid: 4dce9d5b8f72a1d46832c36c5dfe3e7b, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
