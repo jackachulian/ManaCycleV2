@@ -94,28 +94,21 @@ public class Board : MonoBehaviour
 
         defeated = false;
         boardActive = false; // will be set to true after countdown reaches 0
-
-        ui = GetComponent<BoardUI>();
-        ui.InitializeBattle(this);
         
         manaTileGrid = GetComponent<ManaTileGrid>();
-        manaTileGrid.InitializeBattle();
-
-        _upcomingPieces.InitializeBattle(this, seed);
-
+        ui = GetComponent<BoardUI>();
         spellcastManager = GetComponent<SpellcastManager>();
-        spellcastManager.InitializeBattle(this);
-
         ghostPieceManager = GetComponent<GhostPieceManager>();
-        ghostPieceManager.InitializeBattle(this);
-
         pieceManager = GetComponent<PieceManager>();
-        pieceManager.InitializeBattle(this);
-
         healthManager = GetComponent<HealthManager>();
-        healthManager.InitializeBattle(this);
 
-        
+        manaTileGrid.InitializeBattle();
+        _upcomingPieces.InitializeBattle(this, seed);
+        spellcastManager.InitializeBattle(this);
+        ghostPieceManager.InitializeBattle(this);
+        pieceManager.InitializeBattle(this);
+        ui.InitializeBattle(this);
+        healthManager.InitializeBattle(this);
 
         if (!player) {
             ui.ShowBattler(null);

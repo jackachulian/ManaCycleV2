@@ -5,22 +5,25 @@ using UnityEngine;
 /// </summary>
 public class BoardLayoutManager : MonoBehaviour {
     [SerializeField] private BoardLayout singleplayerLayout, twoPlayerLayout, fourPlayerLayout;
-    [SerializeField] private BoardLayout _currentLayout;
-    public BoardLayout currentLayout => _currentLayout;
+    public BoardLayout currentLayout {get; private set;}
 
     public void DecideLayout() {
-        if (_currentLayout) _currentLayout.HideLayout();
+        // Start by hiding all layouts
+        foreach (Transform child in transform) {
+            var layout = child.gameObject.GetComponent<BoardLayout>();
+            if (layout) layout.HideLayout();
+        }
 
         int playerCount = GameManager.Instance.playerManager.players.Count;
 
         if (playerCount <= 1) {
-            _currentLayout = singleplayerLayout;
+            currentLayout = singleplayerLayout;
         } else if (playerCount == 2) {
-            _currentLayout = twoPlayerLayout;
+            currentLayout = twoPlayerLayout;
         } else {
-            _currentLayout = fourPlayerLayout;
+            currentLayout = fourPlayerLayout;
         }
 
-        _currentLayout.ShowLayout();
+        currentLayout.ShowLayout();
     }
 }

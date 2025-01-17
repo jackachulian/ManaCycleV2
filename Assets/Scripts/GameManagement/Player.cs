@@ -435,6 +435,8 @@ public class Player : NetworkBehaviour {
     /// For use in the battle scene. Attach inputs to the board with this player's current boardIndex.
     /// </summary>
     public void AttachToBattleBoard() {
+        if (!BattleManager.Instance.initialized) return;
+
         board = BattleManager.Instance.GetBoardByIndex(boardIndex.Value);
         if (board) {
             battleInputHandler.SetBoard(board);

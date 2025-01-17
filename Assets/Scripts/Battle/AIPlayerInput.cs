@@ -161,8 +161,4 @@ public class AIPlayerInput : MonoBehaviour
         board.pieceManager.SetQuickfall(false);
         DecideSpellcast();
     }
-
-    public void OnSpellcast() {
-        board.spellcastManager.TrySpellcast();
-    }
 }

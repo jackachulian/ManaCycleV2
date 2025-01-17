@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// only true once initialized. will initialize the first time the networkvariable BattleData is changed/set on this client
     /// </summary>
-    private bool initialized = false;
+    public bool initialized {get; private set;} = false;
 
     /// <summary>
     /// Is set to true when a winner is chosen.
@@ -166,7 +166,6 @@ public class BattleManager : MonoBehaviour
             Debug.LogWarning("BattleManager already initialized");
             return;
         }
-        initialized = true;
 
         // Choose the layout to use based on the amount of connected players in the gamemanager
         boardLayoutManager.DecideLayout();
@@ -196,6 +195,7 @@ public class BattleManager : MonoBehaviour
             player.receivedBattleData = default;
         }
 
+        initialized = true;
         BattleInitializedNotifier?.Invoke();
     }
 
