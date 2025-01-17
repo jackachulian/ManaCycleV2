@@ -27,35 +27,6 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     [SerializeField] private float maxChainDelay = 2.00f;
 
-    /// <summary>
-    /// CyclePointer to position on the current color being cleared
-    /// </summary>
-    [SerializeField] private Transform cyclePointer;
-
-    /// <summary>
-    /// Amount of units of offset to position the cycle pointer.
-    /// </summary>
-    [SerializeField] private float cyclePointerOffset = 1.5f;
-
-    private enum BoardSide {
-        LEFT,
-        RIGHT
-    }
-    /// <summary>
-    /// The side of the screen the board is on. Used for cycle pointer positioning.
-    /// </summary>
-    [SerializeField] private BoardSide boardSide = BoardSide.LEFT;
-
-    /// <summary>
-    /// UI object that shows chain number and the duration remaining to extend the chain
-    /// </summary>
-    [SerializeField] private PopupUI chainPopup;
-
-    /// <summary>
-    /// UI object that shows cascade number and the duration remaining to extend the cascade
-    /// </summary>
-    [SerializeField] private PopupUI cascadePopup;
-
     // ================ Non-serialized fields ================
     // ======== General ========
     /// <summary>
@@ -119,12 +90,6 @@ public class SpellcastManager : MonoBehaviour {
     /// <param name="cycleIndex"></param>
     public delegate void CycleChangedCallback(int cycleIndex);
     public event CycleChangedCallback CycleChangedNotifier; 
-
-    // ================ Methods ================
-    void Awake() {
-        // Cascade popup will not use the time display (for now at least, may change this behaviour later)
-        cascadePopup.DisplayTimeLeft(0);
-    }
     
     /// <summary>
     /// Called when the battle initializes, after the ManaCycle and the Board for this spellcastmanager is initialized.
@@ -135,7 +100,10 @@ public class SpellcastManager : MonoBehaviour {
         blobGrid = new List<Vector2Int>[board.manaTileGrid.width, board.manaTileGrid.height];
         clearableManaCounts = new int[GameManager.Instance.battleData.cycleUniqueColors];
 
-        RepositionCyclePointer();
+        board.ui.RepositionCyclePointer(cycleIndex);
+
+        // Cascade popup will not use the time display (for now at least, may change this behaviour later)
+        board.ui.cascadePopup.DisplayTimeLeft(0);
     }
 
     void Update() {
@@ -162,7 +130,7 @@ public class SpellcastManager : MonoBehaviour {
         timeSinceLastClear += Time.deltaTime;
 
         // Display the time remaining to extend the chain
-        chainPopup.DisplayTimeLeft((maxChainDelay - timeSinceLastClear) / maxChainDelay);
+        board.ui.chainPopup.DisplayTimeLeft((maxChainDelay - timeSinceLastClear) / maxChainDelay);
 
         // Check to see if there is a valid cascade
         if (
@@ -211,8 +179,8 @@ public class SpellcastManager : MonoBehaviour {
         spellcasting = false;
         currentChain = 0;
         currentCascade = 0;
-        chainPopup.Hide();
-        cascadePopup.Hide();
+        board.ui.chainPopup.Hide();
+        board.ui.cascadePopup.Hide();
         SpellcastMaterialUpdate();
         UpdateFadeGlow();
         Debug.Log("Chain ended");
@@ -236,12 +204,12 @@ public class SpellcastManager : MonoBehaviour {
 
         // Show the chain popup if chain is 2 or greater
         if (currentChain >= 2) {
-            chainPopup.Show(currentChain);
+            board.ui.chainPopup.Show(currentChain);
         }
 
         // Show the chain popup if cascade is 2 or greater
         if (currentCascade >= 2) {
-            cascadePopup.Show(currentCascade);
+            board.ui.cascadePopup.Show(currentCascade);
         }
 
         // Clear the current cycle color and recalculate connected tiles
@@ -297,7 +265,7 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     public void EndCascade() {
         currentCascade = 0;
-        cascadePopup.Hide();
+        board.ui.cascadePopup.Hide();
         AdvanceCycle();
         UpdateFadeGlow();
     }
@@ -312,19 +280,10 @@ public class SpellcastManager : MonoBehaviour {
             // TODO: cycle multiplier
         }
 
-        RepositionCyclePointer();
+        board.ui.RepositionCyclePointer(cycleIndex);
         CycleChangedNotifier?.Invoke(cycleIndex);
         // TODO: Maybe implement all board ui functions using c# events
-        board.boardUI.OnSpellcast();
-    }
-
-    private void RepositionCyclePointer() {
-        var cycleManaTile = BattleManager.Instance.manaCycle.GetCycleTile(cycleIndex);
-        
-        // TODO: in 2-player mode, player 2's pointer is offset to the right instead of left. 
-        // in 3 and 4-player mode, half and half on each side and handle overlaps by spreading out the sprites slightly
-        Vector3 offsetDirection = boardSide == BoardSide.LEFT ? Vector3.left : Vector3.right;
-        cyclePointer.position = cycleManaTile.transform.position + offsetDirection * cyclePointerOffset;
+        board.ui.OnSpellcast();
     }
 
     /// <summary>
@@ -335,7 +294,7 @@ public class SpellcastManager : MonoBehaviour {
 
         if (clearableManaCounts[GetCurrentCycleColor()] <= 0) {
             Debug.Log("Can't spellcast!");
-            board.boardUI.OnFailSpellcast(GetCurrentCycleColor());
+            board.ui.OnFailSpellcast(GetCurrentCycleColor());
             AudioManager.Instance.PlayBoardSound("cast_fail");
             return;
         }
@@ -357,7 +316,7 @@ public class SpellcastManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Apply fade-glow to all tiles that are within a blob.
+    /// Apply fade-glow to all tiles that are within any adequately-sized blob of the current color.
     /// </summary>
     public void UpdateFadeGlow()
     {

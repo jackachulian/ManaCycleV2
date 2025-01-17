@@ -29,7 +29,8 @@ public class Board : MonoBehaviour
     /// <summary>
     /// Cached UpcomingPieces component on the board. Manages the upcoming pieces list. Cached on initialization.
     /// </summary>
-    public UpcomingPieces upcomingPieces {get; private set;}
+    [SerializeField] private UpcomingPieces _upcomingPieces;
+    public UpcomingPieces upcomingPieces => _upcomingPieces;
 
     /// <summary>
     /// Manages spellcasts for this board. Cached on initialization.
@@ -44,7 +45,7 @@ public class Board : MonoBehaviour
     /// <summary>
     /// Handles the battler portrait sprite and any other board-specific visual elements on the board.
     /// </summary>
-    public BoardUI boardUI {get; private set;}
+    public BoardUI ui {get; private set;}
 
     /// <summary>
     /// Set to true when initialized by the battlemanager.
@@ -93,12 +94,13 @@ public class Board : MonoBehaviour
 
         defeated = false;
         boardActive = false; // will be set to true after countdown reaches 0
+
+        ui = GetComponent<BoardUI>();
         
         manaTileGrid = GetComponent<ManaTileGrid>();
         manaTileGrid.InitializeBattle();
 
-        upcomingPieces = GetComponent<UpcomingPieces>();
-        upcomingPieces.InitializeBattle(this, seed);
+        _upcomingPieces.InitializeBattle(this, seed);
 
         spellcastManager = GetComponent<SpellcastManager>();
         spellcastManager.InitializeBattle(this);
@@ -112,15 +114,15 @@ public class Board : MonoBehaviour
         healthManager = GetComponent<HealthManager>();
         healthManager.InitializeBattle(this);
 
-        boardUI = GetComponent<BoardUI>();
+        
 
         if (!player) {
-            boardUI.ShowBattler(null);
-            boardUI.HideBoard();
+            ui.ShowBattler(null);
+            ui.HideBoard();
         }
 
         manaTileGrid.HideTiles(); // tiles will be shown when the game begins
-        upcomingPieces.HidePieces();
+        _upcomingPieces.HidePieces();
     }
 
     /// <summary>
@@ -129,26 +131,26 @@ public class Board : MonoBehaviour
     public void StartBattle() {
         boardActive = true;
         manaTileGrid.ShowTiles();
-        upcomingPieces.ShowPieces();
+        _upcomingPieces.ShowPieces();
     }
 
     /// <summary>
     /// Called when a player is assigned, OR unassigned for some reason.
     /// </summary>
     public void OnPlayerAssigned() {
-        if (!boardUI) boardUI = GetComponent<BoardUI>();
+        if (!ui) ui = GetComponent<BoardUI>();
 
         if (player) {
-            boardUI.ShowBoard();
+            ui.ShowBoard();
             if (ghostPieceManager && !ghostPieceManager.IsShowingGhostTiles()) ghostPieceManager.CreateGhostPiece();
         } else {
-            boardUI.HideBoard();
+            ui.HideBoard();
         }
 
         if (player && player.battler) {
-            boardUI.ShowBattler(player.battler);
+            ui.ShowBattler(player.battler);
         } else {
-            boardUI.ShowBattler(null);
+            ui.ShowBattler(null);
         }
     }
 
@@ -165,8 +167,8 @@ public class Board : MonoBehaviour
         boardActive = false;
         defeated = true;
         onDefeat.Invoke();
-        boardUI.ShowLoseText();
-        boardUI.StartDefeatFall();
+        ui.ShowLoseText();
+        ui.StartDefeatFall();
     }
 
     /// <summary>
@@ -177,6 +179,6 @@ public class Board : MonoBehaviour
         Audio.AudioManager.Instance.PlayBoardSound("win", pitch: 1f);
         Debug.Log(this+" won!");
         boardActive = false;
-        boardUI.ShowWinText();
+        ui.ShowWinText();
     }
 }

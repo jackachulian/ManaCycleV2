@@ -27,6 +27,7 @@ public class BoardUI : MonoBehaviour {
     /// </summary>
     private string[] colorNames = {"Red", "Green", "Blue", "Yellow", "Purple"};
 
+
     // May move defeat fall logic to its own component for better organization
     [Header("Defeat Fall")]
     [SerializeField] private Transform fallTransform;
@@ -36,18 +37,54 @@ public class BoardUI : MonoBehaviour {
     /** Initial falling speed */
     [SerializeField] float initialFallSpeed = -60f;
 
+
     [Header("Animations")]
     [SerializeField] private Animator animator;
     [SerializeField] private bool doPlaceAnimation;
+
 
     [Header("Particles")]
     [SerializeField] private ParticleSystem particles;
     // min max
     [SerializeField] private Vector2 particleAmount;
 
-    /** Starting reference position */
-    Vector2 fallStartPos;
 
+    [Header("Cycle Pointer")]
+    /// <summary>
+    /// CyclePointer to position on the current color being cleared
+    /// </summary>
+    [SerializeField] private Transform cyclePointer;
+
+    /// <summary>
+    /// Amount of units of offset to position the cycle pointer.
+    /// </summary>
+    [SerializeField] private float cyclePointerOffset = 1.5f;
+
+    private enum BoardSide {
+        LEFT,
+        RIGHT,
+        ABOVE,
+        BELOW
+    }
+    /// <summary>
+    /// The side of the screen the board is on. Used for cycle pointer positioning.
+    /// </summary>
+    [SerializeField] private BoardSide boardSide = BoardSide.LEFT;
+
+    /// <summary>
+    /// UI object that shows chain number and the duration remaining to extend the chain
+    /// </summary>
+    [SerializeField] private PopupUI _chainPopup;
+    public PopupUI chainPopup => _chainPopup;
+
+    /// <summary>
+    /// UI object that shows cascade number and the duration remaining to extend the cascade
+    /// </summary>
+    [SerializeField] private PopupUI _cascadePopup;
+    public PopupUI cascadePopup => _cascadePopup;
+
+
+    Vector2 fallStartPos;
     float fallDistance, fallSpeed, rotation, angularSpeed;
     bool falling = false;
 
@@ -88,6 +125,27 @@ public class BoardUI : MonoBehaviour {
     public void HideBoard() {
         Debug.Log("Hiding board "+this.gameObject);
         gameObject.SetActive(false);
+    }
+
+    public void RepositionCyclePointer(int cycleIndex) {
+        var cycleManaTile = BattleManager.Instance.manaCycle.GetCycleTile(cycleIndex);
+        
+        // TODO: in 2-player mode, player 2's pointer is offset to the right instead of left. 
+        // in 3 and 4-player mode, half and half on each side and handle overlaps by spreading out the sprites slightly
+        Vector3 offsetDirection;
+        switch (boardSide) {
+            case BoardSide.LEFT:
+                offsetDirection = Vector3.left; break;
+            case BoardSide.RIGHT:
+                offsetDirection = Vector3.right; break;
+            case BoardSide.ABOVE:
+                offsetDirection = Vector3.up; break;
+            case BoardSide.BELOW:
+                offsetDirection = Vector3.down; break;
+            default:
+                offsetDirection = Vector3.zero; break;
+        }
+        cyclePointer.position = cycleManaTile.transform.position + offsetDirection * cyclePointerOffset;
     }
     
     public void StartDefeatFall() {

@@ -58,7 +58,7 @@ public class HealthManager : MonoBehaviour {
     public void AdvanceDamageQueue() {
         if (incomingDamage[5] > 0) {
             health -= incomingDamage[5];
-            board.boardUI.OnDamage();
+            board.ui.OnDamage();
         }
 
         for (int i = 5; i >= 1; i--) {

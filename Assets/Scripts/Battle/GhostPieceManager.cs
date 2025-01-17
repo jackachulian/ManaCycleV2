@@ -74,7 +74,7 @@ public class GhostPieceManager : MonoBehaviour {
     /// Returns true if ghost tiles are currently being shown for the current piece, and false if not.
     /// </summary>
     public bool IsShowingGhostTiles() {
-        return ghostTiles != null;
+        return ghostTiles != null && ghostTiles.Length > 0;
     }
 
     public void DestroyGhostPiece() {

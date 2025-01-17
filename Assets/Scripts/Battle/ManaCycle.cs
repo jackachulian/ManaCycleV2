@@ -11,7 +11,7 @@ public class ManaCycle : MonoBehaviour
     /// <summary>
     /// Visual distance between mana tiles (units)
     /// </summary>
-    [SerializeField] private float manaSeparation = 1.5f;
+    [SerializeField] private Vector2 manaOffset = new Vector2(0f, -1.5f);
 
     /// <summary>
     /// Transform that the mana tiles in the cycle are parented to
@@ -54,7 +54,7 @@ public class ManaCycle : MonoBehaviour
             tile.SetColor(colorSequence[i]);
             tile.UpdateVisuals();
             tile.transform.SetParent(manaTileTransform);
-            tile.transform.localPosition = new Vector2(0, (i - (battleData.cycleLength-1)/2.0f) * -manaSeparation);
+            tile.transform.localPosition = (i - (battleData.cycleLength-1)/2.0f) * manaOffset;
             tile.transform.localScale = new Vector2(manaScale, manaScale);
         }
     }

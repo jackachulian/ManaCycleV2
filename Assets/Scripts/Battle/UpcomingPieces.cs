@@ -8,7 +8,7 @@ public class UpcomingPieces : MonoBehaviour
     [SerializeField] private int pieceCount = 3;
     [SerializeField] private float nextPieceScale = 1.0f;
     [SerializeField] private float upcomingPiecesScale = 0.75f;
-    [SerializeField] private float upcomingPiecesHeight = 2.5f;
+    [SerializeField] private Vector2 upcomingPiecesSpan = new Vector2(0f, 2f);
 
     /// <summary>
     /// Board this upcoming piece list is for. Set on battle initialization.
@@ -89,9 +89,10 @@ public class UpcomingPieces : MonoBehaviour
 
             // Parent upcoming pieces to the upcomingPiece parent and space them out accordingly
             else {
-                float y = Mathf.Lerp(upcomingPiecesHeight*0.5f, upcomingPiecesHeight*-0.5f, (i-1) / (pieceCount-2));
+                Vector2 pos = Vector2.Lerp(upcomingPiecesSpan*0.5f, upcomingPiecesSpan*-0.5f, (i-1) / (pieceCount-2));
                 piece.transform.SetParent(upcomingPiecesTransform);
-                piece.transform.localPosition = new Vector2(-0.5f*upcomingPiecesScale, y - 0.5f*upcomingPiecesScale);
+                
+                piece.transform.localPosition = Vector2.one*-0.5f*upcomingPiecesScale + pos; // account for half of scale in position so piece is centered
                 piece.transform.localScale = new Vector2(upcomingPiecesScale, upcomingPiecesScale);
             }
         }

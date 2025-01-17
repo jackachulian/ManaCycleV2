@@ -238,7 +238,7 @@ public class PieceManager : MonoBehaviour {
         PlacePiece(currentPiece);
         board.ghostPieceManager.DestroyGhostPiece();
         board.healthManager.AdvanceDamageQueue();
-        board.boardUI.OnPiecePlaced();
+        board.ui.OnPiecePlaced();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
 
         SpawnNewPiece();
@@ -247,6 +247,7 @@ public class PieceManager : MonoBehaviour {
         // If the newly spawned piece is in an invalid position, player has topped out
         if (!IsValidPlacement(currentPiece)) {
             Destroy(currentPiece.gameObject);
+            board.ghostPieceManager.DestroyGhostPiece();
             board.Defeat();
         }
     }
