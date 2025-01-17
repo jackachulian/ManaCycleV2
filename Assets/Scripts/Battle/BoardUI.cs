@@ -71,6 +71,24 @@ public class BoardUI : MonoBehaviour {
             fallTransform.eulerAngles = new Vector3(0, 0, rotation);
         }
     }
+
+    /// <summary>
+    /// Show the board.
+    /// Board should be shown when there is a player controlling this board.
+    /// </summary>
+    public void ShowBoard() {
+        Debug.Log("Showing board "+this.gameObject);
+        gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Hide the board.
+    /// Board should be hidden when the board is not being used in the current gamemode (not enough players to need it, etc).
+    /// </summary>
+    public void HideBoard() {
+        Debug.Log("Hiding board "+this.gameObject);
+        gameObject.SetActive(false);
+    }
     
     public void StartDefeatFall() {
         if (!falling)

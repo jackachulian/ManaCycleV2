@@ -6438,7 +6438,7 @@ MonoBehaviour:
   pieceCount: 3
   nextPieceScale: 1
   upcomingPiecesScale: 0.75
-  upcomingPiecesHeight: 2.25
+  upcomingPiecesHeight: 2
 --- !u!114 &7214213313452791491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6519,7 +6519,7 @@ MonoBehaviour:
   fallAngularAcceleration: 25
   initialFallSpeed: -6
   animator: {fileID: 8728664645115849563}
-  doPlaceAnimation: 0
+  doPlaceAnimation: 1
   particles: {fileID: 3518572356797624652}
   particleAmount: {x: 1, y: 3}
 --- !u!95 &8728664645115849563

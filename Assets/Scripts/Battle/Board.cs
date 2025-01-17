@@ -114,7 +114,10 @@ public class Board : MonoBehaviour
 
         boardUI = GetComponent<BoardUI>();
 
-        if (!player) boardUI.ShowBattler(null);
+        if (!player) {
+            boardUI.ShowBattler(null);
+            boardUI.HideBoard();
+        }
 
         manaTileGrid.HideTiles(); // tiles will be shown when the game begins
         upcomingPieces.HidePieces();
@@ -134,6 +137,13 @@ public class Board : MonoBehaviour
     /// </summary>
     public void OnPlayerAssigned() {
         if (!boardUI) boardUI = GetComponent<BoardUI>();
+
+        if (player) {
+            boardUI.ShowBoard();
+            if (ghostPieceManager && !ghostPieceManager.IsShowingGhostTiles()) ghostPieceManager.CreateGhostPiece();
+        } else {
+            boardUI.HideBoard();
+        }
 
         if (player && player.battler) {
             boardUI.ShowBattler(player.battler);

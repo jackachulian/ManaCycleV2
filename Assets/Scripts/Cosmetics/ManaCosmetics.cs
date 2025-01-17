@@ -14,12 +14,12 @@ public class ManaCosmetics : ScriptableObject
 [System.Serializable]
 public class ManaVisual {
     /// <summary>
-    /// Material to apply to the quad on ManaTiles of this type
+    /// Material to apply to the sprite on ManaTiles of this type
     /// </summary>
     public Material material;
 
     /// <summary>
-    /// Material to apply to the quad on ManaTiles of this type if the manaTile is a ghost tile
+    /// Material to apply to the sprite on ManaTiles of this type if the manaTile is a ghost tile
     /// </summary>
     public Material ghostMaterial;
 

@@ -45,7 +45,6 @@ public class PieceManager : MonoBehaviour {
     /// Is initialized after UpcomingPieceList so that the first piece can be spawned on initialization.
     /// (The piece is spawned before the timer starts, in case boards' countdowns start at slightly different times on different clients)
     /// </summary>
-    /// <param name="board"></param>
     public void InitializeBattle(Board board) {
         this.board = board;
 
@@ -61,11 +60,10 @@ public class PieceManager : MonoBehaviour {
     }
 
     void PieceFallingUpdate() {
-        // Return if there is a player assigned but this client is not the owner; let that client control this board.
-        if (board.player && !board.player.IsOwner) return;
-
-        // If there is NO player, then the server will have to manage the board's piece while the player is unconnected
-        else if (!board.player && NetworkManager.Singleton && !NetworkManager.Singleton.IsServer) return;
+        // Return if there is no player assigned or the player assigned is not owned by the local client.
+        // Only the local client should handle the timing of piece falling based on inputs 
+        // and then send that to the other clients.
+        if (!board.player || !board.player.IsOwner) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();

@@ -50,7 +50,7 @@ public class GhostPieceManager : MonoBehaviour {
     /// Uses the current BattleManager instance's cosmetics to determine what cosmetics should be used.
     /// </summary>
     public void CreateGhostPiece() {
-        // Don't create the ghost piece unless there is a local player controlling this board
+        // Don't create a ghost piece unless there is a local player controlling this board
         if (!board.player || !board.player.IsOwner) return;
 
         // Destroy old ghost tiles
@@ -67,9 +67,14 @@ public class GhostPieceManager : MonoBehaviour {
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
         }
 
-        Debug.Log("Ghost piece created");
-
         UpdateGhostPiece();
+    }
+
+    /// <summary>
+    /// Returns true if ghost tiles are currently being shown for the current piece, and false if not.
+    /// </summary>
+    public bool IsShowingGhostTiles() {
+        return ghostTiles != null;
     }
 
     public void DestroyGhostPiece() {
@@ -78,9 +83,6 @@ public class GhostPieceManager : MonoBehaviour {
         foreach (var ghostTile in ghostTiles) {
             Destroy(ghostTile.gameObject);
         }
-
-        Debug.Log("Ghost piece destroyed");
-
     }
 
     /// <summary>
@@ -147,21 +149,16 @@ public class GhostPieceManager : MonoBehaviour {
             List<Vector2Int> blob = simulatedBlobGrid[position.x, position.y];
             if (blob != null)
             {
-                Debug.Log("There's already a blob at " + position);
                 continue;
             };
 
             // Try building a blob off this ghost tile
             blob = new List<Vector2Int>();
 
-            Debug.Log("Creating and expanding blob at " + position);
             TileUtility.ExpandBlob(ref blob, position, ghostTile.color, board, ref simulatedTileGrid, ref simulatedBlobGrid);
-            Debug.Log("Blob results: "+string.Join(", ", blob));
-
 
             // if blob is clearable, glow all the connected mana
             if (blob.Count >= board.spellcastManager.minBlobSize) {
-                Debug.Log("Glowing blob with size " + blob.Count);
                 foreach (Vector2Int glowPosition in blob)
                 {
                     ManaTile glowTile = simulatedTileGrid[glowPosition.x, glowPosition.y];

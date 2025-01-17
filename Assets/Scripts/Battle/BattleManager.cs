@@ -13,20 +13,15 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance { get; private set; }
 
     /// <summary>
-    /// The Mana Cycle object that dictates the order of color clears.
+    /// Manages what board layout is being used based on the amount of players.
+    /// Holds a reference to the current layout which contains all the boards.
     /// </summary>
-    [SerializeField] private ManaCycle _manaCycle;
-    public ManaCycle manaCycle => _manaCycle;
+    public BoardLayoutManager boardLayoutManager;
 
     /// <summary>
-    /// All players in the game. 2-4 players per game
+    /// Accessor to quickly retrieve the mana cycle object on the current layout
     /// </summary>
-    [SerializeField] private Board[] boards;
-
-     /// <summary>
-    /// The Mana Cycle object that dictates the order of color clears.
-    /// </summary>
-    [SerializeField] private BattleCountdown countdown;
+    public ManaCycle manaCycle => boardLayoutManager.currentLayout.manaCycle;
 
     /// <summary>
     /// UI for the postgame. Start the UI when the game completes.
@@ -75,6 +70,12 @@ public class BattleManager : MonoBehaviour
     /// Is set to true when a winner is chosen.
     /// </summary>
     public bool gameCompleted {get; private set;}
+
+    /// <summary>
+    /// The Mana Cycle object that dictates the order of color clears. cached on awake
+    /// </summary>
+    private BattleCountdown countdown;
+
 
     /// <summary>
     /// Event invoked when the battle is initialized
@@ -167,14 +168,17 @@ public class BattleManager : MonoBehaviour
         }
         initialized = true;
 
+        // Choose the layout to use based on the amount of connected players in the gamemanager
+        boardLayoutManager.DecideLayout();
+
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
-        _manaCycle.InitializeBattle(this);
+        boardLayoutManager.currentLayout.manaCycle.InitializeBattle(this);
 
         // Create per-battle materials needed for ghost connected tile glowing
         GenerateGlowMaterials();
         
-        foreach (Board board in boards) {
+        foreach (Board board in boardLayoutManager.currentLayout.boards) {
             board.InitializeBattle(this, GameManager.Instance.battleData.seed);
             board.onDefeat.AddListener(CheckForWinner);
         }
@@ -205,7 +209,7 @@ public class BattleManager : MonoBehaviour
 
         GameManager.Instance.SetGameState(GameManager.GameState.Playing);
 
-        foreach (Board board in boards) {
+        foreach (Board board in boardLayoutManager.currentLayout.boards) {
             board.StartBattle();
         }
     }
@@ -234,7 +238,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <returns>the board at the given index in teh baords array</returns>
     public Board GetBoardByIndex(int index) {
-        return boards[index];
+        return boardLayoutManager.currentLayout.boards[index];
     }
 
     /// <summary>
@@ -246,7 +250,7 @@ public class BattleManager : MonoBehaviour
         int livingBoards = 0;
         // tentative winner; will only actually be the winner if no other non-defeated boards are found
         Board winner = null;
-        foreach (Board board in boards) {
+        foreach (Board board in boardLayoutManager.currentLayout.boards) {
             if (!board.defeated) {
                 livingBoards += 1;
                 if (livingBoards == 1) {
