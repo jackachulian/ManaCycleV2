@@ -34,7 +34,7 @@ public class MatchMaterialColorToRenderer : MonoBehaviour
     private void OnCycleChange(int cycleIndex)
     {
         lastCol = spriteRenderer.material.GetColor(propertyToAnimate);
-        ManaVisual manaVisual = BattleManager.Instance.cosmetics.manaVisuals[BattleManager.Instance.manaCycle.GetSequenceColor(cycleIndex)];
+        ManaVisual manaVisual = BattleManager.Instance.cosmetics.manaVisuals[board.GetManaCycle().GetSequenceColor(cycleIndex)];
         Color col = manaVisual.material.GetColor("_InnerColor");
         targCol = col;
         refTime = Time.time;

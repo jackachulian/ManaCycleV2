@@ -135,7 +135,8 @@ public class BoardUI : MonoBehaviour {
     }
 
     public void RepositionCyclePointer(int cycleIndex) {
-        var cycleManaTile = BattleManager.Instance.manaCycle.GetCycleTile(cycleIndex);
+        ManaCycle cycle = board.boardManaCycle != null ? board.boardManaCycle : BattleManager.Instance.manaCycle;
+        var cycleManaTile = cycle.GetCycleTile(cycleIndex);
         
         // TODO: in 2-player mode, player 2's pointer is offset to the right instead of left. 
         // in 3 and 4-player mode, half and half on each side and handle overlaps by spreading out the sprites slightly

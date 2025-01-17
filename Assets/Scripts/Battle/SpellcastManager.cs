@@ -339,7 +339,7 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     /// <returns>the int representing the current color</returns>
     public int GetCurrentCycleColor() {
-        return BattleManager.Instance.manaCycle.GetSequenceColor(cycleIndex);
+        return board.GetManaCycle().GetSequenceColor(cycleIndex);
     }
 
     /// <summary>

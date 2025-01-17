@@ -76,6 +76,12 @@ public class Board : MonoBehaviour
     /// </summary>
     public Player player {get; private set;}
 
+    /// <summary>
+    /// Cycle used only for this board. Only used in some layouts.
+    /// </summary>
+    [SerializeField] private ManaCycle _boardManaCycle;
+    public ManaCycle boardManaCycle => _boardManaCycle;
+
     public void SetPlayer(Player player) {
         this.player = player;
         OnPlayerAssigned();
@@ -96,7 +102,9 @@ public class Board : MonoBehaviour
 
         defeated = false;
         boardActive = false; // will be set to true after countdown reaches 0
-        
+
+        if (_boardManaCycle) _boardManaCycle.InitializeBattle(battleManager);
+
         manaTileGrid = GetComponent<ManaTileGrid>();
         ui = GetComponent<BoardUI>();
         spellcastManager = GetComponent<SpellcastManager>();
@@ -104,12 +112,12 @@ public class Board : MonoBehaviour
         pieceManager = GetComponent<PieceManager>();
         healthManager = GetComponent<HealthManager>();
 
+        ui.InitializeBattle(this);
         manaTileGrid.InitializeBattle();
         _upcomingPieces.InitializeBattle(this, seed);
         spellcastManager.InitializeBattle(this);
         ghostPieceManager.InitializeBattle(this);
         pieceManager.InitializeBattle(this);
-        ui.InitializeBattle(this);
         healthManager.InitializeBattle(this);
 
         if (!player) {
@@ -121,6 +129,11 @@ public class Board : MonoBehaviour
         _upcomingPieces.HidePieces();
 
         onInitialized?.Invoke();
+    }
+
+    public ManaCycle GetManaCycle()
+    {
+        return _boardManaCycle ? _boardManaCycle : BattleManager.Instance.manaCycle;
     }
 
     /// <summary>

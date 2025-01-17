@@ -172,7 +172,7 @@ public class BattleManager : MonoBehaviour
 
         // Initialize the cycle and generate a random sequence of colors.
         // The board RNG is not used for this.
-        boardLayoutManager.currentLayout.manaCycle.InitializeBattle(this);
+        if (boardLayoutManager.currentLayout.manaCycle) boardLayoutManager.currentLayout.manaCycle.InitializeBattle(this);
 
         // Create per-battle materials needed for ghost connected tile glowing
         GenerateGlowMaterials();
