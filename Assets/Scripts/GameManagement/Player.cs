@@ -98,6 +98,13 @@ public class Player : NetworkBehaviour {
     private Board board;
 
 
+    /// <summary>
+    /// The player that is choosing in place of this player. 
+    /// Used if this player is a CPU and main player is choosing for this player.
+    /// When this player presses cancel while choosing character of otherPlayerControlling, control will be returned to this player.
+    /// </summary>
+    public Player otherPlayerControlling {get; private set;}
+
     private void Awake() {
         // If not in local multiplayer, disable the user inputs. these will be enabled if the player is owned once it spawns.
         // for local multiplayer the inputs need to be enabled when the player is added, so this would mess that up
@@ -243,6 +250,21 @@ public class Player : NetworkBehaviour {
         if (selector) {
             selector.ui.UpdateReadinessStatus();
             selector.ui.UpdateSelectedBattler();
+
+            // Once options are chosen, if ready, temporarily control the next non-ready CPU player
+            if (current) ControlNextCPUPlayer();
+        }
+    }
+
+    /// <summary>
+    /// Find the first CPU player in the charselect and control their character choice and options temporarily.
+    /// </summary>
+    public void ControlNextCPUPlayer() {
+        foreach (Player player in GameManager.Instance.playerManager.players) {
+            if (player.isCpu && !player.optionsChosen.Value) {
+                ControlAnotherPlayer(player);
+                return;
+            }
         }
     }
 
@@ -327,9 +349,46 @@ public class Player : NetworkBehaviour {
     }
 
     public void AttachToCharSelector() {
-        selector = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex.Value);
-        charSelectInputHandler.SetCharSelector(selector);
-        if (selector) selector.AssignPlayer(this);
+        // If currently controlling another player, use their selector instead of this player's
+        if (otherPlayerControlling != null) {
+            selector = CharSelectManager.Instance.GetCharSelectorByIndex(otherPlayerControlling.boardIndex.Value);
+            charSelectInputHandler.SetCharSelector(selector);
+        } else {
+            selector = CharSelectManager.Instance.GetCharSelectorByIndex(boardIndex.Value);
+            charSelectInputHandler.SetCharSelector(selector);
+            if (selector) selector.AssignPlayer(this);
+        }
+    }
+
+    public void ControlAnotherPlayer(Player player) {
+        otherPlayerControlling = player;
+        AttachToCharSelector();
+    }
+
+    public void StopControllingAnotherPlayer() {
+        if (!otherPlayerControlling) return;
+
+        // Stop controlling the other player.
+        otherPlayerControlling = null;
+        AttachToCharSelector();
+
+        // Find another CPU player to re-decide for, checking backwards through the player list,
+        // and finding a ready CPU player to make un-ready.
+        for (int i = GameManager.Instance.playerManager.players.Count-1; i >= 0; i--) {
+            Player player = GameManager.Instance.playerManager.players[i];
+
+            if (player.isCpu && player.optionsChosen.Value) {
+                player.optionsChosen.Value = false;
+                player.characterChosen.Value = false;
+                ControlAnotherPlayer(player);
+                return;
+            }
+        }
+
+        // If no other CPU player was found to control, control this player.
+        optionsChosen.Value = false;
+        characterChosen.Value = false;
+        AttachToCharSelector();
     }
 
     /// <summary>

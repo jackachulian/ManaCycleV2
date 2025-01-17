@@ -44,13 +44,17 @@ public class CharSelectInputHandler : NetworkBehaviour
             return;
         }
 
+        var playerToInputOn = player.otherPlayerControlling ? player.otherPlayerControlling : player;
+
         // Confirm options if options is open
-        if (player.characterChosen.Value) {
-            player.optionsChosen.Value = true;
+        if (playerToInputOn.characterChosen.Value) {
+            Debug.Log("choosing options on "+this);
+            playerToInputOn.optionsChosen.Value = true;
         } 
 
         // Click with the cursor if still choosing character
         else {
+            Debug.Log("submitting with cursor on "+this);
             charSelector.ui.cursor.interactor.Submit();
         }
     }
@@ -62,8 +66,19 @@ public class CharSelectInputHandler : NetworkBehaviour
             return;
         }
 
-        player.optionsChosen.Value = false;
-        player.characterChosen.Value = false;
+        var playerToInputOn = player.otherPlayerControlling ? player.otherPlayerControlling : player;
+
+        // When cancel pressed while choosing a character, if controlling another player, 
+        // stop controlling them and control a different player or go back to controlling self.
+        if (playerToInputOn.characterChosen.Value == false) {
+            // TODO: maybe hold cancel to leave the scene, if not controlling another player
+            player.StopControllingAnotherPlayer();
+        } 
+        // otherwise if character already chosen, undo the choice and go back to selecting character
+        else {
+            playerToInputOn.optionsChosen.Value = false;
+            playerToInputOn.characterChosen.Value = false;
+        }
     }
 
     public void OnNavigate(InputValue value)
