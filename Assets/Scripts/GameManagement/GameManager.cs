@@ -1,4 +1,6 @@
+using Battle;
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -102,8 +104,12 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Automatically add this many CPUs to the game when teh game starts. Only use for debugging!
     /// </summary>
-    [Tooltip("Automatically add this many CPUs to the game when the game starts. Only use for debugging!")]
+    [Tooltip("Automatically add this many CPUs to the game when the game starts. Only used in the editor for testing.")]
     [SerializeField] private int autoAddCpus = 0;
+
+
+    [Tooltip("Automatically assign these battlers to boards of these boardIndexes in the list. Only used in the editor for testing.")]
+    [SerializeField] private List<Battler> autoAssignBattlers;
 
 
     private void Awake()
@@ -191,6 +197,15 @@ public class GameManager : MonoBehaviour {
         if (autoAddCpus > 0) {
             for (int i = 0; i < autoAddCpus; i++) {
                 playerManager.AddCPUPlayer();
+            }
+        }
+
+        if (autoAssignBattlers.Count > 0)
+        {
+            for (int i = 0; i < autoAssignBattlers.Count; i++)
+            {
+                Battler battler = autoAssignBattlers[i];
+                playerManager.players[i].battler = battler;
             }
         }
     }
