@@ -122,7 +122,7 @@ Shader "ManaCycle/Unlit/BattleBacgkround"
             float2 uv = (vertex_output.uv * 2.0 - 1) / 1;
             uv.x *= _ScreenParams.x / _ScreenParams.y;
 
-            float4 noise = tex2D(_MainTex, fmod(uv + _Time.y * 0.1, 1.0));
+            float4 noise = tex2D(_MainTex, fmod(uv + _Time.y * 0.1 + 0.5, 1.0));
 
             // define colors
             sunColor.r = 1.0 + nsin(uv.y + 2.0 * _Time.y) * 0.4;

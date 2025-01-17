@@ -52,7 +52,7 @@ Material:
     - _scrollSpeed: 0.2
     - _vLines: 30
     - aa: 0.005
-    - finalDarken: 0.25
+    - finalDarken: 0
     - hLines: 5
     - height: -0.1
     - hole: 0
@@ -65,8 +65,8 @@ Material:
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - floorColor: {r: 0.06274508, g: 0.06274508, b: 0.1882353, a: 1}
     - gridColor: {r: 0.65, g: 0.95, b: 0.95, a: 1}
-    - skyColorBottom: {r: 0.5, g: 0.05, b: 0.6, a: 1}
+    - skyColorBottom: {r: 0.68098253, g: 0.12482201, b: 0.8018868, a: 1}
     - skyColorTop: {r: 0.5, g: 0.05, b: 0.4, a: 1}
-    - sunColor: {r: 1, g: 0.6, b: 0.09999997, a: 1}
+    - sunColor: {r: 1, g: 0.6, b: 0.1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
