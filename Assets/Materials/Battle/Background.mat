@@ -52,7 +52,7 @@ Material:
     - _scrollSpeed: 0.2
     - _vLines: 30
     - aa: 0.005
-    - finalDarken: 0.5
+    - finalDarken: 0.7
     - hLines: 5
     - height: -0.1
     - hole: 0
