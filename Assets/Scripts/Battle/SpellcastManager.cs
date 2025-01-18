@@ -243,7 +243,7 @@ public class SpellcastManager : MonoBehaviour {
                 }
             }
 
-            int damagePerBoard = damage / otherLivingBoardCount;
+            int damagePerBoard = damage / Math.Max(otherLivingBoardCount, 1);
             for (int i = 0; i < playerCount; i++) {
                 Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
                 if (otherBoard != board && otherBoard.boardActive) {
