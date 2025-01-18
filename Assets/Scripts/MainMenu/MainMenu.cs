@@ -25,7 +25,7 @@ public class MainMenu : MonoBehaviour
         void Start()
         {
             AudioManager.Instance.PlayMusic(menuMusic);
-            
+
             rootMenu.ButtonSelected += OnRootButtonSelected;
             rootMenu.ButtonSelected += sceneSwapper.OnButtonSelected;
 

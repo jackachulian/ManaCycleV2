@@ -17,8 +17,7 @@ namespace Audio
         [SerializeField] private AudioMixerGroup sfxMixerGroup;
         [SerializeField] private int maxSounds = 16;
         private List<AudioSource> sources = new List<AudioSource>();
-        private AudioSource musicSource; 
-        public SoundCollectionDictionary test;
+        [SerializeField] private AudioSource musicSource; 
 
         [Header("Sound Collections")]
         public SoundCollection boardSounds;
@@ -40,7 +39,6 @@ namespace Audio
 
         void Start()
         {
-            musicSource = GetComponent<AudioSource>();
             UpdateVolumes();
 
             GameObject newObject = new();

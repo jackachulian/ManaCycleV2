@@ -42,7 +42,7 @@ namespace Menus
         public event MenuChangedHandler MenuClosed;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             radius = openRadius;
             shouldScroll = items.Length - shownAmount >= 2;
