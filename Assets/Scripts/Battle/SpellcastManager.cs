@@ -219,12 +219,13 @@ public class SpellcastManager : MonoBehaviour {
         // if a cascade IS happening but has not activated yet: 1 -> 1.0, 2 -> 2.0, 3 -> 4.0, 4 -> 8.0, etc
         double cascadeMultiplier = currentCascade > 0 ? Math.Pow(currentCascade - 1, 2.0) : 1.0;
 
-        // deal damage to other boards, split damage equally
+        // Main damage formula
         int damage = (int)(totalMana * damagePerMana * chainMultiplier * cascadeMultiplier);
 
         // Counter incoming  (Method will return the amount of leftover damage after countering)
         // evaluate this on both clients here since it should happen at the same time as spellcast clear
         damage = board.healthManager.CounterIncomingDamage(damage);
+        board.healthManager.UpdateHealthUI();
 
         // TODO: factor in how many boards are actually currently controlled, and split damage equally among them
         // for now just deal damage to all other boards.
@@ -237,8 +238,8 @@ public class SpellcastManager : MonoBehaviour {
             int otherLivingBoardCount = 0;
             for (int i = 0; i < playerCount; i++) {
                 Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
-                if (otherBoard != board) {
-                    // todo: when teams mode is added, only track/deal damage to bboard if different team
+                if (otherBoard != board && otherBoard.boardActive) {
+                    // todo: when teams mode is added, only track/deal damage to board if different team
                     otherLivingBoardCount += 1;
                 }
             }
@@ -289,6 +290,7 @@ public class SpellcastManager : MonoBehaviour {
     /// </summary>
     private void AdvanceCycle() {
         cycleIndex += 1;
+        currentCascade = 0;
         if (cycleIndex >= GameManager.Instance.battleData.cycleLength) {
             cycleIndex = 0;
             // TODO: cycle multiplier

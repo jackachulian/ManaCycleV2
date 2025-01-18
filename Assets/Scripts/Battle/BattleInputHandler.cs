@@ -79,9 +79,7 @@ public class BattleInputHandler : MonoBehaviour
         }
 
         // down: quickfall
-        else if (analogDirectionPressed == AnalogMoveDirection.DOWN) {
-            // TODO: set quickfall to on, make sure it is set to off when down input stops
-        }
+        board.pieceManager.SetQuickfall(analogDirectionPressed == AnalogMoveDirection.DOWN);
     }
 
     public void OnMoveLeft() {
