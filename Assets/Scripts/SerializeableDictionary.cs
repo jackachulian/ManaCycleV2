@@ -4,9 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
-using UnityEditor;
 using UnityObject = UnityEngine.Object;
 using Debug = UnityEngine.Debug;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [Serializable, DebuggerDisplay("Count = {Count}")]
 public class SerializableDictionary<TKey, TValue> : IDictionary<TKey, TValue>
@@ -575,6 +578,7 @@ public class SerializableDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     }
 }
 
+#if UNITY_EDITOR
 public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
 {
     private SerializableDictionary<TK, TV> _Dictionary;
@@ -742,6 +746,6 @@ public abstract class DictionaryDrawer<TK, TV> : PropertyDrawer
         }
     }
 }
-
 [CustomPropertyDrawer(typeof(Audio.SoundCollectionDictionary))]
 public class SoundCollectionDictionaryDrawer : DictionaryDrawer<string, AudioClip> { }
+#endif

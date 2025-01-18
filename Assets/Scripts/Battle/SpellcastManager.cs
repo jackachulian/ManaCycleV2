@@ -222,18 +222,34 @@ public class SpellcastManager : MonoBehaviour {
         // deal damage to other boards, split damage equally
         int damage = (int)(totalMana * damagePerMana * chainMultiplier * cascadeMultiplier);
 
+        // Counter incoming  (Method will return the amount of leftover damage after countering)
+        // evaluate this on both clients here since it should happen at the same time as spellcast clear
+        damage = board.healthManager.CounterIncomingDamage(damage);
+
         // TODO: factor in how many boards are actually currently controlled, and split damage equally among them
         // for now just deal damage to all other boards.
         // (client decides how much damage it takes)
 
         // another possible security improvement: 
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
-        if (board.player && !board.player.IsOwner) {
-            for (int i = 0; i < 2; i++) {
+        if (board.player && board.player.IsOwner) {
+            int playerCount = GameManager.Instance.playerManager.players.Count;
+            int otherLivingBoardCount = 0;
+            for (int i = 0; i < playerCount; i++) {
                 Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
-                // Only send the damage if this client owns this board
                 if (otherBoard != board) {
-                    otherBoard.player.boardNetworkBehaviour.EnqueueDamageRpc(damage);
+                    // todo: when teams mode is added, only track/deal damage to bboard if different team
+                    otherLivingBoardCount += 1;
+                }
+            }
+
+            int damagePerBoard = damage / otherLivingBoardCount;
+            for (int i = 0; i < playerCount; i++) {
+                Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
+                if (otherBoard != board && otherBoard.boardActive) {
+                    // Send to the other board for them to enqueue themselves so it is synchronized and order-guaranteed 
+                    // with their health changing events such as spellcasting.
+                    otherBoard.player.boardNetworkBehaviour.EnqueueDamageRpc(damagePerBoard);
                 }
             }
         } else {

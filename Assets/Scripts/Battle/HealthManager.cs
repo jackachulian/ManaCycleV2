@@ -44,6 +44,23 @@ public class HealthManager : MonoBehaviour {
         incomingDamageUI.UpdateUI(incomingDamage);
     }
 
+    /// <summary>
+    /// Counter incoming damage - closest to end of list first.
+    /// Return the amount of leftover damage after countering, if any.
+    /// </summary>
+    public int CounterIncomingDamage(int damage) {
+        for (int i = 5; i >= 1; i--) {
+            if (incomingDamage[i] >= damage) {
+                incomingDamage[i] -= damage;
+                return 0;
+            } else {
+                damage -= incomingDamage[i];
+                incomingDamage[i] = 0;
+            }
+        }
+
+        return damage;
+    }
 
     /// <summary>
     /// (Rpc Target) Add damage to the start of the damage queue.

@@ -1,11 +1,15 @@
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 using System;
 using System.Linq;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
  
 // ReSharper disable once CheckNamespace
  
+#if UNITY_EDITOR
 [UsedImplicitly]
 public class HiddenDrawer : MaterialPropertyDrawer
 {
@@ -83,3 +87,4 @@ public class UIGradientShaderGUI : ShaderGUI
         EditorUtility.SetDirty(material);
     }
 }
+#endif

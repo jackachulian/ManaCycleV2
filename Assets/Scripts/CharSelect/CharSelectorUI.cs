@@ -74,7 +74,7 @@ public class CharSelectorUI : MonoBehaviour
             // Only enable the cursor if a locally owned player is controlling this char selector.
             if (charSelector.player.IsOwner) {
                 cursor.gameObject.SetActive(true);
-                cursor.SetPlayer(charSelector.player, Color.red, charSelector.player.boardIndex.Value + 1);
+                cursor.SetPlayer(charSelector.player, cursorColor, charSelector.player.boardIndex.Value + 1);
             }
         } else {
             background.color = unconnectedBackgroundColor;

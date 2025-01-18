@@ -101,6 +101,8 @@ public class BoardUI : MonoBehaviour {
         this.board = board;
         board.pieceManager.onPiecePlaced += OnPiecePlaced;
         board.manaTileGrid.TileClearedNotifier += OnTileCleared;
+
+        cyclePointer.transform.SetParent(board.GetManaCycle().transform, true);
     }
 
     void Update() {

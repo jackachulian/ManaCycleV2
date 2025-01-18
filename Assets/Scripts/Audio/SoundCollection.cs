@@ -2,7 +2,12 @@
 
 using UnityEngine;
 using System;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
+
+
 
 namespace Audio
 {
@@ -15,11 +20,14 @@ namespace Audio
 
         public void Save() 
         {
+            #if UNITY_EDITOR
             Debug.Log("Saved Asset");
             EditorUtility.SetDirty(this);
+            #endif
         }
     }
 
+    #if UNITY_EDITOR
     [CustomEditor(typeof(SoundCollection))]
     public class SoundCollectionEditor : Editor
     {
@@ -35,5 +43,5 @@ namespace Audio
             
         }
     }
-
+    #endif
 }

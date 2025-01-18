@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Menus;
 using Audio;
-using UnityEditor.SearchService;
-using UnityEngine.SceneManagement;
 
 // ties multiple parts of the main menu together
 public class MainMenu : MonoBehaviour
