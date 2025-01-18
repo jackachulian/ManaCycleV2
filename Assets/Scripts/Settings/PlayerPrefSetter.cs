@@ -33,8 +33,21 @@ namespace Menus
 
         public void Sync()
         {
-            if (slider != null) slider.value = PlayerPrefs.GetFloat(key);
-            if (toggle != null) toggle.isOn = PlayerPrefs.GetInt(key) == 1;
+            if (slider != null)
+            {
+                if (PlayerPrefs.HasKey(key)) 
+                    slider.value = PlayerPrefs.GetFloat(key);
+                else
+                    PlayerPrefs.SetFloat(key, slider.value);
+
+            }
+            if (toggle != null) 
+            {
+                if (PlayerPrefs.HasKey(key))
+                    toggle.isOn = PlayerPrefs.GetInt(key) == 1;
+                else
+                    PlayerPrefs.SetInt(key, toggle.isOn ? 1 : 0);
+            }
         }
 
     }
