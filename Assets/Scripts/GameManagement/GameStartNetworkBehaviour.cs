@@ -101,6 +101,23 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
         NetworkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
     }
 
+    [Rpc(SendTo.Everyone)]
+    /// <summary>
+    /// Server/host will tell all clients to load the postgame menu once the server has decided the match is over and a winner has been decided.
+    /// 
+    /// </summary>
+    public void PostgameMenuRpc(int winnerBoardIndex) {
+        if (!BattleManager.Instance) {
+            Debug.LogError("Trying to load postgame menu while not in the battle scene");
+            return;
+        }
+
+        GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
+
+        Board winningBoard = BattleManager.Instance.GetBoardByIndex(winnerBoardIndex);
+        BattleManager.Instance.ClientStartPostGame(winningBoard);
+    }
+
     /// <summary>
     /// Request to go back to the character select screen.
     /// Can be sent from server or client. Only executes on server/host. Sends all players to the character select scene.

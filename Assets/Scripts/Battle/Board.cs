@@ -77,6 +77,12 @@ public class Board : MonoBehaviour
     public Player player {get; private set;}
 
     /// <summary>
+    /// Index of this board in the layout.
+    /// Set by BoardLayout on its awake.
+    /// </summary>
+    public int boardIndex {get; set;}
+
+    /// <summary>
     /// Cycle used only for this board. Only used in some layouts.
     /// </summary>
     [SerializeField] private ManaCycle _boardManaCycle;

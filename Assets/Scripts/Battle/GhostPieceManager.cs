@@ -92,6 +92,15 @@ public class GhostPieceManager : MonoBehaviour {
     /// Only required when row of tiles of the piece change, because pieces will land in the same columns regardless of the current row.
     /// </summary>
     public void UpdateGhostPiece() {
+        // Don't update a ghost piece unless there is a local player controlling this board,
+        // otherwise there will not be a ghost piece
+        if (!board.player || !board.player.IsOwner) return;
+
+        if (!IsShowingGhostTiles()) {
+            Debug.LogWarning("Trying to show ghost tiles, but there is no current ghost piece being managed!");
+            return;
+        }
+        
         // Unglow all currently glowed tiles from the last piece update
         for (int y = 0; y < board.manaTileGrid.height; y++)
         {

@@ -264,20 +264,26 @@ public class BattleManager : MonoBehaviour
         // If no boards are alive, start the postgame, the one player was defeated
         if (livingBoards == 0) {
             gameCompleted = true;
-            PostGame(winner);
+            ServerStartPostGameAfterDelay(winner);
         }
 
         if (winner) {
             winner.Win();
             gameCompleted = true;
-            PostGame(winner);
+            ServerStartPostGameAfterDelay(winner);
         }
     }
 
     // Waits a bit and then show the postgame menu
-    public async void PostGame(Board winner) {
+    public async void ServerStartPostGameAfterDelay(Board winner) {
+        if (!NetworkManager.Singleton.IsServer) return;
+
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
+        gameStartNetworkBehaviour.PostgameMenuRpc(winner.boardIndex);
+    }
+
+    public void ClientStartPostGame(Board winner) {
         GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
         postGameMenuUI.ShowPostGameMenuUI(winner);
     }

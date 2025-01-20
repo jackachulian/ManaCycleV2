@@ -17,7 +17,11 @@ public class BoardLayout : MonoBehaviour {
     [SerializeField] private ManaCycle _manaCycle;
     public ManaCycle manaCycle => _manaCycle;
 
-    
+    void Awake() {
+        for (int i = 0; i < boards.Length; i++) {
+            boards[i].boardIndex = i;
+        }
+    }
 
     public void ShowLayout() {
         gameObject.SetActive(true);
