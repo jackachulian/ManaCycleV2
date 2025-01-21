@@ -22,7 +22,7 @@ public class PostGameMenuUI : MonoBehaviour {
     }
 
 
-    public void SetAssets(Battler winnerBattler)
+    public void SetAssets(BattlerScriptableObject winnerBattler)
     {
         if (winnerBattler) {
             battlerPortrait.sprite = winnerBattler.sprite;

@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
 
 
     [Tooltip("Automatically assign these battlers to boards of these boardIndexes in the list. Only used in the editor for testing.")]
-    [SerializeField] private List<Battler> autoAssignBattlers;
+    [SerializeField] private List<BattlerScriptableObject> autoAssignBattlers;
 
 
     private void Awake()
@@ -204,7 +204,7 @@ public class GameManager : MonoBehaviour {
         {
             for (int i = 0; i < autoAssignBattlers.Count; i++)
             {
-                Battler battler = autoAssignBattlers[i];
+                BattlerScriptableObject battler = autoAssignBattlers[i];
                 playerManager.players[i].battler = battler;
             }
         }

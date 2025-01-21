@@ -171,7 +171,7 @@ public class BoardUI : MonoBehaviour {
         }
     }
 
-    public void ShowBattler(Battler battler) {
+    public void ShowBattler(BattlerScriptableObject battler) {
         if (battler) {
             portraitSpriteRenderer.sprite = battler.sprite;
         } else {

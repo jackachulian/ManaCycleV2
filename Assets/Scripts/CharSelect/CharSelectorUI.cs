@@ -106,7 +106,7 @@ public class CharSelectorUI : MonoBehaviour
     /// </summary>
     public void UpdateSelectedBattler() {
         if (charSelector.player && charSelector.player.selectedBattlerIndex.Value >= 0) {
-            Battler battler = CharSelectManager.Instance.GetBattlerByIndex(charSelector.player.selectedBattlerIndex.Value);
+            BattlerScriptableObject battler = CharSelectManager.Instance.GetBattlerByIndex(charSelector.player.selectedBattlerIndex.Value);
 
             // Set the reference on the player object locally on clients - this is important for the battle scene,
             // because the battle scene doesn't know the indexes of each battler on the char select grid!

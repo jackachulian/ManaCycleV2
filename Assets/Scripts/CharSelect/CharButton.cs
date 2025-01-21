@@ -7,7 +7,7 @@ using Unity.Netcode;
 
 public class CharButton : Button, ICursorHoverable, ICursorPressable
 {
-    [SerializeField] public Battler battler;
+    [SerializeField] public BattlerScriptableObject battler;
     [SerializeField] private Image charImage;
     [SerializeField] private Image gradient;
 

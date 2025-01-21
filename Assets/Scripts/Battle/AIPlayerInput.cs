@@ -175,7 +175,7 @@ public class AIPlayerInput : MonoBehaviour
         // these will be overridden whenever the score of a placement exceeds highestPlacementScore
         targetCol = Random.Range(0, board.manaTileGrid.width);
         targetRotation = Random.Range(0, 4);
-        int highestPlacementScore = 0;
+        int highestPlacementScore = int.MinValue;
 
         // Copy the latest state of the board before using it for calculations
         System.Array.Copy(board.manaTileGrid.tileGrid, simulatedTileGrid, board.manaTileGrid.width * board.manaTileGrid.height);
@@ -271,12 +271,12 @@ public class AIPlayerInput : MonoBehaviour
                     // Gain score point for each connected tile, even if it doesn't meet required blob size,
                     // will still help with build blobs to get same color together
                     // Cap the blob count incentive at 3, no need to incentivize extremely large blobs, 3 will suffice
-                    placementScore += Mathf.Min(blob.Count, 3) * 2;
+                    placementScore += Mathf.Min(blob.Count, 3) * 3;
 
 
                     // Subtract points for each Y-value this tile is placed above the current lowest tile
                     int rowsAboveLowestColumn = placePos.y - lowestColHeight;
-                    placementScore -= rowsAboveLowestColumn;
+                    placementScore -= rowsAboveLowestColumn * 2;
                 }
 
                 // If score exceeds highest placement score, use this as the preferred placement

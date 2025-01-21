@@ -58,7 +58,7 @@ public class PieceManager : MonoBehaviour {
     public void InitializeBattle(Board board) {
         this.board = board;
 
-        SpawnNewPiece();
+        SpawnNextPiece();
     }
 
     // Update is called once per frame
@@ -251,7 +251,7 @@ public class PieceManager : MonoBehaviour {
         onPiecePlaced?.Invoke();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
 
-        SpawnNewPiece();
+        SpawnNextPiece();
 
 
         // If the newly spawned piece is in an invalid position, player has topped out
@@ -299,9 +299,22 @@ public class PieceManager : MonoBehaviour {
     /// Is called after the current piece is placed.
     /// Replaces the current piece with the next piece from the upcomingpieces list.
     /// </summary>
-    public void SpawnNewPiece() {
+    public void SpawnNextPiece() {
         // TODO: grab the new piece from the upcoming pieces list
-        currentPiece = board.upcomingPieces.PopNextPiece();
+        var nextPiece = board.upcomingPieces.PopNextPiece();
+        SpawnPiece(nextPiece);
+    }
+
+    /// <summary>
+    /// Make the piece the current piece and start dropping it on the board.
+    /// </summary>
+    /// <param name="piece"></param>
+    public void SpawnPiece(ManaPiece piece) {
+        if (currentPiece) {
+            Debug.LogWarning("A piece was spawned while another piece was currently spawned. Make sure you destroy the old piece first!");
+        }
+
+        currentPiece = piece;
 
         // parent the next piece onto the board so the player can see it
         currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
@@ -312,10 +325,20 @@ public class PieceManager : MonoBehaviour {
         currentPiece.position = spawnPos;
         currentPiece.UpdateVisualPositions();
 
+        // TODO: listen for onPieceSpawned in ghostPieceManager instead of calling here
         board.ghostPieceManager.CreateGhostPiece();
 
+        // TODO: listen for onPieceSpawned in upcomingPieces instead of calling here
         board.upcomingPieces.UpdatePieceListUI();
 
         onPieceSpawned?.Invoke();
+    }
+
+    /// <summary>
+    /// Will destroy / discard the current piece, and replace it with the passed piece.
+    /// </summary>
+    public void ReplaceCurrentPiece(ManaPiece piece) {
+        Destroy(currentPiece.gameObject);
+        SpawnPiece(piece);
     }
 }
