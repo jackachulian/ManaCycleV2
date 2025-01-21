@@ -268,8 +268,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b56fb1e126eb32b4881bac741a50b8a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDecisionTime: 0.3
-  maxDecisionTime: 0.9
+  minDecisionTime: 0.1
+  maxDecisionTime: 0.3
 --- !u!114 &298183042389427978
 MonoBehaviour:
   m_ObjectHideFlags: 0

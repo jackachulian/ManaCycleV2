@@ -59,10 +59,10 @@ public class AIPlayerInput : MonoBehaviour
     private bool spellcastNext = false;
 
     void Update() {
-        if (!board || !board.boardActive) return;
+        if (!board) return;
 
         timeUntilNextDecision -= Time.deltaTime;
-        if (timeUntilNextDecision < 0) {
+        if (timeUntilNextDecision <= 0) {
             timeUntilNextDecision += Random.Range(minDecisionTime, maxDecisionTime);
             MakeDecision();
         }
@@ -107,6 +107,11 @@ public class AIPlayerInput : MonoBehaviour
     /// </summary>
     void MakeDecision() {
         ManaPiece currentPiece = board.pieceManager.currentPiece;
+
+        if (!currentPiece) {
+            Debug.LogError("AI is trying to make a decision while there is no current piece on its board");
+            return;
+        }
 
         // if spellcastNext is true, spellcast as the decision
         if (spellcastNext) {
