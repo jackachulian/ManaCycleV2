@@ -59,7 +59,7 @@ public class AIPlayerInput : MonoBehaviour
     private bool spellcastNext = false;
 
     void Update() {
-        if (!board) return;
+        if (!board || !board.boardActive) return;
 
         timeUntilNextDecision -= Time.deltaTime;
         if (timeUntilNextDecision < 0) {
@@ -175,6 +175,21 @@ public class AIPlayerInput : MonoBehaviour
         // Copy the latest state of the board before using it for calculations
         System.Array.Copy(board.manaTileGrid.tileGrid, simulatedTileGrid, board.manaTileGrid.width * board.manaTileGrid.height);
 
+        // Loop through all columns, keeping track of the lowest height out of all columns.
+        int lowestColHeight = board.manaTileGrid.height;
+        for (int x = 0; x < board.manaTileGrid.width; x++) {
+            for (int y = 0; y < board.manaTileGrid.height; y++) {
+                if (!board.manaTileGrid.HasTile(new Vector2Int(x,y))) {
+                    int colHeight = y;
+                    if (colHeight < lowestColHeight) {
+                        lowestColHeight = colHeight;
+                    }
+                    break;
+                }
+            }
+        }
+
+
         // Shuffle the list so that placements can be checked in a random order to prevent column bias
         placementCheckOrder = placementCheckOrder.OrderBy(x => Random.value).ToArray();
 
@@ -248,12 +263,16 @@ public class AIPlayerInput : MonoBehaviour
                     TileUtility.ExpandBlob(ref blob, placePos, tile.color, board, ref simulatedTileGrid, ref simulatedBlobGrid);
 
                     // if blob is clearable, glow all the connected mana
-                    // Gain 1 "score" point for each connected tile, even if it doesn't meet required blob size,
+                    // Gain score point for each connected tile, even if it doesn't meet required blob size,
                     // will still help with build blobs to get same color together
-                    placementScore += blob.Count;
-                }
+                    // Cap the blob count incentive at 4, don't need to make extremely large blobs, but rather lots of smaller blobs
+                    placementScore += Mathf.Min(blob.Count, 4) * 2;
 
-                Debug.Log("col="+col+", rot="+rot+", placementScore="+placementScore);
+
+                    // Subtract points for each Y-value this tile is placed above the current lowest tile
+                    int rowsAboveLowestColumn = placePos.y - lowestColHeight;
+                    placementScore -= rowsAboveLowestColumn;
+                }
 
                 // If score exceeds highest placement score, use this as the preferred placement
                 if (placementScore > highestPlacementScore) {
@@ -278,7 +297,7 @@ public class AIPlayerInput : MonoBehaviour
         // restore the initial rotation of the piece that may have been changed during the calculation
         piece.rotation = restoreRotation;
 
-        Debug.Log("Target col and rotation decided. targetCol="+targetCol+", targetRotation="+targetRotation+", placementScore="+highestPlacementScore);
+        Debug.Log("Target col and rotation decided. lowestColHeight="+lowestColHeight+", targetCol="+targetCol+", targetRotation="+targetRotation+", placementScore="+highestPlacementScore);
     }
 
     /// <summary>
