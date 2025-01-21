@@ -34,6 +34,16 @@ public class AIPlayerInput : MonoBehaviour
     private int[] placementCheckOrder;
 
     /// <summary>
+    /// Y-value of the lowest column according to the last col heights refresh
+    /// </summary>
+    private int lowestColHeight;
+
+    /// <summary>
+    /// Y-value of the highest column according to the last col heights refresh
+    /// </summary>
+    private int highestColHeight;
+
+    /// <summary>
     /// Current rotation direction being used to reach the target rotation.
     /// -1 = counter-clockwise
     /// 0 = not rotating
@@ -180,20 +190,8 @@ public class AIPlayerInput : MonoBehaviour
         // Copy the latest state of the board before using it for calculations
         System.Array.Copy(board.manaTileGrid.tileGrid, simulatedTileGrid, board.manaTileGrid.width * board.manaTileGrid.height);
 
-        // Loop through all columns, keeping track of the lowest height out of all columns.
-        int lowestColHeight = board.manaTileGrid.height;
-        for (int x = 0; x < board.manaTileGrid.width; x++) {
-            for (int y = 0; y < board.manaTileGrid.height; y++) {
-                if (!board.manaTileGrid.HasTile(new Vector2Int(x,y))) {
-                    int colHeight = y;
-                    if (colHeight < lowestColHeight) {
-                        lowestColHeight = colHeight;
-                    }
-                    break;
-                }
-            }
-        }
-
+        // update lowest and highest col that will be used for placement score
+        RefreshColumnHeights();
 
         // Shuffle the list so that placements can be checked in a random order to prevent column bias
         placementCheckOrder = placementCheckOrder.OrderBy(x => Random.value).ToArray();
@@ -267,15 +265,30 @@ public class AIPlayerInput : MonoBehaviour
                     blob = new List<Vector2Int>();
                     TileUtility.ExpandBlob(ref blob, placePos, tile.color, board, ref simulatedTileGrid, ref simulatedBlobGrid);
 
+                    int blobIncentiveMult = 3;
+                    // Incentivise blobs of the current color more if close to topping out
+                    if (tile.color == board.spellcastManager.GetCurrentCycleColor()) {
+                        if (highestColHeight >= 12) {
+                            blobIncentiveMult = 30;
+                        } else if (highestColHeight >= 9) {
+                            blobIncentiveMult = 6;
+                        }
+                    }
+
                     // if blob is clearable, glow all the connected mana
                     // Gain score point for each connected tile, even if it doesn't meet required blob size,
                     // will still help with build blobs to get same color together
                     // Cap the blob count incentive at 3, no need to incentivize extremely large blobs, 3 will suffice
-                    placementScore += Mathf.Min(blob.Count, 3) * 3;
+                    if (blob.Count > 1) {
+                        // large incentive to make blobs of size 2-4
+                        placementScore += Mathf.Min(blob.Count, 3) * blobIncentiveMult;
+                    } else {
+                        // no incentive for blobs of size 1 which are just standalone blobs
+                    }
 
 
                     // Subtract points for each Y-value this tile is placed above the current lowest tile
-                    int rowsAboveLowestColumn = placePos.y - lowestColHeight;
+                    int rowsAboveLowestColumn = placePos.y - lowestColHeight + 1;
                     placementScore -= rowsAboveLowestColumn * 2;
                 }
 
@@ -302,16 +315,32 @@ public class AIPlayerInput : MonoBehaviour
         // restore the initial rotation of the piece that may have been changed during the calculation
         piece.rotation = restoreRotation;
 
-        Debug.Log("Target col and rotation decided. lowestColHeight="+lowestColHeight+", targetCol="+targetCol+", targetRotation="+targetRotation+", placementScore="+highestPlacementScore);
+        // Debug.Log("Target col and rotation decided. lowestColHeight="+lowestColHeight+", targetCol="+targetCol+", targetRotation="+targetRotation+", placementScore="+highestPlacementScore);
     }
 
     /// <summary>
     /// Called when placing a piece.
     /// If current color is clearable, have a certain chance to start a spellcast.
+    /// Highest chance to spellcast the higher the highest column is.
     /// </summary>
     void DecideSpellcast() {
-        if (board.spellcastManager.IsCurrentColorClearable() && Random.value < 0.3f) {
+        // don't ever try to spellcast if current color cant be cleared, because a spellcast wont start.
+        if (!board.spellcastManager.IsCurrentColorClearable()) return;
+
+        if (highestColHeight >= 12) {
             spellcastNext = true;
+        } else if (highestColHeight >= 9) {
+            if (Random.value < 0.6f) {
+                spellcastNext = true;
+            }
+        } else if (highestColHeight >= 6) {
+            if (Random.value < 0.15f) {
+                spellcastNext = true;
+            }
+        } else {
+            if (Random.value < 0.01f) {
+                spellcastNext = true;
+            }
         }
     }
 
@@ -327,5 +356,27 @@ public class AIPlayerInput : MonoBehaviour
         // stop quickfalling, and decide if the player should spellcast next
         board.pieceManager.SetQuickfall(false);
         DecideSpellcast();
+    }
+
+    public void RefreshColumnHeights() {
+        // Loop through all columns, keeping track of the lowest height out of all columns.
+        lowestColHeight = board.manaTileGrid.height;
+        highestColHeight = 0;
+        for (int x = 0; x < board.manaTileGrid.width; x++) {
+            for (int y = 0; y < board.manaTileGrid.height; y++) {
+                if (board.manaTileGrid.HasTile(new Vector2Int(x,y))) {
+                    if (y > highestColHeight) {
+                        highestColHeight = y;
+                    }
+                } else {
+                    if (y < lowestColHeight) {
+                        lowestColHeight = y;
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Debug.Log("Highest column="+highestColHeight+", lowest column="+lowestColHeight);
     }
 }
