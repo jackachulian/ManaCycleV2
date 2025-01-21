@@ -270,8 +270,8 @@ public class AIPlayerInput : MonoBehaviour
                     // if blob is clearable, glow all the connected mana
                     // Gain score point for each connected tile, even if it doesn't meet required blob size,
                     // will still help with build blobs to get same color together
-                    // Cap the blob count incentive at 4, don't need to make extremely large blobs, but rather lots of smaller blobs
-                    placementScore += Mathf.Min(blob.Count, 4) * 2;
+                    // Cap the blob count incentive at 3, no need to incentivize extremely large blobs, 3 will suffice
+                    placementScore += Mathf.Min(blob.Count, 3) * 2;
 
 
                     // Subtract points for each Y-value this tile is placed above the current lowest tile
