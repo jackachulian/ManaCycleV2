@@ -1,4 +1,3 @@
-using Battle;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -109,7 +108,7 @@ public class GameManager : MonoBehaviour {
 
 
     [Tooltip("Automatically assign these battlers to boards of these boardIndexes in the list. Only used in the editor for testing.")]
-    [SerializeField] private List<BattlerScriptableObject> autoAssignBattlers;
+    [SerializeField] private List<Battler> autoAssignBattlers;
 
 
     private void Awake()
@@ -204,7 +203,7 @@ public class GameManager : MonoBehaviour {
         {
             for (int i = 0; i < autoAssignBattlers.Count; i++)
             {
-                BattlerScriptableObject battler = autoAssignBattlers[i];
+                Battler battler = autoAssignBattlers[i];
                 playerManager.players[i].battler = battler;
             }
         }

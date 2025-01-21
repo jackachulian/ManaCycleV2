@@ -134,51 +134,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 263696887875834022}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7000133501282604618
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1942238227642788480}
-  - component: {fileID: 7059392925726833285}
-  m_Layer: 0
-  m_Name: Ability
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1942238227642788480
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7000133501282604618}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4480288, y: -0.7083153, z: -0.006649967}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 263696887875834022}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7059392925726833285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7000133501282604618}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce15544419663344f8e52383b7de9b02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _abilityCost: 0
 --- !u!1 &7426216454335082736
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +255,6 @@ Transform:
   - {fileID: 7500456767435287109}
   - {fileID: 1880122081906645665}
   - {fileID: 5549977111191960701}
-  - {fileID: 1942238227642788480}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8248295609885287369
@@ -320,9 +274,9 @@ MonoBehaviour:
   _displayName: Infinity
   _gradientMat: {fileID: 2100000, guid: e7f532da2f1b44ad9aaf48d174941ccd, type: 2}
   _mainColor: {r: 0.04182972, g: 0.64658415, b: 0.8867924, a: 1}
-  _altColor: {r: 0.8378221, g: 0.19479038, b: 0.9245283, a: 1}
+  _altColor: {r: 0.5809257, g: 0.104109734, b: 0.70440245, a: 1}
   _gameLogo: {fileID: 0}
-  battlerAbility: {fileID: 7059392925726833285}
+  battlerAbility: {fileID: 0}
 --- !u!212 &8598370176957618419
 SpriteRenderer:
   m_ObjectHideFlags: 0

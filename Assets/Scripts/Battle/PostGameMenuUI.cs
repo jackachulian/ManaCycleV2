@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using Battle;
 
 public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
@@ -22,7 +21,7 @@ public class PostGameMenuUI : MonoBehaviour {
     }
 
 
-    public void SetAssets(BattlerScriptableObject winnerBattler)
+    public void SetAssets(Battler winnerBattler)
     {
         if (winnerBattler) {
             battlerPortrait.sprite = winnerBattler.sprite;

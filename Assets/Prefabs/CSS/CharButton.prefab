@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5741903359011555579}
   - component: {fileID: 4291107701405824904}
   - component: {fileID: 4714840542947755102}
+  - component: {fileID: 8306813929245965498}
   - component: {fileID: 2460426438468424170}
   m_Layer: 5
   m_Name: CharButton
@@ -91,6 +92,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e77e1b41b6f954cb1d3b942485ac0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battler: {fileID: 568879115367386083, guid: 6304ee0eb7a2ca54c86e833e232f1062, type: 3}
+  charImage: {fileID: 3133530173438020218}
+  gradient: {fileID: 8789900273337146480}
+--- !u!114 &8306813929245965498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287998416656725606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -101,12 +117,12 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.23137255, g: 0.6862745, b: 0.9647059, a: 1}
-    m_PressedColor: {r: 0.13725491, g: 0.30980393, b: 0.5568628, a: 1}
-    m_SelectedColor: {r: 0.8666667, g: 0.4862745, b: 0.4862745, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.07
+    m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -119,13 +135,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6317928739061364117}
+  m_TargetGraphic: {fileID: 4291107701405824904}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
-  battler: {fileID: 11400000, guid: 808f26159863848d2be4d566709a387a, type: 2}
-  charImage: {fileID: 3133530173438020218}
-  gradient: {fileID: 8789900273337146480}
 --- !u!114 &2460426438468424170
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -158,7 +158,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: edcb16772958c0241bf23d3f331ff59c, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: c0c194afc2c9a9c448b2842a90139246, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.02745098
@@ -1893,7 +1893,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: 8436eff51d1c0ba46acb1cd44b7838a4, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 2b5836f02f78d4e49b71dc088b17dc00, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.101960786
@@ -2390,7 +2390,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: 3173dff97c2cf0b40a51ac27d8584dcc, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 19006de198c391d4bb1430b32289ac07, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.5176471
@@ -2541,7 +2541,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: 9ad7016868fa32b4f9de97945445cc70, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 8de844f6019514e4e93697c12c63405a, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.13725491
@@ -3134,7 +3134,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: 235939d6378ef1b409dfec3b5f186654, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: ed06c07535ef9194cad9e752a8bbfd31, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0
@@ -3366,7 +3366,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: 1432c017534373d499c689f0eef0accb, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 22c2e120207dd9a45b783c1bd472711b, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0
@@ -4220,7 +4220,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: de522e1d813bf96438ccac5d82888171, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 3b799f8e45a56c5458712045cf57ed27, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.2627451
@@ -5202,7 +5202,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: cfd3f097c2fa70347b5372c0d73efece, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 761cbfbc13d07e34e94606dd54c88de5, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.31764707
@@ -5418,7 +5418,7 @@ PrefabInstance:
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: battler
       value: 
-      objectReference: {fileID: 11400000, guid: ecf1bc4b4166b1d4eac916f703352a01, type: 2}
+      objectReference: {fileID: 568879115367386083, guid: 63363269c06935742b17722ce60122e0, type: 3}
     - target: {fileID: 4714840542947755102, guid: 3e0b51f577bfdad4884089fd64dd7f79, type: 3}
       propertyPath: m_Colors.m_PressedColor.b
       value: 0.3882353

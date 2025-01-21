@@ -1,5 +1,4 @@
 using System;
-using Battle;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -54,7 +53,7 @@ public class Player : NetworkBehaviour {
     /// Note: this is not netwok synchronized, but the value is set by CharSelect
     /// before the game is started, and this value is read in the Battle scene.
     /// </summary>
-    public BattlerScriptableObject battler;
+    public Battler battler;
 
 
     /// <summary>

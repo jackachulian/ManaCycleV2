@@ -1,5 +1,4 @@
 using UnityEngine;
-using Battle;
 using UnityEngine.SceneManagement;
 
 // ties multiple systems in the CSS together
@@ -121,7 +120,7 @@ public class CharSelectManager : MonoBehaviour
     /// Returns the battler with the given ID found on the char button list, 
     /// or null if there is no battler with that ID, or ID id empty/null.
     /// </summary>
-    public BattlerScriptableObject GetBattlerByIndex(int index) {
+    public Battler GetBattlerByIndex(int index) {
         return charButtonList.GetBattlerByIndex(index);
     }
 

@@ -1,4 +1,3 @@
-using Battle;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -171,7 +170,7 @@ public class BoardUI : MonoBehaviour {
         }
     }
 
-    public void ShowBattler(BattlerScriptableObject battler) {
+    public void ShowBattler(Battler battler) {
         if (battler) {
             portraitSpriteRenderer.sprite = battler.sprite;
         } else {

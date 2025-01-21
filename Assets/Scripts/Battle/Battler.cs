@@ -25,7 +25,7 @@ public class Battler : MonoBehaviour {
 
     // used for the char select icon
     [SerializeField] private Material _gradientMat;
-    public Material gradientMat => gradientMat;
+    public Material gradientMat => _gradientMat;
 
 
     // colors used in various ui

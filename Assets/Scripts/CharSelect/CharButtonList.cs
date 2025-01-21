@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using Battle;
 using UnityEngine;
 
 public class CharButtonList : MonoBehaviour {
     /// <summary>
     /// Maps battlerIDs to battlers found on CharButtons that are children of this object
     /// </summary>
-    private List<BattlerScriptableObject> battlers;
+    private List<Battler> battlers;
 
     private void Awake() {
-        battlers = new List<BattlerScriptableObject>();
+        battlers = new List<Battler>();
         for (int i = 0; i < transform.childCount; i++) {
             CharButton charButton = transform.GetChild(i).GetComponent<CharButton>();
             if (charButton) {
@@ -19,7 +18,7 @@ public class CharButtonList : MonoBehaviour {
         }
     }
 
-    public BattlerScriptableObject GetBattlerByIndex(int index) {
+    public Battler GetBattlerByIndex(int index) {
         if (index >= 0) {
             return battlers[index];
         } else {
