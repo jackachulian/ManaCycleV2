@@ -223,16 +223,16 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     bool IsValidPlacement(ManaPiece piece) {
         for (int i = 0; i < piece.tiles.Length; i++) {
-            Vector2Int piecePosition = piece.position + piece.GetPieceTilePosition(i);
+            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
-            if (!board.manaTileGrid.IsInBounds(piecePosition)) {
+            if (!board.manaTileGrid.IsInBounds(boardPosition)) {
                 return false;
             }
 
             // If any tile in the piece intersects another tile, return false
             // (If value is not null, there is a tile there)
-            if (board.manaTileGrid.HasTile(piecePosition)) {
+            if (board.manaTileGrid.HasTile(boardPosition)) {
                 return false;
             }
         }

@@ -48,10 +48,11 @@ public class TileUtility {
     /// Perform gravity on the tile at the given position on the passed tile grid.
     /// </summary>
     /// <param name="position">the position of the tile on the grid to fall</param>
-    public static void TileGravity(Vector2Int position, ref ManaTile[,] tileGrid, bool animateFall = false) {
+    /// <returns>the new row of the tile</returns>
+    public static int TileGravity(Vector2Int position, ref ManaTile[,] tileGrid, bool animateFall = false, bool setBoardPosition = true, bool setPosition = false) {
         // if null, no tile here
         ManaTile tile = tileGrid[position.x, position.y];
-        if (tile == null) return;
+        if (tile == null) return position.y;
 
         // While the tile is above the bottom of the board, keep falling
         while (position.y > 0) {
@@ -68,7 +69,13 @@ public class TileUtility {
 
         // if tile fell at all, animate its fall position to the new position
         if (position.y != tile.position.y) {
-            tile.SetBoardPosition(position, animateFall);
+            if (animateFall) {
+                tile.SetBoardPosition(position, true);
+            } else if (setBoardPosition) {
+                tile.SetBoardPosition(position, false);
+            }
         }
+
+        return position.y;
     }
 }

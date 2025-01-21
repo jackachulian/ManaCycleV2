@@ -74,7 +74,12 @@ public class ManaTile : MonoBehaviour
         this.isFadeGlowing = isFadeGlow;
     }
 
-    public void UpdateVisuals(ManaCosmetics manaCosmetics = null)
+    /// <summary>
+    /// Updates ALL things about how this mana looks based on all its current properties.
+    /// </summary>
+    /// <param name="manaCosmetics">cosmetics to get materials from. defaults to BattleManager instance's cosmetics if not provided</param>
+    /// <param name="board">The board. Only needed if this tile will be fade glowed, which is most tiles within a battle.</param>
+    public void UpdateVisuals(ManaCosmetics manaCosmetics = null, Board board = null)
     {
         // if no mana cosmetics passed in parameters, default to the battlemanager's mana cosmetics
         if (!manaCosmetics) manaCosmetics = BattleManager.Instance.cosmetics;
@@ -82,7 +87,7 @@ public class ManaTile : MonoBehaviour
 
         if (isFadeGlowing)
         {
-            renderer.material = BattleManager.Instance.fadeGlowMaterials[color];
+            renderer.material = board.fadeGlowMaterials[color];
         }
         else
         {

@@ -63,7 +63,7 @@ public class GhostPieceManager : MonoBehaviour {
             ghostTile.SetColor(currentPiece.tiles[i].color);
             ghostTile.SetGhost(true);
             ghostTile.SetPulseGlow(false);
-            ghostTile.UpdateVisuals(BattleManager.Instance.cosmetics);
+            ghostTile.UpdateVisuals(board: board);
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
             ghostTile.transform.localScale = Vector3.one;
         }
@@ -110,7 +110,7 @@ public class GhostPieceManager : MonoBehaviour {
                 if (tile)
                 {
                     tile.SetPulseGlow(false);
-                    tile.UpdateVisuals();
+                    tile.UpdateVisuals(board: board);
                 }
             }
         }
@@ -173,7 +173,7 @@ public class GhostPieceManager : MonoBehaviour {
                 {
                     ManaTile glowTile = simulatedTileGrid[glowPosition.x, glowPosition.y];
                     glowTile.SetPulseGlow(true);
-                    glowTile.UpdateVisuals();
+                    glowTile.UpdateVisuals(board: board);
                 }
             }
         }

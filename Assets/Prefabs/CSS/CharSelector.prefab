@@ -244,8 +244,10 @@ MonoBehaviour:
   connectedTextColor: {r: 1, g: 1, b: 1, a: 1}
   unconnectedTextColor: {r: 0.69803923, g: 0.69803923, b: 0.69803923, a: 0.7176471}
   connectedBackgroundColor: {r: 1, g: 0.1254902, b: 0.2509804, a: 0.1254902}
+  connectedCpuBackgroundColor: {r: 0.735849, g: 0.7205767, b: 0.7205767, a: 0.1764706}
   unconnectedBackgroundColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 0.043137256}
   _cursorColor: {r: 1, g: 0, b: 0.14349794, a: 1}
+  _cpuCursorColor: {r: 0.6150943, g: 0.6150943, b: 0.6150943, a: 1}
   optionsWindow: {fileID: 1730388420128806697}
   readyWindow: {fileID: 638437921144066801}
   optionsFirstSelected: {fileID: 6839772303263979861}

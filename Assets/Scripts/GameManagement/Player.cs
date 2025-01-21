@@ -255,11 +255,6 @@ public class Player : NetworkBehaviour {
     public void OnCharacterChosenChanged(bool previous, bool current) {
         if (selector) {
             selector.ui.UpdateReadinessStatus();
-            if (!previous && current) {
-                selector.ui.cursor.animator.SetTrigger("Select");
-            } else if (previous && !current) {
-                selector.ui.cursor.animator.SetTrigger("Hover");
-            }
         }
     }
 

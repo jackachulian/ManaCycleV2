@@ -165,9 +165,9 @@ public class SpellcastManager : MonoBehaviour {
 
     void SpellcastMaterialUpdate()
     {
-        for (int i = 0; i < BattleManager.Instance.fadeGlowMaterials.Length; i++)
+        for (int i = 0; i < board.fadeGlowMaterials.Length; i++)
         {
-            Material fadeGlowMaterial = BattleManager.Instance.fadeGlowMaterials[i];
+            Material fadeGlowMaterial = board.fadeGlowMaterials[i];
             float litAmount = Mathf.Clamp01(Mathf.InverseLerp(0, chainDelay, timeSinceLastClear));
             fadeGlowMaterial.SetFloat("_LitAmount", litAmount);
         }
@@ -346,7 +346,7 @@ public class SpellcastManager : MonoBehaviour {
                     // only fade if in a blob while spellcasting
                     var blob = blobGrid[x, y];
                     tile.SetFadeGlow(spellcasting && blob != null && blob.Count >= minBlobSize && tile.color == GetCurrentCycleColor());
-                    tile.UpdateVisuals();
+                    tile.UpdateVisuals(board: board);
                 }
             }
         }
