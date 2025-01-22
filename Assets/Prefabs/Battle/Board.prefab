@@ -1007,7 +1007,7 @@ SpriteRenderer:
   m_FlipY: 0
   m_DrawMode: 2
   m_Size: {x: 0.8, y: 14.8}
-  m_AdaptiveModeThreshold: 0.406
+  m_AdaptiveModeThreshold: 1
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
@@ -1905,7 +1905,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6842593806738330241}
-  - component: {fileID: 5735120754880867882}
   - component: {fileID: 4221969516890822177}
   m_Layer: 0
   m_Name: SpBar
@@ -1929,19 +1928,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7236830754801714275}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5735120754880867882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2334240332915690564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69de2ca932490ec4aae1be0b20acd2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthNumberLabel: {fileID: 0}
 --- !u!212 &4221969516890822177
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7266,6 +7252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8607579158365053989}
+  - component: {fileID: 5924210782890008481}
   m_Layer: 0
   m_Name: Spells
   m_TagString: Untagged
@@ -7295,6 +7282,29 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 3.5, y: 5.25}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &5924210782890008481
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313066909000012245}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 689461535
+  m_SortingOrder: 3
+  m_TargetDisplay: 0
 --- !u!1 &3495015278262022689
 GameObject:
   m_ObjectHideFlags: 0
@@ -10332,7 +10342,6 @@ GameObject:
   - component: {fileID: 868628082099897598}
   - component: {fileID: 1092589135903430060}
   - component: {fileID: 6310595531198502428}
-  - component: {fileID: 6916041602954914970}
   m_Layer: 0
   m_Name: SpellMenu
   m_TagString: Untagged
@@ -10437,29 +10446,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!223 &6916041602954914970
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7978511692903109175}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 689461535
-  m_SortingOrder: 3
-  m_TargetDisplay: 0
 --- !u!1 &8512564108930165466
 GameObject:
   m_ObjectHideFlags: 0

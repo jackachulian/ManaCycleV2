@@ -29,7 +29,7 @@ public class SpellMenuUI : MonoBehaviour
     public void UpdateUI() {
         if (spNumberLabel) spNumberLabel.text = board.spellManager.sp + "";
 
-        float spPercentage = board.spellManager.sp / board.spellManager.maxSp;
+        float spPercentage = 1.0f*board.spellManager.sp / board.spellManager.maxSp;
 
         spBarMaterial.SetFloat("_HpPercentage", spPercentage);
     }

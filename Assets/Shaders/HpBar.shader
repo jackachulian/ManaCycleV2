@@ -9,6 +9,7 @@ Shader "ManaCycle/Unlit/HPBarShader"
         _DamageEndColor ("Damage End Color", Color) = (1, 0.25, 0, 1)
         _DamageFinalColor ("Damage Final Color", Color) = (1, 0, 0, 1)
         _HpPercentage ("Current HP Percentage", Float) = 0.6
+        _Height ("Height", Float) = 15
     }
     SubShader
     {
@@ -35,6 +36,7 @@ Shader "ManaCycle/Unlit/HPBarShader"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float3 objPos : TEXCOORD1;
             };
 
             sampler2D _MainTex;
@@ -46,6 +48,7 @@ Shader "ManaCycle/Unlit/HPBarShader"
             fixed4 _DamageFinalColor;
             float _HpPercentage;
             float _IncomingDamage[6] = {0, 0.02, 0, 0.1, 0.05, 0.3};
+            float _Height;
 
             v2f vert(appdata v)
             {
@@ -53,19 +56,22 @@ Shader "ManaCycle/Unlit/HPBarShader"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.uv = v.uv;
+                o.objPos = v.vertex;
                 return o;
             }
 
             fixed4 frag(v2f _i) : SV_Target
             {
                 fixed4 baseCol = tex2D(_MainTex, _i.uv);
-                float yUV = _i.uv.y;
-                fixed4 hpBarColor = (yUV <= _HpPercentage) ? _HpColor : _BackColor;
+                float y = (_i.objPos.y / _Height) + 0.5;
+                // return fixed4(y-0.5,y-0.5,y-0.5,1.0);
+
+                fixed4 hpBarColor = (y <= _HpPercentage) ? _HpColor : _BackColor;
 
                 float totalDamage = 0;
                 for (int i = 5; i >= 0; i--) {
                     totalDamage += _IncomingDamage[i];
-                    if (yUV <= _HpPercentage && yUV > _HpPercentage - totalDamage) {
+                    if (y <= _HpPercentage && y > _HpPercentage - totalDamage) {
                         hpBarColor = (i == 5) ? _DamageFinalColor : lerp(_DamageStartColor, _DamageFinalColor, i/5.0);
                         break;
                     }
