@@ -236,25 +236,7 @@ public class SpellcastManager : MonoBehaviour {
         // another possible security improvement: 
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
         if (board.player && board.player.IsOwner) {
-            int playerCount = GameManager.Instance.playerManager.players.Count;
-            int otherLivingBoardCount = 0;
-            for (int i = 0; i < playerCount; i++) {
-                Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
-                if (otherBoard != board && otherBoard.boardActive) {
-                    // todo: when teams mode is added, only track/deal damage to board if different team
-                    otherLivingBoardCount += 1;
-                }
-            }
-
-            int damagePerBoard = damage / Math.Max(otherLivingBoardCount, 1);
-            for (int i = 0; i < playerCount; i++) {
-                Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
-                if (otherBoard != board && otherBoard.boardActive) {
-                    // Send to the other board for them to enqueue themselves so it is synchronized and order-guaranteed 
-                    // with their health changing events such as spellcasting.
-                    otherBoard.player.boardNetworkBehaviour.EnqueueDamageRpc(damagePerBoard);
-                }
-            }
+            board.healthManager.DealDamageToAllOtherBoards(damage);
         } else {
             // check actual (received) value if present, wait for it if not
             // and then compare it against expected damage (the local damage variable)

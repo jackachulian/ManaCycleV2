@@ -75,12 +75,15 @@ public class ManaTileGrid : MonoBehaviour {
     /// Clear the tile at the given position, if there is one there.
     /// </summary>
     /// <param name="position"></param>
-    /// <param name=""></param>
-    public void ClearTile(Vector2Int position) {
+    /// <returns>true if a tile was here and it was cleared</returns>
+    public bool ClearTile(Vector2Int position) {
+        if (!HasTile(position)) return false;
+
         ManaTile tile = tileGrid[position.x, position.y];
         _tileGrid[position.x, position.y] = null;
         TileClearedNotifier.Invoke(tile.transform.position, tile.color);
         Destroy(tile.gameObject);
+        return true;
     }
 
     public void TileGravity(Vector2Int position) {

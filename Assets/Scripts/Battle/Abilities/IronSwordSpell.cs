@@ -4,11 +4,14 @@ public class IronSwordSpell : Spell
 {
     public ManaPiece piecePrefab;
 
+    [SerializeField] private int damagePerTileCleared = 20;
+
     public override void Use(Board board)
     {
         var piece = Instantiate(piecePrefab);
 
         piece.onVisualPositionUpdated += OnVisualPositionUpdated;
+        piece.onPlaced += OnPiecePlaced;
 
         board.pieceManager.ReplaceCurrentPiece(piece);
     }
@@ -25,5 +28,18 @@ public class IronSwordSpell : Spell
                 tile.UpdateVisuals(board: board);
             }
         }
+    }
+
+    void OnPiecePlaced(ManaPiece piece) {
+        int tilesCleared = 0;
+
+        // Clear all tiles in the target column
+        for (int y = 0; y < board.manaTileGrid.height; y++)
+        {
+            bool cleared = board.manaTileGrid.ClearTile(new Vector2Int(piece.position.x, y));
+            if (cleared) tilesCleared++;
+        }
+
+        board.healthManager.DealDamageToAllOtherBoards(tilesCleared * damagePerTileCleared);
     }
 }
