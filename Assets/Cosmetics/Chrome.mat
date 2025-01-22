@@ -12,7 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _SHAPE_SQUARE
+  - _SHAPE_STAR
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -65,8 +65,8 @@ Material:
     - _PulseGlowFrequency: 3
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SHAPE: 0
-    - _ShapeSize: 0.425
+    - _SHAPE: 5
+    - _ShapeSize: 0.39
     - _ZWrite: 0
     m_Colors:
     - _BorderColor: {r: 0.4466002, g: 0.46614057, b: 0.49056602, a: 1}
