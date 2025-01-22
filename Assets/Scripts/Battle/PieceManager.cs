@@ -58,7 +58,7 @@ public class PieceManager : MonoBehaviour {
     public void InitializeBattle(Board board) {
         this.board = board;
 
-        SpawnNewPiece();
+        SpawnNextPiece();
     }
 
     // Update is called once per frame
@@ -121,6 +121,8 @@ public class PieceManager : MonoBehaviour {
         var prevPosition = position;
         var prevRotation = rotation;
 
+        board.ghostPieceManager.UnglowAllTiles();
+
         currentPiece.position = position;
         currentPiece.rotation = rotation;
         currentPiece.UpdateVisualPositions();
@@ -148,6 +150,12 @@ public class PieceManager : MonoBehaviour {
             currentPiece.position -= offset;
             return false;
         }
+
+        if (offset.x != 0)
+        {
+            board.ghostPieceManager.UnglowAllTiles();
+        }
+        
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
@@ -201,6 +209,8 @@ public class PieceManager : MonoBehaviour {
             }
         }
 
+        board.ghostPieceManager.UnglowAllTiles();
+
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
 
@@ -223,16 +233,16 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     bool IsValidPlacement(ManaPiece piece) {
         for (int i = 0; i < piece.tiles.Length; i++) {
-            Vector2Int piecePosition = piece.position + piece.GetPieceTilePosition(i);
+            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
 
             // If any tile in the piece is out of bounds return false
-            if (!board.manaTileGrid.IsInBounds(piecePosition)) {
+            if (!board.manaTileGrid.IsInBounds(boardPosition)) {
                 return false;
             }
 
             // If any tile in the piece intersects another tile, return false
             // (If value is not null, there is a tile there)
-            if (board.manaTileGrid.HasTile(piecePosition)) {
+            if (board.manaTileGrid.HasTile(boardPosition)) {
                 return false;
             }
         }
@@ -247,11 +257,14 @@ public class PieceManager : MonoBehaviour {
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
         board.ghostPieceManager.DestroyGhostPiece();
-        board.healthManager.AdvanceDamageQueue();
+        currentPiece = null;
+
         onPiecePlaced?.Invoke();
+
+        board.healthManager.AdvanceDamageQueue();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
 
-        SpawnNewPiece();
+        SpawnNextPiece();
 
 
         // If the newly spawned piece is in an invalid position, player has topped out
@@ -269,18 +282,8 @@ public class PieceManager : MonoBehaviour {
     /// <param name="piece">the piece to place</param>
     /// <param name="spawnNewPieceAfter">whether or not a new piece should be spawned immediately after the current one is placed</param>
     void PlacePiece(ManaPiece piece) {
-        Vector2Int[] placePositions = new Vector2Int[piece.tiles.Length];
-
-        // Convert the position space of all tiles from piece-relative to board-relative (apply position and rotation)
-        // and reparent the mana tiles to this board
-        for (int i = 0; i < piece.tiles.Length; i++) {
-            ManaTile tile = piece.tiles[i];
-            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
-            placePositions[i] = boardPosition;
-            board.manaTileGrid.PlaceTile(tile, boardPosition);
-            tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
-            tile.SetBoardPosition(boardPosition, false); // no animation; fall animation will perform the animation
-        }
+        // Place pieces' tiles on the mana tile grid based on the piece position and orientation
+        Vector2Int[] placePositions = piece.PlaceTilesOnBoard(board);
 
         // Destroy piece container that is no longer needed
         Destroy(piece.gameObject);
@@ -299,9 +302,22 @@ public class PieceManager : MonoBehaviour {
     /// Is called after the current piece is placed.
     /// Replaces the current piece with the next piece from the upcomingpieces list.
     /// </summary>
-    public void SpawnNewPiece() {
+    public void SpawnNextPiece() {
         // TODO: grab the new piece from the upcoming pieces list
-        currentPiece = board.upcomingPieces.PopNextPiece();
+        var nextPiece = board.upcomingPieces.PopNextPiece();
+        SpawnPiece(nextPiece);
+    }
+
+    /// <summary>
+    /// Make the piece the current piece and start dropping it on the board.
+    /// </summary>
+    /// <param name="piece"></param>
+    public void SpawnPiece(ManaPiece piece) {
+        if (currentPiece != null) {
+            Debug.LogWarning("A piece was spawned while another piece was currently spawned. Make sure you destroy the old piece first!");
+        }
+
+        currentPiece = piece;
 
         // parent the next piece onto the board so the player can see it
         currentPiece.transform.SetParent(board.manaTileGrid.manaTileTransform);
@@ -310,12 +326,27 @@ public class PieceManager : MonoBehaviour {
         // spawn position will be the top row, middle column of the board
         Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
         currentPiece.position = spawnPos;
+
+        board.ghostPieceManager.UnglowAllTiles();
+
         currentPiece.UpdateVisualPositions();
 
+        // TODO: listen for onPieceSpawned in ghostPieceManager instead of calling here
         board.ghostPieceManager.CreateGhostPiece();
 
+        // TODO: listen for onPieceSpawned in upcomingPieces instead of calling here
         board.upcomingPieces.UpdatePieceListUI();
 
         onPieceSpawned?.Invoke();
+    }
+
+    /// <summary>
+    /// Will destroy / discard the current piece, and replace it with the passed piece.
+    /// </summary>
+    public void ReplaceCurrentPiece(ManaPiece piece) {
+        Destroy(currentPiece.gameObject);
+        board.ghostPieceManager.DestroyGhostPiece();
+        currentPiece = null;
+        SpawnPiece(piece);
     }
 }

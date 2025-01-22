@@ -1,17 +1,17 @@
 using UnityEngine;
-using Battle;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using Unity.Netcode;
 
-public class CharButton : Button, ICursorHoverable, ICursorPressable
+public class CharButton : MonoBehaviour, ICursorHoverable, ICursorPressable
 {
     [SerializeField] public Battler battler;
     [SerializeField] private Image charImage;
     [SerializeField] private Image gradient;
 
     
+    private Button button;
 
     /// <summary>
     /// Assigned by CharButtonList. Used to tell other clients that this character in the list was selected.
@@ -19,18 +19,18 @@ public class CharButton : Button, ICursorHoverable, ICursorPressable
     public int index {get; set;}
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-        
+        button = GetComponent<Button>();
+
         charImage.sprite = battler.sprite;
         charImage.GetComponent<RectTransform>().anchoredPosition = battler.portraitOffset;
         gradient.material = battler.gradientMat;
 
-        ColorBlock newColors = colors;
+        ColorBlock newColors = button.colors;
         newColors.highlightedColor = battler.mainColor;
         newColors.pressedColor = battler.altColor;
-        colors = newColors;
+        button.colors = newColors;
     }
 
     public void OnCursorHovered(Player player)

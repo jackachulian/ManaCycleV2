@@ -1,3 +1,4 @@
+using System;
 using Unity.Collections;
 using UnityEngine;
 
@@ -25,6 +26,18 @@ public class ManaPiece : MonoBehaviour
     public int rotation;
 
     /// <summary>
+    /// Event that should be invoked whenever the piece is (successfully) moved by a board, either by column change or quickfall.
+    /// </summary>
+    public event Action<ManaPiece> onVisualPositionUpdated;
+
+    /// <summary>
+    /// Event invoked when this piece is placed by a board's piecemanager, 
+    /// after this piece's tiles are placed onto the board, but before this piece is destroyed.
+    /// Can be listened to by ability-driven pieces, such as z?man's mini z?man.
+    /// </summary>
+    public event Action<ManaPiece> onPlaced;
+
+    /// <summary>
     /// Moves each tile in this piece to the correct position based on position and rotation.
     /// </summary>
     public void UpdateVisualPositions() {
@@ -35,6 +48,8 @@ public class ManaPiece : MonoBehaviour
             Vector2Int tilePosition = GetPieceTilePosition(i);
             tile.transform.localPosition = new Vector2(tilePosition.x, tilePosition.y);
         }
+
+        onVisualPositionUpdated?.Invoke(this);
     }
 
     /// <summary>
@@ -55,5 +70,31 @@ public class ManaPiece : MonoBehaviour
             default: // 0 degrees
                 return new Vector2Int(tile.position.x, tile.position.y);
         }
+    }
+
+    /// <summary>
+    /// Place tiles onto the given board's mana tile grid.
+    /// Note that this does not apply gravity.
+    /// </summary>
+    /// <returns>all positions a tile was placed in</returns>
+    public Vector2Int[] PlaceTilesOnBoard(Board board)
+    {
+        Vector2Int[] placePositions = new Vector2Int[tiles.Length];
+
+        // Convert the position space of all tiles from piece-relative to board-relative (apply position and rotation)
+        // and reparent the mana tiles to this board
+        for (int i = 0; i < tiles.Length; i++)
+        {
+            ManaTile tile = tiles[i];
+            Vector2Int boardPosition = position + GetPieceTilePosition(i);
+            placePositions[i] = boardPosition;
+            board.manaTileGrid.PlaceTile(tile, boardPosition);
+            tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
+            tile.SetBoardPosition(boardPosition, false); // no animation; fall animation will perform the animation
+        }
+
+        onPlaced?.Invoke(this);
+
+        return placePositions;
     }
 }

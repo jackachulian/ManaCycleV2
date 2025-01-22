@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Battle;
 using UnityEngine;
 
 public class CharButtonList : MonoBehaviour {

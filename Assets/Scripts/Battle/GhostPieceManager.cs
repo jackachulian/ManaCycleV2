@@ -31,6 +31,8 @@ public class GhostPieceManager : MonoBehaviour {
     /// </summary>
     private List<Vector2Int>[,] simulatedBlobGrid;
 
+    [SerializeField] private ManaTile ghostTilePrefab;
+
     /// <summary>
     /// Initialize the battle.
     /// Is initialized after UpcomingPieceList so that the first piece can be spawned on initialization.
@@ -58,12 +60,12 @@ public class GhostPieceManager : MonoBehaviour {
         ghostTiles = new ManaTile[currentPiece.tiles.Length];
 
         for (int i = 0; i < ghostTiles.Length; i++) {
-            ManaTile ghostTile = Instantiate(currentPiece.tiles[i]);
+            ManaTile ghostTile = Instantiate(ghostTilePrefab);
             ghostTiles[i] = ghostTile;
             ghostTile.SetColor(currentPiece.tiles[i].color);
             ghostTile.SetGhost(true);
             ghostTile.SetPulseGlow(false);
-            ghostTile.UpdateVisuals(BattleManager.Instance.cosmetics);
+            ghostTile.UpdateVisuals(board: board);
             ghostTile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
             ghostTile.transform.localScale = Vector3.one;
         }
@@ -87,12 +89,12 @@ public class GhostPieceManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Should be called whenever the board's current piece changes columns or rotates. 
-    /// Rebuilds the ghost blob.
-    /// Only required when row of tiles of the piece change, because pieces will land in the same columns regardless of the current row.
+    /// Called BEFORE the position of the piece changes.
+    /// In between ths being called and piece moving and UpdateGhostPiece,
+    /// certain ability functions may be called that glow certain tiles based on the placement of the piece (i.e. pieces that target a whole column.
+    /// So, call this here so that those tiles aren't unglowed after the ability glows the tiles, but before the ghost piece is updated.
     /// </summary>
-    public void UpdateGhostPiece() {
-        // Unglow all currently glowed tiles from the last piece update
+    public void UnglowAllTiles() {
         for (int y = 0; y < board.manaTileGrid.height; y++)
         {
             for (int x = 0; x < board.manaTileGrid.width; x++)
@@ -101,9 +103,25 @@ public class GhostPieceManager : MonoBehaviour {
                 if (tile)
                 {
                     tile.SetPulseGlow(false);
-                    tile.UpdateVisuals();
+                    tile.UpdateVisuals(board: board);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Should be called whenever the board's current piece changes columns or rotates. 
+    /// Rebuilds the ghost blob.
+    /// Only required when row of tiles of the piece change, because pieces will land in the same columns regardless of the current row.
+    /// </summary>
+    public void UpdateGhostPiece() {
+        // Don't update a ghost piece unless there is a local player controlling this board,
+        // otherwise there will not be a ghost piece
+        if (!board.player || !board.player.IsOwner) return;
+
+        if (!IsShowingGhostTiles()) {
+            Debug.LogWarning("Trying to show ghost tiles, but there is no current ghost piece being managed!");
+            return;
         }
 
         // Set the ghost tile grid to a fresh copy of the current state of the actual mana tile grid
@@ -164,7 +182,7 @@ public class GhostPieceManager : MonoBehaviour {
                 {
                     ManaTile glowTile = simulatedTileGrid[glowPosition.x, glowPosition.y];
                     glowTile.SetPulseGlow(true);
-                    glowTile.UpdateVisuals();
+                    glowTile.UpdateVisuals(board: board);
                 }
             }
         }

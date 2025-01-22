@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using Battle;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.Serialization;
 using UnityEngine.InputSystem;
@@ -38,9 +37,12 @@ public class CharSelectorUI : MonoBehaviour
     [SerializeField] private Color connectedTextColor;
     [SerializeField] private Color unconnectedTextColor;
     [SerializeField] private Color connectedBackgroundColor;
+    // [SerializeField] private Color connectedCpuBackgroundColor;
     [SerializeField] private Color unconnectedBackgroundColor;
     [SerializeField] private Color _cursorColor;
     public Color cursorColor => _cursorColor;
+    // [SerializeField] private Color _cpuCursorColor;
+    // public Color cpuCursorColor => _cpuCursorColor;
 
 
     [Header("Menus")]
@@ -68,13 +70,18 @@ public class CharSelectorUI : MonoBehaviour
     /// <summary>
     /// Call this whenever a new player is assigned or a player is removed.
     /// </summary>
-    public void OnAssignedPlayer() {
+    public async void OnAssignedPlayer() {
         if (charSelector.player)  {
+            // background.color = charSelector.player.isCpu ? connectedCpuBackgroundColor : connectedBackgroundColor;
             background.color = connectedBackgroundColor;
             // Only enable the cursor if a locally owned player is controlling this char selector.
             if (charSelector.player.IsOwner) {
                 cursor.gameObject.SetActive(true);
-                cursor.SetPlayer(charSelector.player, cursorColor, charSelector.player.boardIndex.Value + 1);
+                // var currentCursorColor = charSelector.player.isCpu ? cpuCursorColor : cursorColor;
+                var currentCursorColor = cursorColor;
+                cursor.SetPlayer(charSelector.player, currentCursorColor, charSelector.player.boardIndex.Value + 1);
+            } else {
+                cursor.gameObject.SetActive(false);
             }
         } else {
             background.color = unconnectedBackgroundColor;
@@ -87,6 +94,10 @@ public class CharSelectorUI : MonoBehaviour
         UpdatePlayerName();
         UpdateSelectedBattler();
         UpdateReadinessStatus();
+
+        await Awaitable.NextFrameAsync();
+        await Awaitable.NextFrameAsync();
+        if (cursor.transform.position == Vector3.zero) cursor.SetPosition(charSelector.transform.position);
     }
 
     /// <summary>
@@ -162,6 +173,8 @@ public class CharSelectorUI : MonoBehaviour
 
         // Only check for cursor unlock if this player is on the local client, otherwise they won't use a cursor here if they are a remote player
         if (charSelector.player && charSelector.player.IsOwner) {
+            cursor.animator.SetBool("selected", charSelector.player.characterChosen.Value);
+
             // Cursor is only unlocked (moveable) if character not already selected
             if (!charSelector.player.characterChosen.Value) {
                 cursor.SetLocked(false);

@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &8472051197773932586
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 263696887875834022, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _gameLogo
+      value: 
+      objectReference: {fileID: 21300000, guid: 62812099e2b691a4784701a4b97d2c2b, type: 3}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _battlerId
+      value: romra
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _altColor.b
+      value: 0.09019609
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _altColor.g
+      value: 0.96862745
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _altColor.r
+      value: 0.42194954
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _displayName
+      value: Romra
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _gradientMat
+      value: 
+      objectReference: {fileID: 2100000, guid: 29ea05b4d37861b49b71d05ef5987113, type: 2}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _mainColor.b
+      value: 0.08914889
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _mainColor.g
+      value: 0.36477977
+      objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _mainColor.r
+      value: 0.026383411
+      objectReference: {fileID: 0}
+    - target: {fileID: 8338329736168297408, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_Name
+      value: Romra
+      objectReference: {fileID: 0}
+    - target: {fileID: 9166151475304982401, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c3286fb7c43d5d244ae5e543175b7c5f, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}

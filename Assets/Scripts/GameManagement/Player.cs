@@ -1,5 +1,4 @@
 using System;
-using Battle;
 using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Authentication;
@@ -55,6 +54,11 @@ public class Player : NetworkBehaviour {
     /// before the game is started, and this value is read in the Battle scene.
     /// </summary>
     public Battler battler;
+
+    /// <summary>
+    /// Player can equip up to 2 additional spells that are not their battler's Unique Spell.
+    /// </summary>
+    public Spell spell1, spell2;
 
 
     /// <summary>
@@ -255,11 +259,6 @@ public class Player : NetworkBehaviour {
     public void OnCharacterChosenChanged(bool previous, bool current) {
         if (selector) {
             selector.ui.UpdateReadinessStatus();
-            if (!previous && current) {
-                selector.ui.cursor.animator.SetTrigger("Select");
-            } else if (previous && !current) {
-                selector.ui.cursor.animator.SetTrigger("Hover");
-            }
         }
     }
 

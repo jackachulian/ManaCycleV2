@@ -45,6 +45,11 @@ public class Board : MonoBehaviour
     public HealthManager healthManager {get; private set;}
 
     /// <summary>
+    /// Handles building up SP and using spells.
+    /// </summary>
+    public SpellManager spellManager {get; private set;}
+
+    /// <summary>
     /// Handles the battler portrait sprite and any other board-specific visual elements on the board.
     /// </summary>
     public BoardUI ui {get; private set;}
@@ -77,6 +82,21 @@ public class Board : MonoBehaviour
     public Player player {get; private set;}
 
     /// <summary>
+    /// Index of this board in the layout.
+    /// Set by BoardLayout on its awake.
+    /// </summary>
+    public int boardIndex {get; set;}
+
+    /// <summary>
+    /// Materials used to display mana that is currently being cleared by a spellcast.
+    /// The LitAMount is animated over time based on spellcast values.
+    /// (Was moved from BattleManager to here because each board uses its own clear timing, oops.)
+    /// </summary>
+    public Material[] fadeGlowMaterials { get; private set; }
+
+    public Material chromeFadeGlowMaterial { get; private set; }
+
+    /// <summary>
     /// Cycle used only for this board. Only used in some layouts.
     /// </summary>
     [SerializeField] private ManaCycle _boardManaCycle;
@@ -103,6 +123,17 @@ public class Board : MonoBehaviour
         defeated = false;
         boardActive = false; // will be set to true after countdown reaches 0
 
+        // Generate fade glow materials
+        var cosmetics = BattleManager.Instance.cosmetics;
+        fadeGlowMaterials = new Material[cosmetics.manaVisuals.Length];
+        for (int i = 0; i < cosmetics.manaVisuals.Length; i++)
+        {
+            ManaVisual visual = cosmetics.manaVisuals[i];
+            fadeGlowMaterials[i] = new Material(visual.material);
+        }
+
+        chromeFadeGlowMaterial = new Material(cosmetics.chromeManaVisual.material);
+
         if (_boardManaCycle) _boardManaCycle.InitializeBattle(battleManager);
 
         manaTileGrid = GetComponent<ManaTileGrid>();
@@ -111,6 +142,7 @@ public class Board : MonoBehaviour
         ghostPieceManager = GetComponent<GhostPieceManager>();
         pieceManager = GetComponent<PieceManager>();
         healthManager = GetComponent<HealthManager>();
+        spellManager = GetComponent<SpellManager>();
 
         ui.InitializeBattle(this);
         manaTileGrid.InitializeBattle();
@@ -119,6 +151,7 @@ public class Board : MonoBehaviour
         ghostPieceManager.InitializeBattle(this);
         pieceManager.InitializeBattle(this);
         healthManager.InitializeBattle(this);
+        spellManager.InitializeBattle(this);
 
         if (!player) {
             ui.ShowBattler(null);
@@ -163,6 +196,8 @@ public class Board : MonoBehaviour
         } else {
             ui.ShowBattler(null);
         }
+
+        spellManager.OnPlayerAssigned();
     }
 
     public bool IsInitialized() {
@@ -177,7 +212,7 @@ public class Board : MonoBehaviour
         Debug.Log(this+" defeated!");
         boardActive = false;
         defeated = true;
-        onDefeat.Invoke();
+        onDefeat?.Invoke();
         ui.ShowLoseText();
         ui.StartDefeatFall();
     }

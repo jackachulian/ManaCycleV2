@@ -39,11 +39,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public ManaVisual[] pulseGlowManaVisuals { get; private set; }
 
-    /// <summary>
-    /// Materials used to display mana that is currently being cleared by a spellcast.
-    /// The LitAMount is animated over time based on spellcast values
-    /// </summary>
-    public Material[] fadeGlowMaterials { get; private set; }
+
+    public ManaVisual chromePulseGlowManaVisual { get; private set; }
 
     /// <summary>
     /// The L-shaped Triomino ManaPiece that will be duplicated, spawned, and color-changed on all boards
@@ -135,10 +132,16 @@ public class BattleManager : MonoBehaviour
     {
         // Generate the pulse-glow materials
         pulseGlowManaVisuals = new ManaVisual[cosmetics.manaVisuals.Length];
-        fadeGlowMaterials = new Material[cosmetics.manaVisuals.Length];
-        for (int i = 0; i < cosmetics.manaVisuals.Length; i++)
+        // fadeGlowMaterials = new Material[cosmetics.manaVisuals.Length]; <-- moved to board.cs
+        for (int i = -1; i < cosmetics.manaVisuals.Length; i++)
         {
-            ManaVisual visual = cosmetics.manaVisuals[i];
+            ManaVisual visual;
+            if (i == -1) {
+                visual = cosmetics.chromeManaVisual;
+            } else {
+                visual = cosmetics.manaVisuals[i];
+            }
+
             ManaVisual pulseGlowVisual = new ManaVisual();
 
             // TODO: probably should move this to somewhere in the battle cosmetics class, but too lazy rn
@@ -152,9 +155,13 @@ public class BattleManager : MonoBehaviour
             pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowAmplitude", 0.2f);
             pulseGlowVisual.ghostMaterial.SetFloat("_PulseGlowFrequency", 2f);
 
-            fadeGlowMaterials[i] = new Material(visual.material);
+            // fadeGlowMaterials[i] = new Material(visual.material); <-- moved to board.cs
 
-            pulseGlowManaVisuals[i] = pulseGlowVisual;
+            if (i == -1) {
+                chromePulseGlowManaVisual = pulseGlowVisual;
+            } else {
+                pulseGlowManaVisuals[i] = pulseGlowVisual;
+            }
         }
     }
 
@@ -264,20 +271,31 @@ public class BattleManager : MonoBehaviour
         // If no boards are alive, start the postgame, the one player was defeated
         if (livingBoards == 0) {
             gameCompleted = true;
-            PostGame(winner);
+            ServerStartPostGameAfterDelay(winner);
         }
 
         if (winner) {
             winner.Win();
             gameCompleted = true;
-            PostGame(winner);
+            ServerStartPostGameAfterDelay(winner);
         }
     }
 
     // Waits a bit and then show the postgame menu
-    public async void PostGame(Board winner) {
+    public async void ServerStartPostGameAfterDelay(Board winner) {
+        if (!NetworkManager.Singleton.IsServer) {
+            Debug.Log("This isn't the server - waiting for server to start the postgame menu");
+            return;
+        }
+
+        Debug.Log("Starting the postgame menu after delay as server");
+
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
+        gameStartNetworkBehaviour.PostgameMenuRpc(winner.boardIndex);
+    }
+
+    public void ClientStartPostGame(Board winner) {
         GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
         postGameMenuUI.ShowPostGameMenuUI(winner);
     }

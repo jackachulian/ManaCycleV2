@@ -1,25 +1,53 @@
-using System;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace Battle {
-    [CreateAssetMenu(fileName = "Battler", menuName = "ManaCycle/Battler")]
-    public class Battler : ScriptableObject {
-        [SerializeField] private string _battlerId;
-        public string battlerId => _battlerId;
+[ExecuteAlways]
+public class Battler : MonoBehaviour {
+    /// <summary>
+    /// Use this to grab the portraitOffset that should be applied in various areas of the game
+    /// </summary>
+    [SerializeField] private SpriteRenderer portraitSpriteRenderer;
 
-        [SerializeField] public string displayName;
 
-        [SerializeField] public Sprite sprite;
+    /// <summary>
+    /// The id this battler may be identified with by achievmeents, etc
+    /// </summary>
+    [SerializeField] private string _battlerId;
+    public string battlerId => _battlerId;
 
-        /// <summary>Offset of the portrait in the battle view</summary>
-        [SerializeField] public Vector2 portraitOffset;
 
-        // used for the attack popup gradients
-        [SerializeField] public Material gradientMat;
-        // colors for various ui designs
-        [SerializeField] public Color mainColor = Color.white;
-        [SerializeField] public Color altColor = Color.black;
-        // crossover logo for char select
-        [SerializeField] public Sprite gameLogo;
-    }
+    /// <summary>
+    /// name displayed on char select and other areas
+    /// </summary>
+    [SerializeField] private string _displayName; // TODO: localize
+    public string displayName => _displayName;
+
+
+    // used for the char select icon
+    [SerializeField] private Material _gradientMat;
+    public Material gradientMat => _gradientMat;
+
+
+    // colors used in various ui
+    [SerializeField] private Color _mainColor = Color.white;
+    public Color mainColor => _mainColor;
+
+    [SerializeField] private Color _altColor = Color.black;
+    public Color altColor => _altColor;
+
+
+    // crossover logo for char select
+    [SerializeField] private Sprite _gameLogo;
+    public Sprite gameLogo => _gameLogo;
+
+
+    /// <summary>
+    /// This battler's Unique Spell. only this battler can use this spell
+    /// </summary>
+    [SerializeField] private Spell _uniqueSpell;
+    public Spell uniqueSpell => _uniqueSpell;
+
+
+    public Vector2 portraitOffset => portraitSpriteRenderer.transform.localPosition;
+    public Sprite sprite => portraitSpriteRenderer.sprite;
 }

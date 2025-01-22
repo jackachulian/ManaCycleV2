@@ -165,9 +165,9 @@ public class SpellcastManager : MonoBehaviour {
 
     void SpellcastMaterialUpdate()
     {
-        for (int i = 0; i < BattleManager.Instance.fadeGlowMaterials.Length; i++)
+        for (int i = 0; i < board.fadeGlowMaterials.Length; i++)
         {
-            Material fadeGlowMaterial = BattleManager.Instance.fadeGlowMaterials[i];
+            Material fadeGlowMaterial = board.fadeGlowMaterials[i];
             float litAmount = Mathf.Clamp01(Mathf.InverseLerp(0, chainDelay, timeSinceLastClear));
             fadeGlowMaterial.SetFloat("_LitAmount", litAmount);
         }
@@ -222,11 +222,10 @@ public class SpellcastManager : MonoBehaviour {
         // Main damage formula
         int damage = (int)(totalMana * damagePerMana * chainMultiplier * cascadeMultiplier);
 
+        Debug.Log("total mana: " + totalMana + ", chain: " + currentChain + ", cascade: " + currentCascade + ", damage: " + damage + " (" + totalMana + "*" + damagePerMana + "*" + chainMultiplier + "*" + cascadeMultiplier + ")");
+
         // Counter incoming  (Method will return the amount of leftover damage after countering)
         // evaluate this on both clients here since it should happen at the same time as spellcast clear
-        damage = board.healthManager.CounterIncomingDamage(damage);
-        board.healthManager.UpdateHealthUI();
-
         // TODO: factor in how many boards are actually currently controlled, and split damage equally among them
         // for now just deal damage to all other boards.
         // (client decides how much damage it takes)
@@ -234,30 +233,13 @@ public class SpellcastManager : MonoBehaviour {
         // another possible security improvement: 
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
         if (board.player && board.player.IsOwner) {
-            int playerCount = GameManager.Instance.playerManager.players.Count;
-            int otherLivingBoardCount = 0;
-            for (int i = 0; i < playerCount; i++) {
-                Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
-                if (otherBoard != board && otherBoard.boardActive) {
-                    // todo: when teams mode is added, only track/deal damage to board if different team
-                    otherLivingBoardCount += 1;
-                }
-            }
-
-            int damagePerBoard = damage / Math.Max(otherLivingBoardCount, 1);
-            for (int i = 0; i < playerCount; i++) {
-                Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
-                if (otherBoard != board && otherBoard.boardActive) {
-                    // Send to the other board for them to enqueue themselves so it is synchronized and order-guaranteed 
-                    // with their health changing events such as spellcasting.
-                    otherBoard.player.boardNetworkBehaviour.EnqueueDamageRpc(damagePerBoard);
-                }
-            }
+            board.healthManager.DealDamageToAllOtherBoards(damage);
         } else {
             // check actual (received) value if present, wait for it if not
             // and then compare it against expected damage (the local damage variable)
         }
         
+        board.healthManager.UpdateHealthUI();
 
         board.manaTileGrid.AllTileGravity();
         RefreshBlobs();
@@ -346,7 +328,7 @@ public class SpellcastManager : MonoBehaviour {
                     // only fade if in a blob while spellcasting
                     var blob = blobGrid[x, y];
                     tile.SetFadeGlow(spellcasting && blob != null && blob.Count >= minBlobSize && tile.color == GetCurrentCycleColor());
-                    tile.UpdateVisuals();
+                    tile.UpdateVisuals(board: board);
                 }
             }
         }

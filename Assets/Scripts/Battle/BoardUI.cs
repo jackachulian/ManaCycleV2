@@ -1,4 +1,3 @@
-using Battle;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -55,6 +54,8 @@ public class BoardUI : MonoBehaviour {
     /// </summary>
     [SerializeField] private Transform cyclePointer;
 
+    [SerializeField] private TMP_Text cyclePointerLabel;
+
     /// <summary>
     /// Amount of units of offset to position the cycle pointer.
     /// </summary>
@@ -101,6 +102,8 @@ public class BoardUI : MonoBehaviour {
         this.board = board;
         board.pieceManager.onPiecePlaced += OnPiecePlaced;
         board.manaTileGrid.TileClearedNotifier += OnTileCleared;
+
+        cyclePointerLabel.text = "P" + (board.boardIndex + 1);
 
         cyclePointer.transform.SetParent(board.GetManaCycle().transform, true);
     }
@@ -212,12 +215,20 @@ public class BoardUI : MonoBehaviour {
 
     public void OnTileCleared(Vector2 position, int color)
     {
-        Color pieceCol = BattleManager.Instance.cosmetics.manaVisuals[color].material.GetColor("_InnerColor");
+        Color pieceColor;
+        if (color == -1)
+        {
+            pieceColor = BattleManager.Instance.cosmetics.chromeManaVisual.material.GetColor("_InnerColor");
+        } else
+        {
+            pieceColor = BattleManager.Instance.cosmetics.manaVisuals[color].material.GetColor("_InnerColor");
+        }
+        
         var colModule = particles.colorOverLifetime;
         // set particle color gradient
         colModule.color = new ParticleSystem.MinMaxGradient (
-            pieceCol, 
-            new Color(pieceCol.r, pieceCol.g, pieceCol.b, 0.0f)
+            pieceColor, 
+            new Color(pieceColor.r, pieceColor.g, pieceColor.b, 0.0f)
         );
         // play tile clear particles
         particles.transform.position = position;

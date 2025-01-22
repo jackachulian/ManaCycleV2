@@ -1,5 +1,4 @@
 using UnityEngine;
-using Battle;
 using UnityEngine.SceneManagement;
 
 // ties multiple systems in the CSS together

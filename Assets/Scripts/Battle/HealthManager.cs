@@ -45,6 +45,34 @@ public class HealthManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// Counter incoming damage first, and then deal damage to all other players via a network RPC if any is leftover.
+    /// </summary>
+    public void DealDamageToAllOtherBoards(int damage) {
+        damage = board.healthManager.CounterIncomingDamage(damage);
+        if (damage <= 0) return;
+
+        int playerCount = GameManager.Instance.playerManager.players.Count;
+        int otherLivingBoardCount = 0;
+        for (int i = 0; i < playerCount; i++) {
+            Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
+            if (otherBoard != board && otherBoard.boardActive) {
+                // todo: when teams mode is added, only track/deal damage to board if different team
+                otherLivingBoardCount += 1;
+            }
+        }
+
+        int damagePerBoard = damage / Mathf.Max(otherLivingBoardCount, 1);
+        for (int i = 0; i < playerCount; i++) {
+            Board otherBoard = BattleManager.Instance.GetBoardByIndex(i);
+            if (otherBoard != board && otherBoard.boardActive) {
+                // Send to the other board for them to enqueue themselves so it is synchronized and order-guaranteed 
+                // with their health changing events such as spellcasting.
+                otherBoard.player.boardNetworkBehaviour.EnqueueDamageRpc(damagePerBoard);
+            }
+        }
+    }
+
+    /// <summary>
     /// Counter incoming damage - closest to end of list first.
     /// Return the amount of leftover damage after countering, if any.
     /// </summary>

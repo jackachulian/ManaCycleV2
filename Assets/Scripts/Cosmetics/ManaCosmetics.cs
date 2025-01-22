@@ -9,6 +9,12 @@ public class ManaCosmetics : ScriptableObject
     /// 0=red, 1=green, 2=blue, 3=yellow, 4=purple
     /// </summary>
     public ManaVisual[] manaVisuals;
+
+    /// <summary>
+    /// Visual to use for chrome-colored mana, aka white, or counts as all colors. (color = -1)
+    /// The ghost tile is used for most ability tiles to show the drop position.
+    /// </summary>
+    public ManaVisual chromeManaVisual;
 }
 
 [System.Serializable]

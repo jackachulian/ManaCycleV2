@@ -12,7 +12,7 @@ public class CursorMovement : MonoBehaviour
     private Vector2 inputVector;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         rt = GetComponent<RectTransform>();
     }
@@ -30,6 +30,7 @@ public class CursorMovement : MonoBehaviour
     }
 
     public void SetPosition(Vector2 position) {
+        if (!rt) rt = GetComponent<RectTransform>();
         rt.position = new Vector2(Mathf.Clamp(position.x, 0, Screen.width), Mathf.Clamp(position.y, 0, Screen.height));
     }
 }

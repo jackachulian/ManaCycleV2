@@ -69,7 +69,7 @@ Material:
     - _ShapeSize: 0.48
     - _ZWrite: 0
     m_Colors:
-    - _BorderColor: {r: 0.5754717, g: 0.39437598, b: 0.046146322, a: 1}
+    - _BorderColor: {r: 0.49056602, g: 0.34673426, b: 0.026225192, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _InnerColor: {r: 1, g: 0.8589722, b: 0.15566039, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

@@ -23,3 +23,6 @@ MonoBehaviour:
     ghostMaterial: {fileID: 2100000, guid: 7182e9a2d98d9df4f89c5d9899c01df0, type: 2}
   - material: {fileID: 2100000, guid: 62811520065d07d4782d816a00aef644, type: 2}
     ghostMaterial: {fileID: 2100000, guid: 3f005847c931e16418c6e397e812416e, type: 2}
+  chromeManaVisual:
+    material: {fileID: 2100000, guid: 02a138a92caa781478af40f9359c7d17, type: 2}
+    ghostMaterial: {fileID: 2100000, guid: d8624733895da2d4ea35aafb66ab9cbe, type: 2}

@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using Battle;
 
 public class PostGameMenuUI : MonoBehaviour {
     public BattleManager battleManager;
