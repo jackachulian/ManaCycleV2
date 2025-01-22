@@ -226,9 +226,6 @@ public class SpellcastManager : MonoBehaviour {
 
         // Counter incoming  (Method will return the amount of leftover damage after countering)
         // evaluate this on both clients here since it should happen at the same time as spellcast clear
-        damage = board.healthManager.CounterIncomingDamage(damage);
-        board.healthManager.UpdateHealthUI();
-
         // TODO: factor in how many boards are actually currently controlled, and split damage equally among them
         // for now just deal damage to all other boards.
         // (client decides how much damage it takes)
@@ -242,6 +239,7 @@ public class SpellcastManager : MonoBehaviour {
             // and then compare it against expected damage (the local damage variable)
         }
         
+        board.healthManager.UpdateHealthUI();
 
         board.manaTileGrid.AllTileGravity();
         RefreshBlobs();

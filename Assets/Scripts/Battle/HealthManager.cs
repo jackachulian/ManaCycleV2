@@ -45,9 +45,12 @@ public class HealthManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// Deal damage to all other players via a network RPC.
+    /// Counter incoming damage first, and then deal damage to all other players via a network RPC if any is leftover.
     /// </summary>
     public void DealDamageToAllOtherBoards(int damage) {
+        damage = board.healthManager.CounterIncomingDamage(damage);
+        if (damage <= 0) return;
+
         int playerCount = GameManager.Instance.playerManager.players.Count;
         int otherLivingBoardCount = 0;
         for (int i = 0; i < playerCount; i++) {

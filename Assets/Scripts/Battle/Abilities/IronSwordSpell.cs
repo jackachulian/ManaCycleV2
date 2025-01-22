@@ -33,6 +33,9 @@ public class IronSwordSpell : Spell
     void OnPiecePlaced(ManaPiece piece) {
         int tilesCleared = 0;
 
+        // Clear the sword piece's center tile
+        board.manaTileGrid.ClearTile(new Vector2Int(piece.position.x, piece.position.y));
+
         // Clear all tiles in the target column
         for (int y = 0; y < board.manaTileGrid.height; y++)
         {
