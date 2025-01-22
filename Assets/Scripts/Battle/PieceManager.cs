@@ -247,8 +247,11 @@ public class PieceManager : MonoBehaviour {
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
         board.ghostPieceManager.DestroyGhostPiece();
-        board.healthManager.AdvanceDamageQueue();
+        currentPiece = null;
+
         onPiecePlaced?.Invoke();
+
+        board.healthManager.AdvanceDamageQueue();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
 
         SpawnNextPiece();
@@ -310,7 +313,7 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     /// <param name="piece"></param>
     public void SpawnPiece(ManaPiece piece) {
-        if (currentPiece) {
+        if (currentPiece != null) {
             Debug.LogWarning("A piece was spawned while another piece was currently spawned. Make sure you destroy the old piece first!");
         }
 

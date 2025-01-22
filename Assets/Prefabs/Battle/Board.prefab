@@ -6695,6 +6695,7 @@ MonoBehaviour:
   particles: {fileID: 3518572356797624652}
   particleAmount: {x: 1, y: 3}
   cyclePointer: {fileID: 4606163652366399523}
+  cyclePointerLabel: {fileID: 154273191557524765}
   cyclePointerOffset: 1.5
   boardSide: 0
   _chainPopup: {fileID: 7950609448219934011}

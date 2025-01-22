@@ -54,6 +54,8 @@ public class BoardUI : MonoBehaviour {
     /// </summary>
     [SerializeField] private Transform cyclePointer;
 
+    [SerializeField] private TMP_Text cyclePointerLabel;
+
     /// <summary>
     /// Amount of units of offset to position the cycle pointer.
     /// </summary>
@@ -100,6 +102,8 @@ public class BoardUI : MonoBehaviour {
         this.board = board;
         board.pieceManager.onPiecePlaced += OnPiecePlaced;
         board.manaTileGrid.TileClearedNotifier += OnTileCleared;
+
+        cyclePointerLabel.text = "P" + (board.boardIndex + 1);
 
         cyclePointer.transform.SetParent(board.GetManaCycle().transform, true);
     }

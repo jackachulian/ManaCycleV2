@@ -894,6 +894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _upcomingPieces: {fileID: 0}
+  _boardManaCycle: {fileID: 0}
 --- !u!1 &8579285534821548501
 GameObject:
   m_ObjectHideFlags: 0

@@ -69,7 +69,7 @@ public class AIPlayerInput : MonoBehaviour
     private bool spellcastNext = false;
 
     void Update() {
-        if (!board) return;
+        if (!board || !board.boardActive) return;
 
         timeUntilNextDecision -= Time.deltaTime;
         if (timeUntilNextDecision <= 0) {
@@ -130,7 +130,7 @@ public class AIPlayerInput : MonoBehaviour
         }
 
         // Try to rotate the piece if not already in target rotation.
-        else if (currentPiece.rotation != targetRotation) {
+        else if (currentPiece.rotation != targetRotation && rotationDirection != 0) {
             bool rotated = board.pieceManager.TryRotatePiece(rotationDirection);
 
             // If the tile could be rotated, this counts as the decision
