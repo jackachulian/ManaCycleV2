@@ -7118,6 +7118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a2dfced4b2da51448f7849bec7f53c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellMenuUI: {fileID: 1092589135903430060}
 --- !u!114 &8123279063529998444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7292,7 +7293,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 3.5, y: 5.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3495015278262022689
 GameObject:
@@ -10329,6 +10330,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 868628082099897598}
+  - component: {fileID: 1092589135903430060}
   - component: {fileID: 6310595531198502428}
   - component: {fileID: 6916041602954914970}
   m_Layer: 0
@@ -10360,8 +10362,26 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -6.25, y: -4.875}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 3.5, y: 5.25}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1092589135903430060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7978511692903109175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b166ab56cdd0a21479e38d22fa936f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spNumberLabel: {fileID: 8271466018079457529}
+  spellItems:
+  - {fileID: 5131338107838111005}
+  - {fileID: 6671156687782578783}
+  - {fileID: 2051922111066145672}
+  spBarRenderer: {fileID: 4221969516890822177}
 --- !u!212 &6310595531198502428
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11553,6 +11573,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
+--- !u!114 &5131338107838111005 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6982843405489903511, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
+  m_PrefabInstance: {fileID: 2872777347264285322}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6deae28ca5795c0428f84709ed2bf652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8016908195196783741 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5233147865662310135, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
@@ -11659,6 +11690,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
+--- !u!114 &6671156687782578783 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6982843405489903511, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
+  m_PrefabInstance: {fileID: 4358568259053100488}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6deae28ca5795c0428f84709ed2bf652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8422680168023350079 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5233147865662310135, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
@@ -12286,6 +12328,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
+--- !u!114 &2051922111066145672 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6982843405489903511, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}
+  m_PrefabInstance: {fileID: 8976218717096088607}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6deae28ca5795c0428f84709ed2bf652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3750952155253363432 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5233147865662310135, guid: 8bfc17cfed4abb74881f444315526ddb, type: 3}

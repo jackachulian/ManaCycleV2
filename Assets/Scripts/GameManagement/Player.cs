@@ -55,6 +55,11 @@ public class Player : NetworkBehaviour {
     /// </summary>
     public Battler battler;
 
+    /// <summary>
+    /// Player can equip up to 2 additional spells that are not their battler's Unique Spell.
+    /// </summary>
+    public Spell spell1, spell2;
+
 
     /// <summary>
     /// the Unity engine's Input System player input manager

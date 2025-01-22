@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5233147865662310135}
   - component: {fileID: 4283227029545654769}
+  - component: {fileID: 6982843405489903511}
   - component: {fileID: 2617482568223842147}
   - component: {fileID: 3747751560089373618}
   m_Layer: 0
@@ -49,6 +50,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5401611605213896971}
   m_CullTransparentMesh: 1
+--- !u!114 &6982843405489903511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5401611605213896971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6deae28ca5795c0428f84709ed2bf652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  costLabel: {fileID: 3108764681600787272}
+  nameLabel: {fileID: 3882920946418844955}
+  image: {fileID: 8027980181499710206}
 --- !u!114 &2617482568223842147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +174,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ee53d5b8a006ef648a88ca5a849785d8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 77803d834b00942129ae636e123fbac8, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -369,7 +385,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Spell
+  m_text: Infinity Blade
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 03bc80e1ccf448240bf79fabee49e2c6, type: 2}
   m_sharedMaterial: {fileID: -8302480514065152377, guid: 03bc80e1ccf448240bf79fabee49e2c6, type: 2}
@@ -396,7 +412,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.4
+  m_fontSize: 0.35
   m_fontSizeBase: 0.4
   m_fontWeight: 400
   m_enableAutoSizing: 1

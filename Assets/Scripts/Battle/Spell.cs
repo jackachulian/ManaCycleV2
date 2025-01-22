@@ -8,6 +8,20 @@ public abstract class Spell : MonoBehaviour {
     public int spCost => _spCost;
 
 
+    /// <summary>
+    /// Name shown in the spells menu
+    /// </summary>
+    [SerializeField] private string _displayName = "Spell";
+    public string displayName => _displayName;
+
+
+    /// <summary>
+    /// Sprite shown in the spells menu
+    /// </summary>
+    [SerializeField] private Sprite _sprite;
+    public Sprite sprite => _sprite;
+
+
     public Board board {get; private set;}
 
     /// <summary>
