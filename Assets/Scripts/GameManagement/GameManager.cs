@@ -203,8 +203,10 @@ public class GameManager : MonoBehaviour {
         {
             for (int i = 0; i < autoAssignBattlers.Count; i++)
             {
-                Battler battler = autoAssignBattlers[i];
-                playerManager.players[i].battler = battler;
+                if (playerManager.players.Count > i) {
+                    Battler battler = autoAssignBattlers[i];
+                    playerManager.players[i].battler = battler;
+                }
             }
         }
     }
