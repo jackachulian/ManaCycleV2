@@ -2020,6 +2020,10 @@ PrefabInstance:
       propertyPath: boardSide
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8123279063529998444, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: cyclePointerOffset
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -2083,6 +2087,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1702161127}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4262537410739222321, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 5953923350399534583, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -2877,6 +2884,10 @@ PrefabInstance:
       propertyPath: boardSide
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8123279063529998444, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: cyclePointerOffset
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -2940,6 +2951,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2032906196}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4262537410739222321, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 5953923350399534583, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -4864,6 +4878,10 @@ PrefabInstance:
       propertyPath: boardSide
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8123279063529998444, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: cyclePointerOffset
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -4927,6 +4945,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 709318034}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4262537410739222321, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 5953923350399534583, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -7059,6 +7080,10 @@ PrefabInstance:
       propertyPath: boardSide
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8123279063529998444, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      propertyPath: cyclePointerOffset
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8790791077440325607, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -7122,6 +7147,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 955440878}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4262537410739222321, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
     - targetCorrespondingSourceObject: {fileID: 5953923350399534583, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
