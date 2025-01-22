@@ -42,9 +42,10 @@ public class Battler : MonoBehaviour {
 
 
     /// <summary>
-    /// Contains all properties and functions related to this battler's in-battle unique abilities.
+    /// This battler's Unique Spell. only this battler can use this spell
     /// </summary>
-    [SerializeField] private BattlerAbility battlerAbility;
+    [SerializeField] private Spell _uniqueSpell;
+    public Spell uniqueSpell => _uniqueSpell;
 
 
     public Vector2 portraitOffset => portraitSpriteRenderer.transform.localPosition;

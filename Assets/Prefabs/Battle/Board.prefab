@@ -6556,6 +6556,7 @@ GameObject:
   - component: {fileID: 2652607994743603297}
   - component: {fileID: 7100572983371869877}
   - component: {fileID: 2189875021755862908}
+  - component: {fileID: 401062108241276571}
   - component: {fileID: 8123279063529998444}
   - component: {fileID: 8728664645115849563}
   m_Layer: 0
@@ -6642,6 +6643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2902aba0fea5662489d4871a7bf6e4a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghostTilePrefab: {fileID: 3662205671954021063, guid: e42c7f7f7aab59d42a4a3f025032c5d6, type: 3}
 --- !u!114 &7100572983371869877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6671,6 +6673,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarUI: {fileID: 73788944137789411}
   incomingDamageUI: {fileID: 892581007495845712}
+--- !u!114 &401062108241276571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2840813426677701198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a2dfced4b2da51448f7849bec7f53c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8123279063529998444
 MonoBehaviour:
   m_ObjectHideFlags: 0

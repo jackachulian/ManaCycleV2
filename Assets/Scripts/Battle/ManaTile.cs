@@ -16,9 +16,10 @@ public class ManaTile : MonoBehaviour
     /// <summary>
     /// Integer representing the color used for tile clearing.
     /// (This refers to the game logic color int, not the visual color.)
-    /// in standard games: 0=red, 1=green, 2=blue, 3=yellow, 4=purple
+    /// in standard games: -1=chrome/white (all colors), 0=red, 1=green, 2=blue, 3=yellow, 4=purple
     /// </summary>
-    public int color {get; private set;}
+    [SerializeField] private int _color;
+    public int color => _color;
 
     public bool isGhost { get; private set; } = false;
     public bool isPulseGlowing { get; private set; } = false;
@@ -56,7 +57,7 @@ public class ManaTile : MonoBehaviour
     /// <param name="color">an integer representing the color.</param>
     /// <param name="manaCosmetics">Cosmetics object of the sprites and colors to use. If null, visuals are not changed.</param>
     public void SetColor(int color) {
-        this.color = color;
+        _color = color;
     }
 
     public void SetGhost(bool isGhost)
@@ -85,13 +86,22 @@ public class ManaTile : MonoBehaviour
         if (!manaCosmetics) manaCosmetics = BattleManager.Instance.cosmetics;
         var renderer = GetComponent<Renderer>();
 
+        if (!renderer) return;
+
         if (isFadeGlowing)
         {
-            renderer.material = board.fadeGlowMaterials[color];
+            renderer.material = color == -1 ? board.chromeFadeGlowMaterial : board.fadeGlowMaterials[color];
         }
         else
         {
-            ManaVisual manaVisual = isPulseGlowing ? BattleManager.Instance.pulseGlowManaVisuals[color] : manaCosmetics.manaVisuals[color];
+            ManaVisual manaVisual;
+            if (color == -1)
+            {
+                manaVisual = isPulseGlowing ? BattleManager.Instance.chromePulseGlowManaVisual : manaCosmetics.chromeManaVisual;
+                
+            } else {
+                manaVisual = isPulseGlowing ? BattleManager.Instance.pulseGlowManaVisuals[color] : manaCosmetics.manaVisuals[color];
+            }
             renderer.material = isGhost ? manaVisual.ghostMaterial : manaVisual.material;
         }
 

@@ -121,6 +121,8 @@ public class PieceManager : MonoBehaviour {
         var prevPosition = position;
         var prevRotation = rotation;
 
+        board.ghostPieceManager.UnglowAllTiles();
+
         currentPiece.position = position;
         currentPiece.rotation = rotation;
         currentPiece.UpdateVisualPositions();
@@ -148,6 +150,12 @@ public class PieceManager : MonoBehaviour {
             currentPiece.position -= offset;
             return false;
         }
+
+        if (offset.x != 0)
+        {
+            board.ghostPieceManager.UnglowAllTiles();
+        }
+        
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
@@ -200,6 +208,8 @@ public class PieceManager : MonoBehaviour {
                 }
             }
         }
+
+        board.ghostPieceManager.UnglowAllTiles();
 
         if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         currentPiece.UpdateVisualPositions();
@@ -272,18 +282,8 @@ public class PieceManager : MonoBehaviour {
     /// <param name="piece">the piece to place</param>
     /// <param name="spawnNewPieceAfter">whether or not a new piece should be spawned immediately after the current one is placed</param>
     void PlacePiece(ManaPiece piece) {
-        Vector2Int[] placePositions = new Vector2Int[piece.tiles.Length];
-
-        // Convert the position space of all tiles from piece-relative to board-relative (apply position and rotation)
-        // and reparent the mana tiles to this board
-        for (int i = 0; i < piece.tiles.Length; i++) {
-            ManaTile tile = piece.tiles[i];
-            Vector2Int boardPosition = piece.position + piece.GetPieceTilePosition(i);
-            placePositions[i] = boardPosition;
-            board.manaTileGrid.PlaceTile(tile, boardPosition);
-            tile.transform.SetParent(board.manaTileGrid.manaTileTransform, true);
-            tile.SetBoardPosition(boardPosition, false); // no animation; fall animation will perform the animation
-        }
+        // Place pieces' tiles on the mana tile grid based on the piece position and orientation
+        Vector2Int[] placePositions = piece.PlaceTilesOnBoard(board);
 
         // Destroy piece container that is no longer needed
         Destroy(piece.gameObject);
@@ -326,6 +326,9 @@ public class PieceManager : MonoBehaviour {
         // spawn position will be the top row, middle column of the board
         Vector2Int spawnPos = new Vector2Int(board.manaTileGrid.width / 2, board.manaTileGrid.visual_height-1); 
         currentPiece.position = spawnPos;
+
+        board.ghostPieceManager.UnglowAllTiles();
+
         currentPiece.UpdateVisualPositions();
 
         // TODO: listen for onPieceSpawned in ghostPieceManager instead of calling here
@@ -342,6 +345,8 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     public void ReplaceCurrentPiece(ManaPiece piece) {
         Destroy(currentPiece.gameObject);
+        board.ghostPieceManager.DestroyGhostPiece();
+        currentPiece = null;
         SpawnPiece(piece);
     }
 }

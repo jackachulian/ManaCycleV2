@@ -222,6 +222,8 @@ public class SpellcastManager : MonoBehaviour {
         // Main damage formula
         int damage = (int)(totalMana * damagePerMana * chainMultiplier * cascadeMultiplier);
 
+        Debug.Log("total mana: " + totalMana + ", chain: " + currentChain + ", cascade: " + currentCascade + ", damage: " + damage + " (" + totalMana + "*" + damagePerMana + "*" + chainMultiplier + "*" + cascadeMultiplier + ")");
+
         // Counter incoming  (Method will return the amount of leftover damage after countering)
         // evaluate this on both clients here since it should happen at the same time as spellcast clear
         damage = board.healthManager.CounterIncomingDamage(damage);

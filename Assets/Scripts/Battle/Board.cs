@@ -45,6 +45,11 @@ public class Board : MonoBehaviour
     public HealthManager healthManager {get; private set;}
 
     /// <summary>
+    /// Handles building up SP and using spells.
+    /// </summary>
+    public SpellManager spellManager {get; private set;}
+
+    /// <summary>
     /// Handles the battler portrait sprite and any other board-specific visual elements on the board.
     /// </summary>
     public BoardUI ui {get; private set;}
@@ -89,6 +94,8 @@ public class Board : MonoBehaviour
     /// </summary>
     public Material[] fadeGlowMaterials { get; private set; }
 
+    public Material chromeFadeGlowMaterial { get; private set; }
+
     /// <summary>
     /// Cycle used only for this board. Only used in some layouts.
     /// </summary>
@@ -125,6 +132,8 @@ public class Board : MonoBehaviour
             fadeGlowMaterials[i] = new Material(visual.material);
         }
 
+        chromeFadeGlowMaterial = new Material(cosmetics.chromeManaVisual.material);
+
         if (_boardManaCycle) _boardManaCycle.InitializeBattle(battleManager);
 
         manaTileGrid = GetComponent<ManaTileGrid>();
@@ -133,6 +142,7 @@ public class Board : MonoBehaviour
         ghostPieceManager = GetComponent<GhostPieceManager>();
         pieceManager = GetComponent<PieceManager>();
         healthManager = GetComponent<HealthManager>();
+        spellManager = GetComponent<SpellManager>();
 
         ui.InitializeBattle(this);
         manaTileGrid.InitializeBattle();
@@ -141,6 +151,7 @@ public class Board : MonoBehaviour
         ghostPieceManager.InitializeBattle(this);
         pieceManager.InitializeBattle(this);
         healthManager.InitializeBattle(this);
+        spellManager.InitializeBattle(this);
 
         if (!player) {
             ui.ShowBattler(null);
@@ -185,6 +196,8 @@ public class Board : MonoBehaviour
         } else {
             ui.ShowBattler(null);
         }
+
+        spellManager.OnPlayerAssigned();
     }
 
     public bool IsInitialized() {

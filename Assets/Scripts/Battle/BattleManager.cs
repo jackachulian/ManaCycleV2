@@ -39,6 +39,9 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     public ManaVisual[] pulseGlowManaVisuals { get; private set; }
 
+
+    public ManaVisual chromePulseGlowManaVisual { get; private set; }
+
     /// <summary>
     /// The L-shaped Triomino ManaPiece that will be duplicated, spawned, and color-changed on all boards
     /// </summary>
@@ -130,9 +133,15 @@ public class BattleManager : MonoBehaviour
         // Generate the pulse-glow materials
         pulseGlowManaVisuals = new ManaVisual[cosmetics.manaVisuals.Length];
         // fadeGlowMaterials = new Material[cosmetics.manaVisuals.Length]; <-- moved to board.cs
-        for (int i = 0; i < cosmetics.manaVisuals.Length; i++)
+        for (int i = -1; i < cosmetics.manaVisuals.Length; i++)
         {
-            ManaVisual visual = cosmetics.manaVisuals[i];
+            ManaVisual visual;
+            if (i == -1) {
+                visual = cosmetics.chromeManaVisual;
+            } else {
+                visual = cosmetics.manaVisuals[i];
+            }
+
             ManaVisual pulseGlowVisual = new ManaVisual();
 
             // TODO: probably should move this to somewhere in the battle cosmetics class, but too lazy rn
@@ -148,7 +157,11 @@ public class BattleManager : MonoBehaviour
 
             // fadeGlowMaterials[i] = new Material(visual.material); <-- moved to board.cs
 
-            pulseGlowManaVisuals[i] = pulseGlowVisual;
+            if (i == -1) {
+                chromePulseGlowManaVisual = pulseGlowVisual;
+            } else {
+                pulseGlowManaVisuals[i] = pulseGlowVisual;
+            }
         }
     }
 

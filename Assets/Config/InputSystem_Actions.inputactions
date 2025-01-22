@@ -78,6 +78,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "UniqueSpell",
+                    "type": "Button",
+                    "id": "772b3b8f-718e-4dfa-856f-3c79759c95c7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Crouch",
                     "type": "Button",
                     "id": "27c5f898-bc57-4ee1-8800-db469aca5fe3",
@@ -627,6 +636,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Quickfall",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "230f9aa4-d62f-4878-b8b1-a3fe143c233b",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UniqueSpell",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

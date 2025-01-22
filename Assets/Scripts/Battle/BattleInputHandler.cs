@@ -111,4 +111,8 @@ public class BattleInputHandler : MonoBehaviour
     public void OnSpellcast() {
         board.spellcastManager.TrySpellcast();
     }
+
+    public void OnUniqueSpell() {
+        board.spellManager.UseUniqueSpell();
+    }
 }
