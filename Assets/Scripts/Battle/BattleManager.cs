@@ -311,6 +311,13 @@ public class BattleManager : MonoBehaviour
         postGameMenuUI.ShowPostGameMenuUI(winner);
     }
 
+    public void SetBattleTimeScale(float timeScale)
+    {
+        // don't change timescale in online
+        if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer)
+            battleTimeScale = timeScale;
+    }
+
     /// <summary>
     /// Stops player inputs and game logic until unpaused
     /// </summary>
@@ -318,7 +325,7 @@ public class BattleManager : MonoBehaviour
     /// <param name="PlayerPauseIndex">The index of the player that paused. 0 by default for later use in singleplayer</param>
     public void PauseGame(int PlayerPauseIndex = 0, bool showUI = true)
     {
-        battleTimeScale = 0f;
+        SetBattleTimeScale(0f);
         GameManager.Instance.SetGameState(GameManager.GameState.Paused);
         // stop player inputs
         SetAllActionMaps(true, PlayerPauseIndex);
@@ -332,7 +339,7 @@ public class BattleManager : MonoBehaviour
 
     public void UnpauseGame()
     {
-        battleTimeScale = 1f;
+        SetBattleTimeScale(1f);
         GameManager.Instance.SetGameState(GameManager.GameState.Playing);
         SetAllActionMaps(false);
         if (pauseMenuUI.menuShown) pauseMenuUI.HidePauseMenuUI();
@@ -345,25 +352,37 @@ public class BattleManager : MonoBehaviour
     /// <param name="pausedPlayerIndex">Index of the player that initiated the pause.</param>
     public void SetAllActionMaps(bool paused, int pausedPlayerIndex = -1)
     {
+        // in local, pausing should effect all boards and game. in online, pausing should just switch control to menu without effecting game
         List<Player> players = GameManager.Instance.playerManager.players;
-        for (int i = 0; i < players.Count; i++)
+        if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer)
         {
-            Player player = players[i];
+            for (int i = 0; i < players.Count; i++)
+            {
+                SetPlayerActionMap(paused, players[i], i == pausedPlayerIndex);
+            }
+        }
+        else
+        {
+            SetPlayerActionMap(paused, players[pausedPlayerIndex], true);
+        }
 
-            // disable inputs for all execpt pausing player
-            if (paused && pausedPlayerIndex >= 0)
-            {
-                if (!player.isCpu) 
-                    player.playerInput.SwitchCurrentActionMap(i == pausedPlayerIndex ? "UI" : "None");
-                player.aiPlayerInput.enabled = false;
-            }
-            // re-enable battle inputs and cpus
-            else
-            {
-                if (!player.isCpu) 
-                    player.playerInput.SwitchCurrentActionMap("Battle");
-                player.aiPlayerInput.enabled = player.isCpu;
-            }
+    }
+
+    public void SetPlayerActionMap(bool paused, Player player, bool isPausingPlayer = false)
+    {
+        // disable inputs for all execpt pausing player
+        if (paused)
+        {
+            if (!player.isCpu) 
+                player.playerInput.SwitchCurrentActionMap(isPausingPlayer ? "UI" : "None");
+            player.aiPlayerInput.enabled = false;
+        }
+        // re-enable battle inputs and cpus
+        else
+        {
+            if (!player.isCpu) 
+                player.playerInput.SwitchCurrentActionMap("Battle");
+            player.aiPlayerInput.enabled = player.isCpu;
         }
     }
 }
