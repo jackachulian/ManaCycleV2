@@ -210,6 +210,8 @@ public class BattleManager : MonoBehaviour
             player.receivedBattleData = default;
         }
 
+        SetAllActionMaps(false);
+
         initialized = true;
         BattleInitializedNotifier?.Invoke();
     }
@@ -221,7 +223,6 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle() {
         Debug.Log("Game started!");
-        SetAllActionMaps(false);
         battleTimeScale = 1f;
 
         GameManager.Instance.SetGameState(GameManager.GameState.Playing);
