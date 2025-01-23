@@ -8,6 +8,8 @@ public class PauseMenuUI : MonoBehaviour {
     public BattleManager battleManager;
     [SerializeField] private GameObject firstSelectedObject;
     [SerializeField] private GameObject buttonsParent;
+    [SerializeField] private Camera renderTexCam;
+    [SerializeField] private Canvas backgroundCanvas;
 
     public bool menuShown {get; private set;} = false;
 
@@ -29,6 +31,11 @@ public class PauseMenuUI : MonoBehaviour {
     public void ShowPauseMenuUI() {
         menuShown = true;
         gameObject.SetActive(true);
+        // take snapshot for render texture
+        // temporarily change the camera of the backgroud canvas so it is rendered by our render texture camera
+        backgroundCanvas.worldCamera = renderTexCam;
+        renderTexCam.Render();
+        backgroundCanvas.worldCamera = Camera.main;
         EventSystem.current.SetSelectedGameObject(firstSelectedObject);
 
     }

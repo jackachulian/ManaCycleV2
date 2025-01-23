@@ -23,7 +23,7 @@ public class BattleCountdown : NetworkBehaviour {
             return;
         }
 
-        float endTime = (float)NetworkManager.ServerTime.Time + 4.0f;
+        float endTime = (float)NetworkManager.ServerTime.Time + 0.0f;
 
         Debug.Log("Countdown started on the server - end time: "+endTime);
 
