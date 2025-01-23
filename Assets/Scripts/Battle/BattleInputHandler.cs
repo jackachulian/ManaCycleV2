@@ -120,6 +120,6 @@ public class BattleInputHandler : MonoBehaviour
     {
         if (GameManager.Instance.currentGameState != GameManager.GameState.Playing) return;
         Debug.Log("Game paused by " + board);
-        BattleManager.Instance.PauseGame();
+        BattleManager.Instance.PauseGame(board.boardIndex);
     }
 }
