@@ -354,7 +354,7 @@ public class BattleManager : MonoBehaviour
     {
         // in local, pausing should effect all boards and game. in online, pausing should just switch control to menu without effecting game
         List<Player> players = GameManager.Instance.playerManager.players;
-        if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer)
+        if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer || pausedPlayerIndex < 0)
         {
             for (int i = 0; i < players.Count; i++)
             {
@@ -373,14 +373,14 @@ public class BattleManager : MonoBehaviour
         // disable inputs for all execpt pausing player
         if (paused)
         {
-            if (!player.isCpu) 
+            if (player.playerInput.enabled && !player.isCpu) 
                 player.playerInput.SwitchCurrentActionMap(isPausingPlayer ? "UI" : "None");
             player.aiPlayerInput.enabled = false;
         }
         // re-enable battle inputs and cpus
         else
         {
-            if (!player.isCpu) 
+            if (player.playerInput.enabled && !player.isCpu) 
                 player.playerInput.SwitchCurrentActionMap("Battle");
             player.aiPlayerInput.enabled = player.isCpu;
         }
