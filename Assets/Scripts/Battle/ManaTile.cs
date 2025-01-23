@@ -46,8 +46,8 @@ public class ManaTile : MonoBehaviour
 
     void Update() {
         if (falling) {
-            currentFallSpeed += fallAcceleration * Time.deltaTime;
-            transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetPosition, currentFallSpeed * Time.deltaTime);
+            currentFallSpeed += fallAcceleration * BattleManager.deltaTime;
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, targetPosition, currentFallSpeed * BattleManager.deltaTime);
         }
     }
 

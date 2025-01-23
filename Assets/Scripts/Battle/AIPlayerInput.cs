@@ -71,7 +71,7 @@ public class AIPlayerInput : MonoBehaviour
     void Update() {
         if (!board || !board.boardActive) return;
 
-        timeUntilNextDecision -= Time.deltaTime;
+        timeUntilNextDecision -= BattleManager.deltaTime;
         if (timeUntilNextDecision <= 0) {
             timeUntilNextDecision += Random.Range(minDecisionTime, maxDecisionTime);
             MakeDecision();

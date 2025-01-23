@@ -226,6 +226,8 @@ MonoBehaviour:
   optionsChosen:
     m_InternalValue: 0
   battler: {fileID: 0}
+  spell1: {fileID: 0}
+  spell2: {fileID: 0}
 --- !u!114 &3412633086392716045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,7 +255,7 @@ MonoBehaviour:
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
-  m_DefaultActionMap: UI
+  m_DefaultActionMap: 272f6d14-89ba-496f-b7ff-215263d3219f
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &1068524615791818988

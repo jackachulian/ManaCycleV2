@@ -111,10 +111,10 @@ public class BoardUI : MonoBehaviour {
     void Update() {
         if (falling)
         {
-            fallDistance += fallSpeed*Time.smoothDeltaTime;
-            fallSpeed += fallAcceleration*Time.smoothDeltaTime;
-            rotation += angularSpeed*Time.smoothDeltaTime;
-            angularSpeed += fallAngularAcceleration*Time.smoothDeltaTime;
+            fallDistance += fallSpeed * BattleManager.smoothDeltaTime;
+            fallSpeed += fallAcceleration * BattleManager.smoothDeltaTime;
+            rotation += angularSpeed * BattleManager.smoothDeltaTime;
+            angularSpeed += fallAngularAcceleration * BattleManager.smoothDeltaTime;
 
             fallTransform.localPosition = fallStartPos + Vector2.down*fallDistance;
             fallTransform.eulerAngles = new Vector3(0, 0, rotation);

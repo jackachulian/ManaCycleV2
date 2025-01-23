@@ -29,6 +29,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     [SerializeField] private PostGameMenuUI postGameMenuUI;
 
+    [SerializeField] private PauseMenuUI pauseMenuUI;
+
     /// <summary>
     /// Cosmetics to use for all boards and the mana cycle
     /// </summary>
@@ -72,6 +74,12 @@ public class BattleManager : MonoBehaviour
     /// The Mana Cycle object that dictates the order of color clears. cached on awake
     /// </summary>
     private BattleCountdown countdown;
+
+    // used for pausing battle without disrupting other unity functionality
+    public float battleTimeScale {get; private set;} = 1f;
+
+    public static float deltaTime => Time.deltaTime * BattleManager.Instance.battleTimeScale;
+    public static float smoothDeltaTime => Time.smoothDeltaTime * BattleManager.Instance.battleTimeScale;
 
 
     /// <summary>
@@ -213,6 +221,8 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle() {
         Debug.Log("Game started!");
+        SetAllActionMaps(false);
+        battleTimeScale = 1f;
 
         GameManager.Instance.SetGameState(GameManager.GameState.Playing);
 
@@ -298,5 +308,61 @@ public class BattleManager : MonoBehaviour
     public void ClientStartPostGame(Board winner) {
         GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
         postGameMenuUI.ShowPostGameMenuUI(winner);
+    }
+
+    /// <summary>
+    /// Stops player inputs and game logic until unpaused
+    /// </summary>
+    /// <param name="showUI">Show pause menu. Pass false for mid-game dialouge, etc</param>
+    /// <param name="PlayerPauseIndex">The index of the player that paused. 0 by default for later use in singleplayer</param>
+    public void PauseGame(int PlayerPauseIndex = 0, bool showUI = true)
+    {
+        battleTimeScale = 0f;
+        GameManager.Instance.SetGameState(GameManager.GameState.Paused);
+        // stop player inputs
+        SetAllActionMaps(true, PlayerPauseIndex);
+
+        if (showUI)
+        {
+            if (pauseMenuUI) pauseMenuUI.ShowPauseMenuUI();
+            else Debug.LogError("Didn't find Pause UI!");
+        }
+    }
+
+    public void UnpauseGame()
+    {
+        battleTimeScale = 1f;
+        GameManager.Instance.SetGameState(GameManager.GameState.Playing);
+        SetAllActionMaps(false);
+        if (pauseMenuUI.menuShown) pauseMenuUI.HidePauseMenuUI();
+    }
+
+    /// <summary>
+    /// Sets all PlayerInput's action maps based on gamestate and player index.
+    /// </summary>
+    /// <param name="paused">If the game is being paused or unpaused.</param>
+    /// <param name="pausedPlayerIndex">Index of the player that initiated the pause.</param>
+    public void SetAllActionMaps(bool paused, int pausedPlayerIndex = -1)
+    {
+        List<Player> players = GameManager.Instance.playerManager.players;
+        for (int i = 0; i < players.Count; i++)
+        {
+            Player player = players[i];
+
+            // disable inputs for all execpt pausing player
+            if (paused && pausedPlayerIndex >= 0)
+            {
+                if (!player.isCpu) 
+                    player.playerInput.SwitchCurrentActionMap(i == pausedPlayerIndex ? "UI" : "None");
+                player.aiPlayerInput.enabled = false;
+            }
+            // re-enable battle inputs and cpus
+            else
+            {
+                if (!player.isCpu) 
+                    player.playerInput.SwitchCurrentActionMap("Battle");
+                player.aiPlayerInput.enabled = player.isCpu;
+            }
+        }
     }
 }
