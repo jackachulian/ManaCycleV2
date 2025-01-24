@@ -308,6 +308,7 @@ public class GameManager : MonoBehaviour {
             if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
             else if (BattleManager.Instance) TransitionManager.Instance.TransitionToScene("CharSelect", "ReverseWipe");
         }
+        playerManager.players.Clear();
     }
 
     public void OnClientDisconnected() {
