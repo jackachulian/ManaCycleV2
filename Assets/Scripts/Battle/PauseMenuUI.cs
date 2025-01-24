@@ -20,7 +20,7 @@ public class PauseMenuUI : MonoBehaviour {
         for (int i = 0; i < buttonsParent.transform.childCount; i++)
         {
             // flip button
-            Transform t = buttonsParent.transform.GetChild(i);
+            Transform t = buttonsParent.transform.GetChild(i).GetChild(0);
             t.localScale -= new Vector3(i % 2 * 2, 0, 0);
             // flip text again so it is readable
             t.GetChild(1).localScale -= new Vector3(i % 2 * 2, 0, 0);
