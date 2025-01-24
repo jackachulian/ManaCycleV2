@@ -17,12 +17,6 @@ public class SpellMenuUI : MonoBehaviour
 
     [SerializeField] private Renderer spBarRenderer;
 
-    private Material spBarMaterial;
-
-    private void Awake() {
-        spBarMaterial = spBarRenderer.material;
-    }
-
     /// <summary>
     /// Called whenever board's current SP changes.
     /// </summary>
@@ -31,7 +25,7 @@ public class SpellMenuUI : MonoBehaviour
 
         float spPercentage = 1.0f*board.spellManager.sp / board.spellManager.maxSp;
 
-        spBarMaterial.SetFloat("_HpPercentage", spPercentage);
+        if (spBarRenderer && spBarRenderer.material) spBarRenderer.material.SetFloat("_HpPercentage", spPercentage);
     }
 
     /// <summary>

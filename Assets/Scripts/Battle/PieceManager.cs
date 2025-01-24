@@ -80,7 +80,7 @@ public class PieceManager : MonoBehaviour {
 
         // If there is a current piece, have it fall after delay.
         if (currentPiece != null) {
-            movementTimer += Time.deltaTime * currentFallFrequency;
+            movementTimer += BattleManager.deltaTime * currentFallFrequency;
 
             int iters = 0;
             while (movementTimer > 0) {

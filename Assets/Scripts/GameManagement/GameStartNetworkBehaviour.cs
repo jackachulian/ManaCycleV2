@@ -124,8 +124,8 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     /// </summary>
     [Rpc(SendTo.Owner)]
     public void GoToCharacterSelectRpc() {
-        if (GameManager.Instance.currentGameState != GameManager.GameState.PostGame) {
-            Debug.LogError("Game state must be PostGame to go back to character select");
+        if (GameManager.Instance.currentGameState != GameManager.GameState.PostGame && !GameManager.Instance.paused) {
+            Debug.LogError("Game state must be PostGame or Paused to go back to character select, but it is " + GameManager.Instance.currentGameState);
             return;
         }
 
@@ -140,8 +140,8 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     /// </summary>
     [Rpc(SendTo.Owner)]
     public void RematchRpc() {
-        if (GameManager.Instance.currentGameState != GameManager.GameState.PostGame) {
-            Debug.LogError("Game state must be PostGame in order to start a rematch!");
+        if (GameManager.Instance.currentGameState != GameManager.GameState.PostGame && !GameManager.Instance.paused) {
+            Debug.LogError("Game state must be PostGame or Paused in order to start a rematch!");
             return;
         }
 

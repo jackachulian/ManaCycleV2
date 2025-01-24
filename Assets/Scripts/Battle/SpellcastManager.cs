@@ -125,7 +125,7 @@ public class SpellcastManager : MonoBehaviour {
         // Only perform spellcast timing logic if this board is owned
         if (!board.player || !board.player.IsOwner) return;
 
-        timeSinceLastClear += Time.deltaTime;
+        timeSinceLastClear += BattleManager.deltaTime;
 
         // Display the time remaining to extend the chain
         board.ui.chainPopup.DisplayTimeLeft((maxChainDelay - timeSinceLastClear) / maxChainDelay);

@@ -99,9 +99,10 @@ public class GameManager : MonoBehaviour {
     private GameState _currentGameState = GameState.None;
     public GameState currentGameState => _currentGameState;
 
+    public bool paused => _currentGameState == GameState.Paused;
 
     /// <summary>
-    /// Automatically add this many CPUs to the game when teh game starts. Only use for debugging!
+    /// Automatically add this many CPUs to the game when the game starts. Only use for debugging!
     /// </summary>
     [Tooltip("Automatically add this many CPUs to the game when the game starts. Only used in the editor for testing.")]
     [SerializeField] private int autoAddCpus = 0;
@@ -307,6 +308,7 @@ public class GameManager : MonoBehaviour {
             if (CharSelectManager.Instance) CharSelectManager.Instance.ShowConnectionMenu();
             else if (BattleManager.Instance) TransitionManager.Instance.TransitionToScene("CharSelect", "ReverseWipe");
         }
+        playerManager.players.Clear();
     }
 
     public void OnClientDisconnected() {

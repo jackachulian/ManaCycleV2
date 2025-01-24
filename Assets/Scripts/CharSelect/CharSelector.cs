@@ -25,7 +25,7 @@ public class CharSelector : MonoBehaviour {
 
         this.player = player;
         Debug.Log("Assigned "+player+" to char selector "+this);
-        player.OnCharacterChosenChanged(true, player.characterChosen.Value);
+        if (player) player.OnCharacterChosenChanged(true, player.characterChosen.Value);
         GetComponent<CharSelectorUI>().OnAssignedPlayer();
     }
 

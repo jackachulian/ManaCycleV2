@@ -85,8 +85,10 @@ public class CharSelectorUI : MonoBehaviour
             }
         } else {
             background.color = unconnectedBackgroundColor;
-            cursor.gameObject.SetActive(false);
-            cursor.SetPlayer(null, Color.black, 0);
+            if (cursor) {
+                cursor.gameObject.SetActive(false);
+                cursor.SetPlayer(null, Color.black, 0);
+            }
         }
 
         Debug.Log("Updating UI after player assign!");
@@ -97,7 +99,7 @@ public class CharSelectorUI : MonoBehaviour
 
         await Awaitable.NextFrameAsync();
         await Awaitable.NextFrameAsync();
-        if (cursor.transform.position == Vector3.zero) cursor.SetPosition(charSelector.transform.position);
+        if (cursor && cursor.transform.position == Vector3.zero) cursor.SetPosition(charSelector.transform.position);
     }
 
     /// <summary>

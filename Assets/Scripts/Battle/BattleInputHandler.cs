@@ -115,4 +115,11 @@ public class BattleInputHandler : MonoBehaviour
     public void OnUniqueSpell() {
         board.spellManager.UseUniqueSpell();
     }
+
+    public void OnPause()
+    {
+        if (GameManager.Instance.currentGameState != GameManager.GameState.Playing) return;
+        Debug.Log("Game paused by " + board);
+        BattleManager.Instance.PauseGame(board.boardIndex);
+    }
 }
