@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +10,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class BattleManager : MonoBehaviour
 {   
+    public event Action onBattleInitialized;
+    public event Action onBattleEnded;
+
     public static BattleManager Instance { get; private set; }
 
     /// <summary>
@@ -75,18 +78,16 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private BattleCountdown countdown;
 
+    /// <summary>
+    /// Time that is incremented while the game is playing and unpaused. used for recording and replaying
+    /// </summary>
+    public float battleTime;
+
     // used for pausing battle without disrupting other unity functionality
     public float battleTimeScale {get; private set;} = 1f;
 
     public static float deltaTime => Time.deltaTime * BattleManager.Instance.battleTimeScale;
     public static float smoothDeltaTime => Time.smoothDeltaTime * BattleManager.Instance.battleTimeScale;
-
-
-    /// <summary>
-    /// Event invoked when the battle is initialized
-    /// </summary>
-    public delegate void BattleInitializedCallback();
-    public event BattleInitializedCallback BattleInitializedNotifier;
 
     void Awake() {
         if (Instance == null)
@@ -134,6 +135,10 @@ public class BattleManager : MonoBehaviour
         if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer && NetworkManager.Singleton.IsServer) {
             countdown.StartCountdownServer();
         }
+    }
+
+    void Update() {
+        if (GameManager.Instance.currentGameState == GameManager.GameState.Playing) battleTime += Time.deltaTime * battleTimeScale;
     }
 
     public void GenerateGlowMaterials()
@@ -213,7 +218,7 @@ public class BattleManager : MonoBehaviour
         SetAllActionMaps(false);
 
         initialized = true;
-        BattleInitializedNotifier?.Invoke();
+        onBattleInitialized?.Invoke();
     }
 
     public static void InstanceStartCountdownServer(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
@@ -279,15 +284,11 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        // If no boards are alive, start the postgame, the one player was defeated
-        if (livingBoards == 0) {
+        if (livingBoards == 0 || winner) {
+            if (winner) winner.Win();
             gameCompleted = true;
-            ServerStartPostGameAfterDelay(winner);
-        }
-
-        if (winner) {
-            winner.Win();
-            gameCompleted = true;
+            onBattleEnded?.Invoke();
+            
             ServerStartPostGameAfterDelay(winner);
         }
     }

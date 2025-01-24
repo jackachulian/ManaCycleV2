@@ -9,6 +9,12 @@ using Audio;
 /// Handles spellcasting and the timing associated with it.
 /// </summary>
 public class SpellcastManager : MonoBehaviour {
+
+    public event Action<Board> onSpellcastStarted;
+    public event Action<Board> onSpellcastClear;
+    public event Action<Board> onCascadeEnded;
+    public event Action<Board> onChainEnded;
+
     // ================ Serialized fields ================
     /// <summary>
     /// Minimum possible time between clears before a cascade can be triggered. 
@@ -182,6 +188,8 @@ public class SpellcastManager : MonoBehaviour {
         SpellcastMaterialUpdate();
         UpdateFadeGlow();
         Debug.Log("Chain ended");
+
+        onChainEnded?.Invoke(board);
     }
 
     
@@ -255,6 +263,8 @@ public class SpellcastManager : MonoBehaviour {
         }
 
         UpdateFadeGlow();
+
+        onSpellcastClear?.Invoke(board);
     }
 
     /// <summary>
@@ -265,6 +275,8 @@ public class SpellcastManager : MonoBehaviour {
         board.ui.cascadePopup.Hide();
         AdvanceCycle();
         UpdateFadeGlow();
+
+        onCascadeEnded?.Invoke(board);
     }
 
     /// <summary>
@@ -311,6 +323,8 @@ public class SpellcastManager : MonoBehaviour {
         AudioManager.Instance.PlayBoardSound("cast_startup");
         Debug.Log("Spellcast has begun!");
         UpdateFadeGlow();
+
+        onSpellcastStarted?.Invoke(board);
     }
 
     /// <summary>

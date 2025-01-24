@@ -344,7 +344,7 @@ public class AIPlayerInput : MonoBehaviour
         }
     }
 
-    void OnPieceSpawned() {
+    void OnPieceSpawned(Board board) {
         // decide the placement of a piece whenever a new piece is spawned.
         DecidePlacement();
     }
@@ -352,7 +352,7 @@ public class AIPlayerInput : MonoBehaviour
     /// <summary>
     /// Call when a piece is placed. will let the AI know to stop quickfalling and decide a new placement for the new piece.
     /// </summary>
-    void OnPiecePlaced() {
+    void OnPiecePlaced(Board board) {
         // stop quickfalling, and decide if the player should spellcast next
         board.pieceManager.SetQuickfall(false);
         DecideSpellcast();
