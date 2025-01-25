@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 public class BattleManager : MonoBehaviour
 {   
     public event Action onBattleInitialized;
+    public event Action onBattleStarted;
     public event Action onBattleEnded;
 
     public static BattleManager Instance { get; private set; }
@@ -82,7 +83,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// Can be used to record and replay battles.
     /// </summary>
-    [SerializeField] private ReplayManager _replayManager;
+    private ReplayManager _replayManager;
     public ReplayManager replayManager => _replayManager;
 
     /// <summary>
@@ -108,6 +109,7 @@ public class BattleManager : MonoBehaviour
         }
 
         _gameStartNetworkBehaviour = GetComponent<GameStartNetworkBehaviour>();
+        _replayManager = GetComponent<ReplayManager>();
         countdown = GetComponent<BattleCountdown>();
     }
 
@@ -246,6 +248,8 @@ public class BattleManager : MonoBehaviour
         foreach (Board board in boardLayoutManager.currentLayout.boards) {
             board.StartBattle();
         }
+
+        onBattleStarted?.Invoke();
     }
 
     /// <summary>
