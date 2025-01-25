@@ -3,13 +3,8 @@ using UnityEngine;
 namespace StoryMode.Overworld
 {
     public class LevelInteractable : OverworldInteractable
-    {
-        void Awake()
-        {
-            
-        }
-        
-        public override void OnInteract()
+    {        
+        public override void OnInteract(OverworldPlayerInteracter interacter)
         {
             Debug.Log("Implement This! (" + interactableName + ")");
         }

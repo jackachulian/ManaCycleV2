@@ -21,7 +21,7 @@ namespace StoryMode.Overworld
 
         public void OnInteract(InputAction.CallbackContext ctx)
         {
-            if (ctx.performed && currentInteractable) currentInteractable.OnInteract();
+            if (ctx.performed && currentInteractable) currentInteractable.OnInteract(this);
         }
     }
 }

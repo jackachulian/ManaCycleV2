@@ -5,7 +5,7 @@ using System.Linq;
 namespace StoryMode.Overworld
 {
     // Fast-traveling player movement
-    public class OverworldPlayerFastTravel : MonoBehaviour
+    public class OverworldPlayerFastTravel : OverworldPlayerState
     {
         private OverworldInteractable[] travelPoints;
         private OverworldInteractable selectedPoint;
@@ -39,11 +39,21 @@ namespace StoryMode.Overworld
             return closest;
         }
 
-        public void OnMove(InputAction.CallbackContext ctx)
+        public override void OnMove(InputAction.CallbackContext ctx)
         {
             if (!ctx.performed || !enabled) return;
             OverworldInteractable newPoint = selectedPoint.GetAdjacentInDir(ctx.ReadValue<Vector2>(), 90f);
             if (newPoint) selectedPoint = newPoint;
+        }
+
+        public override void OnJump(InputAction.CallbackContext ctx)
+        {
+            // Do nothing
+        }
+
+        public override void OnInteract(InputAction.CallbackContext ctx)
+        {
+            // Do nothing
         }
     }
 }

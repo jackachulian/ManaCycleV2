@@ -5,7 +5,7 @@ using System;
 namespace StoryMode.Overworld
 {
     // Regular player movement (walking)
-    public class OverworldPlayerMovement : MonoBehaviour
+    public class OverworldPlayerMovement : OverworldPlayerState
     {
         [Header("Component References")]
         [SerializeField] private Rigidbody rigidBody;
@@ -31,7 +31,7 @@ namespace StoryMode.Overworld
         private bool jumpPressed = false;
 
         // layer 6 is nocollide layer
-        int layerMask = 1 << 6;
+        readonly int layerMask = 1 << 6;
 
         // FixedUpdate is used to modify player physics to due framerate independance
         void FixedUpdate()
@@ -77,15 +77,20 @@ namespace StoryMode.Overworld
             }
         }
 
-        public void OnMove(InputAction.CallbackContext ctx)
+        public override void OnMove(InputAction.CallbackContext ctx)
         {
             Vector2 v = ctx.ReadValue<Vector2>();
             moveDir = new Vector3(v.x, 0, v.y);
         }
 
-        public void OnJump(InputAction.CallbackContext ctx)
+        public override void OnJump(InputAction.CallbackContext ctx)
         {
             jumpPressed = ctx.performed && jumpingEnabled; 
+        }
+
+        public override void OnInteract(InputAction.CallbackContext ctx)
+        {
+            throw new NotImplementedException();
         }
 
         private bool IsGrounded(out RaycastHit hit)
