@@ -125,7 +125,7 @@ public class BattleManager : MonoBehaviour
             GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
             GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
             
-            if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) {
+            if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.Replay) {
                 BattleData battleData = new BattleData();
                 battleData.SetDefaults();
                 battleData.Randomize();
