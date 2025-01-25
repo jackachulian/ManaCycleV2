@@ -54,6 +54,9 @@ namespace Replay {
         public void OnBattleInitialized() {
             if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.Replay) {
                 StartRecordingEvents();
+            } else {
+                // start replaying from replayData which was loaded from file
+                replaying = true;
             }
         }
 
