@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Replay;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Replay {
     public class ReplayManager : MonoBehaviour {
@@ -23,6 +24,11 @@ namespace Replay {
         private bool replaying = false;
         private int eventIndex = 0;
 
+
+        [SerializeField] private InputActionReference fastForwardInputReference;
+        bool fastForwarding;
+
+
         void Awake() {
             if (!BattleManager.Instance) {
                 Debug.LogError("Replay manager needs a battlemanager to record!");
@@ -30,15 +36,30 @@ namespace Replay {
             }
 
             BattleManager.Instance.onBattleInitialized += OnBattleInitialized;
+
+            
+        }
+
+        void OnEnable() {
+            fastForwardInputReference.action.started += StartFastForward;
+            // fastForwardInputReference.action.performed += StopFastForward;
+            fastForwardInputReference.action.canceled += StopFastForward;
+        }
+
+        void OnDisable() {
+            fastForwardInputReference.action.started -= StartFastForward;
+            // fastForwardInputReference.action.performed -= StopFastForward;
+            fastForwardInputReference.action.canceled -= StopFastForward;
         }
 
         void Update() {
             if (!replaying) return;
 
+            if (replayData == null) return;
+
             // check if the current event should be played, don't go past the bounds of the events/event timing array
             while (eventIndex < replayData.eventTiming.Length && BattleManager.Instance.battleTime >= replayData.eventTiming[eventIndex]) {
                 var ev = replayData.events[eventIndex];
-                Debug.Log("Replaying "+ev);
                 ev.Replay(BattleManager.Instance);
                 eventIndex++;
             }
@@ -48,7 +69,18 @@ namespace Replay {
                 replaying = false;
                 return;
             }
+        }
 
+        void StartFastForward(InputAction.CallbackContext ctx) {
+            Debug.Log("Fast forward started");
+            fastForwarding = true;
+            BattleManager.Instance.SetBattleTimeScale(8f);
+        }
+
+        void StopFastForward(InputAction.CallbackContext ctx) {
+            Debug.Log("Fast forward cancelled");
+            fastForwarding = false;
+            BattleManager.Instance.SetBattleTimeScale(1f);
         }
 
         public void OnBattleInitialized() {
