@@ -11,7 +11,7 @@ namespace StoryMode.Overworld
 
         void Start()
         {
-            interactionManager.interactableChangeNotifier += SetInteractable;
+            interactionManager.InteractableChangeNotifier += SetInteractable;
         }
 
         private void SetInteractable(OverworldInteractable interactable)

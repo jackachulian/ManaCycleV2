@@ -4,6 +4,7 @@ using System;
 
 namespace StoryMode.Overworld
 {
+    // Regular player movement (walking)
     public class OverworldPlayerMovement : MonoBehaviour
     {
         [Header("Component References")]
@@ -51,6 +52,7 @@ namespace StoryMode.Overworld
                 pos.y = hit.point.y + boxCollider.size.y * 0.5f;
             }
 
+            // TODO add drop shadow visual
             if (jumpPressed && grounded)
             {
                 currentVel.y = jumpSpeed;

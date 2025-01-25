@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StoryMode.Overworld
 {
@@ -7,7 +8,7 @@ namespace StoryMode.Overworld
     {
         private List<OverworldInteractable> interactablesInRange = new();
         public delegate void InteractableChangeCallback(OverworldInteractable? interactable);
-        public event InteractableChangeCallback interactableChangeNotifier;
+        public event InteractableChangeCallback? InteractableChangeNotifier;
 
         void OnCollisionEnter(Collision collision)
         {
@@ -18,7 +19,7 @@ namespace StoryMode.Overworld
                 interactablesInRange.Add(oi);
             }
 
-            interactableChangeNotifier.Invoke(oi);
+            InteractableChangeNotifier.Invoke(oi);
         }
 
         void OnCollisionExit(Collision collision)
@@ -30,8 +31,8 @@ namespace StoryMode.Overworld
                 interactablesInRange.Remove(oi);
             }
 
-            interactableChangeNotifier.Invoke(
-                interactablesInRange.Count > 0 ? interactablesInRange[-1] : null
+            InteractableChangeNotifier?.Invoke(
+                interactablesInRange.Count > 0 ? interactablesInRange.Last() : null
             );
         }
     }
