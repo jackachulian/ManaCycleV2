@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Replay;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -79,6 +80,12 @@ public class BattleManager : MonoBehaviour
     private BattleCountdown countdown;
 
     /// <summary>
+    /// Can be used to record and replay battles.
+    /// </summary>
+    [SerializeField] private ReplayManager _replayManager;
+    public ReplayManager replayManager => _replayManager;
+
+    /// <summary>
     /// Time that is incremented while the game is playing and unpaused. used for recording and replaying
     /// </summary>
     public float battleTime;
@@ -86,8 +93,8 @@ public class BattleManager : MonoBehaviour
     // used for pausing battle without disrupting other unity functionality
     public float battleTimeScale {get; private set;} = 1f;
 
-    public static float deltaTime => Time.deltaTime * BattleManager.Instance.battleTimeScale;
-    public static float smoothDeltaTime => Time.smoothDeltaTime * BattleManager.Instance.battleTimeScale;
+    public static float deltaTime => Time.deltaTime * Instance.battleTimeScale;
+    public static float smoothDeltaTime => Time.smoothDeltaTime * Instance.battleTimeScale;
 
     void Awake() {
         if (Instance == null)
@@ -113,14 +120,18 @@ public class BattleManager : MonoBehaviour
         }
 
         // Default to starting a game in singleplayer if a game is not active
-        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
-            GameManager.Instance.StartGameHost(GameManager.GameConnectionType.Singleplayer);
+        if (!NetworkManager.Singleton.IsListening) {
+            if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
+            GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
             GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
-            BattleData battleData = new BattleData();
-            battleData.SetDefaults();
-            battleData.Randomize();
-            GameManager.Instance.SetBattleData(battleData);
-            Debug.Log("Battle data generated within battle scene - seed: "+battleData.seed);
+            
+            if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) {
+                BattleData battleData = new BattleData();
+                battleData.SetDefaults();
+                battleData.Randomize();
+                GameManager.Instance.SetBattleData(battleData);
+                Debug.Log("Battle data generated within battle scene - seed: "+battleData.seed);
+            }
         }
 
         InitializeBattle();

@@ -70,7 +70,12 @@ public class GameManager : MonoBehaviour {
         /// <summary>
         /// Single client, only one client-controlled player
         /// </summary>
-        Singleplayer
+        Singleplayer,
+
+        /// <summary>
+        /// Use when you dont want any players to join an instead show a replay of a battle via a ReplayData.
+        /// </summary>
+        Replay
     }
 
     /// <summary>
@@ -183,24 +188,29 @@ public class GameManager : MonoBehaviour {
             NetworkManager.Singleton.StartServer();
             playerInputManager.enabled = true;
         }
-        else {
+        else if (gameConnectionType == GameConnectionType.Singleplayer) {
             serverPlayerConnectionManager = new SingleplayerConnectionManager();
             // Start a host; this client's player is the one singleplayer player
             NetworkManager.Singleton.StartHost();
         }
+        else if (gameConnectionType == GameConnectionType.Replay) {
+            serverPlayerConnectionManager = new ReplayConnectionManager();
+            // Start a server, this is meterly for network vars to work properly. replay players will be auto spawned
+            NetworkManager.Singleton.StartServer();
+        } 
 
         if (!NetworkManager.Singleton.IsListening) {
             Debug.LogError("Failed to start networkmanager as a host; stopping game");
             return;
         }
 
-        if (autoAddCpus > 0) {
+        if (currentConnectionType != GameConnectionType.Replay && autoAddCpus > 0) {
             for (int i = 0; i < autoAddCpus; i++) {
                 playerManager.AddCPUPlayer();
             }
         }
 
-        if (autoAssignBattlers.Count > 0)
+        if (currentConnectionType != GameConnectionType.Replay && autoAssignBattlers.Count > 0)
         {
             for (int i = 0; i < autoAssignBattlers.Count; i++)
             {
@@ -274,13 +284,15 @@ public class GameManager : MonoBehaviour {
 
     public void OnServerStarted() {
         Debug.Log("Server started");
-        if (currentConnectionType == GameConnectionType.LocalMultiplayer) {
-            if (CharSelectManager.Instance) CharSelectManager.Instance.ShowCharSelectMenu();
+        if (currentConnectionType == GameConnectionType.LocalMultiplayer || currentConnectionType == GameConnectionType.Replay) {
+            if (CharSelectManager.Instance) CharSelectManager.Instance.ShowCharSelectMenu(); 
 
             if (networkManager.IsServer) {
                 serverPlayerConnectionManager.StartListeningForPlayers();
             }
-        }        
+        }
+
+        
     }
 
     public void OnServerStopped(bool wasHost) {

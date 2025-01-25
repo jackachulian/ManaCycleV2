@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Replay;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,17 @@ public class PlayerManager : MonoBehaviour {
     /// Only used to spawn AI players
     /// </summary>
     [SerializeField]  private Player aiPlayerPrefab;
+
+    /// <summary>
+    /// Contains a list of all battlers.
+    /// Used when replaying battlers to identi
+    /// </summary>
+    [SerializeField] private Battler[] battlerList;
+
+    /// <summary>
+    /// this is set up before a replay is started, used to assign battlers based on ReplayPlayer's battlerId
+    /// </summary>
+    private Dictionary<string, Battler> battlerTable = new Dictionary<string, Battler>();
 
     /// <summary>
     /// All players that are connected to the battle
@@ -94,6 +106,7 @@ public class PlayerManager : MonoBehaviour {
     public void AddCPUPlayer() {
         // disabling this on the prefab will make it so the PlayerInputManager doesn't try to assign this a device when it is instantiated
         aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
+        aiPlayerPrefab.GetComponent<AIPlayerInput>().enabled = true;
 
         Player player = Instantiate(aiPlayerPrefab);
         player.isCpu = true;
@@ -101,6 +114,39 @@ public class PlayerManager : MonoBehaviour {
         player.DisableUserInput();
         player.username.Value = "CPU";
         player.EnableBattleAI();
+    }
+
+    public void AddReplayPlayers(ReplayData replayData) {
+        PopulateBattlerTable();
+        foreach (var replayPlayer in replayData.replayPlayers) {
+            AddReplayPlayer(replayPlayer);
+        }
+    }
+
+    private void AddReplayPlayer(ReplayPlayer replayPlayer) {
+        aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
+        aiPlayerPrefab.GetComponent<AIPlayerInput>().enabled = false;
+
+        Player player = Instantiate(aiPlayerPrefab);
+        player.username.Value = replayPlayer.username;
+        player.isCpu = replayPlayer.isCpu;
+        if (battlerTable.ContainsKey(replayPlayer.battlerId)) {
+            player.battler = battlerTable[replayPlayer.battlerId];
+        } else {
+            Debug.LogError("Battler with id "+replayPlayer.battlerId+" not found in PlayerManager's battle table");
+        }
+
+        player.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
+        player.DisableUserInput();
+    }
+
+    public void PopulateBattlerTable() {
+        foreach (Battler battler in battlerList) {
+            if (battlerTable.ContainsKey(battler.battlerId)) {
+                Debug.LogError("There is more than one battler with the id "+battler.battlerId);
+            }
+            battlerTable[battler.battlerId] = battler;
+        }
     }
 
     /// <summary>

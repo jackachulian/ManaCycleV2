@@ -332,11 +332,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 9.25
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -1767,11 +1767,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 9.25
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -7755,11 +7755,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 9.25
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -9105,11 +9105,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 9.25
       objectReference: {fileID: 0}
     - target: {fileID: 6357774316885270904, guid: f4fa85469434fa14087a55f73a244dfc, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -11288,6 +11288,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1170362220}
     - target: {fileID: 6875103078424749902, guid: 17662076faedc3e428988e1374587f3b, type: 3}
+      propertyPath: _replayManager
+      value: 
+      objectReference: {fileID: 1715840118}
+    - target: {fileID: 6875103078424749902, guid: 17662076faedc3e428988e1374587f3b, type: 3}
       propertyPath: postGameMenuUI
       value: 
       objectReference: {fileID: 1675443226}
@@ -11328,13 +11332,57 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: battlerList.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 63363269c06935742b17722ce60122e0, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 761cbfbc13d07e34e94606dd54c88de5, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[2]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 22c2e120207dd9a45b783c1bd472711b, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[3]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: c0c194afc2c9a9c448b2842a90139246, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[4]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 6304ee0eb7a2ca54c86e833e232f1062, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[5]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 19006de198c391d4bb1430b32289ac07, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[6]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 8de844f6019514e4e93697c12c63405a, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[7]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 2b5836f02f78d4e49b71dc088b17dc00, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[8]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: 3b799f8e45a56c5458712045cf57ed27, type: 3}
+    - target: {fileID: 3629195201363629216, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
+      propertyPath: 'battlerList.Array.data[9]'
+      value: 
+      objectReference: {fileID: 568879115367386083, guid: ed06c07535ef9194cad9e752a8bbfd31, type: 3}
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: autoAddCpus
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: _currentConnectionType
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4761168975794845841, guid: a8a9cc35b02658d44962e98eb7d323c1, type: 3}
       propertyPath: autoAssignBattlers.Array.size
@@ -11677,8 +11725,8 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 797281999}
   - {fileID: 6332716612109088955}
-  - {fileID: 1715840119}
   - {fileID: 3910682926418923608}
+  - {fileID: 1715840119}
   - {fileID: 1701603523}
   - {fileID: 723165389}
   - {fileID: 253471515}
