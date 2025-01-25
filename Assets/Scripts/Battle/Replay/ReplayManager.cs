@@ -36,7 +36,7 @@ namespace Replay {
             if (!replaying) return;
 
             // check if the current event should be played, don't go past the bounds of the events/event timing array
-            while (BattleManager.Instance.battleTime >= replayData.eventTiming[eventIndex] && eventIndex < replayData.eventTiming.Length) {
+            while (eventIndex < replayData.eventTiming.Length && BattleManager.Instance.battleTime >= replayData.eventTiming[eventIndex]) {
                 var ev = replayData.events[eventIndex];
                 Debug.Log("Replaying "+ev);
                 ev.Replay(BattleManager.Instance);

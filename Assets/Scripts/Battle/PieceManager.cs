@@ -80,6 +80,9 @@ public class PieceManager : MonoBehaviour {
         // and then send that to the other clients.
         if (!board.player || !board.player.IsOwner) return;
 
+        // don't do piece falling or placing during replays, replaymanager will do this
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) return;
+
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
 

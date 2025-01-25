@@ -131,6 +131,9 @@ public class SpellcastManager : MonoBehaviour {
         // Only perform spellcast timing logic if this board is owned
         if (!board.player || !board.player.IsOwner) return;
 
+        // don't do spellcast timing during replays, replaymanager will call spellcast start/stop/clear
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) return;
+
         timeSinceLastClear += BattleManager.deltaTime;
 
         // Display the time remaining to extend the chain
