@@ -11,7 +11,7 @@ namespace StoryMode.Overworld
         
         public override void OnInteract()
         {
-            Debug.Log("Implement This!");
+            Debug.Log("Implement This! (" + interactableName + ")");
         }
     }
 }

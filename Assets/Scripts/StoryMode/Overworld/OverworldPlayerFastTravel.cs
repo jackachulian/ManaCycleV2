@@ -42,8 +42,8 @@ namespace StoryMode.Overworld
         public void OnMove(InputAction.CallbackContext ctx)
         {
             if (!ctx.performed || !enabled) return;
-            Vector2 v = ctx.ReadValue<Vector2>();
-            selectedPoint = selectedPoint.GetAdjacentInDir(new Vector3(v.x, v.y, 0f));
+            OverworldInteractable newPoint = selectedPoint.GetAdjacentInDir(ctx.ReadValue<Vector2>(), 90f);
+            if (newPoint) selectedPoint = newPoint;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace StoryMode.Overworld
 {
     public abstract class OverworldInteractable : MonoBehaviour
     {
-        public string interactableName {get; private set;}
+        public string interactableName;
         public bool isFastTravelPoint = true;
         public OverworldInteractable[] adjacentPoints;
         public abstract void OnInteract();
@@ -42,9 +42,9 @@ namespace StoryMode.Overworld
                     smallestTheta = theta;
                 }
             }
-            
-            // Debug.Log(aimAng + ", " + Vector3.SignedAngle(Vector3.right, closest.transform.position - transform.position, Vector3.up));
-            return closest;
+
+            // Debug.Log(aimAng + ", " + Vector3.Angle(Vector3.right, closest.transform.position - transform.position));
+            return (smallestTheta < maxAngle) ? closest : null;
         }
     }
 }
