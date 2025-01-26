@@ -1484,6 +1484,9 @@ MonoBehaviour:
   nameOutlines:
   - {fileID: 1718985820}
   - {fileID: 1154796938}
+  nameAnimators:
+  - {fileID: 1718985821}
+  - {fileID: 1154796941}
   initialPositions: []
 --- !u!95 &628584360
 Animator:
@@ -2409,6 +2412,7 @@ GameObject:
   - component: {fileID: 1154796940}
   - component: {fileID: 1154796939}
   - component: {fileID: 1154796938}
+  - component: {fileID: 1154796941}
   m_Layer: 5
   m_Name: NamePlateR
   m_TagString: Untagged
@@ -2489,6 +2493,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1154796936}
   m_CullTransparentMesh: 1
+--- !u!95 &1154796941
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154796936}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a5ad57f4c5ac184e891e50798097cc0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1180253949
 GameObject:
   m_ObjectHideFlags: 0
@@ -3099,6 +3125,7 @@ GameObject:
   - component: {fileID: 1718985819}
   - component: {fileID: 1718985818}
   - component: {fileID: 1718985820}
+  - component: {fileID: 1718985821}
   m_Layer: 5
   m_Name: NamePlateL
   m_TagString: Untagged
@@ -3179,6 +3206,28 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 4, y: 4}
   m_UseGraphicAlpha: 1
+--- !u!95 &1718985821
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718985816}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5a5ad57f4c5ac184e891e50798097cc0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1865457056
 GameObject:
   m_ObjectHideFlags: 0

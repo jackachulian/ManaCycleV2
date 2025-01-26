@@ -16,6 +16,7 @@ namespace StoryMode.ConvoSystem
         [SerializeField] private Image[] portraits;
         [SerializeField] private TextMeshProUGUI[] names;
         [SerializeField] private Outline[] nameOutlines;
+        [SerializeField] private Animator[] nameAnimators;
         [SerializeField] private List<Vector3> initialPositions = new();
 
         void Start()
@@ -34,13 +35,17 @@ namespace StoryMode.ConvoSystem
             menuParent.SetActive(true);
             base.StartConvo(c);
             SetVisuals();
+            for (int i = 0; i < nameAnimators.Length; i++)
+            {
+                nameAnimators[i].Play(i == currentLine.activeActorIndex ? "Showing" : "Hiding");
+            }
             animator.Play("Show");
         }
 
         public override void NextLine()
         {
             base.NextLine();
-            SetVisuals();
+            if (currentLineIndex < currentConvo.lines.Length) SetVisuals();
         }
 
         private void SetVisuals()
@@ -53,7 +58,8 @@ namespace StoryMode.ConvoSystem
                 portraits[i].color = new Color(1f, 1f, 1f, o);
                 names[i].text = a.actorName;
                 // TODO animations
-                nameOutlines[i].gameObject.SetActive(i == currentLine.activeActorIndex);
+                nameAnimators[i].ResetTrigger(i != currentLine.activeActorIndex ? "Show" : "Hide");
+                nameAnimators[i].SetTrigger(i == currentLine.activeActorIndex ? "Show" : "Hide");
                 nameOutlines[i].effectColor = a.color;
 
                 portraits[i].transform.position = initialPositions[i] + a.spriteOffset;
@@ -64,8 +70,6 @@ namespace StoryMode.ConvoSystem
         {
             base.EndConvo();
             animator.Play("Hide");
-
-            SetVisuals();
         }
 
         public void CloseAnimationComplete()
