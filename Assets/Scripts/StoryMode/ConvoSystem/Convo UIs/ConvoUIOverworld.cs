@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace StoryMode.ConvoSystem
 {
-    public class OverworldConvoUI : ConvoUI
+    public class ConvoUIOverworld : ConvoUIBase
     {
         [SerializeField] private GameObject menuParent;
         [SerializeField] private Animator animator;

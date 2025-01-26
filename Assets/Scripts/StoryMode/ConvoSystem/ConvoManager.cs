@@ -17,6 +17,6 @@ namespace StoryMode.ConvoSystem
             }
         }
 
-        public static ConvoUI currentConvoUI;
+        public static ConvoUIBase currentConvoUI;
     }
 }

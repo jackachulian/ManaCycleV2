@@ -5,7 +5,7 @@ using System;
 
 namespace StoryMode.ConvoSystem
 {
-    public abstract class ConvoUI : MonoBehaviour
+    public abstract class ConvoUIBase : MonoBehaviour
     {
         /// <summary>
         /// Interval of time between writing each character
