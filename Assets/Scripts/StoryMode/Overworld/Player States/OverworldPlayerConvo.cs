@@ -8,13 +8,13 @@ namespace StoryMode.Overworld
     {
         public override void OnInteract(InputAction.CallbackContext ctx)
         {
-            if (ctx.performed) 
+            if (ctx.performed)
                 ConvoManager.currentConvoUI.HandleForwardInput();
         }
 
         public override void OnJump(InputAction.CallbackContext ctx)
         {
-            if (ctx.performed) 
+            if (ctx.performed)
                 ConvoManager.currentConvoUI.HandleBackwardInput();
         }
 

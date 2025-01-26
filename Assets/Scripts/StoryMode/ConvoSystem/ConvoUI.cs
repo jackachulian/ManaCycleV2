@@ -53,7 +53,7 @@ namespace StoryMode.ConvoSystem
         private WaitForSeconds WaitForGlyph;
         private WaitForSeconds WaitForPunctuation;
 
-        void Start()
+        void Awake()
         {
             WaitForGlyph = new WaitForSeconds(glyphInterval);
             WaitForPunctuation = new WaitForSeconds(puncuationInterval);
@@ -65,7 +65,7 @@ namespace StoryMode.ConvoSystem
             ConvoManager.currentConvoUI = this;
             inConvo = true;
             currentLineIndex = 0;
-            lineCoroutine = StartCoroutine(StartLine(currentLineIndex));
+            StartCoroutine(StartLine(currentLineIndex));
         }
 
         public virtual IEnumerator StartLine(int lineIndex)
@@ -84,7 +84,6 @@ namespace StoryMode.ConvoSystem
 
         public virtual void SkipLine()
         {
-            StopCoroutine(lineCoroutine);
             WriteGlyph(currentLine.convoText.Length - 1);
             currentGlyphIndex = currentLine.convoText.Length;
             OnEndLine();
@@ -123,7 +122,7 @@ namespace StoryMode.ConvoSystem
         public virtual void HandleBackwardInput()
         {
             currentLineIndex = Math.Max(0, currentLineIndex - 1);
-            lineCoroutine = StartCoroutine(StartLine(currentLineIndex));
+            StartCoroutine(StartLine(currentLineIndex));
         }
     }
 }

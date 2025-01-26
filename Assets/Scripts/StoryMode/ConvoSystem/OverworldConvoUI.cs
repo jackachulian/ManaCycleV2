@@ -6,10 +6,17 @@ namespace StoryMode.ConvoSystem
 {
     public class OverworldConvoUI : ConvoUI
     {
+        [SerializeField] private GameObject menuParent;
+
+        void Start()
+        {
+            menuParent.SetActive(false);
+        }
+
         // TODO Actor portriats and name tags
         public override void StartConvo(Convo c)
         {
-            Debug.Log("Staring Overworld Convo!");
+            menuParent.SetActive(true);
             base.StartConvo(c);
         }
 
@@ -18,6 +25,12 @@ namespace StoryMode.ConvoSystem
             // ewwww
             GameObject.Find("Player").GetComponent<OverworldPlayer>().SetState(OverworldPlayer.PlayerState.Normal);
             base.EndConvo();
+            menuParent.SetActive(false);
+        }
+
+        public void CloseAnimationComplete()
+        {
+            menuParent.SetActive(false);
         }
     }
 }
