@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actorName: chill ass gear
   sprite: {fileID: 1169142262433724574, guid: 3e29779f7f02d1941b8b45d7dc66babe, type: 3}
-  spriteOffset: {x: 0, y: 125}
+  spriteOffset: {x: 0, y: 150, z: 0}
   color: {r: 1, g: 0, b: 0, a: 1}

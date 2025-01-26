@@ -1430,6 +1430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 628584358}
   - component: {fileID: 628584359}
+  - component: {fileID: 628584360}
   m_Layer: 5
   m_Name: DialogueUI
   m_TagString: Untagged
@@ -1473,6 +1474,7 @@ MonoBehaviour:
   puncuationInterval: 0.1
   displayText: {fileID: 94192247}
   menuParent: {fileID: 42976655}
+  animator: {fileID: 628584360}
   portraits:
   - {fileID: 969532041}
   - {fileID: 715305137}
@@ -1483,6 +1485,28 @@ MonoBehaviour:
   - {fileID: 1718985820}
   - {fileID: 1154796938}
   initialPositions: []
+--- !u!95 &628584360
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628584357}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d53d1d9e45c16d1478c6cdc3dcf44447, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &636540361
 GameObject:
   m_ObjectHideFlags: 0

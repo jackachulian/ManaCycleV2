@@ -10,6 +10,7 @@ namespace StoryMode.ConvoSystem
     public class OverworldConvoUI : ConvoUI
     {
         [SerializeField] private GameObject menuParent;
+        [SerializeField] private Animator animator;
         
         [Header("Visuals")]
         [SerializeField] private Image[] portraits;
@@ -25,8 +26,6 @@ namespace StoryMode.ConvoSystem
             {
                 initialPositions.Add(i.transform.position);
             }
-
-            SetVisuals();
         }
 
         // TODO Actor portriats and name tags
@@ -34,8 +33,8 @@ namespace StoryMode.ConvoSystem
         {
             menuParent.SetActive(true);
             base.StartConvo(c);
-
             SetVisuals();
+            animator.Play("Show");
         }
 
         public override void NextLine()
@@ -63,16 +62,16 @@ namespace StoryMode.ConvoSystem
 
         public override void EndConvo()
         {
-            // ewwww
-            GameObject.Find("Player").GetComponent<OverworldPlayer>().SetState(OverworldPlayer.PlayerState.Normal);
             base.EndConvo();
-            menuParent.SetActive(false);
+            animator.Play("Hide");
 
             SetVisuals();
         }
 
         public void CloseAnimationComplete()
         {
+            // ewwww
+            GameObject.Find("Player").GetComponent<OverworldPlayer>().SetState(OverworldPlayer.PlayerState.Normal);
             menuParent.SetActive(false);
         }
     }
