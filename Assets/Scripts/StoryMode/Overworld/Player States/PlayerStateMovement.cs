@@ -5,7 +5,7 @@ using System;
 namespace StoryMode.Overworld
 {
     // Regular player movement (walking)
-    public class OverworldPlayerMovement : OverworldPlayerState
+    public class PlayerStateMovement : PlayerStateBase
     {
         [Header("Component References")]
         [SerializeField] private Rigidbody rigidBody;

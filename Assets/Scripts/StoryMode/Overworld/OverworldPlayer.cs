@@ -9,7 +9,7 @@ namespace StoryMode.Overworld
     /// </summary>
     public class OverworldPlayer : MonoBehaviour
     {
-        private OverworldPlayerState[] states;
+        private PlayerStateBase[] states;
 
         public enum PlayerState
         {
@@ -23,7 +23,7 @@ namespace StoryMode.Overworld
         void Awake()
         {
             // FIXME this finds all states in scene not in object...
-            states = GetComponents<OverworldPlayerState>();
+            states = GetComponents<PlayerStateBase>();
             SetState(PlayerState.Normal);
 
         }
