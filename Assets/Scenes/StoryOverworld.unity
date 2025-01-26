@@ -673,6 +673,7 @@ GameObject:
   - component: {fileID: 582484170}
   - component: {fileID: 582484174}
   - component: {fileID: 582484173}
+  - component: {fileID: 582484176}
   - component: {fileID: 582484171}
   - component: {fileID: 582484172}
   m_Layer: 0
@@ -742,6 +743,7 @@ MonoBehaviour:
   rigidBody: {fileID: 582484169}
   modelTransform: {fileID: 1180253950}
   boxCollider: {fileID: 582484172}
+  playerInteracter: {fileID: 582484173}
   jumpingEnabled: 1
   moveSpeed: 0.2
   gravity: 0.05
@@ -875,21 +877,8 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 582484170}
-        m_TargetAssemblyTypeName: OverworldPlayerMovement, Assembly-CSharp
-        m_MethodName: OnMove
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 582484174}
-        m_TargetAssemblyTypeName: StoryMode.Overworld.OverworldPlayerFastTravel,
-          Assembly-CSharp
+      - m_Target: {fileID: 582484175}
+        m_TargetAssemblyTypeName: StoryMode.Overworld.OverworldPlayer, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -904,8 +893,8 @@ MonoBehaviour:
     m_ActionName: 'Overworld/Move[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 582484170}
-        m_TargetAssemblyTypeName: OverworldPlayerMovement, Assembly-CSharp
+      - m_Target: {fileID: 582484175}
+        m_TargetAssemblyTypeName: StoryMode.Overworld.OverworldPlayer, Assembly-CSharp
         m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
@@ -920,9 +909,8 @@ MonoBehaviour:
     m_ActionName: 'Overworld/Jump[/Keyboard/q]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 582484173}
-        m_TargetAssemblyTypeName: StoryMode.Overworld.OverworldPlayerInteracter,
-          Assembly-CSharp
+      - m_Target: {fileID: 582484175}
+        m_TargetAssemblyTypeName: StoryMode.Overworld.OverworldPlayer, Assembly-CSharp
         m_MethodName: OnInteract
         m_Mode: 0
         m_Arguments:
@@ -997,7 +985,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 582484167}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a23f2349b1387cb4f8cb27ec89226232, type: 3}
   m_Name: 
@@ -1013,6 +1001,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11e8bc1e710f54c4e8d7c84341430005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &582484176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582484167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7460d839ac7dfd43ac9a27192e3b2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &628584357
@@ -2852,6 +2852,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2063340762}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2072648903
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2072648905}
+  - component: {fileID: 2072648904}
+  m_Layer: 0
+  m_Name: ConvoManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2072648904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072648903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c2c57873b541ec45aeff35b1b00e230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2072648905
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2072648903}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 48.55778, y: 42.17876, z: 27.347961}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2108082467
 GameObject:
   m_ObjectHideFlags: 0
@@ -3090,3 +3134,4 @@ SceneRoots:
   - {fileID: 582484168}
   - {fileID: 1476734129}
   - {fileID: 373881113}
+  - {fileID: 2072648905}

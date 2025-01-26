@@ -11,6 +11,7 @@ namespace StoryMode.Overworld
         [SerializeField] private Rigidbody rigidBody;
         [SerializeField] private Transform modelTransform;
         [SerializeField] private BoxCollider boxCollider;
+        [SerializeField] private OverworldPlayerInteracter playerInteracter;
 
         [Header("Flags")]
         [SerializeField] private bool jumpingEnabled = true;
@@ -90,7 +91,7 @@ namespace StoryMode.Overworld
 
         public override void OnInteract(InputAction.CallbackContext ctx)
         {
-            throw new NotImplementedException();
+            playerInteracter.OnInteract(ctx);
         }
 
         private bool IsGrounded(out RaycastHit hit)
@@ -103,6 +104,12 @@ namespace StoryMode.Overworld
                 ~layerMask, 
                 QueryTriggerInteraction.UseGlobal
             );
+        }
+        
+        void OnDisable()
+        {
+            moveDir = Vector3.zero;
+            jumpPressed = false;
         }
     }
 }

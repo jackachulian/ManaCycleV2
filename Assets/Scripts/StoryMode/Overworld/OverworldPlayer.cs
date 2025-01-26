@@ -18,18 +18,20 @@ namespace StoryMode.Overworld
             Convo
         }
 
-        public PlayerState ActiveState {get; private set;} = PlayerState.Normal;
+        public PlayerState ActiveState {get; private set;}
 
         void Awake()
         {
-            ActiveState = PlayerState.Normal;
             // FIXME this finds all states in scene not in object...
-            states = FindObjectsByType<OverworldPlayerState>(FindObjectsSortMode.None);
+            states = GetComponents<OverworldPlayerState>();
+            SetState(PlayerState.Normal);
+
         }
 
         // fast travel enabled only when held
         public void OnFastTravel(InputAction.CallbackContext ctx)
         {
+            if (ActiveState == PlayerState.Convo) return;
             SetState(ctx.performed ? PlayerState.Fast : PlayerState.Normal);
         }
 
@@ -46,6 +48,7 @@ namespace StoryMode.Overworld
 
         public void OnInteract(InputAction.CallbackContext ctx)
         {
+            Debug.Log(ActiveState);
             states[(int)ActiveState].OnInteract(ctx);
         }
 

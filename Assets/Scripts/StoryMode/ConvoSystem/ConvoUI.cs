@@ -43,10 +43,12 @@ namespace StoryMode.ConvoSystem
         /// </summary>
         [SerializeField] private TMPro.TextMeshPro displayText;
 
+        private Coroutine lineCoroutine;
+
         private bool inConvo = false;
         private static char[] puncuation = {'.', ',', ':', '!', '?', ';'};
 
-        public bool LineEnded {get => currentGlyphIndex == currentConvo.lines[currentLineIndex].convoText.Length - 1;}
+        public bool LineEnded {get => currentGlyphIndex >= currentConvo.lines[currentLineIndex].convoText.Length - 1;}
 
         private WaitForSeconds WaitForGlyph;
         private WaitForSeconds WaitForPunctuation;
@@ -60,9 +62,10 @@ namespace StoryMode.ConvoSystem
         public virtual void StartConvo(Convo c)
         {
             currentConvo = c;
+            ConvoManager.currentConvoUI = this;
             inConvo = true;
             currentLineIndex = 0;
-            StartCoroutine(StartLine(currentLineIndex));
+            lineCoroutine = StartCoroutine(StartLine(currentLineIndex));
         }
 
         public virtual IEnumerator StartLine(int lineIndex)
@@ -81,7 +84,9 @@ namespace StoryMode.ConvoSystem
 
         public virtual void SkipLine()
         {
+            StopCoroutine(lineCoroutine);
             WriteGlyph(currentLine.convoText.Length - 1);
+            currentGlyphIndex = currentLine.convoText.Length;
             OnEndLine();
         }
 
@@ -103,10 +108,12 @@ namespace StoryMode.ConvoSystem
         public virtual void EndConvo()
         {
             inConvo = false;
+            ConvoManager.currentConvoUI = null;
         }
 
         public virtual void HandleForwardInput()
         {
+            Debug.Log("Forward Input");
             if (LineEnded) 
                 NextLine();
             else 
@@ -116,7 +123,7 @@ namespace StoryMode.ConvoSystem
         public virtual void HandleBackwardInput()
         {
             currentLineIndex = Math.Max(0, currentLineIndex - 1);
-            StartCoroutine(StartLine(currentLineIndex));
+            lineCoroutine = StartCoroutine(StartLine(currentLineIndex));
         }
     }
 }
