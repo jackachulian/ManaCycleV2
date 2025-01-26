@@ -192,7 +192,7 @@ public class BoardUI : MonoBehaviour {
         winLoseText.text = "Lose";
     }
 
-    public void OnPiecePlaced()
+    public void OnPiecePlaced(Board board)
     {
         if (doPlaceAnimation) animator.Play("Place");
     }

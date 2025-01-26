@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 5256190687837431016}
   - component: {fileID: 6875103078424749902}
   - component: {fileID: 851997579674134533}
+  - component: {fileID: 8697632977107064220}
   - component: {fileID: 615975908181454852}
+  - component: {fileID: 2418140382802109973}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -47,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1819870450
+  GlobalObjectIdHash: 3251545002
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 1
@@ -72,16 +74,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6feea03c0e8dd87489dcfb28098c39ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _manaCycle: {fileID: 0}
-  boards:
-  - {fileID: 0}
-  - {fileID: 0}
-  countdown: {fileID: 0}
+  boardLayoutManager: {fileID: 0}
   postGameMenuUI: {fileID: 0}
+  pauseMenuUI: {fileID: 0}
   cosmetics: {fileID: 11400000, guid: 6d37034fe6289064184c49808436ed7f, type: 2}
   manaPiecePrefab: {fileID: 4739590568304164122, guid: bf6b3eb5ac3a1ed47b928acdde94e7e4, type: 3}
   manaTilePrefab: {fileID: 3662205671954021063, guid: e42c7f7f7aab59d42a4a3f025032c5d6, type: 3}
   _gameStartNetworkBehaviour: {fileID: 615975908181454852}
+  _replayManager: {fileID: 0}
+  battleTime: 0
 --- !u!114 &851997579674134533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,6 +97,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   countdownText: {fileID: 0}
+--- !u!114 &8697632977107064220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7356562684146554855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8207ac406c9132b4ca7501001225168c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timerText: {fileID: 0}
 --- !u!114 &615975908181454852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,3 +123,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &2418140382802109973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7356562684146554855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50875d4270a66348aa6d44676e94ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3412633086392716045, guid: 65db3c54736e3b345bda50bba099caae, type: 3}
+      propertyPath: m_DefaultActionMap
+      value: 272f6d14-89ba-496f-b7ff-215263d3219f
+      objectReference: {fileID: 0}
     - target: {fileID: 7397280237258723983, guid: 65db3c54736e3b345bda50bba099caae, type: 3}
       propertyPath: m_Name
       value: AIPlayerPrefab

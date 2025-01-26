@@ -141,10 +141,14 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     [Rpc(SendTo.Owner)]
     public void RematchRpc() {
         if (GameManager.Instance.currentGameState != GameManager.GameState.PostGame && !GameManager.Instance.paused) {
-            Debug.LogError("Game state must be PostGame or Paused in order to start a rematch!");
+            Debug.LogError("Game state must be PostGame or Paused in order to start a rematch! Current game state: "+GameManager.Instance.currentGameState);
             return;
         }
 
-        SendBattleDataServer();
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) {
+            StartGameServer();
+        } else {
+            SendBattleDataServer();
+        }
     }
 }

@@ -17,7 +17,7 @@ public class PlayerBoardNetworkBehaviour : NetworkBehaviour {
     /// <summary>
     /// RPC to send to other clients when the position of the piece successfully changes.
     /// </summary>
-    [Rpc(SendTo.NotOwner, RequireOwnership = true)]
+    [Rpc(SendTo.Everyone, RequireOwnership = true)]
     public void UpdateCurrentPieceRpc(Vector2Int position, int rotation) {
         player.battleInputHandler.board.pieceManager.UpdateCurrentPiece(position, rotation);
     }

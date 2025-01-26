@@ -9,6 +9,21 @@ using Audio;
 /// </summary>
 public class PieceManager : MonoBehaviour {
     /// <summary>
+    /// Invoked when a new piece is spawned onto the board as the currentPiece.
+    /// </summary>
+    public event Action<Board> onPieceSpawned;
+
+    /// <summary>
+    /// Invoked when the current piece is successfully moved OR rotated.
+    /// </summary>
+    public event Action<Board> onPieceMoved;
+
+    /// <summary>
+    /// Invoked when a new piece is placed onto the board's tile grid.
+    /// </summary>
+    public event Action<Board> onPiecePlaced;
+
+    /// <summary>
     /// The amount of rows the piece should fall per second while not quickfalling.
     /// </summary>
     [SerializeField] private float fallFrequency = 1.2f;
@@ -41,16 +56,6 @@ public class PieceManager : MonoBehaviour {
     private Board board;
 
     /// <summary>
-    /// Invoked when a new piece is spawned onto the board as the currentPiece.
-    /// </summary>
-    public event Action onPieceSpawned;
-
-    /// <summary>
-    /// Invoked when a new piece is placed onto the board's tile grid.
-    /// </summary>
-    public event Action onPiecePlaced;
-
-    /// <summary>
     /// Initialize the battle.
     /// Is initialized after UpcomingPieceList so that the first piece can be spawned on initialization.
     /// (The piece is spawned before the timer starts, in case boards' countdowns start at slightly different times on different clients)
@@ -74,6 +79,9 @@ public class PieceManager : MonoBehaviour {
         // Only the local client should handle the timing of piece falling based on inputs 
         // and then send that to the other clients.
         if (!board.player || !board.player.IsOwner) return;
+
+        // don't do piece falling or placing during replays, replaymanager will do this
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) return;
 
         // use quickfall speed if quick falling, or normal fall frequency otherwise
         float currentFallFrequency = GetCurrentFallFrequency();
@@ -127,10 +135,18 @@ public class PieceManager : MonoBehaviour {
         currentPiece.rotation = rotation;
         currentPiece.UpdateVisualPositions();
 
-        // Only need to update the ghost piece if the piece moved columns or was rotated
-        if (prevPosition.x != position.x || prevRotation != rotation)
-        {
-            board.ghostPieceManager.UpdateGhostPiece();
+        onPieceMoved?.Invoke(board);
+
+        board.ghostPieceManager.UpdateGhostPiece();
+
+        if (position != prevPosition) {
+            var offset = position - prevPosition;
+            AudioManager.Instance.PlayBoardSound(
+                offset == Vector2Int.down ? "fall" : "move", 
+                volumeScale: offset == Vector2Int.down ? 0.15f : 0.5f
+            );
+        } else if (prevRotation != rotation) {
+            AudioManager.Instance.PlayBoardSound("rotate", volumeScale: 0.5f);
         }
     }
 
@@ -155,20 +171,13 @@ public class PieceManager : MonoBehaviour {
         {
             board.ghostPieceManager.UnglowAllTiles();
         }
-        
 
-        if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
-        currentPiece.UpdateVisualPositions();
         AudioManager.Instance.PlayBoardSound(
             offset == Vector2Int.down ? "fall" : "move", 
             volumeScale: offset == Vector2Int.down ? 0.15f : 0.5f
         );
 
-        // Only need to update the ghost piece if the piece moved columns
-        if (offset.x != 0)
-        {
-            board.ghostPieceManager.UpdateGhostPiece();
-        }
+        board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
 
         return true;
     }
@@ -209,14 +218,9 @@ public class PieceManager : MonoBehaviour {
             }
         }
 
-        board.ghostPieceManager.UnglowAllTiles();
-
-        if (board.player) board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
-        currentPiece.UpdateVisualPositions();
-
-        board.ghostPieceManager.UpdateGhostPiece();
-
         AudioManager.Instance.PlayBoardSound("rotate", volumeScale: 0.5f);
+
+        board.player.boardNetworkBehaviour.UpdateCurrentPieceRpc(currentPiece.position, currentPiece.rotation);
         return true;
     }
 
@@ -256,10 +260,10 @@ public class PieceManager : MonoBehaviour {
     /// </summary>
     public void PlaceCurrentPiece() {
         PlacePiece(currentPiece);
+        onPiecePlaced?.Invoke(board);
+
         board.ghostPieceManager.DestroyGhostPiece();
         currentPiece = null;
-
-        onPiecePlaced?.Invoke();
 
         board.healthManager.AdvanceDamageQueue();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
@@ -337,7 +341,7 @@ public class PieceManager : MonoBehaviour {
         // TODO: listen for onPieceSpawned in upcomingPieces instead of calling here
         board.upcomingPieces.UpdatePieceListUI();
 
-        onPieceSpawned?.Invoke();
+        onPieceSpawned?.Invoke(board);
     }
 
     /// <summary>

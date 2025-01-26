@@ -9,6 +9,12 @@ using Audio;
 /// Handles spellcasting and the timing associated with it.
 /// </summary>
 public class SpellcastManager : MonoBehaviour {
+
+    public event Action<Board> onSpellcastStarted;
+    public event Action<Board> onSpellcastClear;
+    public event Action<Board> onCascadeEnded;
+    public event Action<Board> onChainEnded;
+
     // ================ Serialized fields ================
     /// <summary>
     /// Minimum possible time between clears before a cascade can be triggered. 
@@ -125,6 +131,9 @@ public class SpellcastManager : MonoBehaviour {
         // Only perform spellcast timing logic if this board is owned
         if (!board.player || !board.player.IsOwner) return;
 
+        // don't do spellcast timing during replays, replaymanager will call spellcast start/stop/clear
+        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.Replay) return;
+
         timeSinceLastClear += BattleManager.deltaTime;
 
         // Display the time remaining to extend the chain
@@ -182,6 +191,8 @@ public class SpellcastManager : MonoBehaviour {
         SpellcastMaterialUpdate();
         UpdateFadeGlow();
         Debug.Log("Chain ended");
+
+        onChainEnded?.Invoke(board);
     }
 
     
@@ -255,6 +266,8 @@ public class SpellcastManager : MonoBehaviour {
         }
 
         UpdateFadeGlow();
+
+        onSpellcastClear?.Invoke(board);
     }
 
     /// <summary>
@@ -265,6 +278,8 @@ public class SpellcastManager : MonoBehaviour {
         board.ui.cascadePopup.Hide();
         AdvanceCycle();
         UpdateFadeGlow();
+
+        onCascadeEnded?.Invoke(board);
     }
 
     /// <summary>
@@ -311,6 +326,8 @@ public class SpellcastManager : MonoBehaviour {
         AudioManager.Instance.PlayBoardSound("cast_startup");
         Debug.Log("Spellcast has begun!");
         UpdateFadeGlow();
+
+        onSpellcastStarted?.Invoke(board);
     }
 
     /// <summary>

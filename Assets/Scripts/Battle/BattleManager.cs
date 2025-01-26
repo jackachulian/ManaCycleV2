@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Replay;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,10 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class BattleManager : MonoBehaviour
 {   
+    public event Action onBattleInitialized;
+    public event Action onBattleStarted;
+    public event Action onBattleEnded;
+
     public static BattleManager Instance { get; private set; }
 
     /// <summary>
@@ -75,18 +80,22 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private BattleCountdown countdown;
 
+    /// <summary>
+    /// Can be used to record and replay battles.
+    /// </summary>
+    private ReplayManager _replayManager;
+    public ReplayManager replayManager => _replayManager;
+
+    /// <summary>
+    /// Time that is incremented while the game is playing and unpaused. used for recording and replaying
+    /// </summary>
+    public float battleTime;
+
     // used for pausing battle without disrupting other unity functionality
     public float battleTimeScale {get; private set;} = 1f;
 
-    public static float deltaTime => Time.deltaTime * BattleManager.Instance.battleTimeScale;
-    public static float smoothDeltaTime => Time.smoothDeltaTime * BattleManager.Instance.battleTimeScale;
-
-
-    /// <summary>
-    /// Event invoked when the battle is initialized
-    /// </summary>
-    public delegate void BattleInitializedCallback();
-    public event BattleInitializedCallback BattleInitializedNotifier;
+    public static float deltaTime => Time.deltaTime * Instance.battleTimeScale;
+    public static float smoothDeltaTime => Time.smoothDeltaTime * Instance.battleTimeScale;
 
     void Awake() {
         if (Instance == null)
@@ -100,6 +109,7 @@ public class BattleManager : MonoBehaviour
         }
 
         _gameStartNetworkBehaviour = GetComponent<GameStartNetworkBehaviour>();
+        _replayManager = GetComponent<ReplayManager>();
         countdown = GetComponent<BattleCountdown>();
     }
 
@@ -112,14 +122,18 @@ public class BattleManager : MonoBehaviour
         }
 
         // Default to starting a game in singleplayer if a game is not active
-        if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) {
-            GameManager.Instance.StartGameHost(GameManager.GameConnectionType.Singleplayer);
+        if (!NetworkManager.Singleton.IsListening) {
+            if (GameManager.Instance.currentConnectionType == GameManager.GameConnectionType.None) GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
+            GameManager.Instance.StartGameHost(GameManager.Instance.currentConnectionType);
             GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
-            BattleData battleData = new BattleData();
-            battleData.SetDefaults();
-            battleData.Randomize();
-            GameManager.Instance.SetBattleData(battleData);
-            Debug.Log("Battle data generated within battle scene - seed: "+battleData.seed);
+            
+            if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.Replay) {
+                BattleData battleData = new BattleData();
+                battleData.SetDefaults();
+                battleData.Randomize();
+                GameManager.Instance.SetBattleData(battleData);
+                Debug.Log("Battle data generated within battle scene - seed: "+battleData.seed);
+            }
         }
 
         InitializeBattle();
@@ -134,6 +148,10 @@ public class BattleManager : MonoBehaviour
         if (GameManager.Instance.currentConnectionType != GameManager.GameConnectionType.OnlineMultiplayer && NetworkManager.Singleton.IsServer) {
             countdown.StartCountdownServer();
         }
+    }
+
+    void Update() {
+        if (GameManager.Instance.currentGameState == GameManager.GameState.Playing) battleTime += Time.deltaTime * battleTimeScale;
     }
 
     public void GenerateGlowMaterials()
@@ -213,7 +231,7 @@ public class BattleManager : MonoBehaviour
         SetAllActionMaps(false);
 
         initialized = true;
-        BattleInitializedNotifier?.Invoke();
+        onBattleInitialized?.Invoke();
     }
 
     public static void InstanceStartCountdownServer(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
@@ -230,6 +248,8 @@ public class BattleManager : MonoBehaviour
         foreach (Board board in boardLayoutManager.currentLayout.boards) {
             board.StartBattle();
         }
+
+        onBattleStarted?.Invoke();
     }
 
     /// <summary>
@@ -279,15 +299,11 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        // If no boards are alive, start the postgame, the one player was defeated
-        if (livingBoards == 0) {
+        if (livingBoards == 0 || winner) {
+            if (winner) winner.Win();
             gameCompleted = true;
-            ServerStartPostGameAfterDelay(winner);
-        }
-
-        if (winner) {
-            winner.Win();
-            gameCompleted = true;
+            onBattleEnded?.Invoke();
+            
             ServerStartPostGameAfterDelay(winner);
         }
     }
