@@ -7,6 +7,7 @@ namespace StoryMode.ConvoSystem
     {
         public string actorName;
         public Sprite sprite;
+        public Vector3 spriteOffset;
         public Color color;
         // TODO sfx
 

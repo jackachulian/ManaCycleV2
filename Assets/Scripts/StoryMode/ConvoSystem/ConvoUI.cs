@@ -20,30 +20,28 @@ namespace StoryMode.ConvoSystem
         /// <summary>
         /// Convo this UI is displaying
         /// </summary>
-        private Convo currentConvo;
+        protected Convo currentConvo;
 
         /// <summary>
         /// Current line in the current convo
         /// </summary>
-        private ConvoLine currentLine;
+        protected ConvoLine currentLine;
 
         /// <summary>
         /// Current line index of the current convo
         /// </summary>
-        private int currentLineIndex;
+        protected int currentLineIndex;
 
         /// <summary>
         /// Index of the current glyph in line
         /// </summary>
-        private int currentGlyphIndex;
+        protected int currentGlyphIndex;
 
         /// <summary>
         /// TMP asset that the text gets written to 
         /// (Maybe this should be moved out of abstract class?)
         /// </summary>
-        [SerializeField] private TMPro.TextMeshPro displayText;
-
-        private Coroutine lineCoroutine;
+        [SerializeField] private TMPro.TextMeshProUGUI displayText;
 
         private bool inConvo = false;
         private static char[] puncuation = {'.', ',', ':', '!', '?', ';'};

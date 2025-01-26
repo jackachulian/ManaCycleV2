@@ -4,5 +4,7 @@ namespace StoryMode.ConvoSystem
     public class ConvoLine
     {
         public string convoText;
+        public Actor[] actors;
+        public int activeActorIndex;
     }
 }
