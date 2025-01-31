@@ -12,7 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219b4f27279c48d4899beb53dfdd5e25, type: 3}
   m_Name: TestLevel
   m_EditorClassIdentifier: 
-  displayName: 
-  spellType: 0
-  fixedBattlers: []
-  timeLimit: 0
+  id: 
+  displayName: Test Level
+  levelPlayer:
+  - battler: []
+    uniqueSpellEnabled: 0
+    fixedSpells: []
+    cpuDecisionsPerSecond: 3
+  playerOpenSpellSlots: 2
+  randomizeSeedEachBattle: 1
+  battleData:
+    seed: 0
+    cycleLength: 5
+    cycleUniqueColors: 5
+    timeLimit: 0
