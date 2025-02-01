@@ -8,6 +8,7 @@ namespace StoryMode.Overworld
     public class PlayerStateMovement : PlayerStateBase
     {
         [Header("Component References")]
+        [SerializeField] private OverworldPlayer player;
         [SerializeField] private Rigidbody rigidBody;
         [SerializeField] private Transform modelTransform;
         [SerializeField] private BoxCollider boxCollider;
@@ -18,7 +19,7 @@ namespace StoryMode.Overworld
 
         [Header("Player Movement Parameters")]
         [Tooltip("Movement Speed Multiplier.")]
-        [SerializeField] private float moveSpeed = 1f;
+        [SerializeField] private float moveSpeed = 5f;
         [Tooltip("Gravity Scale.")]
         [SerializeField] private float gravity = 1f;
         [SerializeField] private float maxFallVel = 1f;
@@ -65,7 +66,7 @@ namespace StoryMode.Overworld
             }
 
             // apply velocity
-            pos += currentVel;
+            pos += currentVel * Time.fixedDeltaTime;
             rigidBody.position = pos;
         }
 
@@ -82,6 +83,7 @@ namespace StoryMode.Overworld
         {
             Vector2 v = ctx.ReadValue<Vector2>();
             moveDir = new Vector3(v.x, 0, v.y);
+            player.animator.SetBool("running", moveDir.magnitude > 0);
         }
 
         public override void OnJump(InputAction.CallbackContext ctx)

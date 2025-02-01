@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b47bea9ce1b688149ae072ee86086376
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 154271
+  packageName: Basic Motions FREE
+  packageVersion: 2.3.2
+  assetPath: Assets/Kevin Iglesias/Basic Motions/DemoScene/Scripts/BasicMotionsCamera.cs
+  uploadId: 726948

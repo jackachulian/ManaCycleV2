@@ -9,7 +9,12 @@ namespace StoryMode.Overworld
     /// </summary>
     public class OverworldPlayer : MonoBehaviour
     {
+        [SerializeField] private Animator _animator;
+        public Animator animator => _animator;
+
+
         private PlayerStateBase[] states;
+
 
         public enum PlayerState
         {
