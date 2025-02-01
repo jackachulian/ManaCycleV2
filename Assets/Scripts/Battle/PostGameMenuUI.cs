@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class PostGameMenuUI : MonoBehaviour {
-    public BattleManager battleManager;
+    [SerializeField] private EventSystem uiEventSystem;
     [SerializeField] private GameObject firstSelectedObject;
     [SerializeField] private Animator animator;
 
@@ -49,11 +49,11 @@ public class PostGameMenuUI : MonoBehaviour {
     }
 
     public void OnRematchPressed() {
-        battleManager.gameStartNetworkBehaviour.RematchRpc();
+        BattleManager.Instance.gameStartNetworkBehaviour.RematchRpc();
     }
 
     public void OnCharacterSelectPressed() {
-        battleManager.gameStartNetworkBehaviour.GoToCharacterSelectRpc();
+        BattleManager.Instance.gameStartNetworkBehaviour.GoToCharacterSelectRpc();
     }
 
     public void OnMainMenuPressed() {
@@ -63,6 +63,8 @@ public class PostGameMenuUI : MonoBehaviour {
 
     public void OpenAnimationComplete()
     {
-        EventSystem.current.SetSelectedGameObject(firstSelectedObject);
+        uiEventSystem.enabled = true;
+        uiEventSystem.SetSelectedGameObject(null);
+        uiEventSystem.SetSelectedGameObject(firstSelectedObject);
     }
 }

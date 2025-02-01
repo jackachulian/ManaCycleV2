@@ -317,13 +317,13 @@ public class Player : NetworkBehaviour {
     public void EnableUserInput() {
         Debug.Log("Enabling user input on "+this);
         playerInput.enabled = true;
-        multiplayerEventSystem.enabled = true;
+        if (multiplayerEventSystem) multiplayerEventSystem.enabled = true;
     }
 
     public void DisableUserInput() {
         Debug.Log("Disabling user input on "+this);
         playerInput.enabled = false;
-        multiplayerEventSystem.enabled = false;
+        if (multiplayerEventSystem) multiplayerEventSystem.enabled = false;
     }
 
     public void EnableBattleInputs() {

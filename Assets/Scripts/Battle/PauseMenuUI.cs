@@ -9,6 +9,7 @@ using Audio;
 public class PauseMenuUI : MonoBehaviour {
     public BattleManager battleManager;
     [Header("Layout")]
+    [SerializeField] private EventSystem uiEventSystem;
     [SerializeField] private GameObject firstSelectedObject;
     [SerializeField] private GameObject buttonsParent;
     [Header("Rendering")]
@@ -52,12 +53,15 @@ public class PauseMenuUI : MonoBehaviour {
         AudioManager.Instance.PlaySound(openSFX);
 
         // Select button
-        EventSystem.current.SetSelectedGameObject(firstSelectedObject);
+        uiEventSystem.enabled = true;
+        uiEventSystem.SetSelectedGameObject(null);
+        uiEventSystem.SetSelectedGameObject(firstSelectedObject);
 
     }
 
     public void HidePauseMenuUI()
     {
+        uiEventSystem.enabled = false;
         unpausedMixerSnapshot.TransitionTo(0.1f);
         menuShown = false;
         gameObject.SetActive(false);
@@ -91,6 +95,8 @@ public class PauseMenuUI : MonoBehaviour {
 
     public void PlaySelectSound(BaseEventData eventData)
     {
-        AudioManager.Instance.PlaySound(selectSFX, pitch: 1f + (eventData as AxisEventData).moveVector.y * 0.1f);
+        var axisEventData = eventData as AxisEventData;
+        float pitch = (axisEventData != null) ? 1f + axisEventData.moveVector.y * 0.1f : 1f;
+        AudioManager.Instance.PlaySound(selectSFX, pitch: pitch);
     }
 }
