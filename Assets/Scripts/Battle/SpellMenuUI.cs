@@ -34,7 +34,9 @@ public class SpellMenuUI : MonoBehaviour
     public void OnPlayerAssigned(Board board) {
         this.board = board;
 
-        if (!board.player || !board.player.battler) return;
+        if (!board.player || !board.player.battler) {
+            foreach (var spellItem in spellItems) spellItem.AssignSpell(null);
+        }
 
         spellItems[0].AssignSpell(board.player.battler.uniqueSpell);
         spellItems[1].AssignSpell(board.player.spell1);

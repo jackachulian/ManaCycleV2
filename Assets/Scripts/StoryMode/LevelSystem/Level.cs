@@ -70,7 +70,9 @@ public class Level : ScriptableObject {
         GameManager.Instance.SetLevel(this);
         GameManager.Instance.SetBattleData(battleData);
 
-        GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
+        GameManager.Instance.StartGameHost(GameManager.GameConnectionType.Singleplayer);
+
+        // SetupBattlers();  will be called by SingleplayerConnectionManager as the game starts
 
         if (IsChoiceRequired()) {
             TransitionManager.Instance.TransitionToScene("CharSelect");
@@ -87,7 +89,7 @@ public class Level : ScriptableObject {
     /// <param name="playerPrefab">player prefab to use to spawn opponent players</param>
     /// <returns>true if the player needs to choose anything. 
     /// If true upon selecting a level, will open charselect. If false, will go straight to battle.</returns>
-    public bool SetupBattlers(Player playerPrefab) {
+    public bool SetupBattlers() {
         bool choiceRequired = false;
 
         for (int i = 0; i < levelPlayers.Length; i++) {
@@ -98,7 +100,7 @@ public class Level : ScriptableObject {
                 player = GameManager.Instance.playerManager.players[0];
             } else {
                 // spawn the battler if non index 0
-                player = Instantiate(playerPrefab);
+                player = GameManager.Instance.playerManager.AddCPUPlayer();
             }
 
             if (levelPlayer.battlers.Length == 1) {

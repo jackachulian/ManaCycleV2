@@ -18,7 +18,8 @@ public class PlayerManager : MonoBehaviour {
     /// <summary>
     /// Only used to spawn AI players
     /// </summary>
-    [SerializeField]  private Player aiPlayerPrefab;
+    [SerializeField] private Player _aiPlayerPrefab;
+    public Player aiPlayerPrefab => _aiPlayerPrefab;
 
     /// <summary>
     /// Contains a list of all battlers.
@@ -103,17 +104,23 @@ public class PlayerManager : MonoBehaviour {
         Debug.Log("Removed player with ID "+player.playerId.Value+" and board index "+player.boardIndex.Value);
     }
 
-    public void AddCPUPlayer() {
+    /// <summary>
+    /// Add a CPU player to the game.
+    /// </summary>
+    /// <returns>the created player object</returns>
+    public Player AddCPUPlayer() {
         // disabling this on the prefab will make it so the PlayerInputManager doesn't try to assign this a device when it is instantiated
-        aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
-        aiPlayerPrefab.GetComponent<AIPlayerInput>().enabled = true;
+        _aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
+        _aiPlayerPrefab.GetComponent<AIPlayerInput>().enabled = true;
 
-        Player player = Instantiate(aiPlayerPrefab);
+        Player player = Instantiate(_aiPlayerPrefab);
         player.isCpu = true;
         player.GetComponent<NetworkObject>().Spawn(destroyWithScene: false);
         player.DisableUserInput();
         player.username.Value = "CPU";
         player.EnableBattleAI();
+
+        return player;
     }
 
     public void AddReplayPlayers(ReplayData replayData) {
@@ -124,10 +131,10 @@ public class PlayerManager : MonoBehaviour {
     }
 
     private void AddReplayPlayer(ReplayPlayer replayPlayer) {
-        aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
-        aiPlayerPrefab.GetComponent<AIPlayerInput>().enabled = false;
+        _aiPlayerPrefab.GetComponent<PlayerInput>().enabled = false;
+        _aiPlayerPrefab.GetComponent<AIPlayerInput>().enabled = false;
 
-        Player player = Instantiate(aiPlayerPrefab);
+        Player player = Instantiate(_aiPlayerPrefab);
         player.username.Value = replayPlayer.username;
         player.isCpu = replayPlayer.isCpu;
         if (battlerTable.ContainsKey(replayPlayer.battlerId)) {

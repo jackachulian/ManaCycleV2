@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SingleplayerConnectionManager : IServerPlayerConnectionManager {
     private bool isListening = false;
-
-    public Player singleplayerOpponentPlayerPrefab;
     
     public void StartListeningForPlayers()
     {
@@ -23,7 +21,7 @@ public class SingleplayerConnectionManager : IServerPlayerConnectionManager {
 
         // if there is a level, set up its battlers
         if (GameManager.Instance.level) {
-            
+            GameManager.Instance.level.SetupBattlers();
         }
 
         Debug.Log("Single player created");
