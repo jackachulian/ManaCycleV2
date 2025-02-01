@@ -34,7 +34,7 @@ namespace StoryMode.Overworld
         void Awake()
         {
             if (Instance) {
-                Debug.LogError("Duplicate overworld player; destroying duplicate");
+                Debug.Log("Duplicate overworld player; destroying duplicate");
                 Destroy(gameObject);
                 return;
             }
