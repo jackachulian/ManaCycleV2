@@ -39,8 +39,8 @@ public class PostGameMenuUI : MonoBehaviour {
     /// Show the postgame menu and a winner if there was one.
     /// </summary>
     /// <param name="winner">the winner of the game. Null if no player won the game (singleplayer loss).</param>
-    public void ShowPostGameMenuUI(Board winner) {
-        SetAssets(winner ? winner.player.battler : null);
+    public void ShowPostGameMenuUI(Board shownBattlerBoard) {
+        SetAssets(shownBattlerBoard ? shownBattlerBoard.player.battler : null);
         menuShown = true;
         gameObject.SetActive(true);
         animator.ResetTrigger("Open");

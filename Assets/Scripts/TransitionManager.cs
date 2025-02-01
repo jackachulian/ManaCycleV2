@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using Unity.Netcode;
 
 public class TransitionManager : MonoBehaviour
 {
@@ -35,7 +36,12 @@ public class TransitionManager : MonoBehaviour
     // Called from animation event
     void OnTransitionAnimationFinished()
     {
-        SceneManager.LoadScene(nextScene);
+        if (NetworkManager.Singleton && NetworkManager.Singleton.IsListening) {
+            NetworkManager.Singleton.SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
+        } else {
+            SceneManager.LoadScene(nextScene);
+        }
+        
         animator.Play(nextTransition + "Out");
     }
    

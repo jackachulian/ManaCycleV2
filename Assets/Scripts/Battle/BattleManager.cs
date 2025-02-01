@@ -304,27 +304,37 @@ public class BattleManager : MonoBehaviour
             gameCompleted = true;
             onBattleEnded?.Invoke();
             
-            ServerStartPostGameAfterDelay(winner);
+            if (winner) {
+                ServerStartPostGameAfterDelay(winner);
+            } else {
+                // if there is no winner, this is a singleplayer loss, show player 0 in the postgame menu
+                ServerStartPostGameAfterDelay(boardLayoutManager.currentLayout.boards[0]);
+            }
         }
     }
 
-    // Waits a bit and then show the postgame menu
-    public async void ServerStartPostGameAfterDelay(Board winner) {
+    // Waits a bit and then show the postgame menu.
+    // Displayed battler
+    public async void ServerStartPostGameAfterDelay(Board displayedBattler) {
         if (!NetworkManager.Singleton.IsServer) {
             Debug.Log("This isn't the server - waiting for server to start the postgame menu");
             return;
         }
 
-        Debug.Log("Starting the postgame menu after delay as server");
 
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
-        gameStartNetworkBehaviour.PostgameMenuRpc(winner.boardIndex);
+
+        int boardIndex = displayedBattler ? displayedBattler.boardIndex : -1;
+
+        Debug.Log("Starting the postgame menu as server. boardIndex="+boardIndex);
+
+        gameStartNetworkBehaviour.PostgameMenuRpc(boardIndex);
     }
 
-    public void ClientStartPostGame(Board winner) {
+    public void ClientStartPostGame(Board board) {
         GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
-        postGameMenuUI.ShowPostGameMenuUI(winner);
+        postGameMenuUI.ShowPostGameMenuUI(board);
     }
 
     public void SetBattleTimeScale(float timeScale)

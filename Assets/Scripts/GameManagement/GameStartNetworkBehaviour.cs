@@ -98,7 +98,9 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     private void StartGameServer() {
         NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += BattleManager.InstanceStartCountdownServer;
         GameManager.Instance.SetGameState(GameManager.GameState.Countdown);
-        NetworkManager.SceneManager.LoadScene("Battle", LoadSceneMode.Single);
+
+        // TODO: servver sends an RPC that starts the transition animation on connected clients
+        TransitionManager.Instance.TransitionToScene("Battle");
     }
 
     [Rpc(SendTo.Everyone)]
@@ -106,7 +108,9 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
     /// Server/host will tell all clients to load the postgame menu once the server has decided the match is over and a winner has been decided.
     /// 
     /// </summary>
-    public void PostgameMenuRpc(int winnerBoardIndex) {
+    public void PostgameMenuRpc(int boardIndex) {
+        Debug.Log("Received Postgame RPC on client");
+
         if (!BattleManager.Instance) {
             Debug.LogError("Trying to load postgame menu while not in the battle scene");
             return;
@@ -114,8 +118,8 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
 
         GameManager.Instance.SetGameState(GameManager.GameState.PostGame);
 
-        Board winningBoard = BattleManager.Instance.GetBoardByIndex(winnerBoardIndex);
-        BattleManager.Instance.ClientStartPostGame(winningBoard);
+        Board board = boardIndex >= 0 ? BattleManager.Instance.GetBoardByIndex(boardIndex) : null;
+        BattleManager.Instance.ClientStartPostGame(board);
     }
 
     /// <summary>
@@ -131,7 +135,8 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
 
         GameManager.Instance.SetGameState(GameManager.GameState.CharSelect);
         
-        NetworkManager.Singleton.SceneManager.LoadScene("CharSelect", LoadSceneMode.Single);
+        // TODO: send an RPC to clients that starts the transition animation, BUT let the server do the scene management
+        TransitionManager.Instance.TransitionToScene("CharSelect");
     }
 
     /// <summary>
