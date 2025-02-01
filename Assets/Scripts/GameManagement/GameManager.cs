@@ -161,7 +161,9 @@ public class GameManager : MonoBehaviour {
 
     public void SetLevel(Level level) {
         this.level = level;
-        SetBattleData(level.battleData);
+        if (level) {
+            SetBattleData(level.battleData);
+        }
     }
 
     /// <summary>
