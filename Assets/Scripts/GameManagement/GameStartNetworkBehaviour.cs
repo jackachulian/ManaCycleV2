@@ -62,7 +62,7 @@ public class GameStartNetworkBehaviour : NetworkBehaviour {
         // Generate random battle data (seed) to be used for the upcoming battle.
         BattleData battleData = new BattleData();
         battleData.SetDefaults();
-        battleData.Randomize();
+        if (battleData.randomizeSeed) battleData.Randomize();
 
         // send this to other players via an RPC, so that RNG and other per-battle data is sync'ed properly
         Debug.Log("Battle data set on server. RNG seed: "+battleData.seed);

@@ -51,6 +51,12 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public BattleData battleData {get; private set;}
 
+    /// <summary>
+    /// Current level being played. Will only be used if in story mode. 
+    /// Determines how the SingleplayerConnectionManager will set up the battlers.
+    /// </summary>
+    public Level level {get; private set;}
+
     public enum GameConnectionType {
         /// <summary>
         /// Means that no game is initialized right now, meaning player is in main menu or some other non-lobby scene
@@ -151,6 +157,11 @@ public class GameManager : MonoBehaviour {
 
     public void SetBattleData(BattleData battleData) {
         this.battleData = battleData;
+    }
+
+    public void SetLevel(Level level) {
+        this.level = level;
+        SetBattleData(level.battleData);
     }
 
     /// <summary>

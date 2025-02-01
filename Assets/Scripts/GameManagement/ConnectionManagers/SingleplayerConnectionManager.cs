@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SingleplayerConnectionManager : IServerPlayerConnectionManager {
     private bool isListening = false;
+
+    public Player singleplayerOpponentPlayerPrefab;
     
     public void StartListeningForPlayers()
     {
@@ -17,7 +19,12 @@ public class SingleplayerConnectionManager : IServerPlayerConnectionManager {
         // but create a single player of id 0 that the player will control
         isListening = true;
 
-        // uhhs this is pretty much an empty calss now since i realized StartHost() will just creat ethe player so nothing needed here
+        // note: player 0 (local client's palyer) should be created by now by NetworkManager.StartHost auto spawning a player.
+
+        // if there is a level, set up its battlers
+        if (GameManager.Instance.level) {
+            
+        }
 
         Debug.Log("Single player created");
     }

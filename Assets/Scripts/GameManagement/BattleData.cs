@@ -13,6 +13,11 @@ public struct BattleData : INetworkSerializeByMemcpy {
     /// </summary>
     public int seed;
 
+    /// <summary>
+    /// If true, the seed of the battle should be randomized before playing. Default is true, but is false for some levels.
+    /// </summary>
+    public bool randomizeSeed;
+
     // (These will later depend on the level in solo mode, but constant for now)
     public int cycleLength;
     public int cycleUniqueColors;
@@ -25,6 +30,7 @@ public struct BattleData : INetworkSerializeByMemcpy {
 
     public BattleData(int cycleLength = 5, int cycleUniqueColors = 5) {
         this.seed = -1;
+        this.randomizeSeed = true;
         this.cycleLength = cycleLength;
         this.cycleUniqueColors = cycleUniqueColors;
         this.timeLimit = 0;

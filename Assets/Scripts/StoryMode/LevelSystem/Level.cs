@@ -21,8 +21,8 @@ public class Level : ScriptableObject {
         /// If list has more than one battler, player can choose from that list. 
         /// If list is empty, player can choose any battler.
         /// </summary>
-        [Tooltip("Battler that this player can use. \nIf list has more than one battler, player can choose from that list. \nIf list is empty, player can choose any battler.")]
-        public Battler[] battler;
+        [Tooltip("Battlers that this player can use. \nIf list has more than one battler, player can choose from that list. \nIf list is empty, player can choose any battler.")]
+        public Battler[] battlers;
 
         /// <summary>
         /// If this battler's unique spell can be used in this battle.
@@ -47,7 +47,7 @@ public class Level : ScriptableObject {
     /// Each player in this battle. Index 0 is the client's player, other indexes are CPU opponents that are added to the battle.
     /// </summary>
     [Tooltip("Each player in this battle. Index 0 is the client's player, other indexes are CPU opponents that are added to the battle.")]
-    public LevelPlayer[] levelPlayer;
+    public LevelPlayer[] levelPlayers;
 
     /// <summary>
     /// The player has this many open spell slots to equip whatever spell they want. 
@@ -55,16 +55,82 @@ public class Level : ScriptableObject {
     [Tooltip("Client-controlled player has this many open slots to equip whatever spells they want. The last player-selected spells will be auto-filled in these slots at the start of battle setup.")]
     public int playerOpenSpellSlots = 2;
 
-
-    /// <summary>
-    /// If true, each time the level is played a different random RNG seed will be used.
-    /// If false, the same seed in BattleData will be used every battle.
-    /// </summary>
-    [Tooltip("If this level should have different cycle and piece colors each time it is played.")]
-    public bool randomizeSeedEachBattle = true;
-
     /// <summary>
     /// Contains battle-specific non-player-specific data used in the battle scene such as the seed selected, cycle lengths, etc.
     /// </summary>
     public BattleData battleData = new BattleData();
+
+    /// <summary>
+    /// Call this to play the battle associated with this level.
+    /// Will set up a singleplayer game with this level's properties.
+    /// If player setup needs to happen, will go to charselect scene.
+    /// If not, will go straight into battle scene.
+    /// </summary>
+    public void StartLevelBattle() {
+        GameManager.Instance.SetLevel(this);
+        GameManager.Instance.SetBattleData(battleData);
+
+        GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
+
+        if (IsChoiceRequired()) {
+            TransitionManager.Instance.TransitionToScene("CharSelect");
+        } else {
+            TransitionManager.Instance.TransitionToScene("Battle");
+        }
+    }
+
+    
+    /// <summary>
+    /// Setup the levels for a battler.
+    /// Is called by SingleplayerConnectionManager when it starts listening while a level is being played.
+    /// </summary>
+    /// <param name="playerPrefab">player prefab to use to spawn opponent players</param>
+    /// <returns>true if the player needs to choose anything. 
+    /// If true upon selecting a level, will open charselect. If false, will go straight to battle.</returns>
+    public bool SetupBattlers(Player playerPrefab) {
+        bool choiceRequired = false;
+
+        for (int i = 0; i < levelPlayers.Length; i++) {
+            LevelPlayer levelPlayer = levelPlayers[i];
+
+            Player player;
+            if (i == 0) {
+                player = GameManager.Instance.playerManager.players[0];
+            } else {
+                // spawn the battler if non index 0
+                player = Instantiate(playerPrefab);
+            }
+
+            if (levelPlayer.battlers.Length == 1) {
+                // set the battler to this
+                player.battler = levelPlayer.battlers[0];
+            } else if (levelPlayer.battlers.Length > 1) {
+                // TODO: make only the players in this list selectable in the char select.
+                if (i == 0) choiceRequired = true;
+            } else {
+                // if no battlers, player can select any battler
+                if (i == 0) choiceRequired = true;
+            }
+        }
+
+        return choiceRequired;
+    }
+
+    /// <summary>
+    /// Will return true if the player has to choose anything (battler, spell loadout, etc).
+    /// If true, playing this level's battle will go to CharSelect. If false, go straight to battle scene.
+    /// </summary>
+    public bool IsChoiceRequired() {
+        if (levelPlayers.Length == 0) return false;
+
+        LevelPlayer levelPlayer = levelPlayers[0];
+
+        // if the length is exactly one, can only be the one battler.
+        // (empty list means any battler, and more than one means any of the battlers in the list.)
+        if (levelPlayer.battlers.Length != 1) {
+            return true;
+        }
+            
+        return false;
+    }
 }

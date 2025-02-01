@@ -9,11 +9,17 @@ namespace StoryMode.Overworld
     /// </summary>
     public class OverworldPlayer : MonoBehaviour
     {
+        public static OverworldPlayer Instance {get; private set;}
+
         [SerializeField] private Animator _animator;
         public Animator animator => _animator;
 
 
         private PlayerStateBase[] states;
+
+
+        private PlayerInput _playerInput;
+        public PlayerInput playerInput => _playerInput;
 
 
         public enum PlayerState
@@ -27,6 +33,15 @@ namespace StoryMode.Overworld
 
         void Awake()
         {
+            if (Instance) {
+                Debug.LogError("Duplicate overworld player; destroying duplicate");
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+
+            _playerInput = GetComponent<PlayerInput>();
+
             // FIXME this finds all states in scene not in object...
             states = GetComponents<PlayerStateBase>();
             SetState(PlayerState.Normal);

@@ -12,17 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219b4f27279c48d4899beb53dfdd5e25, type: 3}
   m_Name: TestLevel
   m_EditorClassIdentifier: 
-  id: 
+  id: testLevel
   displayName: Test Level
-  levelPlayer:
-  - battler: []
+  levelPlayers:
+  - battlers:
+    - {fileID: 568879115367386083, guid: 6304ee0eb7a2ca54c86e833e232f1062, type: 3}
     uniqueSpellEnabled: 0
     fixedSpells: []
-    cpuDecisionsPerSecond: 3
+    cpuSpeed: 0
   playerOpenSpellSlots: 2
-  randomizeSeedEachBattle: 1
   battleData:
     seed: 0
+    randomizeSeed: 0
     cycleLength: 5
     cycleUniqueColors: 5
     timeLimit: 0

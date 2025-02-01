@@ -78,6 +78,7 @@ public class MainMenu : MonoBehaviour
             if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
 
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
+            GameManager.Instance.SetLevel(null);
             TransitionManager.Instance.TransitionToScene("CharSelect");
         }
 
@@ -85,6 +86,7 @@ public class MainMenu : MonoBehaviour
             if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
 
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.LocalMultiplayer);
+            GameManager.Instance.SetLevel(null);
             TransitionManager.Instance.TransitionToScene("CharSelect");
         }
 
@@ -92,6 +94,7 @@ public class MainMenu : MonoBehaviour
             if (!GameManager.Instance) {Debug.LogError("No GameManager in scene!"); return; }
             
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.OnlineMultiplayer);
+            GameManager.Instance.SetLevel(null);
             TransitionManager.Instance.TransitionToScene("CharSelect");
         }
 
