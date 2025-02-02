@@ -7494,9 +7494,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84cdd2a717e0914a8257e06b7bea959, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cascadeDelay: 0.5
-  chainDelay: 0.75
-  maxChainDelay: 2.25
+  cascadeDelay: 0.6
+  chainDelay: 0.8
+  maxChainDelay: 2.5
 --- !u!114 &2189875021755862908
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -126,6 +126,26 @@ public class SpellcastManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// True if a cascade needs to be checked and hasn't been since the last frame update or board update
+    /// </summary>
+    bool checkedForCascade;
+
+    /// <summary>
+    /// True if a chain needs to be checked and hasn't been since the last frame update or board update
+    /// </summary>
+    bool checkedForChain;
+
+    /// <summary>
+    /// Called whenever the amount of pieces connected per color is changed, due to the board being changed.
+    /// InitializeBattle will listen to the onBlobsRefreshed event and call this when blobs are refreshed.
+    /// Set these flags to false so this spellcastmanager knows it needs to perform another chain check
+    /// </summary>
+    public void SetRecheckChainFlags() {
+        checkedForCascade = false;
+        checkedForChain = false;
+    }
+
+    /// <summary>
     /// Updates the state of the spellcast based on several timing variables and the changing state of the board.
     /// Runs each frame. (Only on the owner of this board!)
     /// </summary>
@@ -148,31 +168,36 @@ public class SpellcastManager : MonoBehaviour {
         if (
             currentCascade > 0   // current cascade must be 1 or higher, meaning that a cascade was possible the instant after the last clear happened.
             && timeSinceLastClear >= cascadeDelay   // must happen after cascade delay
-            && timeSinceLastClear < chainDelay      // must happen before chain delay
-            && IsCurrentColorClearable()            // current color in cycle must be clearable
+            && (timeSinceLastClear < chainDelay || !checkedForCascade) // must happen before chain delay. check regardless if havent checked for cascade yet (to prevent skipping cascades in very low framerate)
         ) {
-            board.player.boardNetworkBehaviour.SpellcastClearRpc();
-            timeSinceLastClear = 0;
+            checkedForCascade = true;
+            if (IsCurrentColorClearable()) {
+                board.player.boardNetworkBehaviour.SpellcastClearRpc();
+                timeSinceLastClear = 0;
+            }
         } 
         // If a cascade is ongoing, but there is not a valid cascade and cascade period has passed (chain delay reached), 
         // end the cascade and move to the next color in the chain.
         // note: this will only be reached if a cascade is set to happen right after a clear, but an ability tile breaks the cascade before cascadeDelay passes
-        else if (currentCascade > 0 && timeSinceLastClear >= chainDelay) {
+        else if (currentCascade > 0 && timeSinceLastClear >= chainDelay && checkedForCascade) {
             board.player.boardNetworkBehaviour.EndCascadeRpc();
         }
 
         // Check to see if there is a valid chain
         if (
-            timeSinceLastClear >= chainDelay    // must happen after chain delay
-            && timeSinceLastClear < maxChainDelay   // must happen before max chain delay
-            && IsCurrentColorClearable()            // current color in cycle must be clearable
+            currentCascade == 0                    // a cascade is not happening
+            && timeSinceLastClear >= chainDelay    // must happen after chain delay
+            && (timeSinceLastClear < maxChainDelay || !checkedForChain)   // must happen before maxChainDelay (ignore if chain hasn't been checked yet after chainDelay)
         ) {
-            board.player.boardNetworkBehaviour.SpellcastClearRpc();
-            timeSinceLastClear = 0;
+            checkedForChain = true;
+            if (IsCurrentColorClearable()) {
+                board.player.boardNetworkBehaviour.SpellcastClearRpc();
+                timeSinceLastClear = 0;
+            }
         } 
 
         // otherwise, if past max chain delay, end the chain here
-        else if (timeSinceLastClear >= maxChainDelay) {
+        else if (timeSinceLastClear >= maxChainDelay && checkedForChain) {
             board.player.boardNetworkBehaviour.EndChainRpc();
         }
     }
@@ -411,6 +436,8 @@ public class SpellcastManager : MonoBehaviour {
                 }
             }
         }
+
+        SetRecheckChainFlags();
 
         UpdateFadeGlow();
     }
