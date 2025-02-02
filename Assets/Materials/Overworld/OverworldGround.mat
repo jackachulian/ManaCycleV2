@@ -58,10 +58,10 @@ Material:
     - _e1: 0.2
     - _e2: 0.45
     m_Colors:
-    - _BaseCol: {r: 0, g: 0, b: 0, a: 1}
+    - _BaseCol: {r: 0.09411765, g: 0.09411765, b: 0.1882353, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint1: {r: 0.97062445, g: 0, b: 1, a: 1}
+    - _Tint1: {r: 0.88235295, g: 0, b: 0.9098039, a: 1}
     - _Tint2: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
