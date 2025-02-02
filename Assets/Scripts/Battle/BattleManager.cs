@@ -301,7 +301,7 @@ public class BattleManager : MonoBehaviour
         }
 
         if (livingBoards == 0 || winner) {
-            
+            EndBattle(winner);
         }
     }
 
@@ -329,16 +329,28 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        await Task.Delay(500);
 
-        // TODO: wait until current spellcast completes on winning board
-        await Task.Delay(1000);
+        // Wait for all boards to finish spellcasting
+        bool anyBoardStillSpellcasting = true;
+        while (anyBoardStillSpellcasting) {
+            anyBoardStillSpellcasting = false;
+            foreach (var board in boardLayoutManager.currentLayout.boards) {
+                if (board.spellcastManager.spellcasting) {
+                    anyBoardStillSpellcasting = true;
+                    await Task.Delay(100);
+                    break;
+                }
+            }
+        }
 
+        await Task.Delay(500);
 
         // Track level progress in save file 
         // this is done after any spellcasts are done, right before postgame menu is shown
         if (GameManager.Instance.level) {
             Board playerBoard = GetBoardByIndex(0);
-            bool cleared = !playerBoard.defeated;
+            bool cleared = playerBoard.won;
             int score = playerBoard.scoreManager.score;
             double clearTime = battleTime;
             SaveData.current.TrackLevelProgress(GameManager.Instance.level, cleared, score, clearTime);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,12 @@ public class BattleTimer : MonoBehaviour {
 
     bool showing = false;
 
+    /// <summary>
+    /// The time limit to clear the level.
+    /// If time limit is 0, there is unlimited time, and the timer will count up from 0 instead of counting down the time.
+    /// </summary>
+    double timeLimit;
+
     void Awake() {
         battleManager = GetComponent<BattleManager>();
         HideTimer();
@@ -19,7 +26,31 @@ public class BattleTimer : MonoBehaviour {
 
     void Update() {
         if (showing) {
-            timerText.text = FormatTime(BattleManager.Instance.battleTime);
+            double displayedTime;
+
+            if (timeLimit > 0) {
+                displayedTime = Math.Max(timeLimit - BattleManager.Instance.battleTime, 0);
+                if (!BattleManager.Instance.gameCompleted && displayedTime <= 0) {
+                    EndBattleTimeUp();
+                }
+            } else {
+                displayedTime = BattleManager.Instance.battleTime;
+            }
+
+            timerText.text = FormatTime(displayedTime);
+        }
+    }
+
+    /// <summary>
+    /// When time runs out, defeat all boards.
+    /// </summary>
+    void EndBattleTimeUp() {
+        if (!BattleManager.Instance.gameCompleted) {
+            foreach (Board board in BattleManager.Instance.boardLayoutManager.currentLayout.boards) {
+                if (!board.defeated && board.boardActive) {
+                    board.Defeat();
+                }
+            }
         }
     }
 

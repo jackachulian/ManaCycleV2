@@ -69,7 +69,14 @@ public class PieceManager : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (!board || !board.boardActive) return;
+        if (!board) return;
+
+        // dont do piece falling if this board is defeated.
+        if (board.defeated) return;
+
+        // don't do board falling if this board is not active, but only if they have not also won.
+        // If they have won, carry out the rest of their spellcast and let their piece land wherever they left it
+        if (!board.boardActive && !board.won) return;
 
         PieceFallingUpdate();
     }
@@ -268,8 +275,10 @@ public class PieceManager : MonoBehaviour {
         board.healthManager.AdvanceDamageQueue();
         AudioManager.Instance.PlayBoardSound("place", volumeScale: 0.5f);
 
-        SpawnNextPiece();
+        // If board isn't active, don't spawn a new piece (or even check for topout), they have already won/lost
+        if (!board.boardActive) return;
 
+        SpawnNextPiece();
 
         // If the newly spawned piece is in an invalid position, player has topped out
         if (!IsValidPlacement(currentPiece)) {

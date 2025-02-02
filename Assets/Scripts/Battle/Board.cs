@@ -72,7 +72,7 @@ public class Board : MonoBehaviour
 
     /// <summary>
     /// Piece spawning will only happen while boardActive is true.
-    /// Set to true when initialized, set to false when winning/losing.
+    /// Set to true when initialized, set to false when defeated.
     /// </summary>
     public bool boardActive {get; private set;}
 
@@ -80,6 +80,11 @@ public class Board : MonoBehaviour
     /// Set to true when this board either tops out or runs out of health.
     /// </summary>
     public bool defeated {get; private set;}
+
+    /// <summary>
+    /// Set to true when this player wins, either by meeting all objectives in a level with objectives, or defeating all other boards in versus.
+    /// </summary>
+    public bool won {get; private set;}
 
     /// <summary>
     /// Current player assigned. Set by BattleManager when players enter the battle scene.
@@ -229,6 +234,7 @@ public class Board : MonoBehaviour
         Debug.Log(this+" defeated!");
         boardActive = false;
         defeated = true;
+        spellcastManager.EndChain();
         onDefeat?.Invoke();
         ui.ShowLoseText();
         ui.StartDefeatFall();
@@ -242,6 +248,7 @@ public class Board : MonoBehaviour
         Audio.AudioManager.Instance.PlayBoardSound("win", pitch: 1f);
         Debug.Log(this+" won!");
         boardActive = false;
+        won = true;
         ui.ShowWinText();
     }
 
@@ -274,6 +281,9 @@ public class Board : MonoBehaviour
     public void CheckObjectivesCompleted() {
         var level = GameManager.Instance.level;
         if (!level) return;
+
+        // dont win off no objectives uncompleted if there are no objectives
+        if (level.objectiveList.objectives.Count == 0) return;
 
         // Check if every objective is completed
         foreach (var objective in level.objectiveList.objectives) {

@@ -71,7 +71,7 @@ public class SpellcastManager : MonoBehaviour {
     /// <summary>
     /// Whether or not a spellcast is currently in progress.
     /// </summary>
-    private bool spellcasting {get; set;}
+    public bool spellcasting {get; private set;}
 
     /// <summary>
     /// Current cascade off the current color during a spellcast.
@@ -116,7 +116,7 @@ public class SpellcastManager : MonoBehaviour {
     }
 
     void Update() {
-        if (!board || !board.boardActive) return;
+        if (!board) return;
 
         if (spellcasting)
         {
