@@ -39,7 +39,7 @@ public class BattleTimer : MonoBehaviour {
     /// <param name="time">time in seconds, eother remaining time or elapsed time, depending on game</param>
     /// <param name="showDecimal">if true, will show some decimal places on the seconds</param>
     /// <returns>a human readable time string</returns>
-    static string FormatTime(float time, bool showDecimal = false)
+    static string FormatTime(double time, bool showDecimal = false)
     {
         int minutes = (int)(time/60);
         int secondsRemainder = (int)(time % 60);

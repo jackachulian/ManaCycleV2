@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Replay;
-using SaveData;
+using SaveDataSystem;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -90,7 +90,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// Time that is incremented while the game is playing and unpaused. used for recording and replaying
     /// </summary>
-    public float battleTime;
+    public double battleTime;
 
     // used for pausing battle without disrupting other unity functionality
     public float battleTimeScale {get; private set;} = 1f;
@@ -330,7 +330,11 @@ public class BattleManager : MonoBehaviour
         // Track level progress in save file 
         // this is done after any spellcasts are done, right before postgame menu is shown
         if (GameManager.Instance.level) {
-            SaveDataManager.saveData.TrackLevelProgress(GameManager.Instance.level, true, 0, 0);
+            Board playerBoard = GetBoardByIndex(0);
+            bool cleared = !playerBoard.defeated;
+            int score = playerBoard.scoreManager.score;
+            double clearTime = battleTime;
+            SaveData.current.TrackLevelProgress(GameManager.Instance.level, cleared, score, clearTime);
         }
 
         int boardIndex = displayedBattler ? displayedBattler.boardIndex : -1;

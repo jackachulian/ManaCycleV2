@@ -62,6 +62,8 @@ public class LevelDetails : MonoBehaviour {
     }
 
     public void PlayLevelPressed() {
+        cancelAction.action.performed -= OnCancelPressed;
+        
         displayedLevel.StartLevelBattle();
     }
 

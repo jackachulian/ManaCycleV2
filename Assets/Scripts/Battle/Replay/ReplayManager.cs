@@ -131,7 +131,7 @@ namespace Replay {
         }
 
         public void AddEvent(Replayable ev) {
-            eventTiming.Add(BattleManager.Instance.battleTime);
+            eventTiming.Add((float)BattleManager.Instance.battleTime);
             events.Add(ev);
         }
 

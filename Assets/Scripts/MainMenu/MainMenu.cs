@@ -79,7 +79,7 @@ public class MainMenu : MonoBehaviour
 
             GameManager.Instance.SetConnectionType(GameManager.GameConnectionType.Singleplayer);
             GameManager.Instance.SetLevel(null);
-            TransitionManager.Instance.TransitionToScene("CharSelect");
+            TransitionManager.Instance.TransitionToScene("StoryOverworld");
         }
 
         public void LocalMultiplayerPressed() {

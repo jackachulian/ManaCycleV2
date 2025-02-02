@@ -8,16 +8,24 @@ using Audio;
 
 public class PauseMenuUI : MonoBehaviour {
     public BattleManager battleManager;
+
     [Header("Layout")]
     [SerializeField] private EventSystem uiEventSystem;
     [SerializeField] private GameObject firstSelectedObject;
     [SerializeField] private GameObject buttonsParent;
+
+    [Header("Buttons")]
+    [SerializeField] private Button charSelectButton;
+    [SerializeField] private Button levelSelectButton;
+
     [Header("Rendering")]
     [SerializeField] private Camera renderTexCam;
     [SerializeField] private Canvas backgroundCanvas;
+
     [Header("Audio Mixer")]
     [SerializeField] private AudioMixerSnapshot pausedMixerSnapshot;
     [SerializeField] private AudioMixerSnapshot unpausedMixerSnapshot;
+
     [Header("Sound Effects")]
     [SerializeField] private AudioClip selectSFX;
     [SerializeField] private AudioClip pressedSFX;
@@ -28,15 +36,6 @@ public class PauseMenuUI : MonoBehaviour {
 
     void Awake() {
         if (!menuShown) gameObject.SetActive(false);
-
-        for (int i = 0; i < buttonsParent.transform.childCount; i++)
-        {
-            // set every other button animation to be fliped
-            Transform t = buttonsParent.transform.GetChild(i).GetChild(0);
-            t.localScale -= new Vector3(i % 2 * 2, 0, 0);
-            // flip text again so it is readable
-            t.GetChild(1).localScale -= new Vector3(i % 2 * 2, 0, 0);
-        }
     }
 
 
@@ -51,6 +50,10 @@ public class PauseMenuUI : MonoBehaviour {
 
         pausedMixerSnapshot.TransitionTo(0.1f);
         AudioManager.Instance.PlaySound(openSFX);
+
+        bool inLevel = GameManager.Instance.level != null;
+        charSelectButton.gameObject.SetActive(!inLevel);
+        levelSelectButton.gameObject.SetActive(inLevel);
 
         // Select button
         uiEventSystem.enabled = true;
@@ -84,6 +87,13 @@ public class PauseMenuUI : MonoBehaviour {
     {
         battleManager.gameStartNetworkBehaviour.GoToCharacterSelectRpc();
         AudioManager.Instance.PlaySound(pressedSFX);
+    }
+
+    public void OnLevelSelectPressed() 
+    {
+        GameManager.Instance.LeaveGame();
+        AudioManager.Instance.PlaySound(pressedSFX);
+        TransitionManager.Instance.TransitionToScene("StoryOverworld", "ReverseWipe");
     }
 
     public void OnMainMenuPressed() 
