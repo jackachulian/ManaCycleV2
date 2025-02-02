@@ -2320,10 +2320,10 @@ MonoBehaviour:
   boxCollider: {fileID: 582484172}
   playerInteracter: {fileID: 582484173}
   jumpingEnabled: 1
-  moveSpeed: 15
-  gravity: 0.5
+  moveSpeed: 0.23
+  gravity: 0.04
   maxFallVel: 15
-  jumpSpeed: 0.6
+  jumpSpeed: 0.5
   jumpDamping: 0.5
 --- !u!114 &582484171
 MonoBehaviour:
@@ -6141,7 +6141,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b272407bbd0252947a50c09b5475a809, type: 2}
+  - {fileID: 2100000, guid: fab522fee052e0a4daa6b215043c36a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

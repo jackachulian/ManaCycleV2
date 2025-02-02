@@ -66,7 +66,8 @@ namespace StoryMode.Overworld
             }
 
             // apply velocity
-            pos += currentVel * Time.fixedDeltaTime;
+            // FixedUpdate runs at a 50 times per second, unrelated to framerate. dt need not apply
+            pos += currentVel;
             rigidBody.position = pos;
         }
 
