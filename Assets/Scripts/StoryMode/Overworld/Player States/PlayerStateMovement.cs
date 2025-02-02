@@ -110,8 +110,17 @@ namespace StoryMode.Overworld
         
         void OnDisable()
         {
-            moveDir = Vector3.zero;
+            // moveDir = Vector3.zero;
             jumpPressed = false;
+        }
+
+        public override void OnStateEntered()
+        {
+            player.animator.SetBool("running", moveDir.magnitude > 0);
+        }
+
+        public override void OnStateExited() {
+            player.animator.SetBool("running", false);
         }
 
         public override void OnFastTravel(InputAction.CallbackContext ctx)

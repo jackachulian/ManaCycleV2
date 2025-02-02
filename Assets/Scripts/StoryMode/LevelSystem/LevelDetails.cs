@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using StoryMode.Overworld;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class LevelDetails : MonoBehaviour {
     public static LevelDetails Instance;
@@ -12,6 +14,8 @@ public class LevelDetails : MonoBehaviour {
 
     [SerializeField] private GameObject uiObject;
     [SerializeField] private GameObject firstSelected;
+
+    [SerializeField] private InputActionReference cancelAction;
 
     private Level displayedLevel;
 
@@ -25,7 +29,7 @@ public class LevelDetails : MonoBehaviour {
         uiObject.SetActive(false);
     }
 
-    public void OpenDetailsWindow(Level level) {
+    public async Task OpenDetailsWindow(Level level) {
         DisplayLevel(level);
 
         OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("UI");
@@ -35,10 +39,20 @@ public class LevelDetails : MonoBehaviour {
         uiObject.SetActive(true);
 
         EventSystem.current.SetSelectedGameObject(null);
+        await Awaitable.EndOfFrameAsync();
         EventSystem.current.SetSelectedGameObject(firstSelected);
+
+        cancelAction.action.performed += OnCancelPressed;
+    }
+
+    public void OnCancelPressed(InputAction.CallbackContext ctx) {
+        CloseDetailsWindow();
     }
 
     public void CloseDetailsWindow() {
+        cancelAction.action.performed -= OnCancelPressed;
+
+        EventSystem.current.SetSelectedGameObject(null);
         uiObject.SetActive(false);
         OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("Overworld");
         OverworldPlayer.Instance.interactionManager.enabled = true;
