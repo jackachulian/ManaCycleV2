@@ -113,7 +113,7 @@ public class CharSelectManager : MonoBehaviour
     }
 
     public void BackToPreviousScene() {
-        SceneManager.LoadScene("MainMenu");
+        TransitionManager.Instance.TransitionToScene("MainMenu", "ReverseWipe");
     }
 
     /// <summary>

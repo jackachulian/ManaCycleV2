@@ -1210,9 +1210,9 @@ MonoBehaviour:
   boxCollider: {fileID: 582484172}
   playerInteracter: {fileID: 582484173}
   jumpingEnabled: 1
-  moveSpeed: 20
+  moveSpeed: 15
   gravity: 0.5
-  maxFallVel: 20
+  maxFallVel: 15
   jumpSpeed: 0.6
   jumpDamping: 0.5
 --- !u!114 &582484171
