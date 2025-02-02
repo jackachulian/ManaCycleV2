@@ -9,9 +9,14 @@ namespace StoryMode.Overworld
 
         public override void OnInteract(OverworldPlayerInteracter interacter)
         {
-            Debug.Log("Playing level (" + level + ")");
+            
 
-            LevelDetails.Instance.OpenDetailsWindow(level);
+            if (level) {
+                Debug.Log("Playing level (" + level + ")");
+                LevelDetails.Instance.OpenDetailsWindow(level);
+            } else {
+                Debug.Log("Interacted with levelinteractable with no level defined");
+            }
 
             // _level.StartLevelBattle();
         }

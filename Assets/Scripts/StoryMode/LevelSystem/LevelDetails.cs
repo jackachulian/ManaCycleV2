@@ -52,6 +52,8 @@ public class LevelDetails : MonoBehaviour {
     }
 
     public void DisplayLevel(Level level) {
+        if (!level) return;
+
         displayedLevel = level;
         levelNameLabel.text = level.name;
         levelNumberLabel.text = level.levelNumber;
