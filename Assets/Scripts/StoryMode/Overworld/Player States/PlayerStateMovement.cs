@@ -113,5 +113,10 @@ namespace StoryMode.Overworld
             moveDir = Vector3.zero;
             jumpPressed = false;
         }
+
+        public override void OnFastTravel(InputAction.CallbackContext ctx)
+        {
+            if (ctx.performed) OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.FastTravel);
+        }
     }
 }

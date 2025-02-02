@@ -74,8 +74,7 @@ namespace StoryMode.ConvoSystem
 
         public void CloseAnimationComplete()
         {
-            // ewwww
-            GameObject.Find("Player").GetComponent<OverworldPlayer>().SetState(OverworldPlayer.PlayerState.Normal);
+            OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
             menuParent.SetActive(false);
         }
     }

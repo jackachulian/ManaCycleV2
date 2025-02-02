@@ -3,16 +3,24 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Level", menuName = "ManaCycle/Level")]
 public class Level : ScriptableObject {
     /// <summary>
-    /// Used to identify this battle for save data, achievements, etc
+    /// Used to identify the level in save data
     /// </summary>
-    [Tooltip("Used to identify this battle for save data, achievements, etc")]
-    public string id;
+    public string levelId = "world1_level1";
+
+    /// <summary>
+    /// Shown in the level UI to show this level's number in the sequence of levels and show the "world" (Map area) it is a part of
+    /// </summary>
+    public string levelNumber = "1-1";
 
     /// <summary>
     /// display name (TODO: localize)
     /// </summary>
-    public string displayName;
+    public string displayName = "Level";
 
+    /// <summary>
+    /// Description shown on the level details window before starting the level (TODO: localize)
+    /// </summary>
+    public string description = "This is a level";
 
     [System.Serializable]
     public class LevelPlayer {
@@ -54,6 +62,12 @@ public class Level : ScriptableObject {
     /// </summary>
     [Tooltip("Client-controlled player has this many open slots to equip whatever spells they want. The last player-selected spells will be auto-filled in these slots at the start of battle setup.")]
     public int playerOpenSpellSlots = 2;
+
+    /// <summary>
+    /// Amount of seconds the player has to beat this level in. If 0, time is unlimited.
+    /// </summary>
+    [Tooltip("Amount of seconds the player has to beat this level in. If 0, time is unlimited.")]
+    public int timeLimit = 180;
 
     /// <summary>
     /// Contains battle-specific non-player-specific data used in the battle scene such as the seed selected, cycle lengths, etc.

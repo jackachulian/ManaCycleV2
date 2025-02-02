@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace StoryMode.Overworld
 {
-    public class OverworldPlayerConvo : PlayerStateBase
+    public class PlayerStateConvo : PlayerStateBase
     {
         public override void OnInteract(InputAction.CallbackContext ctx)
         {
@@ -16,11 +16,6 @@ namespace StoryMode.Overworld
         {
             if (ctx.performed)
                 ConvoManager.currentConvoUI.HandleBackwardInput();
-        }
-
-        public override void OnMove(InputAction.CallbackContext ctx)
-        {
-
         }
     }
 }

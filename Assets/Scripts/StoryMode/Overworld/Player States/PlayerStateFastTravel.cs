@@ -55,5 +55,10 @@ namespace StoryMode.Overworld
         {
             // Do nothing
         }
+
+        public override void OnFastTravel(InputAction.CallbackContext ctx)
+        {
+            if (!ctx.performed) OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
+        }
     }
 }

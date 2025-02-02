@@ -9,7 +9,11 @@ namespace StoryMode.Overworld
         public string interactableName;
         public bool isFastTravelPoint = true;
         public OverworldInteractable[] adjacentPoints;
+
+
         public abstract void OnInteract(OverworldPlayerInteracter interacter);
+        public virtual void OnInteractionRangeEntered() {}
+        public virtual void OnInteractionRangeExited() {}
 
         /// <summary>
         /// Gets the closest interactable to this one in the given target direction.

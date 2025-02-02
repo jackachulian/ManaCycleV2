@@ -1,14 +1,48 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace StoryMode.Overworld
 {
     public class InteractionManager : MonoBehaviour
     {
-        private List<OverworldInteractable> interactablesInRange = new();
+        public List<OverworldInteractable> interactablesInRange {get; private set;} = new();
         public delegate void InteractableChangeCallback(OverworldInteractable? interactable);
         public event InteractableChangeCallback? InteractableChangeNotifier;
+
+        public OverworldInteractable nearest {get; private set;}
+
+        /// <summary>
+        /// Called when the nearest interactable to the player changes.
+        /// Can be null, in which case there is no interactable object in range to the player.
+        /// </summary>
+        public event Action<OverworldInteractable> onNearestChanged;
+
+        void Update() {
+            // Constantly keep track of the nearest interactable
+            var previousNearest = nearest;
+
+            nearest = null;
+            float closestSqrDistance = float.MaxValue;
+
+            for (int i = 0; i < interactablesInRange.Count; i++) {
+                var interactable = interactablesInRange[i];
+                float sqrDistance = (interactable.transform.position - transform.position).magnitude;
+
+                if (sqrDistance < closestSqrDistance) {
+                    nearest = interactable;
+                    closestSqrDistance = sqrDistance;
+                }
+            }
+
+            if (nearest != previousNearest) {
+                if (previousNearest) previousNearest.OnInteractionRangeExited();
+                if (nearest) nearest.OnInteractionRangeEntered();
+                onNearestChanged.Invoke(nearest);
+            }
+        }
+
 
         void OnCollisionEnter(Collision collision)
         {
@@ -19,7 +53,7 @@ namespace StoryMode.Overworld
                 interactablesInRange.Add(oi);
             }
 
-            InteractableChangeNotifier.Invoke(oi);
+            InteractableChangeNotifier?.Invoke(oi);
         }
 
         void OnCollisionExit(Collision collision)

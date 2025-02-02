@@ -14,8 +14,10 @@ namespace StoryMode.Overworld
         [SerializeField] private Animator _animator;
         public Animator animator => _animator;
 
-
-        private PlayerStateBase[] states;
+        /// <summary>
+        /// All states. Index corresponds to the PlayerState enum.
+        /// </summary>
+        [SerializeField] private PlayerStateBase[] states;
 
 
         private PlayerInput _playerInput;
@@ -24,9 +26,10 @@ namespace StoryMode.Overworld
 
         public enum PlayerState
         {
-            Normal,
-            Fast,
-            Convo
+            Movement,
+            FastTravel,
+            Convo,
+            LevelDetails
         }
 
         public PlayerState ActiveState {get; private set;}
@@ -43,16 +46,13 @@ namespace StoryMode.Overworld
             _playerInput = GetComponent<PlayerInput>();
 
             // FIXME this finds all states in scene not in object...
-            states = GetComponents<PlayerStateBase>();
-            SetState(PlayerState.Normal);
-
+            SetState(PlayerState.Movement);
         }
 
         // fast travel enabled only when held
         public void OnFastTravel(InputAction.CallbackContext ctx)
         {
-            if (ActiveState == PlayerState.Convo) return;
-            SetState(ctx.performed ? PlayerState.Fast : PlayerState.Normal);
+            
         }
 
         // re-route inputs to active state to avoid interference and only serialize inputs once
@@ -68,12 +68,13 @@ namespace StoryMode.Overworld
 
         public void OnInteract(InputAction.CallbackContext ctx)
         {
-            Debug.Log(ActiveState);
             states[(int)ActiveState].OnInteract(ctx);
         }
 
         public void SetState(PlayerState state)
         {
+            Debug.Log("Changing to state "+state);
+
             foreach(var s in states)
             {
                 s.enabled = false;
