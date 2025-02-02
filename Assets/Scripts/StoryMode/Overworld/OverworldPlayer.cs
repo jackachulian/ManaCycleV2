@@ -24,12 +24,15 @@ namespace StoryMode.Overworld
         public PlayerInput playerInput => _playerInput;
 
 
+        [SerializeField] private InteractionManager _interactionManager;
+        public InteractionManager interactionManager => _interactionManager;
+
         public enum PlayerState
         {
             Movement,
             FastTravel,
             Convo,
-            LevelDetails
+            LevelDetails,
         }
 
         public PlayerState ActiveState {get; private set;}
@@ -45,14 +48,17 @@ namespace StoryMode.Overworld
 
             _playerInput = GetComponent<PlayerInput>();
 
-            // FIXME this finds all states in scene not in object...
+            foreach (var state in states) {
+                state.enabled = false;
+            }
+
             SetState(PlayerState.Movement);
         }
 
         // fast travel enabled only when held
         public void OnFastTravel(InputAction.CallbackContext ctx)
         {
-            
+            states[(int)ActiveState].OnFastTravel(ctx);
         }
 
         // re-route inputs to active state to avoid interference and only serialize inputs once
@@ -73,14 +79,22 @@ namespace StoryMode.Overworld
 
         public void SetState(PlayerState state)
         {
+            if (ActiveState == state && states[(int)ActiveState].enabled) return;
+
             Debug.Log("Changing to state "+state);
 
-            foreach(var s in states)
-            {
-                s.enabled = false;
+            var prevStateBehavior = states[(int)ActiveState];
+            if (prevStateBehavior && prevStateBehavior.enabled) {
+                prevStateBehavior.OnStateExited();
+                prevStateBehavior.enabled = false;
             }
-            states[(int)state].enabled = true;
+
             ActiveState = state;
+            var newStateBehavior = states[(int)ActiveState];
+            if (newStateBehavior) {
+                newStateBehavior.enabled = true;
+                newStateBehavior.OnStateEntered();
+            }
         }
         
     }

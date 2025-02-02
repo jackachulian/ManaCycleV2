@@ -9,11 +9,11 @@ namespace StoryMode.Overworld
 
         public override void OnInteract(OverworldPlayerInteracter interacter)
         {
-            Debug.Log("Playing level (" + _level + ")");
+            Debug.Log("Playing level (" + level + ")");
 
-            if (OverworldPlayer.Instance) OverworldPlayer.Instance.playerInput.enabled = false;
+            LevelDetails.Instance.OpenDetailsWindow(level);
 
-            _level.StartLevelBattle();
+            // _level.StartLevelBattle();
         }
 
         public override void OnInteractionRangeEntered()

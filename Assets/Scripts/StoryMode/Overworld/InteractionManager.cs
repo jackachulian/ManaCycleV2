@@ -19,6 +19,16 @@ namespace StoryMode.Overworld
         /// </summary>
         public event Action<OverworldInteractable> onNearestChanged;
 
+        void OnEnable() {
+
+        }
+
+        void OnDisable() {
+            if (nearest) nearest.OnInteractionRangeExited();
+            nearest = null;
+            onNearestChanged.Invoke(nearest);
+        }
+
         void Update() {
             // Constantly keep track of the nearest interactable
             var previousNearest = nearest;
