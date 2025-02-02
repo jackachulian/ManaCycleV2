@@ -25,10 +25,10 @@ MonoBehaviour:
     cpuSpeed: 0
   playerOpenSpellSlots: 2
   timeLimit: 180
-  objectives:
+  objectiveList:
     objectives:
-    - rid: 9161467395753377892
-    - rid: 9161467395753377895
+    - rid: 9161467395753377896
+    - rid: 9161467395753377898
   battleData:
     seed: 0
     randomizeSeed: 0
@@ -38,11 +38,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 9161467395753377892
+    - rid: 9161467395753377896
       type: {class: ScoreObjective, ns: LevelSystem.Objectives, asm: Assembly-CSharp}
       data:
         scoreRequirement: 1000
-    - rid: 9161467395753377895
+    - rid: 9161467395753377898
       type: {class: SpellcastClearObjective, ns: LevelSystem.Objectives, asm: Assembly-CSharp}
       data:
         spellcastClearRequirement: 5

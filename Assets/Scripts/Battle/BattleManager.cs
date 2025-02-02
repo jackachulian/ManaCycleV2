@@ -301,16 +301,23 @@ public class BattleManager : MonoBehaviour
         }
 
         if (livingBoards == 0 || winner) {
-            if (winner) winner.Win();
-            gameCompleted = true;
-            onBattleEnded?.Invoke();
             
-            if (winner) {
-                ServerStartPostGameAfterDelay(winner);
-            } else {
-                // if there is no winner, this is a singleplayer loss, show player 0 in the postgame menu
-                ServerStartPostGameAfterDelay(boardLayoutManager.currentLayout.boards[0]);
-            }
+        }
+    }
+
+    /// <summary>
+    /// End the current batle. If a winning board is provided, they are presented as the winner.
+    /// </summary>
+    public void EndBattle(Board winner = null) {
+        if (winner) winner.Win();
+        gameCompleted = true;
+        onBattleEnded?.Invoke();
+        
+        if (winner) {
+            ServerStartPostGameAfterDelay(winner);
+        } else {
+            // if there is no winner, this is a singleplayer loss, show player 0 in the postgame menu
+            ServerStartPostGameAfterDelay(boardLayoutManager.currentLayout.boards[0]);
         }
     }
 

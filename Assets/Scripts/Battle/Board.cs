@@ -165,10 +165,20 @@ public class Board : MonoBehaviour
             ui.HideBoard();
         }
 
+        if (GameManager.Instance.level != null) {
+            ListenForObjectives();
+        }
+
         manaTileGrid.HideTiles(); // tiles will be shown when the game begins
         _upcomingPieces.HidePieces();
 
         onInitialized?.Invoke();
+    }
+
+    void OnDisable() {
+        if (GameManager.Instance.level != null) {
+            StopListeningForObjectives();
+        }
     }
 
     public ManaCycle GetManaCycle()
@@ -233,5 +243,46 @@ public class Board : MonoBehaviour
         Debug.Log(this+" won!");
         boardActive = false;
         ui.ShowWinText();
+    }
+
+    bool listeningForObjectives = false;
+    public void ListenForObjectives() {
+        var level = GameManager.Instance.level;
+        if (!level) return;
+
+        if (listeningForObjectives) return;
+        listeningForObjectives = true;
+
+        // Check if every objective is completed
+        foreach (var objective in level.objectiveList.objectives) {
+            objective.onUpdated += CheckObjectivesCompleted;
+        }
+    }
+
+    public void StopListeningForObjectives() {
+        var level = GameManager.Instance.level;
+        if (!level) return;
+
+        if (!listeningForObjectives) return;
+        listeningForObjectives = false;
+
+        foreach (var objective in level.objectiveList.objectives) {
+            objective.onUpdated -= CheckObjectivesCompleted;
+        }
+    }
+
+    public void CheckObjectivesCompleted() {
+        var level = GameManager.Instance.level;
+        if (!level) return;
+
+        // Check if every objective is completed
+        foreach (var objective in level.objectiveList.objectives) {
+            if (objective.GetProgress(this) < 1) {
+                return;
+            }
+        }
+
+        // Win the game :)
+        BattleManager.Instance.EndBattle(winner: this);
     }
 }

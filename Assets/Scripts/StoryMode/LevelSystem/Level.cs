@@ -79,7 +79,7 @@ public class Level : ScriptableObject {
     /// <summary>
     /// Objectives that need to be met to clear the level. Should only be used in singleplayer levels.
     /// </summary>
-    public LevelObjectiveList objectives = new();
+    public LevelObjectiveList objectiveList = new();
 
     /// <summary>
     /// Contains battle-specific non-player-specific data used in the battle scene such as the seed selected, cycle lengths, etc.

@@ -33,7 +33,7 @@ public class ObjectivesUI : MonoBehaviour {
             return;
         }
 
-        foreach (var objective in level.objectives.objectives) {
+        foreach (var objective in level.objectiveList.objectives) {
             var objectiveItem = Instantiate(objectiveItemPrefab, objectivesParent);
             objectiveItem.InitializeObjectiveItem(objective, board);
         }
