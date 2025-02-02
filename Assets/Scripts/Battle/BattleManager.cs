@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Replay;
+using SaveData;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -324,6 +325,13 @@ public class BattleManager : MonoBehaviour
 
         // TODO: wait until current spellcast completes on winning board
         await Task.Delay(1000);
+
+
+        // Track level progress in save file 
+        // this is done after any spellcasts are done, right before postgame menu is shown
+        if (GameManager.Instance.level) {
+            SaveDataManager.saveData.TrackLevelProgress(GameManager.Instance.level, true, 0, 0);
+        }
 
         int boardIndex = displayedBattler ? displayedBattler.boardIndex : -1;
 

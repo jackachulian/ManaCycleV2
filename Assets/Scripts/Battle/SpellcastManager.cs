@@ -244,7 +244,7 @@ public class SpellcastManager : MonoBehaviour {
         // another possible security improvement: 
         // have each client store the expected and actual damage of a damage instance to determine if the other client is cheating
         if (board.player && board.player.IsOwner) {
-            board.healthManager.DealDamageToAllOtherBoards(damage);
+            board.healthManager.DealDamage(damage);
         } else {
             // check actual (received) value if present, wait for it if not
             // and then compare it against expected damage (the local damage variable)

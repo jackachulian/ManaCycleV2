@@ -45,6 +45,11 @@ public class Board : MonoBehaviour
     public HealthManager healthManager {get; private set;}
 
     /// <summary>
+    /// Handles gaining of score in singleplayer levels.
+    /// </summary>
+    public ScoreManager scoreManager {get; private set;}
+
+    /// <summary>
     /// Handles building up SP and using spells.
     /// </summary>
     public SpellManager spellManager {get; private set;}
@@ -142,6 +147,7 @@ public class Board : MonoBehaviour
         ghostPieceManager = GetComponent<GhostPieceManager>();
         pieceManager = GetComponent<PieceManager>();
         healthManager = GetComponent<HealthManager>();
+        scoreManager = GetComponent<ScoreManager>();
         spellManager = GetComponent<SpellManager>();
 
         ui.InitializeBattle(this);
@@ -151,6 +157,7 @@ public class Board : MonoBehaviour
         ghostPieceManager.InitializeBattle(this);
         pieceManager.InitializeBattle(this);
         healthManager.InitializeBattle(this);
+        scoreManager.InitializeBattle(this);
         spellManager.InitializeBattle(this);
 
         if (!player) {

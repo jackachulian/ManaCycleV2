@@ -23,9 +23,13 @@ public class HealthManager : MonoBehaviour {
     /// </summary>
     public int[] incomingDamage {get; private set;}
 
-    [SerializeField] private HpBarUI hpBarUI;
+    [SerializeField] private HealthUI healthUI;
     [SerializeField] private IncomingDamageUI incomingDamageUI;
 
+    /// <summary>
+    /// Only display the health bar and health number if there is more than one player in the battle.
+    /// </summary>
+    private bool showingHealthUI;
 
     private Board board;
 
@@ -36,18 +40,32 @@ public class HealthManager : MonoBehaviour {
     public void InitializeBattle(Board board) {
         this.board = board;
         incomingDamage = new int[6];
-        UpdateHealthUI();
+        showingHealthUI = GameManager.Instance.playerManager.players.Count > 1;
+        if (showingHealthUI) {
+            healthUI.ShowHealthUI();
+            incomingDamageUI.ShowUI();
+            UpdateHealthUI();
+        } else {
+            healthUI.HideHealthUI();
+            incomingDamageUI.HideUI();
+        }
     }
 
     public void UpdateHealthUI() {
-        hpBarUI.UpdateUI(health, maxHealth, incomingDamage);
-        incomingDamageUI.UpdateUI(incomingDamage);
+        if (showingHealthUI) {
+            healthUI.UpdateUI(health, maxHealth, incomingDamage);
+            incomingDamageUI.UpdateUI(incomingDamage);
+        }
     }
 
     /// <summary>
     /// Counter incoming damage first, and then deal damage to all other players via a network RPC if any is leftover.
+    /// Will also gain score based on the amount of total damage before countering (even if there were no boards attacked, such as in singleplayer.)
     /// </summary>
-    public void DealDamageToAllOtherBoards(int damage) {
+    public void DealDamage(int damage) {
+        // Gain score, regardless of if any damage was countered or if any boards are actually attacked by this damage
+        board.scoreManager.AddScore(damage);
+
         damage = board.healthManager.CounterIncomingDamage(damage);
         if (damage <= 0) return;
 

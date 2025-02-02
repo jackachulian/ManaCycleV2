@@ -43,6 +43,6 @@ public class IronSwordSpell : Spell
             if (cleared) tilesCleared++;
         }
 
-        board.healthManager.DealDamageToAllOtherBoards(tilesCleared * damagePerTileCleared);
+        board.healthManager.DealDamage(tilesCleared * damagePerTileCleared);
     }
 }
