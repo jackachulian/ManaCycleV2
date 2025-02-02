@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using LevelSystem.Objectives;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Level", menuName = "ManaCycle/Level")]
@@ -21,6 +23,11 @@ public class Level : ScriptableObject {
     /// Description shown on the level details window before starting the level (TODO: localize)
     /// </summary>
     public string description = "This is a level";
+
+    /// <summary>
+    /// If not null/empty, prerequisite level of this ID needs to be cleared before this level can be played
+    /// </summary>
+    public string prerequisiteLevel;
 
     [System.Serializable]
     public class LevelPlayer {
@@ -68,6 +75,11 @@ public class Level : ScriptableObject {
     /// </summary>
     [Tooltip("Amount of seconds the player has to beat this level in. If 0, time is unlimited.")]
     public int timeLimit = 180;
+
+    /// <summary>
+    /// Objectives that need to be met to clear the level. Should only be used in singleplayer levels.
+    /// </summary>
+    public LevelObjectiveList objectives = new();
 
     /// <summary>
     /// Contains battle-specific non-player-specific data used in the battle scene such as the seed selected, cycle lengths, etc.

@@ -41,6 +41,11 @@ public class SpellcastManager : MonoBehaviour {
     private Board board;
 
     /// <summary>
+    /// Total amount mana has been cleared via a spellcast (Does not include cascade clears)
+    /// </summary>
+    public int spellcastClears {get; private set;}
+
+    /// <summary>
     /// This board's current position in the cycle's color sequence
     /// </summary>
     private int cycleIndex;
@@ -208,6 +213,7 @@ public class SpellcastManager : MonoBehaviour {
         } else {
             Debug.Log("Chain clearing - chain="+currentChain+", cascade="+currentCascade+", color="+GetCurrentCycleColor());
             currentChain += 1;
+            spellcastClears += 1;
             AudioManager.Instance.PlayBoardSound("cast", pitch: 1f + Math.Min(currentChain + currentCascade, 12) * 0.12f);
         }
 
