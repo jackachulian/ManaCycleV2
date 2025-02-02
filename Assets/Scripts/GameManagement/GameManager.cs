@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviour {
     /// Current level being played. Will only be used if in story mode. 
     /// Determines how the SingleplayerConnectionManager will set up the battlers.
     /// </summary>
-    public Level level {get; private set;}
+    [SerializeField] private Level _level;
+    public Level level => _level;
 
     public enum GameConnectionType {
         /// <summary>
@@ -160,7 +161,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetLevel(Level level) {
-        this.level = level;
+        this._level = level;
         if (level) {
             SetBattleData(level.battleData);
         }

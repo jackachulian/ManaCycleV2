@@ -11,9 +11,24 @@ namespace LevelSystem.Objectives {
             return string.Format("Score {0}/{1} points", board.scoreManager.score, scoreRequirement);
         }
 
-        public override bool IsConditionMet(Board board)
+        public override float GetProgress(Board board)
         {
-            return board.scoreManager.score >= scoreRequirement;
+            return (float)board.scoreManager.score / scoreRequirement;
+        }
+
+
+        public override void ListenToBoard(Board board)
+        {
+            board.scoreManager.onScoreChanged += OnScoreChanged;
+        }
+
+        public override void StopListeningToBoard(Board board)
+        {
+            board.scoreManager.onScoreChanged -= OnScoreChanged;
+        }
+
+        public void OnScoreChanged(int score) {
+            NotifyConditionUpdated();
         }
     }
 }

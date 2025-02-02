@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219b4f27279c48d4899beb53dfdd5e25, type: 3}
   m_Name: TestLevel
   m_EditorClassIdentifier: 
-  id: testLevel
+  levelId: world1_level1
+  levelNumber: 1-1
   displayName: Test Level
+  description: This is a level
+  prerequisiteLevel: 
   levelPlayers:
   - battlers:
     - {fileID: 568879115367386083, guid: 6304ee0eb7a2ca54c86e833e232f1062, type: 3}
@@ -21,9 +24,25 @@ MonoBehaviour:
     fixedSpells: []
     cpuSpeed: 0
   playerOpenSpellSlots: 2
+  timeLimit: 180
+  objectives:
+    objectives:
+    - rid: 9161467395753377892
+    - rid: 9161467395753377895
   battleData:
     seed: 0
     randomizeSeed: 0
     cycleLength: 5
     cycleUniqueColors: 5
     timeLimit: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 9161467395753377892
+      type: {class: ScoreObjective, ns: LevelSystem.Objectives, asm: Assembly-CSharp}
+      data:
+        scoreRequirement: 1000
+    - rid: 9161467395753377895
+      type: {class: SpellcastClearObjective, ns: LevelSystem.Objectives, asm: Assembly-CSharp}
+      data:
+        spellcastClearRequirement: 5

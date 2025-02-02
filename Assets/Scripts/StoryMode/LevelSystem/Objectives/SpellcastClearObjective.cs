@@ -11,9 +11,24 @@ namespace LevelSystem.Objectives {
             return string.Format("Spellcast {0}/{1} times", board.spellcastManager.spellcastClears, spellcastClearRequirement);
         }
 
-        public override bool IsConditionMet(Board board)
+        public override float GetProgress(Board board)
         {
-            return board.spellcastManager.spellcastClears >= spellcastClearRequirement;
+            return (float)board.spellcastManager.spellcastClears / spellcastClearRequirement;
+        }
+
+
+        public override void ListenToBoard(Board board)
+        {
+            board.spellcastManager.onSpellcastClear += OnSpellcastClear;
+        }
+
+        public override void StopListeningToBoard(Board board)
+        {
+            board.spellcastManager.onSpellcastClear -= OnSpellcastClear;
+        }
+
+        public void OnSpellcastClear(Board board) {
+            NotifyConditionUpdated();
         }
     }
 }

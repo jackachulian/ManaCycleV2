@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine;
 /// Handles earning score in singleplayer mode for Score-type levels
 /// </summary>
 public class ScoreManager : MonoBehaviour {
+    public event Action<int> onScoreChanged;
+
     /// <summary>
     /// Entire score ui object. Should be hidden when incoming damage is being used. Score will still be tracked but not shown.
     /// </summary>
@@ -42,6 +45,7 @@ public class ScoreManager : MonoBehaviour {
     /// <param name="score">amount of score gained</param>
     public void AddScore(int score) {
         this.score += score;
+        onScoreChanged.Invoke(score);
         if (showingScoreUI) UpdateScoreUI();
     }
 
