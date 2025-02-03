@@ -17,6 +17,7 @@ Shader "ManaCycle/Unlit/GlowyGrid"
         _PowerOffset ("Glow Exponent Pulse", Float) = 0.1
         _BrightnessPulse ("Brightness Pulse", Float) = 0.3
         _NoiseMix ("Noise Mix", Float) = 0.5
+        _UVs ("UV Scale", float) = 1.0
 
     }
     SubShader
@@ -37,11 +38,14 @@ Shader "ManaCycle/Unlit/GlowyGrid"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                float3 normal : NORMAL;
             };
 
             struct v2f
             {
                 float2 uv : TEXCOORD0;
+                float3 worldPos : TEXCOORD1;
+                float3 worldNormal : TEXCOORD2;
                 float4 vertex : SV_POSITION;
             };
 
@@ -61,23 +65,44 @@ Shader "ManaCycle/Unlit/GlowyGrid"
             float _TimeScale;
             float _NoiseMix;
             fixed4 _BaseCol;
+            float _UVs;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.worldNormal = mul(unity_ObjectToWorld, float4( v.normal, 0.0 ) ).xyz;
+                // rotate by 45 bcus isometric
+                o.worldPos.xz = mul(o.worldPos.xz, float2x2(0.707, -0.707, 0.707, 0.707));
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed2 uv = i.uv;
+                // world space adjustments
+                float3 Pos = i.worldPos / (-1.0 * abs(_UVs));
+
+                float3 c00 = tex2D (_MainTex, i.worldPos / 10);
+
+                float3 c1 = tex2D ( _MainTex, Pos.yz ).rgb;
+                float3 c2 = tex2D ( _MainTex, Pos.xz ).rgb;
+                float3 c3 = tex2D ( _MainTex, Pos.xy ).rgb;
+
+                float alpha21 = abs (i.worldNormal.x);
+                float alpha23 = abs (i.worldNormal.z);
+
+                float3 c21 = lerp ( c2, c1, alpha21 ).rgb;
+                float3 c23 = lerp ( c21, c3, alpha23 ).rgb;
+
+                // fixed2 uv = fmod(fmod(i.worldPos.xz, 1.0) + 1.0, 1.0);
+                fixed2 uv = fmod(fmod(Pos.xz, 1.0) + 1.0, 1.0);
                 fixed4 n = tex2D(_NoiseTex, uv * _GridSize * _NoiseSize);
                 fixed4 c = tex2D(_NoiseTex, fmod(uv + _Time.y * 0.1 * _TimeScale + n.rg * 0.3, 1.0) * _GridSize * _NoiseSize);
                 float v = c.r * (_NoiseMix) - (1.0 - _NoiseMix);
                 
-
+                // color
                 fixed4 col = _BaseCol;
 
                 float GridHalf = _GridSize / 2.0;
@@ -89,7 +114,7 @@ Shader "ManaCycle/Unlit/GlowyGrid"
                         * (_Brightness + abs(sin(_Time.y * _TimeScale)) * _BrightnessPulse)
                         * ((_Tint1 - _BaseCol) * (1.0-v) + (_Tint2 - _BaseCol) * v);
 
-                return col;
+                return fixed4(col.rgb * c23, 1.0);
             }
 
             ENDCG

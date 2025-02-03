@@ -48,20 +48,21 @@ Material:
     - _Brightness: 2
     - _BrightnessPulse: 0.2
     - _EnableExternalAlpha: 0
-    - _GridSize: 0.12
-    - _NoiseMix: 0.15
-    - _NoiseSize: 5
-    - _Power: 1.4
+    - _GridSize: 1
+    - _NoiseMix: 0.4
+    - _NoiseSize: 0.1
+    - _Power: 1.39
     - _PowerOffset: 0.3
-    - _TimeScale: 0.4
+    - _TimeScale: 2
+    - _UVs: 2.7
     - _ZWrite: 0
-    - _e1: 0.2
-    - _e2: 0.45
+    - _e1: 0.3
+    - _e2: 0.7
     m_Colors:
     - _BaseCol: {r: 0.09411765, g: 0.09411765, b: 0.1882353, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tint1: {r: 0.88235295, g: 0, b: 0.9098039, a: 1}
+    - _Tint1: {r: 0.94150037, g: 0.06016379, b: 0.9811321, a: 1}
     - _Tint2: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
