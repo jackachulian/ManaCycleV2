@@ -6,7 +6,12 @@ namespace LevelSystem.Objectives {
     {
         public int scoreRequirement;
 
-        public override string GetInstructionString(Board board)
+        public override string GetDetailsString()
+        {
+            return string.Format("Score {0} points", scoreRequirement);
+        }
+
+        public override string GetProgressString(Board board)
         {
             return string.Format("Score {0}/{1} points", board.scoreManager.score, scoreRequirement);
         }

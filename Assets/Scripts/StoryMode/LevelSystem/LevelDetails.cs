@@ -73,8 +73,16 @@ public class LevelDetails : MonoBehaviour {
         displayedLevel = level;
         levelNameLabel.text = level.name;
         levelNumberLabel.text = level.levelNumber;
-        descriptionLabel.text = level.description;
         timeLabel.text = FormatTime(level.timeLimit);
+
+        string desc = "Requirements:\n";
+        for (int i = 0; i < level.objectiveList.objectives.Count; i++) {
+            var objective = level.objectiveList.objectives[i];
+            desc += "- "+objective.GetDetailsString();
+            if (i < level.objectiveList.objectives.Count-1) desc += "\n";
+        }
+
+        descriptionLabel.text = desc;
     }
 
     static string FormatTime(float time, bool showDecimal = false)

@@ -20,11 +20,6 @@ public class Level : ScriptableObject {
     public string displayName = "Level";
 
     /// <summary>
-    /// Description shown on the level details window before starting the level (TODO: localize)
-    /// </summary>
-    public string description = "This is a level";
-
-    /// <summary>
     /// If not null/empty, prerequisite level of this ID needs to be cleared before this level can be played
     /// </summary>
     public string prerequisiteLevel;

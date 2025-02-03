@@ -6,7 +6,12 @@ namespace LevelSystem.Objectives {
     {
         public int spellcastClearRequirement;
 
-        public override string GetInstructionString(Board board)
+        public override string GetDetailsString()
+        {
+            return string.Format("Spellcast {0} times", spellcastClearRequirement);
+        }
+
+        public override string GetProgressString(Board board)
         {
             return string.Format("Spellcast {0}/{1} times", board.spellcastManager.spellcastClears, spellcastClearRequirement);
         }

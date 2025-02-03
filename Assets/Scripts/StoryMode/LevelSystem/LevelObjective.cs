@@ -4,7 +4,18 @@ using UnityEngine;
 namespace LevelSystem.Objectives {
     [System.Serializable]
     public abstract class LevelObjective {
-        public abstract string GetInstructionString(Board board);
+        /// <summary>
+        /// Returns the string that shows in the level details menu in level select.
+        /// </summary>
+        /// <returns></returns>
+        public abstract string GetDetailsString();
+
+        /// <summary>
+        /// Returns the string that will show in the battle objectives list.
+        /// </summary>
+        /// <param name="board"></param>
+        /// <returns></returns>
+        public abstract string GetProgressString(Board board);
         
         /// <summary>
         /// Get the completion progress, as a percentage.

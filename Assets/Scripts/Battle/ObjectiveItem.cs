@@ -32,7 +32,7 @@ public class ObjectiveItem : MonoBehaviour {
     }
 
     public void UpdateObjectiveItem() {
-        objectiveLabel.text = objective.GetInstructionString(board);
+        objectiveLabel.text = objective.GetProgressString(board);
         
         float progress = objective.GetProgress(board);
         objectiveLabel.color = progress >= 1 ? completedTextColor : inProgressTextColor;
