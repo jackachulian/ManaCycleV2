@@ -154,14 +154,6 @@ public class CharSelectorUI : MonoBehaviour
         if (charSelector.player && charSelector.player.characterChosen.Value && !charSelector.player.optionsChosen.Value) {
             optionsWindow.SetActive(true);
             battlerNameText.enabled = false;
-
-            // If player is locally controlled, select the first option with the player's event system 
-            // (may want to do after 1 frame delay because the event system is dumb)
-            if (charSelector.player.IsOwner && charSelector.player) {
-                MultiplayerEventSystem multiplayerEventSystem = charSelector.player.GetComponent<MultiplayerEventSystem>();
-                multiplayerEventSystem.SetSelectedGameObject(null);
-                multiplayerEventSystem.SetSelectedGameObject(optionsFirstSelected);
-            }
         } else {
             optionsWindow.SetActive(false);
             battlerNameText.enabled = true;

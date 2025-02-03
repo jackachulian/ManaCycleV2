@@ -45,7 +45,7 @@ public class ScoreManager : MonoBehaviour {
     /// <param name="score">amount of score gained</param>
     public void AddScore(int score) {
         this.score += score;
-        onScoreChanged.Invoke(score);
+        onScoreChanged?.Invoke(score);
         if (showingScoreUI) UpdateScoreUI();
     }
 

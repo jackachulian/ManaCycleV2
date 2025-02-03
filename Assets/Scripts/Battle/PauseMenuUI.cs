@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Audio;
 using Audio;
+using System.Threading.Tasks;
 
 public class PauseMenuUI : MonoBehaviour {
     public BattleManager battleManager;
@@ -39,7 +40,7 @@ public class PauseMenuUI : MonoBehaviour {
     }
 
 
-    public void ShowPauseMenuUI() {
+    public async Task ShowPauseMenuUI() {
         menuShown = true;
         gameObject.SetActive(true);
         // take snapshot for render texture
@@ -55,11 +56,16 @@ public class PauseMenuUI : MonoBehaviour {
         charSelectButton.gameObject.SetActive(!inLevel);
         levelSelectButton.gameObject.SetActive(inLevel);
 
-        // Select button
+        GameManager.Instance.playerManager.DisablePlayerInputs();
+
+        // Select button (waits n shit because unity event system dumb)
+        await Awaitable.NextFrameAsync();
         uiEventSystem.enabled = true;
+        uiEventSystem.gameObject.SetActive(false);
+        uiEventSystem.gameObject.SetActive(true);
+        await Awaitable.NextFrameAsync();
         uiEventSystem.SetSelectedGameObject(null);
         uiEventSystem.SetSelectedGameObject(firstSelectedObject);
-
     }
 
     public void HidePauseMenuUI()
@@ -68,6 +74,8 @@ public class PauseMenuUI : MonoBehaviour {
         unpausedMixerSnapshot.TransitionTo(0.1f);
         menuShown = false;
         gameObject.SetActive(false);
+
+        GameManager.Instance.playerManager.EnablePlayerInputs();
     }
 
     public void OnResumePressed()

@@ -183,4 +183,16 @@ public class PlayerManager : MonoBehaviour {
             player.EnableBattleInputs();
         }
     }
+
+    public void DisablePlayerInputs() {
+        foreach (var player in players) {
+            player.DisableUserInput();
+        }
+    }
+
+    public void EnablePlayerInputs() {
+        foreach (var player in players) {
+            player.EnableUserInput();
+        }
+    }
 }

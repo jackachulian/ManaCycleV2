@@ -52,7 +52,7 @@ public class LevelPopup : MonoBehaviour {
     }
 
     public void HideUI() {
-        uiTransform.gameObject.SetActive(false);
+        if (uiTransform) uiTransform.gameObject.SetActive(false);
     }
 
     public void DisplayLevel(Level level) {

@@ -80,7 +80,11 @@ public class PostGameMenuUI : MonoBehaviour {
 
     public void OpenAnimationComplete()
     {
+        GameManager.Instance.playerManager.DisablePlayerInputs();
+
         uiEventSystem.enabled = true;
+        uiEventSystem.gameObject.SetActive(false);
+        uiEventSystem.gameObject.SetActive(true);
         uiEventSystem.SetSelectedGameObject(null);
         uiEventSystem.SetSelectedGameObject(firstSelectedObject);
     }
