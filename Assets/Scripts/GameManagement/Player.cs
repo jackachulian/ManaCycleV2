@@ -318,14 +318,14 @@ public class Player : NetworkBehaviour {
         if (IsOwner && !isCpu) {
             Debug.Log("Enabling user input on "+this);
             playerInput.enabled = true;
-            playerInput.actions.Enable();
+            playerInput.ActivateInput();
             if (multiplayerEventSystem) multiplayerEventSystem.enabled = true;
         }
     }
 
     public void DisableUserInput() {
         Debug.Log("Disabling user input on "+this);
-        playerInput.actions.Disable();
+        playerInput.DeactivateInput();
         if (multiplayerEventSystem) multiplayerEventSystem.enabled = false;
     }
 
