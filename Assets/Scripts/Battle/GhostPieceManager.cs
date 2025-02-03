@@ -129,6 +129,8 @@ public class GhostPieceManager : MonoBehaviour {
 
         ManaPiece piece = board.pieceManager.currentPiece;
 
+        if (!piece) return;
+
         Vector2Int[] placePositions = new Vector2Int[piece.tiles.Length]; 
 
         // Convert the position space of all tiles from piece-relative to board-relative (apply position and rotation).

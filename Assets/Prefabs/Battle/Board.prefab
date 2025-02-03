@@ -7467,8 +7467,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08ed01b2cd3b13b4398db5cec589ddda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallFrequency: 1
-  quickFallFrequency: 7.5
+  fallFrequency: 1.25
+  quickFallFrequency: 8
 --- !u!114 &2652607994743603297
 MonoBehaviour:
   m_ObjectHideFlags: 0

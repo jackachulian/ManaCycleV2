@@ -14,6 +14,10 @@ public class PostGameMenuUI : MonoBehaviour {
     [SerializeField] private Image[] battlerColoredImages;
     [SerializeField] private TMP_Text nameText;
 
+    [Header("Buttons")]
+    [SerializeField] private Button charSelectButton;
+    [SerializeField] private Button levelSelectButton;
+
     private bool menuShown = false;
 
     void Awake() {
@@ -21,16 +25,19 @@ public class PostGameMenuUI : MonoBehaviour {
     }
 
 
-    public void SetAssets(Battler winnerBattler)
+    public void SetAssets(Battler battler, bool won)
     {
-        if (winnerBattler) {
-            battlerPortrait.sprite = winnerBattler.sprite;
-            foreach (var i in battlerColoredImages) i.color = winnerBattler.mainColor;
-            nameText.text = winnerBattler.displayName + " Wins";
+        if (battler) {
+            battlerPortrait.sprite = battler.sprite;
+            foreach (var i in battlerColoredImages) i.color = battler.mainColor;
         } else {
             battlerPortrait.sprite = null;
             battlerPortrait.color = Color.clear;
-            // foreach (var i in battlerColoredImages) i.color = winnerBattler.mainColor;
+        }
+
+        if (won) {
+            nameText.text = battler.displayName + " Wins";
+        } else {
             nameText.text = "Defeat...";
         }
     }
@@ -40,12 +47,16 @@ public class PostGameMenuUI : MonoBehaviour {
     /// </summary>
     /// <param name="winner">the winner of the game. Null if no player won the game (singleplayer loss).</param>
     public void ShowPostGameMenuUI(Board shownBattlerBoard) {
-        SetAssets(shownBattlerBoard ? shownBattlerBoard.player.battler : null);
+        SetAssets(shownBattlerBoard ? shownBattlerBoard.player.battler : null, shownBattlerBoard.won);
         menuShown = true;
+
+        bool inLevel = GameManager.Instance.level != null;
+        charSelectButton.gameObject.SetActive(!inLevel);
+        levelSelectButton.gameObject.SetActive(inLevel);
+
         gameObject.SetActive(true);
         animator.ResetTrigger("Open");
         animator.SetTrigger("Open");
-
     }
 
     public void OnRematchPressed() {
@@ -54,6 +65,12 @@ public class PostGameMenuUI : MonoBehaviour {
 
     public void OnCharacterSelectPressed() {
         BattleManager.Instance.gameStartNetworkBehaviour.GoToCharacterSelectRpc();
+    }
+
+    public void OnLevelSelectPressed() 
+    {
+        GameManager.Instance.LeaveGame();
+        TransitionManager.Instance.TransitionToScene("StoryOverworld", "ReverseWipe");
     }
 
     public void OnMainMenuPressed() {
