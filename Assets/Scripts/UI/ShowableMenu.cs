@@ -12,13 +12,10 @@ public abstract class ShowableMenu : MonoBehaviour {
     public event Action onControlExit;
 
 
-    [SerializeField] protected CanvasGroup uiCanvasGroup;
-
-
     public bool showing {get; private set;}
     public bool controlling {get; private set;}
-
     private GameObject previousObject;
+
 
     /// <summary>
     /// Object to first select if non-null. if rememberObjectSelection is enabled and previousObject is non-null, that will be selected instead.
@@ -44,6 +41,8 @@ public abstract class ShowableMenu : MonoBehaviour {
     /// If true, all ui on this will become uninteractable while this menu is not controlled (unclickable and cant be navigated to using ui).
     /// </summary>
     [SerializeField] private bool uninteractableWhileNotControlled = false;
+
+    [SerializeField] protected CanvasGroup uiCanvasGroup;
 
     protected virtual void OnEnable() {
         if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = false;
@@ -102,16 +101,13 @@ public abstract class ShowableMenu : MonoBehaviour {
         controlling = true;
         if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = true;
         if (backAction) {
-            Debug.Log(gameObject+" starts listening for back press");
             backAction.action.performed += OnBackPressed;
         }
 
         if (rememberObjectSelection && previousObject) {
-            EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(previousObject);
         }
         else if (firstSelected) {
-            EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(firstSelected);
         }
 
@@ -124,12 +120,11 @@ public abstract class ShowableMenu : MonoBehaviour {
     public void StopControllingMenu() {
         if (!controlling) return;
 
-        if (rememberObjectSelection) previousObject = EventSystem.current.currentSelectedGameObject;
+        if (rememberObjectSelection && EventSystem.current) previousObject = EventSystem.current.currentSelectedGameObject;
 
         controlling = false;
         if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = false;
         if (backAction) {
-            Debug.Log(gameObject+" stops listening for back press");
             backAction.action.performed -= OnBackPressed;
         }
         onControlExit?.Invoke();

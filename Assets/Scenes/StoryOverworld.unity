@@ -365,6 +365,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 19404161}
+  - component: {fileID: 19404162}
   m_Layer: 5
   m_Name: StoryMenuUI
   m_TagString: Untagged
@@ -394,6 +395,18 @@ RectTransform:
   m_AnchoredPosition: {x: -1362.377, y: 45.580566}
   m_SizeDelta: {x: -1394.377, y: -263.1611}
   m_Pivot: {x: 1, y: 0.5}
+--- !u!225 &19404162
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19404160}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &42976655
 GameObject:
   m_ObjectHideFlags: 0
@@ -6278,7 +6291,6 @@ GameObject:
   - component: {fileID: 1129342606}
   - component: {fileID: 1129342607}
   - component: {fileID: 1129342609}
-  - component: {fileID: 1129342608}
   m_Layer: 5
   m_Name: StoryMenu
   m_TagString: Untagged
@@ -6319,25 +6331,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d11b2993afa2cd4588a7eec99be0ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstSelected: {fileID: 2089692896}
   backAction: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   hideOnBackAction: 1
+  rememberObjectSelection: 1
+  uninteractableWhileNotControlled: 1
+  uiCanvasGroup: {fileID: 19404162}
   menuObject: {fileID: 19404160}
-  firstSelected: {fileID: 2089692896}
-  dimWhileUncontrolled: 0
-  uncontrolledAlpha: 0.5
+  dimWhileUncontrolled: 1
+  uncontrolledAlpha: 0.7
   _menuPanelSwapper: {fileID: 1129342609}
---- !u!225 &1129342608
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1129342605}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &1129342609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6823,6 +6826,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1362587899}
+  - component: {fileID: 1362587900}
   m_Layer: 5
   m_Name: PartyMenuUI
   m_TagString: Untagged
@@ -6852,6 +6856,18 @@ RectTransform:
   m_AnchoredPosition: {x: 51, y: 0}
   m_SizeDelta: {x: 827.9338, y: 929.7065}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1362587900
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362587898}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1379618857
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7741,7 +7757,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1623753963}
   - component: {fileID: 1623753965}
-  - component: {fileID: 1623753964}
   m_Layer: 5
   m_Name: PartyMenu
   m_TagString: Untagged
@@ -7769,18 +7784,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!225 &1623753964
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1623753962}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &1623753965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7793,12 +7796,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aff655f3717fc4e4f93aace4ec6346fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firstSelected: {fileID: 1259128664}
   backAction: {fileID: 7727032971491509709, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   hideOnBackAction: 0
+  rememberObjectSelection: 1
+  uninteractableWhileNotControlled: 1
+  uiCanvasGroup: {fileID: 1362587900}
   menuObject: {fileID: 1362587898}
-  firstSelected: {fileID: 1259128664}
   dimWhileUncontrolled: 1
-  uncontrolledAlpha: 0.5
+  uncontrolledAlpha: 0.7
 --- !u!1 &1640632470
 GameObject:
   m_ObjectHideFlags: 0
