@@ -25,7 +25,11 @@ public class OverworldManager : MonoBehaviour {
     }
 
     public void OpenStoryMenuOpenPressed(InputAction.CallbackContext ctx) {
-        if (!storyMenu.menuActive && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Menu) {
+        if (!storyMenu.menuActive 
+            && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Menu 
+            && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Convo
+        )
+        {
             storyMenu.OpenMenu();
         }
     }
