@@ -13,6 +13,7 @@ public class AnimatorShowableMenu : ShowableMenu
     [SerializeField] private GameObject firstSelected;
 
     protected override void OnEnable() {
+        base.OnEnable();
         onShow += OnShow;
         onHide += OnHide;
         onControlEnter += OnControlEnter;
@@ -20,6 +21,7 @@ public class AnimatorShowableMenu : ShowableMenu
     }
 
     protected override void OnDisable() {
+        base.OnDisable();
         onShow -= OnShow;
         onHide -= OnHide;
         onControlEnter -= OnControlEnter;

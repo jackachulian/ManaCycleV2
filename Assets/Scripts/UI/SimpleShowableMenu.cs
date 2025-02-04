@@ -8,16 +8,11 @@ using UnityEngine.EventSystems;
 public class SimpleShowableMenu : ShowableMenu
 {
     [SerializeField] private GameObject menuObject;
-    [SerializeField] private GameObject firstSelected;
     [SerializeField] private bool dimWhileUncontrolled = true;
     [SerializeField] private float uncontrolledAlpha = 0.5f;
 
-    private CanvasGroup canvasGroup;
-
     protected override void OnEnable() {
         base.OnEnable();
-        canvasGroup = GetComponent<CanvasGroup>();
-
         menuObject.SetActive(false);
 
         onShow += OnShow;
@@ -28,7 +23,6 @@ public class SimpleShowableMenu : ShowableMenu
 
     protected override void OnDisable() {
         base.OnDisable();
-
         onShow -= OnShow;
         onHide -= OnHide;
         onControlEnter -= OnControlEnter;
@@ -45,16 +39,11 @@ public class SimpleShowableMenu : ShowableMenu
 
     public void OnControlEnter()
     {
-        if (dimWhileUncontrolled && canvasGroup) canvasGroup.alpha = 1;
-        if (firstSelected) {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(firstSelected);
-        }
-        
+        if (dimWhileUncontrolled && uiCanvasGroup) uiCanvasGroup.alpha = 1;
     }
 
     public virtual void OnControlExit()
     {
-        if (dimWhileUncontrolled && canvasGroup) canvasGroup.alpha = uncontrolledAlpha;
+        if (dimWhileUncontrolled && uiCanvasGroup) uiCanvasGroup.alpha = uncontrolledAlpha;
     }    
 }

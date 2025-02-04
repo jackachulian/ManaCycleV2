@@ -24,12 +24,12 @@ public class OverworldManager : MonoBehaviour {
 
     void OnEnable() {
         storyMenuToggleAction.action.performed += OnStoryMenuTogglePressed;
-        storyMenu.onControlExit += OnStoryMenuClosed;
+        storyMenu.onHide += OnStoryMenuClosed;
     }
 
     void OnDisable() {
         storyMenuToggleAction.action.performed -= OnStoryMenuTogglePressed;
-        storyMenu.onControlExit -= OnStoryMenuClosed;
+        storyMenu.onHide -= OnStoryMenuClosed;
     }
 
     public void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
@@ -50,6 +50,9 @@ public class OverworldManager : MonoBehaviour {
 
     public void OnStoryMenuClosed() {
         storyMenu.HideMenu();
+        foreach (var menu in storyMenu.menuPanelSwapper.menus) {
+            if (menu) menu.HideMenu();
+        }
         OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
     }
 }

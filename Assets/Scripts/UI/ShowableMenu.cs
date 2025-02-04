@@ -12,20 +12,45 @@ public abstract class ShowableMenu : MonoBehaviour {
     public event Action onControlExit;
 
 
+    [SerializeField] protected CanvasGroup uiCanvasGroup;
+
+
     public bool showing {get; private set;}
     public bool controlling {get; private set;}
+
+    private GameObject previousObject;
+
+    /// <summary>
+    /// Object to first select if non-null. if rememberObjectSelection is enabled and previousObject is non-null, that will be selected instead.
+    /// </summary>
+    [SerializeField] private GameObject firstSelected;
 
     /// <summary>
     /// If non-null, stop controlling this window if pressed.
     /// </summary>
     [SerializeField] private InputActionReference backAction;
 
+    /// <summary>
+    /// if true, pressing backAction will hide this in addition to exiting control for this menu.
+    /// </summary>
+    [SerializeField] private bool hideOnBackAction = false;
+
+    /// <summary>
+    /// If true, last selected object will be returned to when navigating off and back onto this menu.
+    /// </summary>
+    [SerializeField] private bool rememberObjectSelection = true;
+
+    /// <summary>
+    /// If true, all ui on this will become uninteractable while this menu is not controlled (unclickable and cant be navigated to using ui).
+    /// </summary>
+    [SerializeField] private bool uninteractableWhileNotControlled = false;
+
     protected virtual void OnEnable() {
-        onControlExit += AfterStopControlling;
+        if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = false;
     }
 
     protected virtual void OnDisable() {
-        onControlExit -= AfterStopControlling;
+        if (controlling) StopControllingMenu();
     }
 
     /// <summary>
@@ -34,6 +59,7 @@ public abstract class ShowableMenu : MonoBehaviour {
     public void OnBackPressed(InputAction.CallbackContext ctx) {
         Debug.Log("Back button of "+gameObject+" pressed");
         StopControllingMenu();
+        if (hideOnBackAction) HideMenu();
     }
     
     /// <summary>
@@ -74,10 +100,21 @@ public abstract class ShowableMenu : MonoBehaviour {
 
         Debug.Log("Controlling menu "+gameObject);
         controlling = true;
+        if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = true;
         if (backAction) {
             Debug.Log(gameObject+" starts listening for back press");
             backAction.action.performed += OnBackPressed;
         }
+
+        if (rememberObjectSelection && previousObject) {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(previousObject);
+        }
+        else if (firstSelected) {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(firstSelected);
+        }
+
         onControlEnter?.Invoke();
     }
 
@@ -86,69 +123,53 @@ public abstract class ShowableMenu : MonoBehaviour {
     /// </summary>
     public void StopControllingMenu() {
         if (!controlling) return;
+
+        if (rememberObjectSelection) previousObject = EventSystem.current.currentSelectedGameObject;
+
         controlling = false;
+        if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = false;
         if (backAction) {
             Debug.Log(gameObject+" stops listening for back press");
             backAction.action.performed -= OnBackPressed;
         }
         onControlExit?.Invoke();
+
+        if (backToMenu) {
+            backToMenu.ControlMenu();
+            backToMenu = null;
+        }
     }
 
     /// <summary>
     /// If currently deferred to another menu, stop controlling those menus recursively, and then stop controlling this one.
     /// </summary>
-    public void StopControllingDeferred() {
-        if (deferredMenu) {
-            deferredMenu.StopControllingDeferred();
+    public void StopControllingMenuDeferred() {
+        if (backToMenu) {
+            backToMenu.StopControllingMenuDeferred();
         }
 
         StopControllingMenu();
     }
 
-    private ShowableMenu deferredMenu = null;
-    private GameObject deferredObject = null;
+    private ShowableMenu backToMenu = null;
 
     /// <summary>
     /// Show and control this menu, but return control to passed menu when this menu is closed.
     /// </summary>
     public void ControlMenuDeferred(ShowableMenu menu) {
         if (!CheckIfCanDefer()) return;
-        deferredMenu = menu;
-        if (!showing) ShowMenu();
-        ControlMenu();
-    }
-
-    /// <summary>
-    /// Show and control this menu, but select the passed object when this menu is closed.
-    /// </summary>
-    /// <param name="gameObject"></param>
-    public void ControlMenuDeferred(GameObject gameObject) {
-        if (!CheckIfCanDefer()) return;
-        deferredObject = gameObject;
+        backToMenu = menu;
+        backToMenu.StopControllingMenu();
         if (!showing) ShowMenu();
         ControlMenu();
     }
 
     public bool CheckIfCanDefer() {
-        if (deferredMenu) {
-            Debug.LogError("Trying to defer "+this+" while it is already deferring to another menu: "+deferredMenu);
-            return false;
-        }
-        if (deferredObject) {
-            Debug.LogError("Trying to defer "+this+" while it is already deferring to another object: "+deferredObject);
+        if (backToMenu) {
+            Debug.LogError("Trying to defer "+this+" while it is already deferring to another menu: "+backToMenu);
             return false;
         }
 
         return true;
-    }
-
-    public void AfterStopControlling() {
-        if (deferredMenu) {
-            deferredMenu.ControlMenu();
-        }
-        else if (deferredObject) {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(deferredObject);
-        }
     }
 }

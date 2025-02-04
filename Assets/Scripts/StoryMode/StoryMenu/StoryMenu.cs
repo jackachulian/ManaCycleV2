@@ -5,5 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class StoryMenu : SimpleShowableMenu {
-    
+    [SerializeField] private MenuPanelSwapper _menuPanelSwapper;
+    public MenuPanelSwapper menuPanelSwapper => _menuPanelSwapper;
 }
