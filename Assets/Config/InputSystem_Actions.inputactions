@@ -1089,6 +1089,17 @@
                 },
                 {
                     "name": "",
+                    "id": "e02eec2c-1ac3-46a3-bb9e-364af00ec87b",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "c52c8e0b-8179-41d3-b8a1-d149033bbe86",
                     "path": "<Mouse>/position",
                     "interactions": "",
@@ -1528,7 +1539,7 @@
                 {
                     "name": "",
                     "id": "eec1e299-075b-4cdc-9cfb-122903cae9be",
-                    "path": "<Keyboard>/c",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",

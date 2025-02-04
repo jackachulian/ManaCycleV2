@@ -20,14 +20,19 @@ public abstract class ShowableMenu : MonoBehaviour {
     /// </summary>
     [SerializeField] private InputActionReference backAction;
 
-    protected virtual void Awake() {
+    protected virtual void OnEnable() {
         onControlExit += AfterStopControlling;
+    }
+
+    protected virtual void OnDisable() {
+        onControlExit -= AfterStopControlling;
     }
 
     /// <summary>
     /// Called when back action is pressed while this is controlled.
     /// </summary>
     public void OnBackPressed(InputAction.CallbackContext ctx) {
+        Debug.Log("Back button of "+gameObject+" pressed");
         StopControllingMenu();
     }
     
@@ -67,9 +72,12 @@ public abstract class ShowableMenu : MonoBehaviour {
 
         if (controlling) return;
 
-        Debug.Log("Controlling "+this);
+        Debug.Log("Controlling menu "+gameObject);
         controlling = true;
-        if (backAction) backAction.action.performed += OnBackPressed;
+        if (backAction) {
+            Debug.Log(gameObject+" starts listening for back press");
+            backAction.action.performed += OnBackPressed;
+        }
         onControlEnter?.Invoke();
     }
 
@@ -79,7 +87,10 @@ public abstract class ShowableMenu : MonoBehaviour {
     public void StopControllingMenu() {
         if (!controlling) return;
         controlling = false;
-        if (backAction) backAction.action.performed -= OnBackPressed;
+        if (backAction) {
+            Debug.Log(gameObject+" stops listening for back press");
+            backAction.action.performed -= OnBackPressed;
+        }
         onControlExit?.Invoke();
     }
 

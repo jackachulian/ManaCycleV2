@@ -12,11 +12,18 @@ public class AnimatorShowableMenu : ShowableMenu
     [SerializeField] private string controllingBoolName = "controlling";
     [SerializeField] private GameObject firstSelected;
 
-    protected override void Awake() {
+    protected override void OnEnable() {
         onShow += OnShow;
         onHide += OnHide;
         onControlEnter += OnControlEnter;
         onControlExit += OnControlExit;
+    }
+
+    protected override void OnDisable() {
+        onShow -= OnShow;
+        onHide -= OnHide;
+        onControlEnter -= OnControlEnter;
+        onControlExit -= OnControlExit;
     }
 
     public void OnShow() {

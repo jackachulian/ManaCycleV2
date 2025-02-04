@@ -20,9 +20,16 @@ public class OverworldManager : MonoBehaviour {
             return;
         }
         Instance = this;
+    }
 
+    void OnEnable() {
         storyMenuToggleAction.action.performed += OnStoryMenuTogglePressed;
-        storyMenu.onHide += OnStoryMenuClosed;
+        storyMenu.onControlExit += OnStoryMenuClosed;
+    }
+
+    void OnDisable() {
+        storyMenuToggleAction.action.performed -= OnStoryMenuTogglePressed;
+        storyMenu.onControlExit -= OnStoryMenuClosed;
     }
 
     public void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
@@ -35,13 +42,14 @@ public class OverworldManager : MonoBehaviour {
             storyMenu.ControlMenu();
         }
 
-        // if story menu is active, close it and any sub menus it has opened
-        else if (storyMenu.showing) {
-            storyMenu.StopControllingDeferred();
-        }
+        // // if story menu is active, close it and any sub menus it has opened
+        // else if (storyMenu.showing) {
+        //     storyMenu.StopControllingDeferred();
+        // }
     }
 
     public void OnStoryMenuClosed() {
+        storyMenu.HideMenu();
         OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
     }
 }

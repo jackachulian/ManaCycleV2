@@ -14,8 +14,8 @@ public class SimpleShowableMenu : ShowableMenu
 
     private CanvasGroup canvasGroup;
 
-    protected override void Awake() {
-        base.Awake();
+    protected override void OnEnable() {
+        base.OnEnable();
         canvasGroup = GetComponent<CanvasGroup>();
 
         menuObject.SetActive(false);
@@ -24,6 +24,15 @@ public class SimpleShowableMenu : ShowableMenu
         onHide += OnHide;
         onControlEnter += OnControlEnter;
         onControlExit += OnControlExit;
+    }
+
+    protected override void OnDisable() {
+        base.OnDisable();
+
+        onShow -= OnShow;
+        onHide -= OnHide;
+        onControlEnter -= OnControlEnter;
+        onControlExit -= OnControlExit;
     }
 
     public void OnShow() {
