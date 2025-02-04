@@ -167,4 +167,16 @@ public abstract class ShowableMenu : MonoBehaviour {
 
         return true;
     }
+
+    public void SetFirstObjectSelected(GameObject obj) {
+        firstSelected = obj;
+    }
+
+    public void SetNextObjectSelected(GameObject obj) {
+        if (rememberObjectSelection) {
+            previousObject = obj;
+        } else {
+            firstSelected = obj;
+        }
+    }
 }
