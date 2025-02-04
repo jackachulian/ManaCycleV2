@@ -121,6 +121,7 @@ namespace StoryMode.Overworld
 
         public override void OnStateExited() {
             player.animator.SetBool("running", false);
+            moveDir = Vector3.zero;
         }
 
         public override void OnFastTravel(InputAction.CallbackContext ctx)

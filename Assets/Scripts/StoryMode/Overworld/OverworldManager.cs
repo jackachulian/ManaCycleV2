@@ -10,7 +10,7 @@ public class OverworldManager : MonoBehaviour {
     public StoryMenu storyMenu => _storyMenu;
 
 
-    public InputActionReference storyMenuOpenAction;
+    public InputActionReference storyMenuToggleAction;
 
 
     void Awake() {
@@ -21,16 +21,27 @@ public class OverworldManager : MonoBehaviour {
         }
         Instance = this;
 
-        storyMenuOpenAction.action.performed += OpenStoryMenuOpenPressed;
+        storyMenuToggleAction.action.performed += OnStoryMenuTogglePressed;
+        storyMenu.onHide += OnStoryMenuClosed;
     }
 
-    public void OpenStoryMenuOpenPressed(InputAction.CallbackContext ctx) {
-        if (!storyMenu.menuActive 
+    public void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
+        if (!storyMenu.showing 
             && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Menu 
             && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Convo
         )
         {
-            storyMenu.OpenMenu();
+            OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Menu);
+            storyMenu.ControlMenu();
         }
+
+        // if story menu is active, close it and any sub menus it has opened
+        else if (storyMenu.showing) {
+            storyMenu.StopControllingDeferred();
+        }
+    }
+
+    public void OnStoryMenuClosed() {
+        OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
     }
 }

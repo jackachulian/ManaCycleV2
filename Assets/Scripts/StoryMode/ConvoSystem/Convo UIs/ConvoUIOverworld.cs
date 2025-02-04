@@ -70,12 +70,14 @@ namespace StoryMode.ConvoSystem
         {
             base.EndConvo();
             animator.Play("Hide");
+
+            OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
         }
 
         public void CloseAnimationComplete()
         {
-            OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
             menuParent.SetActive(false);
+            // movment state change moved to re-enabled right as the close anim starts
         }
     }
 }
