@@ -58,6 +58,7 @@ public abstract class ShowableMenu : MonoBehaviour {
     public void OnBackPressed(InputAction.CallbackContext ctx) {
         Debug.Log("Back button of "+gameObject+" pressed");
         StopControllingMenu();
+
         if (hideOnBackAction) HideMenu();
     }
     
@@ -66,6 +67,7 @@ public abstract class ShowableMenu : MonoBehaviour {
     /// </summary>
     public void ShowMenu() {
         if (showing) return;
+        Debug.Log("Showing menu "+gameObject);
         showing = true;
         onShow?.Invoke();
     }
@@ -79,7 +81,9 @@ public abstract class ShowableMenu : MonoBehaviour {
         // dont control while hidden
         if (controlling) StopControllingMenu();
 
+        Debug.Log("Hiding menu "+gameObject);
         showing = false;
+
         onHide?.Invoke();
     }
 
@@ -122,6 +126,7 @@ public abstract class ShowableMenu : MonoBehaviour {
 
         if (rememberObjectSelection && EventSystem.current) previousObject = EventSystem.current.currentSelectedGameObject;
 
+        Debug.Log("Exiting control of menu "+gameObject);
         controlling = false;
         if (uiCanvasGroup && uninteractableWhileNotControlled) uiCanvasGroup.interactable = false;
         if (backAction) {

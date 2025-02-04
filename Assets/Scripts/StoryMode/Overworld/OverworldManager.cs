@@ -1,10 +1,16 @@
+using System;
 using System.Threading.Tasks;
+using SaveDataSystem;
 using StoryMode.Overworld;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OverworldManager : MonoBehaviour {
     public static OverworldManager Instance;
+
+
+    public static Battler activeBattler;
+    public static event Action<Battler> onActiveBattlerChanged;
 
 
     [SerializeField] private StoryMenu _storyMenu;
@@ -34,6 +40,10 @@ public class OverworldManager : MonoBehaviour {
         storyMenu.onHide -= OnStoryMenuClosed;
     }
 
+    void Start() {
+        if (activeBattler) ChangeActiveBattler(activeBattler);
+    }
+
     public async void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
         if (!storyMenu.showing 
             && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Menu 
@@ -58,9 +68,20 @@ public class OverworldManager : MonoBehaviour {
         storyMenu.HideMenu();
         // levelPopup.ShowNearbyLevels();
         levelPopup.Undim();
-        foreach (var menu in storyMenu.menuPanelSwapper.menus) {
-            if (menu) menu.HideMenu();
-        }
+        storyMenu.menuPanelSwapper.HideAllMenus();
         OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
+    }
+
+    public static void ChangeActiveBattler(Battler battler) {
+        activeBattler = battler;
+        SaveData.current.storyModeData.activeBattlerId = battler.battlerId;
+
+        if (battler.overworldModel && OverworldPlayer.Instance) {
+            Destroy(OverworldPlayer.Instance.modelObject);
+            GameObject playerModel = Instantiate(battler.overworldModel, OverworldPlayer.Instance.transform);
+            OverworldPlayer.Instance.SetPlayerModel(playerModel);
+        }
+
+        onActiveBattlerChanged?.Invoke(battler);
     }
 }

@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: _mainColor.r
       value: 0.9137255
       objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _overworldModel
+      value: 
+      objectReference: {fileID: 69625802416560909, guid: 30a3d2b308a06444ca39fb3cd81c01a6, type: 3}
     - target: {fileID: 8338329736168297408, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
       propertyPath: m_Name
       value: Pyro

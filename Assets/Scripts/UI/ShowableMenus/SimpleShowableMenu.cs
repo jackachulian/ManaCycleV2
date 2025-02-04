@@ -34,6 +34,7 @@ public class SimpleShowableMenu : ShowableMenu
     }
 
     public void OnHide() {
+        Debug.Log("hiding simple menu "+gameObject);
         menuObject.SetActive(false);
     }
 

@@ -1,3 +1,4 @@
+using SaveDataSystem;
 using StoryMode.Overworld;
 using TMPro;
 using UnityEngine;
@@ -17,10 +18,6 @@ public class PartyMenuItem : MonoBehaviour {
 
     public void SelectBattler() {
         // set model
-        if (battler.overworldModel) {
-            Destroy(OverworldPlayer.Instance.modelObject);
-            GameObject playerModel = Instantiate(battler.overworldModel, OverworldPlayer.Instance.transform);
-            OverworldPlayer.Instance.SetPlayerModel(playerModel);
-        }
+        OverworldManager.ChangeActiveBattler(battler);
     }
 }

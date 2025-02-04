@@ -13,6 +13,8 @@ namespace SaveDataSystem {
         /// </summary>
         public Dictionary<string, LevelProgressData> levelProgressDataEntries = new();
 
+        public StoryModeData storyModeData = new();
+
         /// <summary>
         /// To be called after a level is finished (either a wiin or a loss).
         /// </summary>
@@ -70,5 +72,10 @@ namespace SaveDataSystem {
         /// Fastest time the level was beaten in
         /// </summary>
         public double fastestClearTime;
+    }
+
+    [System.Serializable]
+    public class StoryModeData {
+        public string activeBattlerId;
     }
 }

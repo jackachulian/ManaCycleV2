@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: _mainColor.r
       value: 0.8591946
       objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _overworldModel
+      value: 
+      objectReference: {fileID: 8397380965658091464, guid: 2c35fa3953a1e6c4a9ebaa86aadbe1a0, type: 3}
     - target: {fileID: 8338329736168297408, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
       propertyPath: m_Name
       value: Psychic
