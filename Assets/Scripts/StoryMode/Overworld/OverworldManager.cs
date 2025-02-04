@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using StoryMode.Overworld;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,7 +34,7 @@ public class OverworldManager : MonoBehaviour {
         storyMenu.onHide -= OnStoryMenuClosed;
     }
 
-    public void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
+    public async void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
         if (!storyMenu.showing 
             && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Menu 
             && OverworldPlayer.Instance.ActiveState != OverworldPlayer.PlayerState.Convo
@@ -42,7 +43,9 @@ public class OverworldManager : MonoBehaviour {
             OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Menu);
             // levelPopup.StopShowingNearbyLevels();
             levelPopup.Dim();
-            storyMenu.ControlMenu();
+            storyMenu.rememberObjectSelection = false;
+            await storyMenu.ControlMenu();
+            storyMenu.rememberObjectSelection = true;
         }
 
         // // if story menu is active, close it and any sub menus it has opened

@@ -30,17 +30,17 @@ public abstract class ShowableMenu : MonoBehaviour {
     /// <summary>
     /// if true, pressing backAction will hide this in addition to exiting control for this menu.
     /// </summary>
-    [SerializeField] private bool hideOnBackAction = false;
+    [SerializeField] public bool hideOnBackAction = false;
 
     /// <summary>
     /// If true, last selected object will be returned to when navigating off and back onto this menu.
     /// </summary>
-    [SerializeField] private bool rememberObjectSelection = true;
+    [SerializeField] public bool rememberObjectSelection = true;
 
     /// <summary>
     /// If true, all ui on this will become uninteractable while this menu is not controlled (unclickable and cant be navigated to using ui).
     /// </summary>
-    [SerializeField] private bool uninteractableWhileNotControlled = false;
+    [SerializeField] public bool uninteractableWhileNotControlled = false;
 
     [SerializeField] protected CanvasGroup uiCanvasGroup;
 
@@ -86,7 +86,7 @@ public abstract class ShowableMenu : MonoBehaviour {
     /// <summary>
     /// UIelement is selected and control is given to this menu in this function.
     /// </summary>
-    public async void ControlMenu() {
+    public async Task ControlMenu() {
         if (controlling) return;
 
         // make sure menu is visible before it is controlled
