@@ -29,10 +29,10 @@ public class LevelDetails : MonoBehaviour {
         uiObject.SetActive(false);
     }
 
-    public async Task OpenDetailsWindow(Level level) {
+    public async void OpenDetailsWindow(Level level) {
         DisplayLevel(level);
 
-        OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("UI");
+        // OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("UI");
         OverworldPlayer.Instance.interactionManager.enabled = false;
         OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Menu);
         // TODO: maybe make this an animator
@@ -49,12 +49,16 @@ public class LevelDetails : MonoBehaviour {
         CloseDetailsWindow();
     }
 
-    public void CloseDetailsWindow() {
+    public async void CloseDetailsWindow() {
         cancelAction.action.performed -= OnCancelPressed;
 
         EventSystem.current.SetSelectedGameObject(null);
         uiObject.SetActive(false);
-        OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("Overworld");
+
+        // Double input prevention - wait for cancel action to fall through so it does not unintentionally open the story menu
+        await Awaitable.NextFrameAsync();
+
+        // OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("Overworld");
         OverworldPlayer.Instance.interactionManager.enabled = true;
         if (OverworldPlayer.Instance.ActiveState == OverworldPlayer.PlayerState.Menu) {
             OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);

@@ -1260,6 +1260,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "StoryMenuToggle",
+                    "type": "Button",
+                    "id": "14928b61-3491-4eb6-be15-2bf15251b5a4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1419,17 +1428,6 @@
                 },
                 {
                     "name": "",
-                    "id": "5f3f5de2-b788-420b-bca1-eb40c4c9f3f3",
-                    "path": "*/{Cancel}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse;Gamepad;Touch;Joystick;XR",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "83009dba-f8a5-4ecf-8a35-6d3c8d883778",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -1502,6 +1500,39 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "FastTravel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "94e76786-4687-43aa-b7b7-c2c764f68ebf",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "StoryMenuToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cab7511f-326f-46c5-b16e-5af1e17b893e",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "StoryMenuToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eec1e299-075b-4cdc-9cfb-122903cae9be",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "StoryMenuToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

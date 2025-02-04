@@ -26,7 +26,7 @@ namespace StoryMode.Overworld
         void OnDisable() {
             if (nearest) nearest.OnInteractionRangeExited();
             nearest = null;
-            onNearestChanged.Invoke(nearest);
+            onNearestChanged?.Invoke(nearest);
         }
 
         void Update() {
@@ -49,7 +49,7 @@ namespace StoryMode.Overworld
             if (nearest != previousNearest) {
                 if (previousNearest) previousNearest.OnInteractionRangeExited();
                 if (nearest) nearest.OnInteractionRangeEntered();
-                onNearestChanged.Invoke(nearest);
+                onNearestChanged?.Invoke(nearest);
             }
         }
 
