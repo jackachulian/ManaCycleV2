@@ -10,7 +10,6 @@ namespace StoryMode.Overworld
         [Header("Component References")]
         [SerializeField] private OverworldPlayer player;
         [SerializeField] private Rigidbody rigidBody;
-        [SerializeField] private Transform modelTransform;
         [SerializeField] private BoxCollider boxCollider;
         [SerializeField] private OverworldPlayerInteracter playerInteracter;
 
@@ -75,7 +74,7 @@ namespace StoryMode.Overworld
         {
             if (moveDir != Vector3.zero)
             {
-                modelTransform.forward = moveDir;
+                player.modelTransform.forward = moveDir;
             }
         }
 
@@ -83,7 +82,7 @@ namespace StoryMode.Overworld
         {
             Vector2 v = ctx.ReadValue<Vector2>();
             moveDir = new Vector3(v.x, 0, v.y);
-            player.animator.SetBool("running", moveDir.magnitude > 0);
+            player.modelAnimator.SetBool("running", moveDir.magnitude > 0);
         }
 
         public override void OnJump(InputAction.CallbackContext ctx)
@@ -116,11 +115,11 @@ namespace StoryMode.Overworld
 
         public override void OnStateEntered()
         {
-            player.animator.SetBool("running", moveDir.magnitude > 0);
+            player.modelAnimator.SetBool("running", moveDir.magnitude > 0);
         }
 
         public override void OnStateExited() {
-            player.animator.SetBool("running", false);
+            player.modelAnimator.SetBool("running", false);
             moveDir = Vector3.zero;
         }
 

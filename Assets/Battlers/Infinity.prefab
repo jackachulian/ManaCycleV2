@@ -291,6 +291,10 @@ PrefabInstance:
       propertyPath: battlerAbility
       value: 
       objectReference: {fileID: 8724920082450778113}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _overworldModel
+      value: 
+      objectReference: {fileID: 8004758057123369973, guid: a223395a9766b5347b241cd147bd549a, type: 3}
     - target: {fileID: 8338329736168297408, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
       propertyPath: m_Name
       value: Infinity

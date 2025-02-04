@@ -11,13 +11,16 @@ namespace StoryMode.Overworld
     {
         public static OverworldPlayer Instance {get; private set;}
 
-        [SerializeField] private Animator _animator;
-        public Animator animator => _animator;
-
         /// <summary>
         /// All states. Index corresponds to the PlayerState enum.
         /// </summary>
         [SerializeField] private PlayerStateBase[] states;
+
+
+        [SerializeField] private GameObject _modelObject;
+        public GameObject modelObject => _modelObject;
+        public Transform modelTransform {get; private set;}
+        public Animator modelAnimator {get; private set;}
 
 
         private PlayerInput _playerInput;
@@ -52,6 +55,7 @@ namespace StoryMode.Overworld
                 state.enabled = false;
             }
 
+            SetPlayerModel(modelObject);
             SetState(PlayerState.Movement);
         }
 
@@ -97,5 +101,10 @@ namespace StoryMode.Overworld
             }
         }
         
+        public void SetPlayerModel(GameObject modelObject) {
+            this._modelObject = modelObject;
+            modelTransform = modelObject.transform;
+            modelAnimator = modelObject.GetComponent<Animator>();
+        }
     }
 }

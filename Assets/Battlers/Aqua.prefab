@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: _mainColor.r
       value: 0.041355114
       objectReference: {fileID: 0}
+    - target: {fileID: 8248295609885287369, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
+      propertyPath: _overworldModel
+      value: 
+      objectReference: {fileID: 1961705732190824526, guid: 36baf1875a589b54c9be4f0fa56cdda1, type: 3}
     - target: {fileID: 8338329736168297408, guid: fdd2b7c7222ed794ba8885d3d2920ff3, type: 3}
       propertyPath: m_Name
       value: Aqua

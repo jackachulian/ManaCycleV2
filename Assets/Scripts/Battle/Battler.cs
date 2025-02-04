@@ -48,6 +48,10 @@ public class Battler : MonoBehaviour {
     public Spell uniqueSpell => _uniqueSpell;
 
 
+    [SerializeField] private GameObject _overworldModel;
+    public GameObject overworldModel => _overworldModel;
+
+
     public Vector2 portraitOffset => portraitSpriteRenderer.transform.localPosition;
     public Sprite sprite => portraitSpriteRenderer.sprite;
 }
