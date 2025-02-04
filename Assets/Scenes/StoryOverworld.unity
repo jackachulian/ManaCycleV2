@@ -1074,6 +1074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _storyMenu: {fileID: 1129342607}
+  levelPopup: {fileID: 1853635717}
   storyMenuToggleAction: {fileID: -7914226847670817060, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!4 &184428817
 Transform:
@@ -5846,6 +5847,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1010071797}
+  - component: {fileID: 1010071798}
   m_Layer: 5
   m_Name: LevelPopupUI
   m_TagString: Untagged
@@ -5878,6 +5880,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 300}
   m_SizeDelta: {x: 300, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1010071798
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010071796}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1027369956
 GameObject:
   m_ObjectHideFlags: 0
@@ -6338,7 +6352,7 @@ MonoBehaviour:
   uninteractableWhileNotControlled: 1
   uiCanvasGroup: {fileID: 19404162}
   menuObject: {fileID: 19404160}
-  dimWhileUncontrolled: 1
+  dimWhileUncontrolled: 0
   uncontrolledAlpha: 0.7
   _menuPanelSwapper: {fileID: 1129342609}
 --- !u!114 &1129342609
@@ -7559,10 +7573,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1129342606}
   - {fileID: 628584358}
   - {fileID: 1853635716}
   - {fileID: 386729130}
+  - {fileID: 1129342606}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7803,7 +7817,7 @@ MonoBehaviour:
   uninteractableWhileNotControlled: 1
   uiCanvasGroup: {fileID: 1362587900}
   menuObject: {fileID: 1362587898}
-  dimWhileUncontrolled: 1
+  dimWhileUncontrolled: 0
   uncontrolledAlpha: 0.7
 --- !u!1 &1640632470
 GameObject:
@@ -8576,6 +8590,7 @@ MonoBehaviour:
   popupOffset: {x: 0, y: 250}
   levelNameLabel: {fileID: 2046365861}
   levelNumberLabel: {fileID: 1418902565}
+  popupCanvasGroup: {fileID: 1010071798}
 --- !u!1 &1865457056
 GameObject:
   m_ObjectHideFlags: 0

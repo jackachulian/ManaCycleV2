@@ -6,13 +6,14 @@ public class LevelPopup : MonoBehaviour {
     [SerializeField] private RectTransform uiTransform;
     [SerializeField] private Vector2 popupOffset;
 
-
     [SerializeField] private TMPro.TMP_Text levelNameLabel;
     [SerializeField] private TMPro.TMP_Text levelNumberLabel;
 
+    [SerializeField] private CanvasGroup popupCanvasGroup;
 
     private LevelInteractable currentLevelInteractable;
 
+    private bool showNearbyLevels = true;
 
     void Start() {
         HideUI();
@@ -31,6 +32,8 @@ public class LevelPopup : MonoBehaviour {
     }
 
     void OnInteractionManagerNearestChanged(OverworldInteractable nearest) {
+        if (!showNearbyLevels) return;
+
         LevelInteractable levelInteractable = nearest as LevelInteractable;
         if (levelInteractable) {
             if (levelInteractable.level) {
@@ -63,5 +66,23 @@ public class LevelPopup : MonoBehaviour {
 
         levelNameLabel.text = level.displayName;
         levelNumberLabel.text = level.levelNumber;
+    }
+
+    public void StopShowingNearbyLevels() {
+        showNearbyLevels = false;
+        HideUI();
+    }
+
+    public void ShowNearbyLevels() {
+        showNearbyLevels = true;
+        OnInteractionManagerNearestChanged(interactionManager.nearest);
+    }
+
+    public void Dim() {
+        popupCanvasGroup.alpha = 0.3f;
+    }
+
+    public void Undim() {
+        popupCanvasGroup.alpha = 1f;
     }
 }

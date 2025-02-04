@@ -8,6 +8,7 @@ public class OverworldManager : MonoBehaviour {
 
     [SerializeField] private StoryMenu _storyMenu;
     public StoryMenu storyMenu => _storyMenu;
+    [SerializeField] private LevelPopup levelPopup;
 
 
     public InputActionReference storyMenuToggleAction;
@@ -39,6 +40,8 @@ public class OverworldManager : MonoBehaviour {
         )
         {
             OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Menu);
+            // levelPopup.StopShowingNearbyLevels();
+            levelPopup.Dim();
             storyMenu.ControlMenu();
         }
 
@@ -50,6 +53,8 @@ public class OverworldManager : MonoBehaviour {
 
     public void OnStoryMenuClosed() {
         storyMenu.HideMenu();
+        // levelPopup.ShowNearbyLevels();
+        levelPopup.Undim();
         foreach (var menu in storyMenu.menuPanelSwapper.menus) {
             if (menu) menu.HideMenu();
         }
