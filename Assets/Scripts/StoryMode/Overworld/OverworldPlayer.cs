@@ -32,7 +32,7 @@ namespace StoryMode.Overworld
             Movement,
             FastTravel,
             Convo,
-            LevelDetails,
+            Menu,
         }
 
         public PlayerState ActiveState {get; private set;}

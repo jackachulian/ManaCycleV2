@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace StoryMode.Overworld
 {
-    public class PlayerStateLevelDetails : PlayerStateBase
+    public class PlayerStateMenu : PlayerStateBase
     {
         
     }

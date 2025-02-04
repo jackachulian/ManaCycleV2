@@ -34,7 +34,7 @@ public class LevelDetails : MonoBehaviour {
 
         OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("UI");
         OverworldPlayer.Instance.interactionManager.enabled = false;
-        OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.LevelDetails);
+        OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Menu);
         // TODO: maybe make this an animator
         uiObject.SetActive(true);
 
@@ -56,7 +56,7 @@ public class LevelDetails : MonoBehaviour {
         uiObject.SetActive(false);
         OverworldPlayer.Instance.playerInput.SwitchCurrentActionMap("Overworld");
         OverworldPlayer.Instance.interactionManager.enabled = true;
-        if (OverworldPlayer.Instance.ActiveState == OverworldPlayer.PlayerState.LevelDetails) {
+        if (OverworldPlayer.Instance.ActiveState == OverworldPlayer.PlayerState.Menu) {
             OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
         }
     }
