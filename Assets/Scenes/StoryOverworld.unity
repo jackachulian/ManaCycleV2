@@ -404,7 +404,7 @@ GameObject:
   m_Component:
   - component: {fileID: 42976656}
   m_Layer: 5
-  m_Name: DialogueUI
+  m_Name: MenuParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2377,7 +2377,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0.00012207031}
   m_SizeDelta: {x: 0, y: 300.55}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &494729699
@@ -4080,7 +4080,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -7421,7 +7421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 4}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.3000488, y: 302.02936}
+  m_AnchoredPosition: {x: -2.2998047, y: 302.0293}
   m_SizeDelta: {x: 0, y: -604.1794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1992649760
