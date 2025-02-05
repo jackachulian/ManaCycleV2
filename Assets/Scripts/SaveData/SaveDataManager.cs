@@ -66,7 +66,6 @@ namespace SaveDataSystem {
             } else {
                 Debug.LogWarning("Save file not found, creating new save data obj");
                 saveData = new SaveData();
-                return;
             }
         }
     }

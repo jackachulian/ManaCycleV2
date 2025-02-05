@@ -1240,6 +1240,11 @@ MonoBehaviour:
   _storyMenu: {fileID: 1129342607}
   levelPopup: {fileID: 1853635717}
   storyMenuToggleAction: {fileID: -7914226847670817060, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  playableBattlers:
+  - {fileID: 568879115367386083, guid: 6304ee0eb7a2ca54c86e833e232f1062, type: 3}
+  - {fileID: 568879115367386083, guid: 63363269c06935742b17722ce60122e0, type: 3}
+  - {fileID: 568879115367386083, guid: 8de844f6019514e4e93697c12c63405a, type: 3}
+  - {fileID: 568879115367386083, guid: 19006de198c391d4bb1430b32289ac07, type: 3}
 --- !u!4 &184428817
 Transform:
   m_ObjectHideFlags: 0
@@ -7735,11 +7740,6 @@ MonoBehaviour:
   menuObject: {fileID: 1362587898}
   dimWhileUncontrolled: 0
   uncontrolledAlpha: 0.7
-  playableBattlers:
-  - {fileID: 568879115367386083, guid: 6304ee0eb7a2ca54c86e833e232f1062, type: 3}
-  - {fileID: 568879115367386083, guid: 63363269c06935742b17722ce60122e0, type: 3}
-  - {fileID: 568879115367386083, guid: 8de844f6019514e4e93697c12c63405a, type: 3}
-  - {fileID: 568879115367386083, guid: 19006de198c391d4bb1430b32289ac07, type: 3}
   partyMenuItemPrefab: {fileID: 8872291387179248227, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
   partyMenuLayoutTransform: {fileID: 383748918}
 --- !u!1 &1640632470

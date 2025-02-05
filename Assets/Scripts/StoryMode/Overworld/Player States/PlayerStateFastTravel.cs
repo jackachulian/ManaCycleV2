@@ -5,7 +5,7 @@ using System.Linq;
 namespace StoryMode.Overworld
 {
     // Fast-traveling player movement
-    public class PlayerStateFastTravel : PlayerStateBase
+    public class PlayerStateFastTravel : OverworldPlayerState
     {
         private OverworldInteractable[] travelPoints;
         private OverworldInteractable selectedPoint;

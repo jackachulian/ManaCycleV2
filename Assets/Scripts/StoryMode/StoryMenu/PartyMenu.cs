@@ -1,8 +1,6 @@
 using UnityEngine;
 
 public class PartyMenu : SimpleShowableMenu {
-    [SerializeField] private Battler[] playableBattlers;
-
     [SerializeField] private PartyMenuItem partyMenuItemPrefab;
     [SerializeField] private Transform partyMenuLayoutTransform;
 
@@ -12,8 +10,8 @@ public class PartyMenu : SimpleShowableMenu {
             Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < playableBattlers.Length; i++) {
-            Battler battler = playableBattlers[i];
+        for (int i = 0; i < OverworldManager.Instance.playableBattlers.Length; i++) {
+            Battler battler = OverworldManager.Instance.playableBattlers[i];
             PartyMenuItem partyMenuItem = Instantiate(partyMenuItemPrefab, partyMenuLayoutTransform);
             partyMenuItem.SetBattler(battler);
             if (i == 0) SetFirstObjectSelected(partyMenuItem.gameObject);

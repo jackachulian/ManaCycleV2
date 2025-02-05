@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace StoryMode.Overworld
 {
-    public class PlayerStateConvo : PlayerStateBase
+    public class PlayerStateConvo : OverworldPlayerState
     {
         public override void OnInteract(InputAction.CallbackContext ctx)
         {

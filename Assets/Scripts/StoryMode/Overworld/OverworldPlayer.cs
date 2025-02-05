@@ -14,7 +14,7 @@ namespace StoryMode.Overworld
         /// <summary>
         /// All states. Index corresponds to the PlayerState enum.
         /// </summary>
-        [SerializeField] private PlayerStateBase[] states;
+        [SerializeField] private OverworldPlayerState[] states;
 
 
         [SerializeField] private GameObject _modelObject;
@@ -57,6 +57,10 @@ namespace StoryMode.Overworld
 
             SetPlayerModel(modelObject);
             SetState(PlayerState.Movement);
+        }
+
+        public OverworldPlayerState GetActiveState() {
+            return states[(int)ActiveState];
         }
 
         // fast travel enabled only when held

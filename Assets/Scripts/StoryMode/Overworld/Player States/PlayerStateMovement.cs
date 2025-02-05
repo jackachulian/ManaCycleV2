@@ -5,7 +5,7 @@ using System;
 namespace StoryMode.Overworld
 {
     // Regular player movement (walking)
-    public class PlayerStateMovement : PlayerStateBase
+    public class PlayerStateMovement : OverworldPlayerState
     {
         [Header("Component References")]
         [SerializeField] private OverworldPlayer player;
@@ -33,6 +33,8 @@ namespace StoryMode.Overworld
 
         // layer 6 is nocollide layer
         readonly int layerMask = 1 << 6;
+
+        private Vector3 facing;
 
         // FixedUpdate is used to modify player physics to due framerate independance
         void FixedUpdate()
@@ -74,8 +76,9 @@ namespace StoryMode.Overworld
         {
             if (moveDir != Vector3.zero)
             {
-                player.modelTransform.forward = moveDir;
+                facing = moveDir;  
             }
+            player.modelTransform.forward = facing;
         }
 
         public override void OnMove(InputAction.CallbackContext ctx)

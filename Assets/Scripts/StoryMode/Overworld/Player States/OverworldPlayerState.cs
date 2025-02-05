@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace StoryMode.Overworld
 {
-    public abstract class PlayerStateBase : MonoBehaviour
+    public abstract class OverworldPlayerState : MonoBehaviour
     {
         public virtual void OnStateEntered() {}
         public virtual void OnStateExited() {}

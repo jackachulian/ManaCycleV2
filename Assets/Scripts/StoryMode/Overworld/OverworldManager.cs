@@ -21,6 +21,9 @@ public class OverworldManager : MonoBehaviour {
     public InputActionReference storyMenuToggleAction;
 
 
+    [SerializeField] public Battler[] playableBattlers;
+
+
     void Awake() {
         if (Instance) {
             Debug.LogWarning("Duplicate OverworldManager");
@@ -42,6 +45,13 @@ public class OverworldManager : MonoBehaviour {
 
     void Start() {
         if (activeBattler) ChangeActiveBattler(activeBattler);
+        else if (SaveData.current.storyModeData.activeBattlerId != null) {
+            foreach (Battler battler in playableBattlers) {
+                if (battler.battlerId == SaveData.current.storyModeData.activeBattlerId) {
+                    ChangeActiveBattler(battler);
+                }
+            }
+        }
     }
 
     public async void OnStoryMenuTogglePressed(InputAction.CallbackContext ctx) {
@@ -79,7 +89,9 @@ public class OverworldManager : MonoBehaviour {
         if (battler.overworldModel && OverworldPlayer.Instance) {
             Destroy(OverworldPlayer.Instance.modelObject);
             GameObject playerModel = Instantiate(battler.overworldModel, OverworldPlayer.Instance.transform);
+            var forward = OverworldPlayer.Instance.modelTransform.forward;
             OverworldPlayer.Instance.SetPlayerModel(playerModel);
+            OverworldPlayer.Instance.modelTransform.forward = forward;
         }
 
         onActiveBattlerChanged?.Invoke(battler);
