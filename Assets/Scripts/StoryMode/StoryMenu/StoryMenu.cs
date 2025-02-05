@@ -14,7 +14,7 @@ public class StoryMenu : SimpleShowableMenu {
     }
 
     protected override void OnDisable() {
-        base.OnEnable();
+        base.OnDisable();
         OverworldManager.onActiveBattlerChanged -= SetActiveBattlerSprite;
     }
 
