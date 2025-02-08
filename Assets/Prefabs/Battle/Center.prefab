@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _position: {x: 0, y: 0}
+  _color: 0
   initialFallSpeed: 40
   fallAcceleration: 40
 --- !u!212 &8321151740212686890

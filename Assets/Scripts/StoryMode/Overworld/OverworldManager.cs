@@ -22,6 +22,7 @@ public class OverworldManager : MonoBehaviour {
 
 
     [SerializeField] public Battler[] playableBattlers;
+    [SerializeField] public Spell[] equippableSpells;
 
 
     void Awake() {

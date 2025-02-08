@@ -146,6 +146,7 @@ public abstract class ShowableMenu : MonoBehaviour {
     public void StopControllingMenuDeferred() {
         if (backToMenu) {
             backToMenu.StopControllingMenuDeferred();
+            backToMenu = null;
         }
 
         StopControllingMenu();

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class IronSwordSpell : Spell
+public class SwordSpell : Spell
 {
     public ManaPiece piecePrefab;
 

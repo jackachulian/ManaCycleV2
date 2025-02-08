@@ -78,7 +78,9 @@ namespace StoryMode.Overworld
             {
                 facing = moveDir;  
             }
-            player.modelTransform.forward = facing;
+            if (facing != Vector3.zero) {
+                player.modelTransform.forward = facing;
+            }
         }
 
         public override void OnMove(InputAction.CallbackContext ctx)
