@@ -83,6 +83,10 @@ public class OverworldManager : MonoBehaviour {
         OverworldPlayer.Instance.SetState(OverworldPlayer.PlayerState.Movement);
     }
 
+    public void BackToMainMenu() {
+        TransitionManager.Instance.TransitionToScene("MainMenu", "ReverseWipe");
+    }
+
     public static void ChangeActiveBattler(Battler battler) {
         activeBattler = battler;
         SaveData.current.storyModeData.activeBattlerId = battler.battlerId;
