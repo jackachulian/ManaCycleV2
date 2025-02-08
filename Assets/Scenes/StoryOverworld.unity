@@ -457,7 +457,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -70.11667
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5786,6 +5786,7 @@ GameObject:
   - component: {fileID: 865362676}
   - component: {fileID: 865362681}
   - component: {fileID: 865362682}
+  - component: {fileID: 865362683}
   - component: {fileID: 865362678}
   m_Layer: 5
   m_Name: ReturnButton
@@ -5900,6 +5901,35 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &865362683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 865362675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1129342609}
+          m_TargetAssemblyTypeName: MenuPanelSwapper, Assembly-CSharp
+          m_MethodName: HideAllMenus
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &877702270
 GameObject:
   m_ObjectHideFlags: 0
@@ -6024,7 +6054,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 70.11667
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6338,7 +6368,7 @@ MonoBehaviour:
   uninteractableWhileNotControlled: 1
   uiCanvasGroup: {fileID: 654503801}
   menuObject: {fileID: 654503799}
-  dimWhileUncontrolled: 1
+  dimWhileUncontrolled: 0
   uncontrolledAlpha: 0.5
   equipMenuItemPrefab: {fileID: 7564362384898214096, guid: 37e0b061ab961024eaa74612e7980c7f, type: 3}
   equipMenuLayoutTransform: {fileID: 877702271}
@@ -9269,7 +9299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -210.35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10959,7 +10989,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 210.35
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8650080254819866498, guid: 9a640364c350c8a4c8a4f296562f8076, type: 3}
       propertyPath: m_LocalPosition.z
